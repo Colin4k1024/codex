@@ -173,7 +173,7 @@ describe('AppServerProcessManager cleanup', () => {
 
     await vi.waitFor(() => {
       expect(isProcessAlive(pid)).toBe(false)
+      expect(manager.status.state).toBe('Disconnected')
     })
-    expect(manager.status.state).toBe('Disconnected')
   })
 })
