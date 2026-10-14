@@ -46,16 +46,17 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
         env:
-          npm_config_store_dir: ${{ runner.temp }}/pnpm-store
+          npm_config_store_dir: /tmp/codex-pnpm-store-${{ github.run_id }}
         with:
           node-version: 22
           cache: pnpm
       - name: Install desktop dependencies
         # The workspace contains an unrelated git-hosted package with an unreliable prepare script.
         # Desktop does not consume that package, so install without scripts and run Electron's installer explicitly.
-        # A job-local store avoids concurrent runner corruption and lower network concurrency avoids registry resets.
+        # A job-local overlay-filesystem store avoids concurrent runner corruption and grpcfuse file errors;
+        # lower network concurrency avoids registry resets.
         env:
-          npm_config_store_dir: ${{ runner.temp }}/pnpm-store
+          npm_config_store_dir: /tmp/codex-pnpm-store-${{ github.run_id }}
         run: pnpm --filter codex-desktop... install --frozen-lockfile --ignore-scripts --network-concurrency 4
       - name: Install Electron binary
         run: node node_modules/electron/install.js
