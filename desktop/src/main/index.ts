@@ -5,13 +5,24 @@ import type { DesktopInfo } from '../shared/types'
 import { registerAppServerIpc } from './appServer/ipc'
 import { DisabledAppServerManager } from './appServer/disabledManager'
 import { AppServerProcessManager } from './appServer/processManager'
+import { AttachedAppServerManager } from './appServer/attachedManager'
 
 function isAppServerEnabled(): boolean {
   const value = process.env.CODEX_DESKTOP_APP_SERVER
   return value === '1' || value === 'true'
 }
 
-function createAppServerManager(): AppServerProcessManager | DisabledAppServerManager {
+function getDaemonSocketPath(): string | null {
+  const value = process.env.CODEX_DESKTOP_DAEMON_SOCKET
+  return value !== undefined && value.length > 0 ? value : null
+}
+
+function createAppServerManager(): AppServerProcessManager | DisabledAppServerManager | AttachedAppServerManager {
+  const daemonSocket = getDaemonSocketPath()
+  if (daemonSocket !== null) {
+    return new AttachedAppServerManager(daemonSocket)
+  }
+
   if (!isAppServerEnabled()) {
     return new DisabledAppServerManager()
   }
