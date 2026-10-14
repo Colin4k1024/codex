@@ -38,7 +38,7 @@ export function listGeneratedFiles() {
 export function hashGeneratedFiles() {
   const hash = createHash('sha256')
   const files = listGeneratedFiles()
-  const jsonRpcSchema = readFileSync(jsonRpcSchemaFile)
+  const jsonRpcSchema = readFileSync(jsonRpcSchemaFile).toString().replace(/\r\n/g, '\n')
   hash.update('json/JSONRPCMessage.json')
   hash.update('\0')
   hash.update(jsonRpcSchema)
@@ -47,7 +47,9 @@ export function hashGeneratedFiles() {
     const normalizedPath = relativePath.split(sep).join('/')
     hash.update(normalizedPath)
     hash.update('\0')
-    hash.update(readFileSync(join(generatedSourceDir, relativePath)))
+    hash.update(
+      readFileSync(join(generatedSourceDir, relativePath)).toString().replace(/\r\n/g, '\n'),
+    )
     hash.update('\0')
   }
   return {
