@@ -22,9 +22,7 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Install Rust
         # 1.95.0 fails on this ARM64 runner with E0463 dependency-resolution errors.
-        uses: dtolnay/rust-toolchain@e081816240890017053eacbb1bdf337761dc5582 # 1.98.1
-        with:
-          toolchain: 1.98.1
+        uses: dtolnay/rust-toolchain@a2627de80e5819949c7e1c83ed99b29085fc9bc4 # 1.98.1
       - name: Run protocol fixture tests
         working-directory: codex-rs
         env:
