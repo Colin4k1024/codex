@@ -57,8 +57,11 @@ jobs:
         # lower network concurrency avoids registry resets.
         env:
           npm_config_store_dir: /tmp/codex-pnpm-store-${{ github.run_id }}
+          npm_config_registry: https://registry.npmmirror.com
         run: pnpm --filter codex-desktop... install --frozen-lockfile --ignore-scripts --network-concurrency 4
       - name: Install Electron binary
+        env:
+          ELECTRON_MIRROR: https://npmmirror.com/mirrors/electron/
         run: node node_modules/electron/install.js
       - name: Check generated protocol revision
         run: pnpm --dir desktop/packages/app-server-protocol check
