@@ -5,18 +5,20 @@
   "description": "Electron desktop client for Codex app-server",
   "main": "dist-electron/main/index.js",
   "scripts": {
-    "build": "tsc -p tsconfig.node.json && vite build",
+    "build": "pnpm run protocol:build && tsc -p tsconfig.node.json && vite build",
     "dev": "tsc -p tsconfig.node.json && concurrently -k \"vite\" \"wait-on tcp:127.0.0.1:5173 && electron .\"",
     "format": "prettier --check .",
     "format:fix": "prettier --write .",
     "lint": "eslint .",
-    "test": "vitest run",
+    "test": "pnpm run protocol:build && vitest run",
     "test:electron": "electron . --smoke",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "pnpm run protocol:build && tsc --noEmit",
+    "protocol:build": "pnpm --filter @codex/app-server-protocol... build"
   },
   "dependencies": {
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "@codex/app-server-protocol": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",

@@ -1,6 +1,7 @@
 packages:
   - codex-cli
   - desktop
+  - desktop/packages/*
   - codex-rs/responses-api-proxy/npm
   - sdk/typescript
 

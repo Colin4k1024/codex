@@ -4,12 +4,25 @@ on:
   pull_request:
     paths:
       - desktop/**
+      - codex-rs/app-server-protocol/**
       - .github/workflows/desktop-ci.yml
       - pnpm-lock.yaml
       - pnpm-workspace.yaml
   workflow_dispatch:
 
 jobs:
+  protocol-drift:
+    name: App-server protocol drift
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@e081816240890017053eacbb1bdf337761dc5582 # 1.95.0
+      - name: Run protocol fixture tests
+        working-directory: codex-rs
+        run: cargo test -p codex-app-server-protocol --lib schema_fixtures
+
   build-test:
     name: Desktop build and test
     runs-on: ${{ matrix.os }}
@@ -32,6 +45,12 @@ jobs:
           cache: pnpm
       - name: Install desktop dependencies
         run: pnpm --filter codex-desktop... install --frozen-lockfile
+      - name: Check generated protocol revision
+        run: pnpm --dir desktop/packages/app-server-protocol check
+      - name: Build generated protocol package
+        run: pnpm --dir desktop/packages/app-server-protocol build
+      - name: Test generated protocol package
+        run: pnpm --dir desktop/packages/app-server-protocol test
       - name: Format
         run: pnpm --dir desktop format
       - name: Lint
