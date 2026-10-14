@@ -93,7 +93,14 @@ interface UpdateManifestOptions {
   protocolVersion: string
 }
 
-function createUpdateManifest({ version, platform, arch, sha256, url, protocolVersion }: UpdateManifestOptions) {
+function createUpdateManifest({
+  version,
+  platform,
+  arch,
+  sha256,
+  url,
+  protocolVersion,
+}: UpdateManifestOptions) {
   return {
     version,
     platform,

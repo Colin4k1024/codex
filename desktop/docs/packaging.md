@@ -4,15 +4,16 @@ This document describes the packaging, signing, and update safety design for Cod
 
 ## Package Formats
 
-| Platform | Format | Notes |
-|----------|--------|-------|
-| macOS    | `.dmg` | Signed and notarized |
-| Windows  | `.msi` | Signed with Authenticode |
+| Platform | Format      | Notes                               |
+| -------- | ----------- | ----------------------------------- |
+| macOS    | `.dmg`      | Signed and notarized                |
+| Windows  | `.msi`      | Signed with Authenticode            |
 | Linux    | `.AppImage` | Self-contained, no install required |
 
 ## Sidecar Strategy
 
 The app-server binary is bundled as a sidecar inside the app package:
+
 - macOS: `Contents/Resources/sidecar/codex-app-server`
 - Windows: `resources/sidecar/codex-app-server.exe`
 - Linux: `resources/sidecar/codex-app-server`

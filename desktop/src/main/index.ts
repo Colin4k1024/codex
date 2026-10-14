@@ -17,14 +17,24 @@ function getDaemonSocketPath(): string | null {
   return value !== undefined && value.length > 0 ? value : null
 }
 
-function createAppServerManager(): AppServerProcessManager | DisabledAppServerManager | AttachedAppServerManager {
-  const daemonSocket = getDaemonSocketPath()
-  if (daemonSocket !== null) {
-    return new AttachedAppServerManager(daemonSocket)
-  }
-
+function createAppServerManager():
+  | AppServerProcessManager
+  | DisabledAppServerManager
+  | AttachedAppServerManager {
   if (!isAppServerEnabled()) {
     return new DisabledAppServerManager()
+  }
+
+  const daemonSocket = getDaemonSocketPath()
+  if (daemonSocket !== null) {
+    return new AttachedAppServerManager({
+      socketPath: daemonSocket,
+      clientInfo: {
+        name: 'codex-desktop',
+        title: 'Codex Desktop',
+        version: app.getVersion(),
+      },
+    })
   }
 
   return new AppServerProcessManager({
