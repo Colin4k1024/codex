@@ -3,3 +3,4 @@ dist/
 dist-electron/
 coverage/
 *.log
+test-results/

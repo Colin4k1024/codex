@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react'
+import { AppShell, EmptyState } from './components/AppShell'
+import { Button } from './components/ui/Button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './components/ui/Card'
+import { Spinner } from './components/ui/Spinner'
 import { formatDesktopInfo } from '../shared/desktopInfo'
+import type { AppServerStatus } from '../shared/appServer'
 import type { CodexDesktopBridge, DesktopInfo } from '../shared/types'
 
 declare global {
@@ -10,42 +15,90 @@ declare global {
 
 export function App() {
   const [info, setInfo] = useState<DesktopInfo | null>(null)
+  const [appServerStatus, setAppServerStatus] = useState<AppServerStatus | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [retryCount, setRetryCount] = useState(0)
 
   useEffect(() => {
     let cancelled = false
-    window.codexDesktop
-      .getDesktopInfo()
-      .then((value) => {
+
+    async function loadDesktopState(): Promise<void> {
+      try {
+        const [desktopInfo, status] = await Promise.all([
+          window.codexDesktop.getDesktopInfo(),
+          window.codexDesktop.getAppServerStatus(),
+        ])
         if (!cancelled) {
-          setInfo(value)
+          setInfo(desktopInfo)
+          setAppServerStatus(status)
+          setError(null)
         }
-      })
-      .catch((err: Error) => {
+      } catch (err) {
         if (!cancelled) {
-          setError(err.message)
+          setError(err instanceof Error ? err.message : 'Unable to load desktop state')
         }
-      })
+      }
+    }
+
+    void loadDesktopState()
+    const unsubscribe = window.codexDesktop.onAppServerStatusChanged((status) => {
+      if (!cancelled) {
+        setAppServerStatus(status)
+      }
+    })
+
     return () => {
       cancelled = true
+      unsubscribe()
     }
-  }, [])
+  }, [retryCount])
+
+  const connectionState = appServerStatus?.state ?? 'Disconnected'
 
   return (
-    <main className="shell">
-      <header className="shell__header">
-        <h1>Codex Desktop</h1>
-        <p>Electron scaffold connected through a typed preload bridge.</p>
-      </header>
-      <section className="shell__content">
-        {info ? (
-          <p className="shell__status">{formatDesktopInfo(info)}</p>
-        ) : error ? (
-          <p className="shell__error">Unable to read desktop info: {error}</p>
+    <AppShell connectionState={connectionState}>
+      <div className="mx-auto grid max-w-5xl gap-6">
+        {error ? (
+          <Card>
+            <CardHeader>
+              <CardTitle>Unable to load desktop state</CardTitle>
+              <CardDescription>{error}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button onClick={() => setRetryCount((count) => count + 1)}>Try again</Button>
+            </CardContent>
+          </Card>
+        ) : info ? (
+          <Card>
+            <CardHeader>
+              <CardTitle>Runtime</CardTitle>
+              <CardDescription>{formatDesktopInfo(info)}</CardDescription>
+            </CardHeader>
+            <CardContent className="flex flex-wrap gap-3">
+              <Button
+                variant={connectionState === 'Ready' ? 'secondary' : 'primary'}
+                onClick={() => void window.codexDesktop.startAppServer()}
+              >
+                {connectionState === 'Ready' ? 'Restart app server' : 'Start app server'}
+              </Button>
+              <Button variant="ghost" onClick={() => void window.codexDesktop.stopAppServer()}>
+                Stop app server
+              </Button>
+            </CardContent>
+          </Card>
         ) : (
-          <p className="shell__loading">Loading desktop info…</p>
+          <Card>
+            <CardContent className="flex h-24 items-center justify-center">
+              <Spinner label="Loading desktop runtime" />
+            </CardContent>
+          </Card>
         )}
-      </section>
-    </main>
+
+        <EmptyState
+          title="No active thread"
+          description="Start a new Codex thread to begin a session."
+        />
+      </div>
+    </AppShell>
   )
 }
