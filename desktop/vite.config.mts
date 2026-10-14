@@ -1,8 +1,9 @@
+import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [tailwindcss(), react()],
   base: './',
   build: {
     target: 'es2022',
@@ -14,8 +15,9 @@ export default defineConfig({
     strictPort: true,
   },
   test: {
-    environment: 'node',
+    environment: 'jsdom',
     globals: true,
-    include: ['tests/**/*.test.ts'],
+    setupFiles: ['./tests/setup.ts'],
+    include: ['tests/**/*.{test.ts,test.tsx}'],
   },
 })

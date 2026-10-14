@@ -19,6 +19,7 @@ pnpm --dir desktop typecheck
 pnpm --dir desktop test
 pnpm --dir desktop build
 pnpm --dir desktop test:electron
+pnpm --dir desktop test:visual
 ```
 
 `test:electron` launches the built shell and closes it immediately through the `--smoke` flag.
@@ -34,3 +35,7 @@ pnpm --dir desktop test:electron
 ## App-server protocol package
 
 `desktop/packages/app-server-protocol` regenerates its TypeScript contract from `codex-rs/app-server-protocol/schema/typescript` and the JSON-RPC envelope JSON schema. Generated files are copied into the package during build and are never edited by hand. The checked-in `protocol-revision.json` pins the current fixture hash; CI fails closed when the Rust schema drift changes that hash.
+
+## Design system
+
+The renderer uses Tailwind CSS with semantic color tokens for light and dark themes. Reusable UI primitives live under `desktop/src/renderer/components/ui` and cover buttons, cards, inputs, badges, status indicators, and navigation items. The shell provides a responsive header, sidebar, main region, and footer with keyboard-accessible landmarks.
