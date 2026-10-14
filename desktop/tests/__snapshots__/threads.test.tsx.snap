@@ -141,13 +141,57 @@ exports[`restores the selected thread after a desktop restart and keeps only its
               <div
                 class="p-5 pt-0 space-y-4"
               >
+                <form
+                  class="flex flex-col gap-2 sm:flex-row"
+                >
+                  <label
+                    class="sr-only"
+                    for="thread-search"
+                  >
+                    Search threads
+                  </label>
+                  <input
+                    class="h-10 w-full rounded-[var(--radius-md)] border border-border bg-surface px-3 text-sm text-foreground placeholder:text-foreground-muted"
+                    id="thread-search"
+                    placeholder="Search threads"
+                    value=""
+                  />
+                  <label
+                    class="sr-only"
+                    for="thread-archived-filter"
+                  >
+                    Thread archive filter
+                  </label>
+                  <select
+                    class="h-10 rounded-[var(--radius-md)] border border-border bg-surface px-3 text-sm text-foreground"
+                    id="thread-archived-filter"
+                  >
+                    <option
+                      value="active"
+                    >
+                      Active
+                    </option>
+                    <option
+                      value="archived"
+                    >
+                      Archived
+                    </option>
+                  </select>
+                  <button
+                    class="inline-flex select-none items-center justify-center gap-2 whitespace-nowrap rounded-[var(--radius-md)] border text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 bg-surface text-foreground border-border hover:bg-surface-muted h-10 px-4"
+                    type="submit"
+                  >
+                    Apply filters
+                  </button>
+                </form>
                 <ul
                   aria-label="Thread list"
                   class="space-y-1"
                 >
                   <li>
                     <button
-                      class="flex h-10 w-full items-center rounded-[var(--radius-md)] px-3 text-left text-sm font-medium transition-colors text-foreground-muted hover:bg-surface-muted hover:text-foreground"
+                      aria-current="true"
+                      class="flex h-10 w-full items-center rounded-[var(--radius-md)] px-3 text-left text-sm font-medium transition-colors bg-primary/10 text-primary"
                       type="button"
                     >
                       <span

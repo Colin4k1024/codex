@@ -43,13 +43,53 @@ function isNullableString(value: unknown): value is string | null {
   return value === null || typeof value === 'string'
 }
 
+function isStringArray(value: unknown): value is string[] {
+  return Array.isArray(value) && value.every((entry) => typeof entry === 'string')
+}
+
+function isNullableNumber(value: unknown): value is number | null {
+  return value === null || typeof value === 'number'
+}
+
+const turnStatuses = new Set(['completed', 'interrupted', 'failed', 'inProgress'])
+const threadStatuses = new Set(['notLoaded', 'idle', 'systemError', 'active'])
+
 export function isThreadItem(value: unknown): value is ThreadItem {
-  return (
-    isRecord(value) &&
-    typeof value.type === 'string' &&
-    typeof value.id === 'string' &&
-    value.id.length > 0
-  )
+  if (
+    !isRecord(value) ||
+    typeof value.type !== 'string' ||
+    typeof value.id !== 'string' ||
+    value.id.length === 0
+  ) {
+    return false
+  }
+
+  switch (value.type) {
+    case 'userMessage':
+      return Array.isArray(value.content) && value.content.every(isRecord)
+    case 'agentMessage':
+    case 'plan':
+      return typeof value.text === 'string'
+    case 'reasoning':
+      return isStringArray(value.summary) && isStringArray(value.content)
+    case 'commandExecution':
+      return (
+        typeof value.command === 'string' &&
+        typeof value.cwd === 'string' &&
+        typeof value.status === 'string' &&
+        Array.isArray(value.commandActions) &&
+        isNullableString(value.aggregatedOutput) &&
+        isNullableNumber(value.exitCode) &&
+        isNullableNumber(value.durationMs)
+      )
+    case 'fileChange':
+      return Array.isArray(value.changes) && typeof value.status === 'string'
+    case 'mcpToolCall':
+    case 'dynamicToolCall':
+      return typeof value.tool === 'string' && typeof value.status === 'string'
+    default:
+      return true
+  }
 }
 
 export function isTurn(value: unknown): value is Turn {
@@ -60,6 +100,7 @@ export function isTurn(value: unknown): value is Turn {
     Array.isArray(value.items) &&
     value.items.every(isThreadItem) &&
     typeof value.status === 'string' &&
+    turnStatuses.has(value.status) &&
     (value.error === null || isRecord(value.error))
   )
 }
@@ -73,10 +114,18 @@ export function isThread(value: unknown): value is Thread {
     typeof value.preview === 'string' &&
     typeof value.ephemeral === 'boolean' &&
     typeof value.modelProvider === 'string' &&
+    isNullableString(value.model) &&
+    isNullableNumber(value.recencyAt) &&
+    isNullableString(value.path) &&
+    typeof value.cwd === 'string' &&
+    typeof value.cliVersion === 'string' &&
+    isNullableString(value.name) &&
     typeof value.createdAt === 'number' &&
     typeof value.updatedAt === 'number' &&
     isRecord(value.status) &&
     typeof value.status.type === 'string' &&
+    threadStatuses.has(value.status.type) &&
+    (value.status.type !== 'active' || Array.isArray(value.status.activeFlags)) &&
     Array.isArray(value.turns) &&
     value.turns.every(isTurn)
   )
@@ -105,8 +154,8 @@ function isThreadStartResponse(value: unknown): value is ThreadStartResponse {
 function isThreadResumeResponse(value: unknown): value is ThreadResumeResponse {
   return (
     isThreadStartResponse(value) &&
-    'turnsBackwardsCursor' in value &&
-    'itemsBackwardsCursor' in value
+    isNullableString((value as { turnsBackwardsCursor?: unknown }).turnsBackwardsCursor) &&
+    isNullableString((value as { itemsBackwardsCursor?: unknown }).itemsBackwardsCursor)
   )
 }
 

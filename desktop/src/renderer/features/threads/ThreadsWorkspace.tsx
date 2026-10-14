@@ -11,8 +11,10 @@ export function ThreadsWorkspace({ controller }: ThreadsWorkspaceProps) {
     <div className="grid gap-6 lg:grid-cols-[20rem_minmax(0,1fr)]">
       <ThreadList
         state={controller.state.list}
+        selectedThreadId={controller.state.view.threadId}
         onCreateThread={() => void controller.createThread()}
         onResumeThread={(threadId) => void controller.resumeThread(threadId)}
+        onFilterChange={controller.updateFilters}
         onLoadNextPage={() => void controller.loadNextPage()}
       />
       <ConversationStream

@@ -1,3 +1,4 @@
+import { useEffect, useState, type FormEvent } from 'react'
 import { Button } from '../../components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/Card'
 import { SidebarItem } from '../../components/ui/SidebarItem'
@@ -7,8 +8,10 @@ import { getThreadTitle, type ThreadListState } from './state'
 
 export interface ThreadListProps {
   state: ThreadListState
+  selectedThreadId: string | null
   onCreateThread: () => void
   onResumeThread: (threadId: string) => void
+  onFilterChange: (searchTerm: string, archivedOnly: boolean) => void
   onLoadNextPage: () => void
 }
 
@@ -21,10 +24,25 @@ function threadStatusTone(status: string): 'neutral' | 'success' | 'warning' | '
 
 export function ThreadList({
   state,
+  selectedThreadId,
   onCreateThread,
   onResumeThread,
+  onFilterChange,
   onLoadNextPage,
 }: ThreadListProps) {
+  const [searchTerm, setSearchTerm] = useState(state.searchTerm)
+  const [archivedOnly, setArchivedOnly] = useState(state.archivedOnly)
+
+  useEffect(() => {
+    setSearchTerm(state.searchTerm)
+    setArchivedOnly(state.archivedOnly)
+  }, [state.searchTerm, state.archivedOnly])
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>): void {
+    event.preventDefault()
+    onFilterChange(searchTerm, archivedOnly)
+  }
+
   return (
     <Card className="min-w-0">
       <CardHeader className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
@@ -41,13 +59,45 @@ export function ThreadList({
         </Button>
       </CardHeader>
       <CardContent className="space-y-4">
+        <form className="flex flex-col gap-2 sm:flex-row" onSubmit={handleSubmit}>
+          <label className="sr-only" htmlFor="thread-search">
+            Search threads
+          </label>
+          <input
+            id="thread-search"
+            className="h-10 w-full rounded-[var(--radius-md)] border border-border bg-surface px-3 text-sm text-foreground placeholder:text-foreground-muted"
+            placeholder="Search threads"
+            value={searchTerm}
+            onChange={(event) => setSearchTerm(event.target.value)}
+          />
+          <label className="sr-only" htmlFor="thread-archived-filter">
+            Thread archive filter
+          </label>
+          <select
+            id="thread-archived-filter"
+            className="h-10 rounded-[var(--radius-md)] border border-border bg-surface px-3 text-sm text-foreground"
+            value={archivedOnly ? 'archived' : 'active'}
+            onChange={(event) => setArchivedOnly(event.target.value === 'archived')}
+          >
+            <option value="active">Active</option>
+            <option value="archived">Archived</option>
+          </select>
+          <Button type="submit" variant="secondary">
+            Apply filters
+          </Button>
+        </form>
+
         {state.phase === 'Loading' ? (
           <Spinner label="Loading threads" />
         ) : (
           <ul className="space-y-1" aria-label="Thread list">
             {state.threads.map((thread) => (
               <li key={thread.id}>
-                <SidebarItem onClick={() => onResumeThread(thread.id)}>
+                <SidebarItem
+                  active={thread.id === selectedThreadId}
+                  aria-current={thread.id === selectedThreadId ? 'true' : undefined}
+                  onClick={() => onResumeThread(thread.id)}
+                >
                   <span className="flex min-w-0 flex-col gap-1">
                     <span className="truncate font-medium">{getThreadTitle(thread)}</span>
                     <span className="truncate text-xs text-foreground-muted">

@@ -42,4 +42,8 @@ The renderer uses Tailwind CSS with semantic color tokens for light and dark the
 
 ## Local Docker CI runner
 
-`desktop-ci` targets the `local-docker` GitHub Actions runner label while hosted runner billing is unavailable. Register a runner against this repository with the `local-docker` label and expose the host Docker socket to the container. The runner is Linux-only; it intentionally does not replace the later cross-platform compatibility matrix tracked in the desktop Epic.
+`desktop-ci` targets the `local-docker` GitHub Actions runner label while hosted runner billing is unavailable. Register a runner against this repository with the `local-docker` label. Do **not** expose the host Docker socket to the runner container: this workflow checks out and executes pull-request code, so a Docker socket would grant that code root-equivalent host access. The runner is Linux-only; #38 remains the release prerequisite for restoring the full cross-platform compatibility matrix.
+
+## Thread workspace rollback flag
+
+Append `?disableThreads=1` to the renderer URL to hide the thread workspace and fall back to the empty shell. This is the rollback path for the conversation feature; protocol and process-manager capabilities remain available.

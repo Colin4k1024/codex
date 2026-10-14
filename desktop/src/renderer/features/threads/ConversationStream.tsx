@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { Button } from '../../components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/Card'
 import { Input } from '../../components/ui/Input'
@@ -120,8 +120,26 @@ function turnLabel(state: ThreadViewState): {
 
 export function ConversationStream({ state, onSubmit }: ConversationStreamProps) {
   const [message, setMessage] = useState('')
+  const logRef = useRef<HTMLDivElement | null>(null)
+  const shouldFollowRef = useRef(true)
   const turn = turnLabel(state)
   const canSubmit = canStartTurn(state) && message.trim().length > 0
+
+  useEffect(() => {
+    const log = logRef.current
+    if (log !== null && shouldFollowRef.current) {
+      log.scrollTop = log.scrollHeight
+    }
+  }, [state.entries])
+
+  function handleScroll(): void {
+    const log = logRef.current
+    if (log === null) {
+      return
+    }
+    const distanceFromBottom = log.scrollHeight - log.scrollTop - log.clientHeight
+    shouldFollowRef.current = distanceFromBottom <= 32
+  }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>): void {
     event.preventDefault()
@@ -156,9 +174,11 @@ export function ConversationStream({ state, onSubmit }: ConversationStreamProps)
         ) : null}
 
         <div
+          ref={logRef}
           role="log"
           aria-label="Conversation stream"
           aria-live="polite"
+          onScroll={handleScroll}
           className="flex max-h-[28rem] min-h-48 flex-col gap-3 overflow-y-auto rounded-[var(--radius-md)] border border-border bg-surface-muted p-3"
         >
           {state.entries.map(renderEntry)}

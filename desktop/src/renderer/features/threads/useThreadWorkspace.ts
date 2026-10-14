@@ -16,6 +16,7 @@ export interface ThreadWorkspaceController {
   loadNextPage: () => Promise<void>
   createThread: () => Promise<void>
   resumeThread: (threadId: string) => Promise<void>
+  updateFilters: (searchTerm: string, archivedOnly: boolean) => void
   startTurn: (text: string) => Promise<void>
 }
 
@@ -54,6 +55,8 @@ export function useThreadWorkspace({
       const response = await client.current.listThreads({
         cursor: null,
         limit: THREAD_PAGE_LIMIT,
+        searchTerm: stateRef.current.list.searchTerm.trim() || null,
+        archived: stateRef.current.list.archivedOnly,
       })
       dispatch({
         type: 'listLoadSucceeded',
@@ -94,6 +97,8 @@ export function useThreadWorkspace({
       const response = await client.current.listThreads({
         cursor,
         limit: THREAD_PAGE_LIMIT,
+        searchTerm: stateRef.current.list.searchTerm.trim() || null,
+        archived: stateRef.current.list.archivedOnly,
       })
       dispatch({ type: 'listLoadSucceeded', requestId, cursor, first: false, response })
     } catch (error) {
@@ -183,6 +188,17 @@ export function useThreadWorkspace({
     }
   }, [])
 
+  const updateFilters = useCallback((searchTerm: string, archivedOnly: boolean): void => {
+    const trimmed = searchTerm.trim()
+    if (
+      stateRef.current.list.searchTerm === trimmed &&
+      stateRef.current.list.archivedOnly === archivedOnly
+    ) {
+      return
+    }
+    dispatch({ type: 'filterChanged', searchTerm: trimmed, archivedOnly })
+  }, [])
+
   const startTurn = useCallback(async (text: string) => {
     const view = stateRef.current.view
     if (!readyRef.current || turnInFlightRef.current || !canStartTurn(view)) {
@@ -195,7 +211,7 @@ export function useThreadWorkspace({
     }
 
     turnInFlightRef.current = true
-    const requestId = view.requestId + 1
+    const requestId = ++viewRequestSeqRef.current
     dispatch({ type: 'turnStartStarted', requestId })
 
     try {
@@ -263,12 +279,19 @@ export function useThreadWorkspace({
     }
   }, [state.view.phase, state.view.thread, state.view.threadId])
 
+  useEffect(() => {
+    if (readyRef.current && state.list.phase === 'NotLoaded' && !listInFlightRef.current) {
+      void loadFirstPage()
+    }
+  }, [state.list.phase, state.list.searchTerm, state.list.archivedOnly, loadFirstPage])
+
   return {
     state,
     loadFirstPage,
     loadNextPage,
     createThread,
     resumeThread,
+    updateFilters,
     startTurn,
   }
 }

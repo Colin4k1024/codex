@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { AppShell } from './components/AppShell'
+import { AppShell, EmptyState } from './components/AppShell'
 import { Button } from './components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './components/ui/Card'
 import { Spinner } from './components/ui/Spinner'
@@ -8,6 +8,18 @@ import { ThreadsWorkspace } from './features/threads/ThreadsWorkspace'
 import { useThreadWorkspace } from './features/threads/useThreadWorkspace'
 import type { AppServerStatus } from '../shared/appServer'
 import type { CodexDesktopBridge, DesktopInfo } from '../shared/types'
+
+function ThreadsPanel({
+  bridge,
+  appServerStatus,
+}: {
+  bridge: CodexDesktopBridge
+  appServerStatus: AppServerStatus | null
+}) {
+  const threadController = useThreadWorkspace({ bridge, appServerStatus })
+
+  return <ThreadsWorkspace controller={threadController} />
+}
 
 declare global {
   interface Window {
@@ -56,10 +68,7 @@ export function App() {
   }, [retryCount])
 
   const connectionState = appServerStatus?.state ?? 'Disconnected'
-  const threadController = useThreadWorkspace({
-    bridge: window.codexDesktop,
-    appServerStatus,
-  })
+  const threadsEnabled = !window.location.search.includes('disableThreads=1')
 
   return (
     <AppShell connectionState={connectionState}>
@@ -100,7 +109,14 @@ export function App() {
           </Card>
         )}
 
-        <ThreadsWorkspace controller={threadController} />
+        {threadsEnabled ? (
+          <ThreadsPanel bridge={window.codexDesktop} appServerStatus={appServerStatus} />
+        ) : (
+          <EmptyState
+            title="Threads are disabled"
+            description="Enable threads to list, resume, and continue Codex conversations."
+          />
+        )}
       </div>
     </AppShell>
   )

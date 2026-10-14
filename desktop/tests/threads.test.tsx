@@ -2,6 +2,8 @@ import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import * as axe from 'axe-core'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { App } from '../src/renderer/App'
+import { ConversationStream } from '../src/renderer/features/threads/ConversationStream'
+import { initialThreadWorkspaceState } from '../src/renderer/features/threads/state'
 import type { AppServerNotificationEvent, AppServerStatus } from '../src/shared/appServer'
 import type { CodexDesktopBridge, DesktopInfo } from '../src/shared/types'
 
@@ -63,7 +65,9 @@ function mockThread({ id, preview, name, turns = [] }: MockThread): Record<strin
     createdAt: 1,
     updatedAt: 2,
     recencyAt: 2,
-    status: { type: turns.some((turn) => turn.status === 'inProgress') ? 'active' : 'idle' },
+    status: turns.some((turn) => turn.status === 'inProgress')
+      ? { type: 'active', activeFlags: [] }
+      : { type: 'idle' },
     path: null,
     cwd: '/tmp',
     cliVersion: 'test',
@@ -236,13 +240,20 @@ describe('thread workspace', () => {
 
     renderApp(bridge)
     expect(await screen.findByText('Thread one')).toBeInTheDocument()
-    expect(request).toHaveBeenNthCalledWith(1, 'thread/list', { cursor: null, limit: 50 })
+    expect(request).toHaveBeenNthCalledWith(1, 'thread/list', {
+      cursor: null,
+      limit: 50,
+      searchTerm: null,
+      archived: false,
+    })
 
     fireEvent.click(screen.getByRole('button', { name: 'Load more threads' }))
     expect(await screen.findByText('Thread two')).toBeInTheDocument()
     expect(request).toHaveBeenNthCalledWith(2, 'thread/list', {
       cursor: 'cursor-1',
       limit: 50,
+      searchTerm: null,
+      archived: false,
     })
     expect(screen.getAllByRole('button', { name: /Thread one/ })).toHaveLength(1)
     expect(screen.queryByRole('button', { name: 'Load more threads' })).not.toBeInTheDocument()
@@ -560,7 +571,12 @@ describe('thread workspace', () => {
     emitStatus(readyStatus())
 
     await waitFor(() => expect(request).toHaveBeenCalledTimes(4))
-    expect(request).toHaveBeenNthCalledWith(3, 'thread/list', { cursor: null, limit: 50 })
+    expect(request).toHaveBeenNthCalledWith(3, 'thread/list', {
+      cursor: null,
+      limit: 50,
+      searchTerm: null,
+      archived: false,
+    })
     expect(request).toHaveBeenNthCalledWith(4, 'thread/read', {
       threadId: 'thread-1',
       includeTurns: true,
@@ -752,4 +768,266 @@ it('restores the selected thread after a desktop restart and keeps only its ID d
   const a11y = await axe.run(secondRender.container)
   expect(a11y.violations).toHaveLength(0)
   expect(secondRender.container).toMatchSnapshot()
+})
+
+it('applies thread filters and resets strict pagination', async () => {
+  const first = mockThread({ id: 'thread-1', preview: 'Alpha', name: 'Alpha thread' })
+  const second = mockThread({ id: 'thread-2', preview: 'Beta', name: 'Beta thread' })
+  const archived = mockThread({ id: 'thread-3', preview: 'Beta archived', name: 'Beta archived' })
+  const { bridge, request } = createMockBridge(async () => listResponse([]))
+  request
+    .mockResolvedValueOnce(listResponse([first], 'cursor-1'))
+    .mockResolvedValueOnce(listResponse([second], null))
+    .mockResolvedValueOnce(listResponse([archived], null))
+
+  renderApp(bridge)
+  expect(await screen.findByText('Alpha thread')).toBeInTheDocument()
+  fireEvent.click(screen.getByRole('button', { name: 'Load more threads' }))
+  expect(await screen.findByText('Beta thread')).toBeInTheDocument()
+
+  fireEvent.change(screen.getByLabelText('Search threads'), { target: { value: 'Beta' } })
+  fireEvent.change(screen.getByLabelText('Thread archive filter'), {
+    target: { value: 'archived' },
+  })
+  fireEvent.click(screen.getByRole('button', { name: 'Apply filters' }))
+
+  expect(await screen.findByRole('button', { name: /Beta archived/ })).toBeInTheDocument()
+  expect(screen.queryByRole('button', { name: /Alpha thread/ })).not.toBeInTheDocument()
+  expect(screen.queryByRole('button', { name: /Beta thread/ })).not.toBeInTheDocument()
+  expect(screen.queryByRole('button', { name: 'Load more threads' })).not.toBeInTheDocument()
+  expect(request).toHaveBeenNthCalledWith(3, 'thread/list', {
+    cursor: null,
+    limit: 50,
+    searchTerm: 'Beta',
+    archived: true,
+  })
+})
+
+it('ignores a late turn response after switching threads', async () => {
+  const first = mockThread({ id: 'thread-1', preview: 'First', name: 'First thread' })
+  const second = mockThread({ id: 'thread-2', preview: 'Second', name: 'Second thread' })
+  const { bridge, request } = createMockBridge(async () => listResponse([]))
+  request
+    .mockResolvedValueOnce(listResponse([first, second], null))
+    .mockResolvedValueOnce(
+      resumeEnvelope(
+        mockThread({
+          id: 'thread-1',
+          preview: 'First',
+          name: 'First thread',
+          turns: [mockTurn({ id: 'turn-1', status: 'completed' })],
+        }),
+      ),
+    )
+    .mockImplementationOnce(
+      () =>
+        new Promise(() => {
+          // Keep turn/start pending while the user switches threads.
+        }),
+    )
+    .mockResolvedValueOnce(
+      resumeEnvelope(
+        mockThread({
+          id: 'thread-2',
+          preview: 'Second',
+          name: 'Second thread',
+          turns: [
+            mockTurn({
+              id: 'turn-2',
+              status: 'completed',
+              items: [assistantItem('assistant-2', 'Second thread history')],
+            }),
+          ],
+        }),
+      ),
+    )
+
+  renderApp(bridge)
+  fireEvent.click(await screen.findByRole('button', { name: /First thread/ }))
+  await screen.findByText('First thread')
+
+  fireEvent.change(screen.getByLabelText('Message'), { target: { value: 'Hello' } })
+  fireEvent.click(screen.getByRole('button', { name: 'Send' }))
+  await waitFor(() => expect(request).toHaveBeenCalledTimes(3))
+
+  fireEvent.click(screen.getByRole('button', { name: /Second thread/ }))
+  expect(await screen.findByText('Second thread history')).toBeInTheDocument()
+  expect(screen.queryByText('Turn: running')).not.toBeInTheDocument()
+})
+
+it('converges when turn completion arrives before the turn/start response', async () => {
+  const { bridge, request, emitNotification } = createMockBridge(async () => listResponse([]))
+  request
+    .mockResolvedValueOnce(listResponse([]))
+    .mockResolvedValueOnce(threadEnvelope(mockThread({ id: 'thread-1', preview: 'Thread' })))
+    .mockImplementationOnce(
+      () =>
+        new Promise((resolve) => {
+          setTimeout(() => {
+            resolve({
+              turn: mockTurn({
+                id: 'turn-1',
+                status: 'inProgress',
+                items: [userItem('user-1', 'Hello')],
+              }),
+            })
+          }, 0)
+        }),
+    )
+
+  renderApp(bridge)
+  await screen.findByText('No threads are available yet.')
+  fireEvent.click(screen.getByRole('button', { name: 'New thread' }))
+  await screen.findByRole('heading', { name: 'No thread selected', level: 2 })
+
+  fireEvent.change(screen.getByLabelText('Message'), { target: { value: 'Hello' } })
+  fireEvent.click(screen.getByRole('button', { name: 'Send' }))
+
+  emitNotification('turn/completed', {
+    threadId: 'thread-1',
+    turn: mockTurn({ id: 'turn-1', status: 'completed' }),
+  })
+  expect(await screen.findByText('Turn: completed')).toBeInTheDocument()
+
+  await waitFor(() => expect(screen.getByText('Turn: running')).toBeInTheDocument())
+  expect(screen.getByLabelText('Message')).toBeDisabled()
+
+  emitNotification('turn/completed', {
+    threadId: 'thread-1',
+    turn: mockTurn({ id: 'turn-1', status: 'completed' }),
+  })
+  expect(await screen.findByText('Turn: completed')).toBeInTheDocument()
+  expect(screen.getByLabelText('Message')).toBeEnabled()
+})
+
+it('rejects thread-scoped notifications with omitted or non-record parameters', async () => {
+  const { bridge, request, emitNotification } = createMockBridge(async () => listResponse([]))
+  request
+    .mockResolvedValueOnce(listResponse([]))
+    .mockResolvedValueOnce(threadEnvelope(mockThread({ id: 'thread-1', preview: 'Thread' })))
+
+  renderApp(bridge)
+  await screen.findByText('No threads are available yet.')
+  fireEvent.click(screen.getByRole('button', { name: 'New thread' }))
+  await screen.findByRole('heading', { name: 'No thread selected', level: 2 })
+
+  emitNotification('error', { turnId: 'turn-1' })
+  expect(screen.getByText('Thread event is missing a valid thread ID')).toBeInTheDocument()
+
+  emitNotification('turn/completed', null)
+  expect(screen.getByText('Thread event is missing a valid thread ID')).toBeInTheDocument()
+})
+
+it('allows ordinary input after an interrupted terminal turn', async () => {
+  const { bridge, request } = createMockBridge(async () => listResponse([]))
+  request
+    .mockResolvedValueOnce(listResponse([]))
+    .mockResolvedValueOnce(
+      threadEnvelope(
+        mockThread({
+          id: 'thread-1',
+          preview: 'Thread',
+          turns: [mockTurn({ id: 'turn-1', status: 'interrupted' })],
+        }),
+      ),
+    )
+    .mockResolvedValueOnce({ turn: mockTurn({ id: 'turn-2', status: 'inProgress' }) })
+
+  renderApp(bridge)
+  await screen.findByText('No threads are available yet.')
+  fireEvent.click(screen.getByRole('button', { name: 'New thread' }))
+  expect(await screen.findByText('Turn: interrupted')).toBeInTheDocument()
+
+  fireEvent.change(screen.getByLabelText('Message'), { target: { value: 'Continue' } })
+  fireEvent.click(screen.getByRole('button', { name: 'Send' }))
+
+  await waitFor(() =>
+    expect(request).toHaveBeenNthCalledWith(3, 'turn/start', {
+      threadId: 'thread-1',
+      input: [{ type: 'text', text: 'Continue', text_elements: [] }],
+    }),
+  )
+  expect(await screen.findByText('Turn: running')).toBeInTheDocument()
+})
+
+it('rejects malformed rendered item fields', async () => {
+  const { bridge, request } = createMockBridge(async () => listResponse([]))
+  const malformedThread = mockThread({
+    id: 'thread-1',
+    preview: 'Thread',
+    turns: [
+      mockTurn({
+        id: 'turn-1',
+        status: 'completed',
+        items: [{ type: 'agentMessage', id: 'assistant-1' }],
+      }),
+    ],
+  })
+  request
+    .mockResolvedValueOnce(listResponse([]))
+    .mockResolvedValueOnce(threadEnvelope(malformedThread))
+
+  renderApp(bridge)
+  await screen.findByText('No threads are available yet.')
+  fireEvent.click(screen.getByRole('button', { name: 'New thread' }))
+
+  expect(await screen.findByText('thread/start response is invalid')).toBeInTheDocument()
+})
+
+it('follows incremental output near the bottom and preserves intentional upward scrolling', () => {
+  const baseView = {
+    ...initialThreadWorkspaceState.view,
+    phase: 'Ready' as const,
+    threadId: 'thread-1',
+    thread: mockThread({ id: 'thread-1', preview: 'Thread', name: 'Thread' }) as never,
+    entries: [
+      {
+        id: 'assistant-1',
+        sequence: 0,
+        item: assistantItem('assistant-1', 'First'),
+      },
+    ],
+  }
+  const { rerender } = render(
+    <ConversationStream state={baseView as never} onSubmit={() => undefined} />,
+  )
+  const log = screen.getByRole('log', { name: 'Conversation stream' })
+  Object.defineProperty(log, 'scrollHeight', { configurable: true, value: 100 })
+  Object.defineProperty(log, 'clientHeight', { configurable: true, value: 40 })
+  log.scrollTop = 50
+
+  const appendedView = {
+    ...baseView,
+    entries: [
+      ...baseView.entries,
+      { id: 'assistant-2', sequence: 1, item: assistantItem('assistant-2', 'Second') },
+    ],
+  }
+  rerender(<ConversationStream state={appendedView as never} onSubmit={() => undefined} />)
+  expect(log.scrollTop).toBe(100)
+
+  log.scrollTop = 0
+  fireEvent.scroll(log)
+  const upwardView = {
+    ...baseView,
+    entries: [
+      ...appendedView.entries,
+      { id: 'assistant-3', sequence: 2, item: assistantItem('assistant-3', 'Third') },
+    ],
+  }
+  rerender(<ConversationStream state={upwardView as never} onSubmit={() => undefined} />)
+  expect(log.scrollTop).toBe(0)
+})
+
+it('can disable the thread workspace through the rollback feature flag', async () => {
+  const { bridge, request } = createMockBridge(async () => listResponse([]))
+  window.history.replaceState(null, '', '?disableThreads=1')
+  try {
+    renderApp(bridge)
+    expect(await screen.findByText('Threads are disabled')).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'New thread' })).not.toBeInTheDocument()
+    expect(request).not.toHaveBeenCalled()
+  } finally {
+    window.history.replaceState(null, '', window.location.pathname)
+  }
 })

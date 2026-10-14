@@ -23,9 +23,126 @@ const send = (message) => process.stdout.write(`${JSON.stringify(message)}\n`)
 const respond = (id, result) => send({ id, result })
 const respondError = (id, code, message, data) => send({ id, error: { code, message, data } })
 
+const threadId = 'integration-thread-1'
+const thread = {
+  id: threadId,
+  sessionId: 'integration-session-1',
+  forkedFromId: null,
+  parentThreadId: null,
+  preview: 'Integration thread',
+  ephemeral: false,
+  section: null,
+  sectionEnteredAt: null,
+  projectId: null,
+  historyMode: 'paginated',
+  modelProvider: 'openai',
+  model: 'gpt-test',
+  reasoningEffort: null,
+  createdAt: 1,
+  updatedAt: 2,
+  recencyAt: 2,
+  status: { type: 'idle' },
+  path: null,
+  cwd: '/tmp',
+  cliVersion: 'test',
+  originator: null,
+  source: 'appServer',
+  threadSource: null,
+  agentNickname: null,
+  agentRole: null,
+  gitInfo: null,
+  name: 'Integration thread',
+  turns: [],
+}
+const threadEnvelope = (turns = []) => ({
+  thread: { ...thread, turns },
+  model: 'gpt-test',
+  modelProvider: 'openai',
+  serviceTier: null,
+  disabledPluginIds: [],
+  cwd: '/tmp',
+  instructionSources: [],
+  approvalPolicy: 'untrusted',
+  approvalsReviewer: 'none',
+  sandbox: {},
+  reasoningEffort: null,
+})
+const resumeEnvelope = (turns = []) => ({
+  ...threadEnvelope(turns),
+  collaborationMode: null,
+  turnsBackwardsCursor: null,
+  itemsBackwardsCursor: null,
+})
+const userItem = {
+  type: 'userMessage',
+  id: 'integration-user-1',
+  clientId: null,
+  content: [{ type: 'text', text: 'Hello from integration', text_elements: [] }],
+}
+const assistantItem = { type: 'agentMessage', id: 'integration-assistant-1', text: '' }
+const makeTurn = (status, items = []) => ({
+  id: 'integration-turn-1',
+  rootTurnId: 'integration-turn-1',
+  items,
+  itemsView: 'full',
+  status,
+  error: null,
+  startedAt: 1,
+  completedAt: status === 'inProgress' ? null : 2,
+  durationMs: status === 'inProgress' ? null : 1,
+})
+
+function emitTurnEvents() {
+  send({
+    method: 'item/started',
+    params: { threadId, turnId: 'integration-turn-1', item: assistantItem },
+  })
+  send({
+    method: 'item/agentMessage/delta',
+    params: {
+      threadId,
+      turnId: 'integration-turn-1',
+      itemId: 'integration-assistant-1',
+      delta: 'Model reply',
+    },
+  })
+  send({
+    method: 'turn/completed',
+    params: {
+      threadId,
+      turn: makeTurn('completed', [userItem, { ...assistantItem, text: 'Model reply' }]),
+    },
+  })
+}
+
 async function handleRequest(message) {
   if (mode === 'noResponse') {
     return
+  }
+
+  if (mode === 'threads') {
+    if (message.method === 'thread/list') {
+      respond(message.id, { data: [thread], nextCursor: null, backwardsCursor: null })
+      return
+    }
+    if (message.method === 'thread/start' || message.method === 'thread/resume') {
+      respond(message.id, resumeEnvelope([]))
+      return
+    }
+    if (message.method === 'thread/read') {
+      respond(message.id, {
+        thread: {
+          ...thread,
+          turns: [makeTurn('completed', [userItem, { ...assistantItem, text: 'Durable reply' }])],
+        },
+      })
+      return
+    }
+    if (message.method === 'turn/start') {
+      respond(message.id, { turn: makeTurn('inProgress', [userItem]) })
+      setTimeout(emitTurnEvents, 25)
+      return
+    }
   }
 
   if (message.method === 'initialize') {
