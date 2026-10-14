@@ -39,3 +39,7 @@ pnpm --dir desktop test:visual
 ## Design system
 
 The renderer uses Tailwind CSS with semantic color tokens for light and dark themes. Reusable UI primitives live under `desktop/src/renderer/components/ui` and cover buttons, cards, inputs, badges, status indicators, and navigation items. The shell provides a responsive header, sidebar, main region, and footer with keyboard-accessible landmarks.
+
+## Local Docker CI runner
+
+`desktop-ci` targets the `local-docker` GitHub Actions runner label while hosted runner billing is unavailable. Register a runner against this repository with the `local-docker` label and expose the host Docker socket to the container. The runner is Linux-only; it intentionally does not replace the later cross-platform compatibility matrix tracked in the desktop Epic.

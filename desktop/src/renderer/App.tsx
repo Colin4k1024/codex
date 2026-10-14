@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
-import { AppShell, EmptyState } from './components/AppShell'
+import { AppShell } from './components/AppShell'
 import { Button } from './components/ui/Button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './components/ui/Card'
 import { Spinner } from './components/ui/Spinner'
 import { formatDesktopInfo } from '../shared/desktopInfo'
+import { ThreadsWorkspace } from './features/threads/ThreadsWorkspace'
+import { useThreadWorkspace } from './features/threads/useThreadWorkspace'
 import type { AppServerStatus } from '../shared/appServer'
 import type { CodexDesktopBridge, DesktopInfo } from '../shared/types'
 
@@ -54,6 +56,10 @@ export function App() {
   }, [retryCount])
 
   const connectionState = appServerStatus?.state ?? 'Disconnected'
+  const threadController = useThreadWorkspace({
+    bridge: window.codexDesktop,
+    appServerStatus,
+  })
 
   return (
     <AppShell connectionState={connectionState}>
@@ -94,10 +100,7 @@ export function App() {
           </Card>
         )}
 
-        <EmptyState
-          title="No active thread"
-          description="Start a new Codex thread to begin a session."
-        />
+        <ThreadsWorkspace controller={threadController} />
       </div>
     </AppShell>
   )

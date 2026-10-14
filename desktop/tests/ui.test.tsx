@@ -34,7 +34,11 @@ const mockBridge = {
   })),
   startAppServer: vi.fn(async () => undefined),
   stopAppServer: vi.fn(async () => undefined),
-  requestAppServer: vi.fn(async () => undefined),
+  requestAppServer: vi.fn(async () => ({
+    data: [],
+    nextCursor: null,
+    backwardsCursor: null,
+  })),
   notifyAppServer: vi.fn(),
   onAppServerStatusChanged: vi.fn(() => () => undefined),
   onAppServerNotification: vi.fn(() => () => undefined),
@@ -152,7 +156,7 @@ describe('App', () => {
       expect(screen.getByText('Runtime')).toBeInTheDocument()
     })
     expect(screen.getByText(/Platform: darwin/)).toBeInTheDocument()
-    expect(screen.getByText('No active thread')).toBeInTheDocument()
+    expect(screen.getByText('No thread selected')).toBeInTheDocument()
   })
 
   it('shows a retry action when desktop state cannot load', async () => {

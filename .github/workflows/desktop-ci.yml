@@ -13,7 +13,7 @@ on:
 jobs:
   protocol-drift:
     name: App-server protocol drift
-    runs-on: ubuntu-latest
+    runs-on: local-docker
     steps:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -25,14 +25,7 @@ jobs:
 
   build-test:
     name: Desktop build and test
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os:
-          - ubuntu-latest
-          - macos-latest
-          - windows-latest
+    runs-on: local-docker
     steps:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -61,15 +54,8 @@ jobs:
         run: pnpm --dir desktop test
       - name: Build
         run: pnpm --dir desktop build
-      - name: Install Linux display dependencies
-        if: runner.os == 'Linux'
-        run: sudo apt-get update && sudo apt-get install -y xvfb
       - name: Electron smoke
         shell: bash
         run: |
-          if [[ "${{ runner.os }}" == "Linux" ]]; then
-            export ELECTRON_DISABLE_SANDBOX=1
-            xvfb-run --auto-servernum --server-args="-screen 0 1280x800x24" pnpm --dir desktop test:electron
-          else
-            pnpm --dir desktop test:electron
-          fi
+          export ELECTRON_DISABLE_SANDBOX=1
+          xvfb-run --auto-servernum --server-args="-screen 0 1280x800x24" pnpm --dir desktop test:electron
