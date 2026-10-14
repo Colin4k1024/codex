@@ -1,0 +1,56 @@
+name: desktop-ci
+
+on:
+  pull_request:
+    paths:
+      - desktop/**
+      - .github/workflows/desktop-ci.yml
+      - pnpm-lock.yaml
+      - pnpm-workspace.yaml
+  workflow_dispatch:
+
+jobs:
+  build-test:
+    name: Desktop build and test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Setup pnpm
+        uses: pnpm/action-setup@a8198c4bff370c8506180b035930dea56dbd5288 # v5.0.0
+      - name: Setup Node.js
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        with:
+          node-version: 22
+          cache: pnpm
+      - name: Install desktop dependencies
+        run: pnpm --filter codex-desktop... install --frozen-lockfile
+      - name: Format
+        run: pnpm --dir desktop format
+      - name: Lint
+        run: pnpm --dir desktop lint
+      - name: Typecheck
+        run: pnpm --dir desktop typecheck
+      - name: Unit tests
+        run: pnpm --dir desktop test
+      - name: Build
+        run: pnpm --dir desktop build
+      - name: Install Linux display dependencies
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y xvfb
+      - name: Electron smoke
+        shell: bash
+        run: |
+          if [[ "${{ runner.os }}" == "Linux" ]]; then
+            export ELECTRON_DISABLE_SANDBOX=1
+            xvfb-run --auto-servernum --server-args="-screen 0 1280x800x24" pnpm --dir desktop test:electron
+          else
+            pnpm --dir desktop test:electron
+          fi
