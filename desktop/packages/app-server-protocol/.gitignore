@@ -1,0 +1,6 @@
+src/generated/
+dist/
+coverage/
+tests/*.js
+tests/*.js.map
+tests/*.d.ts

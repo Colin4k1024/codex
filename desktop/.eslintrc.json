@@ -103,5 +103,14 @@
       }
     }
   ],
-  "ignorePatterns": ["dist/**", "dist-electron/**", "coverage/**"]
+  "ignorePatterns": [
+    "dist/**",
+    "dist-electron/**",
+    "coverage/**",
+    "packages/app-server-protocol/src/generated/**",
+    "packages/app-server-protocol/dist/**",
+    "packages/app-server-protocol/tests/*.js",
+    "packages/app-server-protocol/tests/*.js.map",
+    "packages/app-server-protocol/tests/*.d.ts"
+  ]
 }

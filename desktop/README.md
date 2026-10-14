@@ -30,3 +30,7 @@ pnpm --dir desktop test:electron
 - Renderer code accesses Electron through the typed preload bridge exposed as `window.codexDesktop`.
 - Context isolation, sandboxing, and web security remain enabled.
 - The preload surface is intentionally minimal and versioned with the app-server contract.
+
+## App-server protocol package
+
+`desktop/packages/app-server-protocol` regenerates its TypeScript contract from `codex-rs/app-server-protocol/schema/typescript` and the JSON-RPC envelope JSON schema. Generated files are copied into the package during build and are never edited by hand. The checked-in `protocol-revision.json` pins the current fixture hash; CI fails closed when the Rust schema drift changes that hash.
