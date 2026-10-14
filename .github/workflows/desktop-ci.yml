@@ -77,6 +77,16 @@ jobs:
         run: pnpm --dir desktop typecheck
       - name: Unit tests
         run: pnpm --dir desktop test
+      - name: Install Electron runtime libraries
+        # The secure local Docker runner is minimal; install Chromium/Electron's
+        # shared libraries inside the container, never on the host.
+        run: |
+          sed -i 's|http://ports.ubuntu.com/ubuntu-ports/|https://mirrors.aliyun.com/ubuntu-ports/|g' /etc/apt/sources.list.d/ubuntu.sources
+          apt-get update -qq
+          DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --no-install-recommends \
+            libglib2.0-0 libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 \
+            libgtk-3-0 libgbm1 libasound2t64 libxss1 libxtst6 libxrandr2 \
+            libxcomposite1 libxdamage1 libxfixes3 libxkbcommon0 libpango-1.0-0 libcairo2
       - name: Build
         run: pnpm --dir desktop build
       - name: Electron smoke
