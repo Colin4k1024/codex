@@ -1,0 +1,76 @@
+:root {
+  color-scheme: light dark;
+  font-family:
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif;
+  background: #f6f8fa;
+  color: #111827;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 1024px;
+  min-height: 640px;
+}
+
+.shell {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100vh;
+  padding: 2rem;
+  gap: 1rem;
+}
+
+.shell__header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.shell__header p {
+  margin: 0.5rem 0 0;
+  color: #4b5563;
+}
+
+.shell__content {
+  display: grid;
+  place-items: center;
+}
+
+.shell__status,
+.shell__error,
+.shell__loading {
+  margin: 0;
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.75);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.shell__error {
+  color: #b91c1c;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    background: #111827;
+    color: #f9fafb;
+  }
+
+  .shell__header p {
+    color: #d1d5db;
+  }
+
+  .shell__status,
+  .shell__error,
+  .shell__loading {
+    background: rgba(31, 41, 55, 0.9);
+    box-shadow: none;
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "name": "codex-desktop",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Electron desktop client for Codex app-server",
+  "main": "dist-electron/main/index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.node.json && vite build",
+    "dev": "tsc -p tsconfig.node.json && concurrently -k \"vite\" \"wait-on tcp:127.0.0.1:5173 && electron .\"",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write .",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:electron": "electron . --smoke",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^9.1.0",
+    "electron": "^33.2.0",
+    "eslint": "^8.57.1",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.2",
+    "vite": "^5.4.11",
+    "vitest": "^2.1.8",
+    "wait-on": "^8.0.1"
+  }
+}
