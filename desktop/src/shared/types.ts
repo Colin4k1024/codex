@@ -1,6 +1,7 @@
 import type {
   AppServerNotificationEvent,
   AppServerNotificationMethod,
+  AppServerRequestId,
   AppServerRequestMethod,
   AppServerStatus,
 } from './appServer'
@@ -21,6 +22,7 @@ export interface CodexDesktopBridge {
   getAppServerStatus(): Promise<AppServerStatus>
   requestAppServer(method: AppServerRequestMethod, params?: unknown): Promise<unknown>
   notifyAppServer(method: AppServerNotificationMethod, params?: unknown): Promise<void>
+  respondAppServerRequest(id: AppServerRequestId, result: unknown): Promise<void>
   onAppServerStatusChanged(listener: (status: AppServerStatus) => void): () => void
   onAppServerNotification(listener: (event: AppServerNotificationEvent) => void): () => void
 }

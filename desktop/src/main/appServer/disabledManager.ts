@@ -39,6 +39,10 @@ export class DisabledAppServerManager implements AppServerIpcManager {
   notify(): void {
     throw this.status.lastError
   }
+
+  respondToServerRequest(): Promise<never> {
+    return Promise.reject(this.status.lastError)
+  }
   dispose(): void {
     // Disabled manager never owns a child process.
   }

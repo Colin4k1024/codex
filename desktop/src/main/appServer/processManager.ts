@@ -55,6 +55,10 @@ function hasExited(child: ChildProcessWithoutNullStreams): boolean {
   return child.exitCode !== null || child.signalCode !== null
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value)
+}
+
 /**
  * Owns the single app-server child process and its JSON-RPC client.
  *
@@ -206,8 +210,19 @@ export class AppServerProcessManager extends EventEmitter {
       limits: this.limits,
       nextRequestId: () => ++this.nextId,
       onNotification: (method, params) => {
+        if (method === 'serverRequest/resolved') {
+          const requestId = isRecord(params) ? params.requestId : undefined
+          if (typeof requestId === 'string' || typeof requestId === 'number') {
+            this.client?.forgetServerRequest(requestId)
+          }
+        }
         if (this.state === 'Ready') {
           this.emit('notification', { method, params } satisfies AppServerNotificationEvent)
+        }
+      },
+      onServerRequest: ({ id, method, params }) => {
+        if (this.state === 'Ready') {
+          this.emit('notification', { id, method, params } satisfies AppServerNotificationEvent)
         }
       },
       onProtocolError: (error) => {
@@ -275,6 +290,23 @@ export class AppServerProcessManager extends EventEmitter {
       })
     }
     this.requestNotify(method, params)
+  }
+
+  respondToServerRequest(id: string | number, result: unknown): Promise<void> {
+    if (this.state !== 'Ready') {
+      return Promise.reject(
+        localError(
+          'notReady',
+          `app-server is ${this.state}; server request responses require Ready state`,
+        ),
+      )
+    }
+    try {
+      this.client?.respondToServerRequest(id, result)
+      return Promise.resolve()
+    } catch (error) {
+      return Promise.reject(error)
+    }
   }
 
   async stop(): Promise<AppServerStatus> {

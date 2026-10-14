@@ -6,6 +6,8 @@ import { Spinner } from './components/ui/Spinner'
 import { formatDesktopInfo } from '../shared/desktopInfo'
 import { ThreadsWorkspace } from './features/threads/ThreadsWorkspace'
 import { useThreadWorkspace } from './features/threads/useThreadWorkspace'
+import { ApprovalWorkspace } from './features/approvals/ApprovalWorkspace'
+import { useApprovalWorkspace } from './features/approvals/useApprovalWorkspace'
 import type { AppServerStatus } from '../shared/appServer'
 import type { CodexDesktopBridge, DesktopInfo } from '../shared/types'
 
@@ -21,6 +23,29 @@ function ThreadsPanel({
   return <ThreadsWorkspace controller={threadController} />
 }
 
+function ApprovalsPanel({
+  bridge,
+  appServerStatus,
+}: {
+  bridge: CodexDesktopBridge
+  appServerStatus: AppServerStatus | null
+}) {
+  const approvalController = useApprovalWorkspace({ bridge, appServerStatus })
+
+  return (
+    <ApprovalWorkspace
+      state={approvalController.state}
+      onRespond={(request, decision) => {
+        void approvalController.respond(request, decision)
+      }}
+      onCancel={(requestId) => {
+        void approvalController.cancel(requestId)
+      }}
+      onSelect={approvalController.select}
+    />
+  )
+}
+
 declare global {
   interface Window {
     codexDesktop: CodexDesktopBridge
@@ -32,6 +57,7 @@ export function App() {
   const [appServerStatus, setAppServerStatus] = useState<AppServerStatus | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [retryCount, setRetryCount] = useState(0)
+  const [activePanel, setActivePanel] = useState<'threads' | 'approvals'>('threads')
 
   useEffect(() => {
     let cancelled = false
@@ -109,13 +135,36 @@ export function App() {
           </Card>
         )}
 
-        {threadsEnabled ? (
-          <ThreadsPanel bridge={window.codexDesktop} appServerStatus={appServerStatus} />
+        <div className="flex gap-2 border-b border-border">
+          <Button
+            aria-label="Show threads"
+            aria-pressed={activePanel === 'threads'}
+            variant={activePanel === 'threads' ? 'primary' : 'ghost'}
+            onClick={() => setActivePanel('threads')}
+          >
+            Threads
+          </Button>
+          <Button
+            aria-label="Show approvals"
+            aria-pressed={activePanel === 'approvals'}
+            variant={activePanel === 'approvals' ? 'primary' : 'ghost'}
+            onClick={() => setActivePanel('approvals')}
+          >
+            Approvals
+          </Button>
+        </div>
+
+        {activePanel === 'threads' ? (
+          threadsEnabled ? (
+            <ThreadsPanel bridge={window.codexDesktop} appServerStatus={appServerStatus} />
+          ) : (
+            <EmptyState
+              title="Threads are disabled"
+              description="Enable threads to list, resume, and continue Codex conversations."
+            />
+          )
         ) : (
-          <EmptyState
-            title="Threads are disabled"
-            description="Enable threads to list, resume, and continue Codex conversations."
-          />
+          <ApprovalsPanel bridge={window.codexDesktop} appServerStatus={appServerStatus} />
         )}
       </div>
     </AppShell>

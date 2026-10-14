@@ -19,7 +19,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Install Rust
-        uses: dtolnay/rust-toolchain@e081816240890017053eacbb1bdf337761dc5582 # 1.95.0
+        # 1.95.0 fails on this ARM64 runner with E0463 dependency-resolution errors.
+        uses: dtolnay/rust-toolchain@e081816240890017053eacbb1bdf337761dc5582 # 1.98.1
+        with:
+          toolchain: 1.98.1
       - name: Run protocol fixture tests
         working-directory: codex-rs
         env:
@@ -37,13 +40,18 @@ jobs:
         uses: pnpm/action-setup@a8198c4bff370c8506180b035930dea56dbd5288 # v5.0.0
       - name: Setup Node.js
         uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        env:
+          npm_config_store_dir: ${{ runner.temp }}/pnpm-store
         with:
           node-version: 22
           cache: pnpm
       - name: Install desktop dependencies
         # The workspace contains an unrelated git-hosted package with an unreliable prepare script.
         # Desktop does not consume that package, so install without scripts and run Electron's installer explicitly.
-        run: pnpm --filter codex-desktop... install --frozen-lockfile --ignore-scripts
+        # A job-local store avoids concurrent runner corruption and lower network concurrency avoids registry resets.
+        env:
+          npm_config_store_dir: ${{ runner.temp }}/pnpm-store
+        run: pnpm --filter codex-desktop... install --frozen-lockfile --ignore-scripts --network-concurrency 4
       - name: Install Electron binary
         run: node node_modules/electron/install.js
       - name: Check generated protocol revision

@@ -36,6 +36,7 @@ describe('preload bridge', () => {
         getAppServerStatus: expect.any(Function),
         requestAppServer: expect.any(Function),
         notifyAppServer: expect.any(Function),
+        respondAppServerRequest: expect.any(Function),
         onAppServerStatusChanged: expect.any(Function),
         onAppServerNotification: expect.any(Function),
       }),
@@ -48,6 +49,7 @@ describe('preload bridge', () => {
       getAppServerStatus: () => Promise<unknown>
       requestAppServer: (method: string, params?: unknown) => Promise<unknown>
       notifyAppServer: (method: string, params?: unknown) => Promise<void>
+      respondAppServerRequest: (id: string | number, result: unknown) => Promise<void>
       onAppServerStatusChanged: (listener: (status: unknown) => void) => () => void
       onAppServerNotification: (listener: (event: unknown) => void) => () => void
     }
@@ -58,6 +60,7 @@ describe('preload bridge', () => {
       'getAppServerStatus',
       'requestAppServer',
       'notifyAppServer',
+      'respondAppServerRequest',
       'onAppServerStatusChanged',
       'onAppServerNotification',
     ])

@@ -39,6 +39,7 @@ describe('thread workspace app-server integration', () => {
       notifyAppServer: async (method, params) => {
         manager.notify(method, params)
       },
+      respondAppServerRequest: (id, result) => manager.respondToServerRequest(id, result),
       onAppServerStatusChanged: (listener: (status: AppServerStatus) => void) =>
         manager.onStatus((status) => {
           act(() => {

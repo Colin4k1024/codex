@@ -109,6 +109,26 @@ exports[`restores the selected thread after a desktop restart and keeps only its
             </div>
           </div>
           <div
+            class="flex gap-2 border-b border-border"
+          >
+            <button
+              aria-label="Show threads"
+              aria-pressed="true"
+              class="inline-flex select-none items-center justify-center gap-2 whitespace-nowrap rounded-[var(--radius-md)] border text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground border-transparent hover:opacity-90 h-10 px-4"
+              type="button"
+            >
+              Threads
+            </button>
+            <button
+              aria-label="Show approvals"
+              aria-pressed="false"
+              class="inline-flex select-none items-center justify-center gap-2 whitespace-nowrap rounded-[var(--radius-md)] border text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 bg-transparent text-foreground border-transparent hover:bg-surface-muted h-10 px-4"
+              type="button"
+            >
+              Approvals
+            </button>
+          </div>
+          <div
             class="grid gap-6 lg:grid-cols-[20rem_minmax(0,1fr)]"
           >
             <div

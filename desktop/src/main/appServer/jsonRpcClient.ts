@@ -18,6 +18,7 @@ export interface JsonRpcClientOptions {
   limits?: Partial<JsonRpcLimits>
   nextRequestId?: RequestIdFactory
   onNotification?: (method: string, params: unknown) => void
+  onServerRequest?: (request: { id: string | number; method: string; params?: unknown }) => void
   onProtocolError?: (error: AppServerRpcError) => void
   onRequestIds?: (ids: ReadonlySet<number>) => void
   setTimeoutFn?: typeof setTimeout
@@ -48,10 +49,16 @@ export class JsonRpcClient {
   private readonly limits: JsonRpcLimits
   private readonly nextRequestId: RequestIdFactory
   private readonly onNotification: (method: string, params: unknown) => void
+  private readonly onServerRequest: (request: {
+    id: string | number
+    method: string
+    params?: unknown
+  }) => void
   private readonly onProtocolError: (error: AppServerRpcError) => void
   private readonly setTimeoutFn: typeof setTimeout
   private readonly clearTimeoutFn: typeof clearTimeout
   private pending = new Map<number, PendingRequest>()
+  private activeServerRequests = new Set<string | number>()
   private ended = false
 
   constructor(options: JsonRpcClientOptions) {
@@ -60,6 +67,7 @@ export class JsonRpcClient {
     let defaultId = 0
     this.nextRequestId = options.nextRequestId ?? (() => ++defaultId)
     this.onNotification = options.onNotification ?? (() => undefined)
+    this.onServerRequest = options.onServerRequest ?? (() => undefined)
     this.onProtocolError = options.onProtocolError ?? (() => undefined)
     this.setTimeoutFn = options.setTimeoutFn ?? setTimeout
     this.clearTimeoutFn = options.clearTimeoutFn ?? clearTimeout
@@ -172,6 +180,34 @@ export class JsonRpcClient {
         )
         return
       }
+
+      if ('id' in record) {
+        const id = record.id
+        if (typeof id !== 'string' && (typeof id !== 'number' || !Number.isFinite(id))) {
+          this.onProtocolError(
+            localError('parse', `app-server request has invalid id ${JSON.stringify(id)}`, {
+              code: JSON_RPC_ERROR_CODES.parse,
+            }),
+          )
+          return
+        }
+        if (this.activeServerRequests.has(id)) {
+          this.onProtocolError(
+            localError('parse', `app-server repeated active request id ${JSON.stringify(id)}`, {
+              code: JSON_RPC_ERROR_CODES.parse,
+            }),
+          )
+          return
+        }
+        this.activeServerRequests.add(id)
+        this.onServerRequest({
+          id,
+          method: record.method,
+          params: 'params' in record ? record.params : undefined,
+        })
+        return
+      }
+
       this.onNotification(record.method, 'params' in record ? record.params : undefined)
       return
     }
@@ -213,6 +249,25 @@ export class JsonRpcClient {
     pending.resolve('result' in record ? record.result : undefined)
   }
 
+  respondToServerRequest(id: string | number, result: unknown): void {
+    if (this.ended) {
+      throw localError('connectionClosed', 'app-server connection is closed')
+    }
+    if (!this.activeServerRequests.has(id)) {
+      throw localError(
+        'invalidRequest',
+        `app-server request id ${JSON.stringify(id)} is not active`,
+        { code: JSON_RPC_ERROR_CODES.invalidRequest },
+      )
+    }
+    this.activeServerRequests.delete(id)
+    this.sendFrame({ id, result })
+  }
+
+  forgetServerRequest(id: string | number): void {
+    this.activeServerRequests.delete(id)
+  }
+
   /**
    * Called when stdin/stdout closes or the process exits. Every pending request
    * must fail immediately; late responses are ignored afterwards.
@@ -230,6 +285,7 @@ export class JsonRpcClient {
       pending.reject(failure)
     }
     this.pending.clear()
+    this.activeServerRequests.clear()
   }
 
   private sendFrame(frame: Record<string, unknown>): void {

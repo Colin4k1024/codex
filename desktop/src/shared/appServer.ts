@@ -1,4 +1,4 @@
-import type { ClientNotification, ClientRequest } from '@codex/app-server-protocol'
+import type { ClientNotification, ClientRequest, RequestId } from '@codex/app-server-protocol'
 
 export type AppServerConnectionState =
   | 'Disconnected'
@@ -47,9 +47,13 @@ export interface AppServerStatus {
   lastError: AppServerRpcError | null
 }
 
+export type AppServerRequestId = RequestId
+
 export interface AppServerNotificationEvent {
   method: AppServerNotificationMethod
   params?: unknown
+  /** JSON-RPC request id for server-to-client requests; absent for notifications. */
+  id?: AppServerRequestId
 }
 
 export type AppServerRequestMethod = ClientRequest['method']
@@ -63,6 +67,7 @@ export const APP_SERVER_CHANNELS = {
   status: 'appServer:status',
   request: 'appServer:request',
   notify: 'appServer:notify',
+  respondRequest: 'appServer:respondRequest',
   statusChanged: 'appServer:statusChanged',
   notification: 'appServer:notification',
 } as const

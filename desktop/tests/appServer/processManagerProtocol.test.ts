@@ -54,6 +54,31 @@ describe('AppServerProcessManager protocol handling', () => {
     expect(manager.status.lastError).toMatchObject({ kind: 'parse' })
   })
 
+  it('delivers server requests and responds with the original request id', async () => {
+    const manager = await trackedStartReady('approvals')
+    const events: unknown[] = []
+    manager.onNotification((event) => {
+      events.push(event)
+    })
+
+    await vi.waitFor(() => {
+      expect(events).toContainEqual({
+        id: 'approval-1',
+        method: 'item/commandExecution/requestApproval',
+        params: expect.objectContaining({ command: 'echo approval-integration' }),
+      })
+    })
+
+    await manager.respondToServerRequest('approval-1', { decision: 'accept' })
+
+    await vi.waitFor(() => {
+      expect(events).toContainEqual({
+        method: 'serverRequest/resolved',
+        params: { threadId: 'integration-thread-1', requestId: 'approval-1' },
+      })
+    })
+  })
+
   it('delivers server notifications in wire order', async () => {
     const manager = createManager({ mode: 'notify' })
     managers.push(manager)

@@ -31,6 +31,8 @@ const bridge: CodexDesktopBridge = {
     ipcRenderer.invoke(APP_SERVER_CHANNELS.request, { method, params }),
   notifyAppServer: (method, params) =>
     ipcRenderer.invoke(APP_SERVER_CHANNELS.notify, { method, params }),
+  respondAppServerRequest: (id, result) =>
+    ipcRenderer.invoke(APP_SERVER_CHANNELS.respondRequest, id, result),
   onAppServerStatusChanged: (listener) =>
     subscribe(APP_SERVER_CHANNELS.statusChanged, (payload) => {
       listener(payload as AppServerStatus)
