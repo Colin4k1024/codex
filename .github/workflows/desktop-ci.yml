@@ -13,7 +13,8 @@ on:
 jobs:
   protocol-drift:
     name: App-server protocol drift
-    runs-on: ubuntu-latest
+    # Linux-only while hosted Actions billing is unavailable; #38 tracks the full matrix.
+    runs-on: local-docker
     steps:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -21,18 +22,14 @@ jobs:
         uses: dtolnay/rust-toolchain@e081816240890017053eacbb1bdf337761dc5582 # 1.95.0
       - name: Run protocol fixture tests
         working-directory: codex-rs
-        run: cargo test -p codex-app-server-protocol --lib schema_fixtures
+        env:
+          CARGO_HOME: ${{ runner.temp }}/cargo-home
+        run: cargo test --locked -p codex-app-server-protocol --lib schema_fixtures
 
   build-test:
     name: Desktop build and test
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os:
-          - ubuntu-latest
-          - macos-latest
-          - windows-latest
+    # Linux-only while hosted Actions billing is unavailable; #38 tracks the full matrix.
+    runs-on: local-docker
     steps:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -44,7 +41,11 @@ jobs:
           node-version: 22
           cache: pnpm
       - name: Install desktop dependencies
-        run: pnpm --filter codex-desktop... install --frozen-lockfile
+        # The workspace contains an unrelated git-hosted package with an unreliable prepare script.
+        # Desktop does not consume that package, so install without scripts and run Electron's installer explicitly.
+        run: pnpm --filter codex-desktop... install --frozen-lockfile --ignore-scripts
+      - name: Install Electron binary
+        run: node node_modules/electron/install.js
       - name: Check generated protocol revision
         run: pnpm --dir desktop/packages/app-server-protocol check
       - name: Build generated protocol package
@@ -61,15 +62,8 @@ jobs:
         run: pnpm --dir desktop test
       - name: Build
         run: pnpm --dir desktop build
-      - name: Install Linux display dependencies
-        if: runner.os == 'Linux'
-        run: sudo apt-get update && sudo apt-get install -y xvfb
       - name: Electron smoke
         shell: bash
         run: |
-          if [[ "${{ runner.os }}" == "Linux" ]]; then
-            export ELECTRON_DISABLE_SANDBOX=1
-            xvfb-run --auto-servernum --server-args="-screen 0 1280x800x24" pnpm --dir desktop test:electron
-          else
-            pnpm --dir desktop test:electron
-          fi
+          export ELECTRON_DISABLE_SANDBOX=1
+          xvfb-run --auto-servernum --server-args="-screen 0 1280x800x24" pnpm --dir desktop test:electron

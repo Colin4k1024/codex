@@ -6,11 +6,11 @@ export interface SidebarItemProps extends React.ButtonHTMLAttributes<HTMLButtonE
 }
 
 export const SidebarItem = forwardRef<HTMLButtonElement, SidebarItemProps>(
-  ({ className, active = false, ...props }, ref) => (
+  ({ className, active = false, 'aria-current': ariaCurrent = 'page', ...props }, ref) => (
     <button
       ref={ref}
       type="button"
-      aria-current={active ? 'page' : undefined}
+      aria-current={active ? ariaCurrent : undefined}
       className={cn(
         'flex h-10 w-full items-center rounded-[var(--radius-md)] px-3 text-left text-sm font-medium transition-colors',
         active
