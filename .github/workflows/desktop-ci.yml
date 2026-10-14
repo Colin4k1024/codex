@@ -49,6 +49,7 @@ jobs:
         shell: bash
         run: |
           if [[ "${{ runner.os }}" == "Linux" ]]; then
+            export ELECTRON_DISABLE_SANDBOX=1
             xvfb-run --auto-servernum --server-args="-screen 0 1280x800x24" pnpm --dir desktop test:electron
           else
             pnpm --dir desktop test:electron
