@@ -4,6 +4,7 @@ import { JsonRpcClient } from '../../src/main/appServer/jsonRpcClient'
 function createClient(options: Partial<ConstructorParameters<typeof JsonRpcClient>[0]> = {}) {
   const sent: string[] = []
   const notifications: Array<{ method: string; params: unknown }> = []
+  const serverRequests: Array<{ id: string | number; method: string; params?: unknown }> = []
   const protocolErrors: unknown[] = []
   const client = new JsonRpcClient({
     send: (frame) => {
@@ -12,12 +13,15 @@ function createClient(options: Partial<ConstructorParameters<typeof JsonRpcClien
     onNotification: (method, params) => {
       notifications.push({ method, params })
     },
+    onServerRequest: (request) => {
+      serverRequests.push(request)
+    },
     onProtocolError: (error) => {
       protocolErrors.push(error)
     },
     ...options,
   })
-  return { client, sent, notifications, protocolErrors }
+  return { client, sent, notifications, serverRequests, protocolErrors }
 }
 
 describe('JsonRpcClient', () => {
@@ -100,6 +104,65 @@ describe('JsonRpcClient', () => {
     expect(notifications.map((event) => (event.params as { sequence: number }).sequence)).toEqual([
       0, 1, 2, 3, 4,
     ])
+  })
+
+  it('captures server requests and responds with the original id', () => {
+    const { client, sent, serverRequests, notifications } = createClient()
+
+    client.feedLine(
+      JSON.stringify({
+        id: 'approval-1',
+        method: 'item/commandExecution/requestApproval',
+        params: { command: 'echo hello' },
+      }),
+    )
+    client.respondToServerRequest('approval-1', { decision: 'decline' })
+
+    expect(serverRequests).toEqual([
+      {
+        id: 'approval-1',
+        method: 'item/commandExecution/requestApproval',
+        params: { command: 'echo hello' },
+      },
+    ])
+    expect(notifications).toEqual([])
+    expect(JSON.parse(sent[0])).toEqual({
+      id: 'approval-1',
+      result: { decision: 'decline' },
+    })
+  })
+
+  it('rejects duplicate active server request ids and unknown responses', () => {
+    const { client, sent, protocolErrors } = createClient()
+    const frame = JSON.stringify({
+      id: 42,
+      method: 'item/fileChange/requestApproval',
+      params: {},
+    })
+
+    client.feedLine(frame)
+    client.feedLine(frame)
+
+    expect(protocolErrors).toHaveLength(1)
+    expect(protocolErrors[0]).toMatchObject({ kind: 'parse' })
+    expect(() => client.respondToServerRequest(999, null)).toThrowError(/not active/)
+
+    client.respondToServerRequest(42, { decision: 'decline' })
+    expect(JSON.parse(sent[0])).toEqual({ id: 42, result: { decision: 'decline' } })
+    expect(() => client.respondToServerRequest(42, null)).toThrowError(/not active/)
+  })
+
+  it('forgets server requests when the server reports them resolved', () => {
+    const { client } = createClient()
+    client.feedLine(
+      JSON.stringify({
+        id: 7,
+        method: 'item/tool/requestUserInput',
+        params: {},
+      }),
+    )
+    client.forgetServerRequest(7)
+    expect(() => client.respondToServerRequest(7, {})).toThrowError(/not active/)
   })
 
   it('drops late responses after disconnect', async () => {

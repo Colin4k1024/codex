@@ -9,6 +9,7 @@
 //   noResponse - ignore initialize so the client times out
 //   badInit    - respond to initialize with an invalid result
 //   notify     - after initialized, emit notifyCount ordered notifications
+//   approvals  - after initialized, issue a command-execution server request and resolve it on response
 //   huge       - write one 9 MiB frame without newline
 //   closeStdout - destroy stdout after initialized and stay alive
 //   closeStdin  - destroy stdin after initialized and stay alive
@@ -203,6 +204,20 @@ process.stdin.on('data', (chunk) => {
     } catch {
       continue
     }
+    if (
+      message.method === undefined &&
+      message.id !== undefined &&
+      (message.result !== undefined || message.error !== undefined)
+    ) {
+      if (mode === 'approvals') {
+        send({
+          method: 'serverRequest/resolved',
+          params: { threadId: 'integration-thread-1', requestId: message.id },
+        })
+      }
+      continue
+    }
+
     if (typeof message.method === 'string' && message.id === undefined) {
       if (message.method === 'initialized') {
         if (mode === 'malformed') {
@@ -216,6 +231,21 @@ process.stdin.on('data', (chunk) => {
           for (let i = 0; i < count; i += 1) {
             send({ method: 'test/ordered', params: { sequence: i } })
           }
+        }
+        if (mode === 'approvals') {
+          send({
+            id: 'approval-1',
+            method: 'item/commandExecution/requestApproval',
+            params: {
+              threadId: 'integration-thread-1',
+              turnId: 'integration-turn-1',
+              itemId: 'integration-item-1',
+              startedAtMs: 1,
+              command: 'echo approval-integration',
+              cwd: '/tmp',
+              reason: 'Integration approval',
+            },
+          })
         }
         if (mode === 'closeStdout') {
           process.stdout.end()

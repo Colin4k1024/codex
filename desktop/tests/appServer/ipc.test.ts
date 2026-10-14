@@ -39,6 +39,7 @@ function createManager() {
     stop: vi.fn(async () => status),
     request: vi.fn(async () => ({ ok: true })),
     notify: vi.fn(),
+    respondToServerRequest: vi.fn(async () => undefined),
     emitStatus: (value: AppServerStatus) => {
       for (const listener of statusListeners) {
         listener(value)
@@ -56,13 +57,13 @@ function createWebContents() {
   return { send, isDestroyed }
 }
 
-function getHandler(channel: string): (payload?: unknown) => unknown {
+function getHandler(channel: string): (...args: unknown[]) => unknown {
   const call = handle.mock.calls.find(([registeredChannel]) => registeredChannel === channel)
   if (!call) {
     throw new Error(`no handler registered for ${channel}`)
   }
-  const handler = call[1] as (event: unknown, payload?: unknown) => unknown
-  return (payload?: unknown) => handler(null, payload)
+  const handler = call[1] as (event: unknown, ...args: unknown[]) => unknown
+  return (...args: unknown[]) => handler(null, ...args)
 }
 
 describe('registerAppServerIpc', () => {
@@ -83,6 +84,7 @@ describe('registerAppServerIpc', () => {
       APP_SERVER_CHANNELS.status,
       APP_SERVER_CHANNELS.request,
       APP_SERVER_CHANNELS.notify,
+      APP_SERVER_CHANNELS.respondRequest,
     ])
   })
 
@@ -96,12 +98,16 @@ describe('registerAppServerIpc', () => {
     await getHandler(APP_SERVER_CHANNELS.status)()
     await getHandler(APP_SERVER_CHANNELS.request)({ method: 'account/logout' })
     await getHandler(APP_SERVER_CHANNELS.notify)({ method: 'test/notify' })
+    await getHandler(APP_SERVER_CHANNELS.respondRequest)('request-1', { decision: 'decline' })
 
     expect(manager.start).toHaveBeenCalledTimes(1)
     expect(manager.stop).toHaveBeenCalledTimes(1)
     expect(manager.status).toBeTypeOf('object')
     expect(manager.request).toHaveBeenCalledWith('account/logout', undefined)
     expect(manager.notify).toHaveBeenCalledWith('test/notify', undefined)
+    expect(manager.respondToServerRequest).toHaveBeenCalledWith('request-1', {
+      decision: 'decline',
+    })
   })
 
   it('validates request and notification payloads', async () => {

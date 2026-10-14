@@ -190,6 +190,7 @@ function createMockBridge(request: (method: string, params?: unknown) => Promise
     getAppServerStatus: vi.fn(async () => readyStatus()),
     requestAppServer: requestMock,
     notifyAppServer: vi.fn(),
+    respondAppServerRequest: vi.fn(async () => undefined),
     onAppServerStatusChanged: vi.fn((listener: (status: AppServerStatus) => void) => {
       statusListeners.add(listener)
       return () => statusListeners.delete(listener)

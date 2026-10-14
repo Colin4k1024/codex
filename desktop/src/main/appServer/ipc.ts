@@ -15,6 +15,7 @@ export interface AppServerIpcManager {
   stop(): Promise<AppServerStatus>
   request(method: AppServerRequestMethod, params?: unknown): Promise<unknown>
   notify(method: string, params?: unknown): void
+  respondToServerRequest(id: string | number, result: unknown): Promise<void>
 }
 
 export type AppServerRenderer = Pick<WebContents, 'send' | 'isDestroyed'>
@@ -75,5 +76,11 @@ export function registerAppServerIpc(options: AppServerIpcOptions): void {
       throw new Error('appServer:notify method must be a non-empty string')
     }
     manager.notify(method, params)
+  })
+  ipcMain.handle(APP_SERVER_CHANNELS.respondRequest, (_event, id: unknown, result: unknown) => {
+    if (typeof id !== 'string' && (typeof id !== 'number' || !Number.isFinite(id))) {
+      throw new Error('appServer:respondRequest id must be a string or finite number')
+    }
+    return manager.respondToServerRequest(id, result)
   })
 }
