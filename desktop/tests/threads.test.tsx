@@ -453,10 +453,11 @@ describe('thread workspace', () => {
       .mockResolvedValueOnce(listResponse([thread], null))
       .mockRejectedValueOnce(new Error('thread not found'))
 
-    renderApp(bridge)
+    const firstRender = renderApp(bridge)
     fireEvent.click(await screen.findByRole('button', { name: /Thread one/ }))
     expect(await screen.findByText('thread not found')).toBeInTheDocument()
     expect(screen.getByText('No thread selected')).toBeInTheDocument()
+    firstRender.unmount()
 
     request.mockReset()
     request
@@ -470,14 +471,17 @@ describe('thread workspace', () => {
     unmount()
 
     request.mockReset()
+    const thread2 = mockThread({ id: 'thread-2', preview: 'Thread 2', name: 'Thread two' })
     request
       .mockResolvedValueOnce(listResponse([thread], 'cursor-1'))
-      .mockResolvedValueOnce(listResponse([thread], null))
+      .mockResolvedValueOnce(listResponse([thread, thread2], null))
     const duplicateBridge = createMockBridge(request)
     vi.stubGlobal('codexDesktop', duplicateBridge.bridge)
     render(<App />)
     fireEvent.click(await screen.findByRole('button', { name: 'Load more threads' }))
-    expect(await screen.findByText(/duplicate thread thread-1/)).toBeInTheDocument()
+    expect(await screen.findByRole('button', { name: /Thread two/ })).toBeInTheDocument()
+    expect(screen.queryByText(/duplicate thread/)).not.toBeInTheDocument()
+    expect(screen.getAllByRole('button', { name: /Thread one/ })).toHaveLength(1)
 
     request.mockReset()
     request.mockResolvedValueOnce({

@@ -248,18 +248,19 @@ function listReducer(state: ThreadListState, action: ThreadWorkspaceAction): Thr
         return makeListError(state, 'App server returned an invalid or repeated next cursor')
       }
 
-      const currentIds = new Set(action.first ? [] : state.threads.map((thread) => thread.id))
-      for (const thread of action.response.data) {
-        if (currentIds.has(thread.id)) {
-          return makeListError(state, `App server returned duplicate thread ${thread.id}`)
+      const existingIds = new Set(action.first ? [] : state.threads.map((thread) => thread.id))
+      const deduped = action.response.data.filter((thread) => {
+        if (existingIds.has(thread.id)) {
+          return false
         }
-        currentIds.add(thread.id)
-      }
+        existingIds.add(thread.id)
+        return true
+      })
 
       return {
         ...state,
         phase: 'Ready',
-        threads: action.first ? action.response.data : [...state.threads, ...action.response.data],
+        threads: action.first ? deduped : [...state.threads, ...deduped],
         nextCursor: action.response.nextCursor,
         loadingMore: false,
         inFlightCursor: null,
