@@ -1,4 +1,5 @@
 use anyhow::Context as _;
+use serde_json;
 use std::ffi::CString;
 use std::path::Path;
 use std::path::PathBuf;
@@ -379,29 +380,63 @@ async fn install_local_dmg(dmg_path: &Path) -> anyhow::Result<PathBuf> {
 }
 
 /// Open a locally-built Codex app bundle (skips codesign verification).
+/// Local unsigned builds can't use `open -a` due to Gatekeeper; execute the
+/// adapter binary directly as a background process.
 async fn open_codex_app_local(app_path: &Path, workspace: &Path) -> anyhow::Result<()> {
+    let executable = app_path.join("Contents/MacOS/codex-launcher");
     eprintln!(
-        "Opening workspace {workspace}...",
+        "Starting Codex app adapter from {executable} (workspace: {workspace})...",
+        executable = executable.display(),
         workspace = workspace.display()
     );
-    let url = codex_new_thread_url(workspace);
-    let status = Command::new("open")
-        .arg("-a")
-        .arg(app_path)
-        .arg(&url)
-        .status()
-        .await
-        .context("failed to invoke `open`")?;
 
-    if status.success() {
-        return Ok(());
+    // Spawn the adapter as a detached background process
+    let child = Command::new(&executable)
+        .current_dir(workspace)
+        .stdin(std::process::Stdio::null())
+        .stdout(std::process::Stdio::null())
+        .stderr(std::process::Stdio::null())
+        .spawn()
+        .context("failed to start Codex app adapter")?;
+
+    let pid = child.id().unwrap_or(0);
+
+    // Give the adapter a moment to register its service
+    tokio::time::sleep(std::time::Duration::from_millis(500)).await;
+
+    let service_file = service_json_path();
+    if service_file.exists() {
+        if let Ok(contents) = std::fs::read_to_string(&service_file) {
+            if let Ok(info) = serde_json::from_str::<serde_json::Value>(&contents) {
+                if let Some(url) = info.get("url").and_then(|v| v.as_str()) {
+                    eprintln!(
+                        "Codex app adapter running at {url} (pid: {pid})",
+                        url = url
+                    );
+                    return Ok(());
+                }
+            }
+        }
     }
 
-    anyhow::bail!(
-        "`open -a {app_path} {url}` exited with {status}",
-        app_path = app_path.display(),
-        url = url
+    eprintln!(
+        "Codex app adapter started (pid: {pid}). Service file: {service_file}",
+        pid = pid,
+        service_file = service_file.display()
     );
+    Ok(())
+}
+
+fn service_json_path() -> std::path::PathBuf {
+    let state = std::env::var_os("XDG_STATE_HOME")
+        .map(std::path::PathBuf::from)
+        .unwrap_or_else(|| {
+            let home = std::env::var_os("HOME")
+                .map(std::path::PathBuf::from)
+                .unwrap_or_default();
+            home.join(".local").join("state")
+        });
+    state.join("opencode").join("service.json")
 }
 
 fn user_applications_dir() -> anyhow::Result<PathBuf> {
