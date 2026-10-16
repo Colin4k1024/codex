@@ -76,6 +76,12 @@ function dirnameOfThisBinary(): string | undefined {
   }
 }
 
+function resolveWorkspace(): string {
+  // The desktop sets CODEX_WORKSPACE to the project directory before spawning
+  // the adapter. Without it, the adapter would report its own staging directory.
+  return process.env.CODEX_WORKSPACE ?? process.cwd()
+}
+
 class CodexBridge {
   private child: ChildProcess | null = null
   private buffer = ""
@@ -120,6 +126,7 @@ class CodexBridge {
   private async initialize(): Promise<void> {
     await this.request("initialize", {
       clientInfo: { name: "codex-opencode-adapter", title: "Codex OpenCode Adapter", version: "0.1.0" },
+      capabilities: { experimentalApi: true },
     })
     this.ready = true
     for (const w of this.readyWaiters) w()
@@ -310,8 +317,8 @@ function mapThreadToSession(thread: Record<string, unknown>, directory?: string)
   return {
     id: thread.id as string,
     slug: thread.id as string,
-    projectID: "codex",
-    directory: directory ?? (thread.cwd as string) ?? process.cwd(),
+    projectID: (thread.projectId as string) ?? (thread.cwd as string) ?? "codex",
+    directory: directory ?? (thread.cwd as string) ?? resolveWorkspace(),
     title: (thread.name as string) ?? (thread.preview as string) ?? "Untitled",
     version: "0.1.0",
     time: { created, updated },
@@ -427,20 +434,71 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse, password
 
   // Project
   if (req.method === "GET" && path === "/project") {
-    const now = Date.now()
-    sendJson(res, 200, [{ id: "codex", worktree: process.cwd(), sandboxes: [], time: { created: now, updated: now, initialized: now } }], password, req)
+    try {
+      const result = (await bridge.request("project/list", {})) as { data?: Array<Record<string, unknown>> }
+      let projects = (result?.data ?? []).map((p) => {
+        // codex app-server returns projects with roots[] containing path.
+        const root = (p.roots as Array<Record<string, unknown>>)?.[0]
+        const worktree = (root?.path as string) ?? (p.path as string) ?? (p.directory as string) ?? resolveWorkspace()
+        return {
+          id: (p.id as string) ?? "unknown",
+          name: (p.name as string) ?? "unknown",
+          worktree,
+          sandboxes: [],
+          time: {
+            created: typeof p.createdAt === "number" ? p.createdAt * 1000 : Date.now(),
+            updated: typeof p.updatedAt === "number" ? p.updatedAt * 1000 : Date.now(),
+            initialized: typeof p.createdAt === "number" ? p.createdAt * 1000 : Date.now(),
+          },
+        }
+      })
+      // If no projects are registered in the app-server, fall back to the
+      // workspace directory so the desktop can still create sessions there.
+      if (projects.length === 0) {
+        const workspace = process.env.CODEX_WORKSPACE ?? resolveWorkspace()
+        projects = [{
+          id: workspace,
+          name: workspace.split("/").pop() ?? workspace,
+          worktree: workspace,
+          sandboxes: [],
+          time: { created: Date.now(), updated: Date.now(), initialized: Date.now() },
+        }]
+      }
+      sendJson(res, 200, projects, password, req)
+    } catch {
+      sendJson(res, 200, [{ id: "codex", worktree: resolveWorkspace(), sandboxes: [], time: { created: Date.now(), updated: Date.now(), initialized: Date.now() } }], password, req)
+    }
     return
   }
   if (req.method === "GET" && path === "/project/current") {
-    const now = Date.now()
-    sendJson(res, 200, { id: "codex", worktree: process.cwd(), sandboxes: [], time: { created: now, updated: now, initialized: now } }, password, req)
+    const directory = url.searchParams.get("directory") ?? resolveWorkspace()
+    try {
+      const result = (await bridge.request("project/list", {})) as { data?: Array<Record<string, unknown>> }
+      const match = (result?.data ?? []).find((p) => {
+        const pPath = (p.path as string) ?? (p.directory as string) ?? ""
+        return pPath === directory || directory.startsWith(pPath + "/")
+      })
+      sendJson(res, 200, match ? {
+        id: (match.id as string) ?? "codex",
+        worktree: (match.path as string) ?? directory,
+        sandboxes: [],
+        time: { created: Date.now(), updated: Date.now(), initialized: Date.now() },
+      } : {
+        id: "codex",
+        worktree: directory,
+        sandboxes: [],
+        time: { created: Date.now(), updated: Date.now(), initialized: Date.now() },
+      }, password, req)
+    } catch {
+      sendJson(res, 200, { id: "codex", worktree: directory, sandboxes: [], time: { created: Date.now(), updated: Date.now(), initialized: Date.now() } }, password, req)
+    }
     return
   }
 
   // Path
   if (req.method === "GET" && path === "/path") {
     const home = homedir()
-    const directory = url.searchParams.get("directory") ?? process.cwd()
+    const directory = url.searchParams.get("directory") ?? resolveWorkspace()
     sendJson(res, 200, {
       home,
       state: join(home, ".codex"),
@@ -453,7 +511,7 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse, password
 
   // Provider
   if (req.method === "GET" && path === "/api/provider") {
-    sendJson(res, 200, { location: { directory: url.searchParams.get("directory") ?? process.cwd() }, data: [{ id: "codex", name: "Codex", activation: "enabled", package: "codex" }] }, password, req)
+    sendJson(res, 200, { location: { directory: url.searchParams.get("directory") ?? resolveWorkspace() }, data: [{ id: "codex", name: "Codex", activation: "enabled", package: "codex" }] }, password, req)
     return
   }
 
@@ -466,7 +524,11 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse, password
         modelID: m.id as string,
         providerID: "codex",
         name: (m.displayName as string) ?? (m.id as string),
-        capabilities: { text: true, image: (m.inputModalities as string[])?.includes("image") ?? false },
+        capabilities: {
+          input: ["text"],
+          output: ["text"],
+          tools: true,
+        },
         variants: [],
         time: { released: Date.now() },
         cost: [],
@@ -474,9 +536,9 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse, password
         enabled: true,
         limit: { context: 128000, output: 4096 },
       }))
-      sendJson(res, 200, { location: { directory: url.searchParams.get("directory") ?? process.cwd() }, data: models }, password, req)
+      sendJson(res, 200, { location: { directory: url.searchParams.get("directory") ?? resolveWorkspace() }, data: models }, password, req)
     } catch (e) {
-      sendJson(res, 200, { location: { directory: url.searchParams.get("directory") ?? process.cwd() }, data: [] }, password, req)
+      sendJson(res, 200, { location: { directory: url.searchParams.get("directory") ?? resolveWorkspace() }, data: [] }, password, req)
     }
     return
   }
@@ -485,13 +547,17 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse, password
       const result = (await bridge.request("model/list", {})) as { data?: Array<Record<string, unknown>> }
       const first = (result?.data ?? [])[0]
       sendJson(res, 200, {
-        location: { directory: url.searchParams.get("directory") ?? process.cwd() },
+        location: { directory: url.searchParams.get("directory") ?? resolveWorkspace() },
         data: first ? {
           id: first.id as string,
           modelID: first.id as string,
           providerID: "codex",
           name: (first.displayName as string) ?? (first.id as string),
-          capabilities: { text: true, image: (first.inputModalities as string[])?.includes("image") ?? false },
+          capabilities: {
+            input: ["text"],
+            output: ["text"],
+            tools: true,
+          },
           variants: [],
           time: { released: Date.now() },
           cost: [],
@@ -501,7 +567,7 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse, password
         } : null,
       }, password, req)
     } catch (e) {
-      sendJson(res, 200, { location: { directory: url.searchParams.get("directory") ?? process.cwd() }, data: null }, password, req)
+      sendJson(res, 200, { location: { directory: url.searchParams.get("directory") ?? resolveWorkspace() }, data: null }, password, req)
     }
     return
   }
@@ -546,7 +612,7 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse, password
 
   // Sessions
   if (req.method === "GET" && path === "/session") {
-    const directory = url.searchParams.get("directory") ?? process.cwd()
+    const directory = url.searchParams.get("directory") ?? resolveWorkspace()
     const result = (await bridge.request("thread/list", {})) as { data?: Array<Record<string, unknown>> }
     const sessions = (result?.data ?? [])
       .filter((thread) => {
@@ -561,7 +627,7 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse, password
   if (req.method === "POST" && path === "/session") {
     const body = await readBody(req)
     const result = (await bridge.request("thread/start", {
-      cwd: body.directory ?? process.cwd(),
+      cwd: body.directory ?? resolveWorkspace(),
     })) as { thread?: Record<string, unknown> }
     const thread = result?.thread ?? { id: String(Date.now()) }
     sendJson(res, 200, mapThreadToSession(thread), password, req)
@@ -633,7 +699,7 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse, password
     })
     const client = { res, directory: url.searchParams.get("directory") }
     bridge.addSseClient(client)
-    res.write(JSON.stringify({ id: "0", type: "server.connected", data: {} }) + "\n")
+    res.write(`data: ${JSON.stringify({ id: "0", type: "server.connected", data: {} })}\n\n`)
     const keepalive = setInterval(() => {
       try {
         res.write(`: keepalive\n\n`)
