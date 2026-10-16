@@ -443,11 +443,13 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse, password
         return {
           id: (p.id as string) ?? "unknown",
           name: (p.name as string) ?? "unknown",
+          canonical: worktree,
           worktree,
           sandboxes: [],
           time: {
             created: typeof p.createdAt === "number" ? p.createdAt * 1000 : Date.now(),
             updated: typeof p.updatedAt === "number" ? p.updatedAt * 1000 : Date.now(),
+            active: typeof p.updatedAt === "number" ? p.updatedAt * 1000 : Date.now(),
             initialized: typeof p.createdAt === "number" ? p.createdAt * 1000 : Date.now(),
           },
         }
@@ -459,6 +461,7 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse, password
         projects = [{
           id: workspace,
           name: workspace.split("/").pop() ?? workspace,
+          canonical: workspace,
           worktree: workspace,
           sandboxes: [],
           time: { created: Date.now(), updated: Date.now(), initialized: Date.now() },
