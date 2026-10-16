@@ -10,16 +10,27 @@ pub struct AppCommand {
     /// Override the app installer download URL (advanced).
     #[arg(long = "download-url")]
     pub download_url_override: Option<String>,
+
+    /// Use a local DMG file for installation (for testing).
+    /// Overrides the download URL. Skips code-signing verification.
+    #[arg(long = "local-dmg")]
+    pub local_dmg: Option<PathBuf>,
 }
 
 pub async fn run_app(cmd: AppCommand) -> anyhow::Result<()> {
     let workspace = std::fs::canonicalize(&cmd.path).unwrap_or(cmd.path);
     #[cfg(target_os = "macos")]
     {
-        crate::app_launcher::run_app_open_or_install(workspace, cmd.download_url_override).await
+        crate::app_launcher::run_app_open_or_install(
+            workspace,
+            cmd.download_url_override,
+            cmd.local_dmg,
+        )
+        .await
     }
     #[cfg(target_os = "windows")]
     {
-        crate::app_launcher::run_app_open_or_install(workspace, cmd.download_url_override).await
+        crate::app_launcher::run_app_open_or_install(workspace, cmd.download_url_override, None)
+            .await
     }
 }

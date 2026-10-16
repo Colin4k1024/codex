@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# Codex app launcher
+# Starts the codex-opencode-adapter service and opens OpenCode desktop.
+set -euo pipefail
+
+APP_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+ADAPTER="${APP_DIR}/MacOS/codex-opencode-adapter"
+
+# Resolve codex CLI: prefer bundled, fall back to PATH
+CODEX_BIN="${APP_DIR}/MacOS/codex"
+if [ ! -x "${CODEX_BIN}" ]; then
+    CODEX_BIN="$(command -v codex 2>/dev/null || echo "")"
+fi
+
+# Start the adapter service in the background
+export PORT="${PORT:-0}"
+export HOSTNAME="${HOSTNAME:-127.0.0.1}"
+export CODEX_APP_SERVER_COMMAND="${CODEX_APP_SERVER_COMMAND:-${CODEX_BIN}}"
+export CODEX_APP_SERVER_ARGS="${CODEX_APP_SERVER_ARGS:-app-server}"
+export OPENCODE_SERVICE_VERSION="${OPENCODE_SERVICE_VERSION:-0.0.0-dev}"
+
+"${ADAPTER}" &
+ADAPTER_PID=$!
+
+# Wait briefly for adapter to register
+sleep 1
+
+# Open OpenCode desktop if available
+OPENCODE_BIN="/Applications/OpenCode.app"
+if [ -d "${OPENCODE_BIN}" ]; then
+    open "${OPENCODE_BIN}"
+fi
+
+# Keep the app alive while adapter runs
+wait "${ADAPTER_PID}" 2>/dev/null || true

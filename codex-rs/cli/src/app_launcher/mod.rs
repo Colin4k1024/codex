@@ -8,8 +8,9 @@ mod windows;
 pub async fn run_app_open_or_install(
     workspace: std::path::PathBuf,
     download_url_override: Option<String>,
+    local_dmg: Option<std::path::PathBuf>,
 ) -> anyhow::Result<()> {
-    mac::run_mac_app_open_or_install(workspace, download_url_override).await
+    mac::run_mac_app_open_or_install(workspace, download_url_override, local_dmg).await
 }
 
 /// Run the app install/open logic for the current OS.
@@ -17,6 +18,7 @@ pub async fn run_app_open_or_install(
 pub async fn run_app_open_or_install(
     workspace: std::path::PathBuf,
     download_url_override: Option<String>,
+    local_dmg: Option<std::path::PathBuf>,
 ) -> anyhow::Result<()> {
-    windows::run_windows_app_open_or_install(workspace, download_url_override).await
+    windows::run_windows_app_open_or_install(workspace, download_url_override, local_dmg).await
 }

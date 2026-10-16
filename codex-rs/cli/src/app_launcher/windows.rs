@@ -10,6 +10,7 @@ const CODEX_MICROSOFT_STORE_WEB_URL: &str = "https://apps.microsoft.com/detail/9
 pub async fn run_windows_app_open_or_install(
     workspace: PathBuf,
     download_url_override: Option<String>,
+    _local_dmg: Option<PathBuf>,
 ) -> anyhow::Result<()> {
     let workspace_path = workspace.display().to_string();
     let display_workspace = display_workspace_path(&workspace);

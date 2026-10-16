@@ -14,16 +14,38 @@ const CODEX_DMG_URL_X64: &str =
 pub async fn run_mac_app_open_or_install(
     workspace: PathBuf,
     download_url_override: Option<String>,
+    local_dmg: Option<PathBuf>,
 ) -> anyhow::Result<()> {
+    // When using a local DMG, install it directly (skip codesign verification for testing)
+    if let Some(dmg_path) = local_dmg {
+        if !dmg_path.exists() {
+            anyhow::bail!(
+                "local DMG not found at {}",
+                dmg_path.display()
+            );
+        }
+        eprintln!(
+            "Using local DMG at {dmg_path} (skipping code signature verification)...",
+            dmg_path = dmg_path.display()
+        );
+        let installed_app = install_local_dmg(&dmg_path).await?;
+        eprintln!(
+            "Launching Codex app from {installed_app}...",
+            installed_app = installed_app.display()
+        );
+        open_codex_app_local(&installed_app, &workspace).await?;
+        return Ok(());
+    }
+
     if let Some(app_path) = find_existing_codex_app_path(&codex_app_search_dirs()) {
         eprintln!(
-            "Opening Desktop app at {app_path}...",
+            "Opening Codex app at {app_path}...",
             app_path = app_path.display()
         );
         open_codex_app(&app_path, &workspace).await?;
         return Ok(());
     }
-    eprintln!("Desktop app not found; downloading installer...");
+    eprintln!("Codex app not found; downloading installer...");
     let download_url = download_url_override.unwrap_or_else(|| {
         let default_url = if is_apple_silicon_mac() {
             CODEX_DMG_URL_ARM64
@@ -34,9 +56,9 @@ pub async fn run_mac_app_open_or_install(
     });
     let installed_app = download_and_install_codex_to_user_applications(&download_url)
         .await
-        .context("failed to download/install Desktop app")?;
+        .context("failed to download/install Codex app")?;
     eprintln!(
-        "Launching Desktop app from {installed_app}...",
+        "Launching Codex app from {installed_app}...",
         installed_app = installed_app.display()
     );
     open_codex_app(&installed_app, &workspace).await?;
@@ -135,14 +157,14 @@ async fn verify_codex_app_bundle(app_path: &Path) -> anyhow::Result<()> {
         .arg(app_path)
         .output()
         .await
-        .context("failed to verify Desktop app signature")?;
+        .context("failed to verify Codex app signature")?;
 
     if output.status.success() {
         return Ok(());
     }
 
     anyhow::bail!(
-        "Desktop app at {} failed OpenAI signature verification (team {OPENAI_APPLE_TEAM_IDENTIFIER}, bundle {CODEX_BUNDLE_IDENTIFIER}): {}",
+        "Codex app at {} failed OpenAI signature verification (team {OPENAI_APPLE_TEAM_IDENTIFIER}, bundle {CODEX_BUNDLE_IDENTIFIER}): {}",
         app_path.display(),
         String::from_utf8_lossy(&output.stderr).trim()
     );
@@ -167,7 +189,7 @@ async fn download_and_install_codex_to_user_applications(dmg_url: &str) -> anyho
     let dmg_path = tmp_root.join("Codex.dmg");
     download_dmg(dmg_url, &dmg_path).await?;
 
-    eprintln!("Mounting Desktop app installer...");
+    eprintln!("Mounting Codex app installer...");
     let mount_point = mount_dmg(&dmg_path).await?;
     eprintln!(
         "Installer mounted at {mount_point}.",
@@ -178,7 +200,7 @@ async fn download_and_install_codex_to_user_applications(dmg_url: &str) -> anyho
             .context("failed to locate Codex.app in mounted dmg")?;
         verify_codex_app_bundle(&app_in_volume)
             .await
-            .context("refusing to install an unverified Desktop app")?;
+            .context("refusing to install an unverified Codex app")?;
         install_codex_app_bundle(&app_in_volume).await
     }
     .await;
@@ -197,7 +219,7 @@ async fn download_and_install_codex_to_user_applications(dmg_url: &str) -> anyho
 async fn install_codex_app_bundle(app_in_volume: &Path) -> anyhow::Result<PathBuf> {
     for applications_dir in candidate_applications_dirs()? {
         eprintln!(
-            "Installing Desktop app into {applications_dir}...",
+            "Installing Codex app into {applications_dir}...",
             applications_dir = applications_dir.display()
         );
         std::fs::create_dir_all(&applications_dir).with_context(|| {
@@ -328,6 +350,58 @@ async fn copy_app_bundle(src_app: &Path, dest_app: &Path) -> anyhow::Result<()> 
         return Ok(());
     }
     anyhow::bail!("ditto copy failed with {status}");
+}
+
+/// Install a locally-built DMG (skips code-signing verification for testing).
+async fn install_local_dmg(dmg_path: &Path) -> anyhow::Result<PathBuf> {
+    eprintln!("Mounting local DMG...");
+    let mount_point = mount_dmg(dmg_path).await?;
+    eprintln!(
+        "Local DMG mounted at {mount_point}.",
+        mount_point = mount_point.display()
+    );
+    let result = async {
+        let app_in_volume = find_codex_app_in_mount(&mount_point)
+            .context("failed to locate Codex.app in local DMG")?;
+        install_codex_app_bundle(&app_in_volume).await
+    }
+    .await;
+
+    let detach_result = detach_dmg(&mount_point).await;
+    if let Err(err) = detach_result {
+        eprintln!(
+            "warning: failed to detach DMG at {mount_point}: {err}",
+            mount_point = mount_point.display()
+        );
+    }
+
+    result
+}
+
+/// Open a locally-built Codex app bundle (skips codesign verification).
+async fn open_codex_app_local(app_path: &Path, workspace: &Path) -> anyhow::Result<()> {
+    eprintln!(
+        "Opening workspace {workspace}...",
+        workspace = workspace.display()
+    );
+    let url = codex_new_thread_url(workspace);
+    let status = Command::new("open")
+        .arg("-a")
+        .arg(app_path)
+        .arg(&url)
+        .status()
+        .await
+        .context("failed to invoke `open`")?;
+
+    if status.success() {
+        return Ok(());
+    }
+
+    anyhow::bail!(
+        "`open -a {app_path} {url}` exited with {status}",
+        app_path = app_path.display(),
+        url = url
+    );
 }
 
 fn user_applications_dir() -> anyhow::Result<PathBuf> {
