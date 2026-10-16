@@ -78,6 +78,15 @@ fn config_error_from_ignored_toml_value_fields_for_source<T: DeserializeOwned + 
     let mut ignored_callback = |ignored_path: serde_ignored::Path<'_>| {
         let path_segments = ignored_path_segments(&ignored_path);
         if !path_segments.is_empty() {
+            // `app` was renamed from `desktop`; the old key is accepted via
+            // serde alias.  serde_ignored does not observe aliases, so filter
+            // the legacy key here to avoid a spurious warning.
+            if TypeId::of::<T>() == TypeId::of::<ConfigToml>()
+                && path_segments.len() == 1
+                && path_segments[0] == "desktop"
+            {
+                return;
+            }
             ignored_paths.push(path_segments);
         }
     };
