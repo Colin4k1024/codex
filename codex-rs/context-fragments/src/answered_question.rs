@@ -1,4 +1,4 @@
-//! Async answers use the desktop's existing reply envelope and stable question identity.
+//! Async answers use the Codex app's existing reply envelope and stable question identity.
 //! Model-authored framing is bounded; oversized identities use the previous plain-text format.
 
 use super::ContextualUserFragment;
