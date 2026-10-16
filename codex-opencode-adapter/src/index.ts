@@ -385,8 +385,10 @@ function sendJson(res: ServerResponse, status: number, body: unknown, password: 
   const text = body === undefined ? "" : JSON.stringify(body)
   res.writeHead(status, {
     "content-type": "application/json",
-    "access-control-allow-origin": "oc://renderer",
+    "access-control-allow-origin": "*",
     "access-control-allow-credentials": "true",
+    "access-control-allow-methods": "GET,POST,PUT,PATCH,DELETE,OPTIONS",
+    "access-control-allow-headers": "*",
   })
   res.end(text)
 }
@@ -411,10 +413,10 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse, password
 
   if (req.method === "OPTIONS") {
     res.writeHead(204, {
-      "access-control-allow-origin": "oc://renderer",
-      "access-control-allow-credentials": "true",
-      "access-control-allow-methods": "GET,POST,PUT,PATCH,DELETE,OPTIONS",
-      "access-control-allow-headers": "authorization,content-type",
+    "access-control-allow-origin": "*",
+    "access-control-allow-credentials": "true",
+    "access-control-allow-methods": "GET,POST,PUT,PATCH,DELETE,OPTIONS",
+    "access-control-allow-headers": "*",
     })
     res.end()
     return
@@ -708,7 +710,7 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse, password
       "Content-Type": "text/event-stream",
       "Cache-Control": "no-cache",
       "Connection": "keep-alive",
-      "Access-Control-Allow-Origin": "oc://renderer",
+      "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Credentials": "true",
     })
     const client = { res, directory: url.searchParams.get("directory") }
