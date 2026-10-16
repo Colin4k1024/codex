@@ -317,11 +317,22 @@ function mapThreadToSession(thread: Record<string, unknown>, directory?: string)
   return {
     id: thread.id as string,
     slug: thread.id as string,
-    projectID: (thread.projectId as string) ?? (thread.cwd as string) ?? "codex",
+    projectID: (thread.projectId as string) ?? (thread.cwd as string) ?? resolveWorkspace(),
     directory: directory ?? (thread.cwd as string) ?? resolveWorkspace(),
     title: (thread.name as string) ?? (thread.preview as string) ?? "Untitled",
     version: "0.1.0",
-    time: { created, updated },
+    time: {
+      created,
+      updated,
+      idle: updated,
+    },
+    cost: 0,
+    tokens: {
+      input: 0,
+      output: 0,
+      reasoning: 0,
+      cache: { read: 0, write: 0 },
+    },
     ...(parentThreadId ? { parentID: parentThreadId } : {}),
   }
 }
