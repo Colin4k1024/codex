@@ -56,3 +56,7 @@ jobs:
         uses: oven-sh/setup-bun@4bc047ad259df6fc24a6c9b0f9a0cb08cf17fbe5 # v2.0.1
       - name: Build adapter
         run: pnpm --dir codex-opencode-adapter build
+      - name: Compile standalone binary
+        run: pnpm --dir codex-opencode-adapter compile
+      - name: Package distributable archive
+        run: pnpm --dir codex-opencode-adapter package

@@ -7,7 +7,11 @@
   "scripts": {
     "start": "bun src/index.ts",
     "dev": "bun --watch src/index.ts",
-    "build": "bun build src/index.ts --outdir dist --target node"
+    "build": "bun build src/index.ts --outdir dist --target node",
+    "compile": "bun build src/index.ts --outfile dist/codex-opencode-adapter --compile --target node",
+    "package": "npm run compile && mkdir -p dist/package && cp dist/codex-opencode-adapter dist/package/ && cp scripts/start.sh dist/package/ && chmod +x dist/package/start.sh && cd dist/package && tar czf ../codex-opencode-adapter-$(uname -s | tr '[:upper:]' '[:lower:]')-$(uname -m).tar.gz *",
+    "package:macos-arm64": "npm run compile && mkdir -p dist/package && cp dist/codex-opencode-adapter dist/package/ && cp scripts/start.sh dist/package/ && chmod +x dist/package/start.sh && cd dist/package && tar czf ../codex-opencode-adapter-darwin-arm64.tar.gz *",
+    "package:macos-x64": "npm run compile && mkdir -p dist/package && cp dist/codex-opencode-adapter dist/package/ && cp scripts/start.sh dist/package/ && chmod +x dist/package/start.sh && cd dist/package && tar czf ../codex-opencode-adapter-darwin-x64.tar.gz *"
   },
   "dependencies": {
     "@hono/node-server": "^2.1.5",
