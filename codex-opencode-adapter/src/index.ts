@@ -348,6 +348,7 @@ async function readBody(req: IncomingMessage): Promise<Record<string, unknown>> 
 }
 
 const bridge = new CodexBridge()
+let servicePassword = ""
 
 async function handleRequest(req: IncomingMessage, res: ServerResponse, password: string) {
   const url = new URL(req.url ?? "/", `http://${req.headers.host ?? "localhost"}`)
@@ -628,7 +629,7 @@ async function main() {
   await bridge.start()
 
   const server = createServer((req, res) => {
-    void handleRequest(req, res, process.env.OPENCODE_SERVICE_PASSWORD ?? "").catch((error) => {
+    void handleRequest(req, res, servicePassword).catch((error) => {
       console.error("[adapter] request failed:", error)
       res.writeHead(500, { "content-type": "application/json" })
       res.end(JSON.stringify({ error: String(error) }))
@@ -644,14 +645,14 @@ async function main() {
   if (!address || typeof address === "string") throw new Error("failed to get server address")
 
   const url = `http://${address.address === "::" ? "127.0.0.1" : address.address}:${address.port}`
-  const password = process.env.OPENCODE_SERVICE_PASSWORD ?? crypto.randomUUID()
+  servicePassword = process.env.OPENCODE_SERVICE_PASSWORD ?? crypto.randomUUID()
 
   const info: ServiceInfo = {
     id: crypto.randomUUID(),
     version: process.env.OPENCODE_SERVICE_VERSION ?? "0.0.0-dev-20978",
     url,
     pid: process.pid,
-    password,
+    password: servicePassword,
   }
 
   writeServiceFile(info)
