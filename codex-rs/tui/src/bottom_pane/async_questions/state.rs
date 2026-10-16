@@ -18,7 +18,7 @@ impl AsyncQuestions {
         let was_empty = self.state.pending.is_empty();
         let expires_at = (!self.expanded).then(|| Instant::now() + Duration::from_secs(30));
         for (index, question) in questions.iter().enumerate() {
-            // Match the desktop's JSON.stringify([tool name, item id, question index]).
+            // Match the Codex app's JSON.stringify([tool name, item id, question index]).
             let question_id =
                 serde_json::json!(["request_user_input_async", message_id, index]).to_string();
             if self.state.answered_ids.contains(&question_id)
@@ -153,7 +153,7 @@ impl AsyncQuestions {
     pub(crate) fn resolve_answers(&mut self, question_ids: &[String]) -> bool {
         // History can arrive before live questions or before restoring local drafts.
         self.state.answered_ids.extend(question_ids.iter().cloned());
-        // Older desktop replies identify the whole source message instead of one question.
+        // Older app replies identify the whole source message instead of one question.
         let answered = |question: &PendingQuestion| {
             question_ids.contains(&question.question_id)
                 || question_ids.contains(&question.message_id)

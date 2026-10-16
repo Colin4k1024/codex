@@ -1,6 +1,10 @@
 # ADR 0001 — Electron Desktop client for Codex app-server
 
-- Status: Accepted
+> **SUPERSEDED** by commit `65c9a206e` (refactor: remove custom desktop, adopt OpenCode desktop with codex adapter).
+> The Electron+React desktop client described below has been deleted and replaced by `codex-opencode-adapter/`.
+> This ADR is retained for historical reference only.
+
+- Status: Superseded
 - Date: 2026-10-14
 - Scope: `desktop/` client and app-server v2 integration
 - Target platforms: macOS, Linux, Windows

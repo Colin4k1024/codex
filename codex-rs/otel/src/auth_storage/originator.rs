@@ -14,7 +14,7 @@ pub struct AuthStorageOriginator(&'static str);
 impl AuthStorageOriginator {
     pub fn from_client_name(name: &str) -> Self {
         let name = match name {
-            "Codex Desktop" => "codex_desktop",
+            "Codex Desktop" | "Codex App" => "codex_app",
             _ => name,
         };
         Self(crate::bounded_originator_tag_value(name))

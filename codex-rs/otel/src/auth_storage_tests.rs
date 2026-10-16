@@ -64,7 +64,7 @@ fn startup_fallback_exports_one_logical_operation_without_error_contents() -> cr
     let logs = String::from_utf8(logs.lock().unwrap().clone()).unwrap();
     assert_eq!(logs.lines().count(), 1);
     assert!(logs.contains("secure_error=\"access_denied\""), "{logs}");
-    assert!(logs.contains("originator=\"codex_desktop\""), "{logs}");
+    assert!(logs.contains("originator=\"codex_app\""), "{logs}");
     assert!(logs.contains("outcome=\"success\""), "{logs}");
     assert!(!logs.contains("private account") && !logs.contains("sensitive error contents"));
 
@@ -120,7 +120,7 @@ fn startup_fallback_exports_one_logical_operation_without_error_contents() -> cr
                 ("fallback_reason".into(), "secure_error".into()),
                 ("secure_error".into(), "access_denied".into()),
                 ("storage_phase".into(), "policy".into()),
-                ("originator".into(), "codex_desktop".into()),
+                ("originator".into(), "codex_app".into()),
             ])
         )]
     );

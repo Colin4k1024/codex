@@ -49,7 +49,7 @@ async fn user_verification_initialize_owns_advertisement_and_eligibility() -> Re
             false,
         ),
         (ConnectionOrigin::Stdio, "other-ui", true, true, false),
-        (ConnectionOrigin::Stdio, "codex_desktop", true, true, false),
+        (ConnectionOrigin::Stdio, "codex_app", true, true, false),
         (ConnectionOrigin::Stdio, "Codex Desktop", false, true, false),
         (ConnectionOrigin::Stdio, "Codex Desktop", true, false, false),
     ] {

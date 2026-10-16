@@ -56,7 +56,7 @@ mod cloud_config;
 mod daemon_install;
 mod daemon_telemetry;
 #[cfg(any(target_os = "macos", target_os = "windows"))]
-mod desktop_app;
+mod app_launcher;
 mod doctor;
 #[cfg(test)]
 #[path = "exec_args_tests.rs"]

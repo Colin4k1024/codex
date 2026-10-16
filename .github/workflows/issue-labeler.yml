@@ -39,7 +39,7 @@ jobs:
             - If applicable, add one of the following labels to specify which sub-product or product surface the issue relates to.
             1. CLI — the Codex command line interface.
             2. extension — VS Code (or other IDE) extension-specific issues.
-            3. app - Issues related to the Codex desktop application.
+            3. app - Issues related to the Codex application (launched via `codex app`).
             4. codex-web — Issues targeting the Codex web UI/Cloud experience.
             5. github-action — Issues with the Codex GitHub action.
             6. iOS — Issues with the Codex iOS app.

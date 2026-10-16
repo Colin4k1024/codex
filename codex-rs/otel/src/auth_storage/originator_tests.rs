@@ -41,7 +41,7 @@ async fn concurrent_clients_keep_their_originator_across_awaits_and_blocking_wor
     }
     assert_eq!(
         actual,
-        ["codex_desktop", "codex_vscode", "other"]
+        ["codex_app", "codex_vscode", "other"]
             .map(|originator| (originator, "codex_cli_rs", originator, originator))
             .to_vec()
     );

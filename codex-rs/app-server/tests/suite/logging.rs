@@ -264,7 +264,7 @@ supports_websockets = false
     let initialized = app_server
         .initialize_with_capabilities(
             ClientInfo {
-                name: "codex_desktop".into(),
+                name: "codex_app".into(),
                 title: None,
                 version: "0.1.0".into(),
             },

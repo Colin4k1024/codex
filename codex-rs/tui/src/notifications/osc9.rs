@@ -36,7 +36,7 @@ impl Osc9Backend {
     }
 }
 
-/// Command that emits an OSC 9 desktop notification with a message.
+/// Command that emits an OSC 9 notification with a message.
 #[derive(Debug, Clone)]
 pub struct PostNotification {
     pub message: String,

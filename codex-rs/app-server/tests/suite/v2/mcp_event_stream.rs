@@ -163,7 +163,7 @@ async fn mcp_event_stream_waits_for_activation_forwards_events_and_cancels() -> 
             "arguments": { "project": "codex" },
             "_meta": {
                 "progressToken": stream_request["params"]["_meta"]["progressToken"],
-                "source": "desktop",
+                "source": "app",
             },
         })
     );

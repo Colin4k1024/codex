@@ -48,7 +48,7 @@ fn signed_credits_keep_daily_activity_when_the_period_nets_to_zero() {
     let end = NaiveDate::from_ymd_opt(/*year*/ 2026, /*month*/ 1, /*day*/ 9).unwrap();
     let response = serde_json::from_value(json!({"data": [
         {"date": "2026-01-08", "product_surface": "cli", "credit_amount": 0.004},
-        {"date": "2026-01-09", "product_surface": "desktop_app", "credit_amount": -0.004}
+        {"date": "2026-01-09", "product_surface": "codex_app", "credit_amount": -0.004}
     ]}))
     .unwrap();
     assert_eq!(
@@ -58,7 +58,7 @@ fn signed_credits_keep_daily_activity_when_the_period_nets_to_zero() {
             updated_at: None,
             data: [
                 ("2026-01-08", 0.004, "cli", "CLI"),
-                ("2026-01-09", -0.004, "desktop_app", "Desktop app")
+                ("2026-01-09", -0.004, "codex_app", "Codex app")
             ]
             .into_iter()
             .map(|(date, amount, key, label)| AccountAnalyticsDay {
@@ -80,8 +80,8 @@ fn message_surfaces_include_both_desktop_clients_and_unmapped_counts() {
     let date = NaiveDate::from_ymd_opt(/*year*/ 2026, /*month*/ 1, /*day*/ 9).unwrap();
     let response = serde_json::from_value(
         json!({"data": [{"date": "2026-01-09", "totals": {"turns": 10}, "clients": [
-            {"client_id": "CODEX_DESKTOP_APP", "turns": 2},
-            {"client_id": "CODEX_WORK_DESKTOP", "turns": 3},
+            {"client_id": "CODEX_APP", "turns": 2},
+            {"client_id": "CODEX_WORK_APP", "turns": 3},
             {"client_id": "new_client", "turns": 1}
         ]}]}),
     )
@@ -96,8 +96,8 @@ fn message_surfaces_include_both_desktop_clients_and_unmapped_counts() {
             total: 10.0,
             values: vec![
                 AccountAnalyticsValue {
-                    key: "desktop_app".to_string(),
-                    label: "Desktop app".to_string(),
+                    key: "codex_app".to_string(),
+                    label: "Codex app".to_string(),
                     value: 5.0
                 },
                 AccountAnalyticsValue {
@@ -201,7 +201,7 @@ fn legacy_consumer_history_keeps_daily_products_and_models() {
     let date = "2026-09-01".parse().unwrap();
     let response: AnalyticsData = serde_json::from_value(json!({"units":"relative", "data":[{
         "date":"2026-09-01",
-        "product_surface_usage_values":{"work_desktop":12,"work_web":8,"cli":30,"desktop_app":50},
+        "product_surface_usage_values":{"work_app":12,"work_web":8,"cli":30,"codex_app":50},
         "models":[{"model":"major","credits":98.5},{"model":"one-percent","credits":1},{"model":"tiny","credits":0.3},{"model":"OTHER","credits":0.2}]
     }]})).unwrap();
     for (grouping, expected) in [
@@ -256,7 +256,7 @@ fn complete_attribution_wins_consistently_and_incomplete_attribution_is_not_mixe
         "date":"2026-09-01", "product_surface_usage_values":{"cli":999},
         "models":[{"model":"legacy","credits":999}],
         "attribution":[
-            {"thread_source":"user","turn_trigger":"composer","surface":"desktop_app","model":"alpha","value":30},
+            {"thread_source":"user","turn_trigger":"composer","surface":"codex_app","model":"alpha","value":30},
             {"thread_source":"subagent","turn_trigger":"goal","surface":"cli","model":"tiny","value":0.1}
         ]
     }]})).unwrap();

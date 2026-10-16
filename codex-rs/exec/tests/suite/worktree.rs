@@ -78,16 +78,16 @@ async fn worktree_start_and_fork_use_host_pool_and_preserve_legacy_resume() -> a
     fs::write(
         home.join("config.toml"),
         format!(
-            "sandbox_mode = \"workspace-write\"\nfeatures.worktrees = true\n[desktop]\ngit-worktree-root = {}\n[projects.{}]\ntrust_level = \"trusted\"\n",
+            "sandbox_mode = \"workspace-write\"\nfeatures.worktrees = true\n[app]\ngit-worktree-root = {}\n[projects.{}]\ntrust_level = \"trusted\"\n",
             serde_json::to_string(&pool)?,
             serde_json::to_string(&source)?,
         ),
     )?;
     fs::write(
         home.join("demo.config.toml"),
-        format!("features.worktrees = false\n[desktop]\ngit-worktree-root = {other_pool}\n"),
+        format!("features.worktrees = false\n[app]\ngit-worktree-root = {other_pool}\n"),
     )?;
-    let mut settings = WorktreeSettings::for_cli(&home, /*desktop*/ None)?;
+    let mut settings = WorktreeSettings::for_cli(&home, /*app*/ None)?;
     settings.root = pool;
     let legacy_manager = WorktreeManager::new(WorktreeSettings {
         root: home.join("worktrees-cli"),
@@ -130,7 +130,7 @@ async fn worktree_start_and_fork_use_host_pool_and_preserve_legacy_resume() -> a
                 "-c".to_owned(),
                 "features.worktrees=true".to_owned(),
                 "-c".to_owned(),
-                format!("desktop.git-worktree-root={other_pool}"),
+                format!("app.git-worktree-root={other_pool}"),
                 "-c".to_owned(),
                 format!("desktop={{git-worktree-root={other_pool}}}"),
             ],
@@ -344,7 +344,7 @@ async fn worktree_start_and_fork_use_host_pool_and_preserve_legacy_resume() -> a
         if let Some(request_count) = request_count {
             assert!(!String::from_utf8_lossy(&output.stdout).contains("thread.started"));
             let denied_manager =
-                WorktreeManager::new(WorktreeSettings::for_cli(&home, /*desktop*/ None)?);
+                WorktreeManager::new(WorktreeSettings::for_cli(&home, /*app*/ None)?);
             let checkout = denied_manager
                 .list(&legacy.cwd)?
                 .into_iter()

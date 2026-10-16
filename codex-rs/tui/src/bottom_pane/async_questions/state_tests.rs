@@ -620,7 +620,7 @@ fn answered_questions_do_not_reopen_when_history_precedes_local_drafts() {
     assert_eq!(restored.unanswered_count(), 1);
     restored.restore(saved);
     assert_eq!(restored.state.pending, original.state.pending[1..]);
-    // Legacy desktop replies refer to the entire source message.
+    // Legacy app replies refer to the entire source message.
     restored.resolve_answers(&["message".into()]);
     assert_eq!(restored.unanswered_count(), 0);
     assert!(restored.composer.is_empty());

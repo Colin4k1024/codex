@@ -306,7 +306,7 @@ async fn thread_archive_without_turns(history_mode: ThreadHistoryMode) -> Result
         .build()
         .await?;
     mcp.initialize_with_client_info(ClientInfo {
-        name: "codex_work_desktop".to_string(),
+        name: "codex_work_app".to_string(),
         title: None,
         version: "0.1.0".to_string(),
     })
@@ -318,7 +318,7 @@ async fn thread_archive_without_turns(history_mode: ThreadHistoryMode) -> Result
             model: Some("mock-model".to_string()),
             history_mode: Some(history_mode),
             thread_source: Some(ThreadSource::User),
-            service_name: Some("codex_work_desktop".to_string()),
+            service_name: Some("codex_work_app".to_string()),
             ..Default::default()
         })
         .await?;
@@ -384,8 +384,8 @@ async fn thread_archive_without_turns(history_mode: ThreadHistoryMode) -> Result
                 "action": "archived",
                 "occurred_at_ms": occurred_at_ms,
                 "app_server_client": {
-                    "product_client_id": "codex_work_desktop",
-                    "client_name": "codex_work_desktop",
+                    "product_client_id": "codex_work_app",
+                    "client_name": "codex_work_app",
                     "client_version": "0.1.0",
                     "rpc_transport": "stdio",
                     "experimental_api_enabled": true,

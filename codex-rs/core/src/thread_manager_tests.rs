@@ -625,10 +625,10 @@ fn developer_interrupted_marker() -> ResponseItem {
 fn effective_originator_prefers_thread_scoped_sources_before_env_originator() {
     for (metrics_service_name, persisted_originator, inherited_originator, expected_originator) in [
         (
-            Some("codex_work_desktop"),
+            Some("codex_work_app"),
             Some("persisted_originator"),
             Some("inherited_originator"),
-            "codex_work_desktop",
+            "codex_work_app",
         ),
         (
             Some("codex_work_web"),
@@ -1350,7 +1350,7 @@ async fn spawn_internal_session_preserves_parent_lineage_without_forking_history
     manager_state.user_instructions_provider = parent_provider.clone();
     let parent = manager
         .start_thread(StartThreadOptions {
-            metrics_service_name: Some("codex_work_desktop".to_string()),
+            metrics_service_name: Some("codex_work_app".to_string()),
             thread_instructions_provider: Some(parent_provider),
             ..StartThreadOptions::new(config.clone())
         })
@@ -1451,7 +1451,7 @@ async fn spawn_internal_session_preserves_parent_lineage_without_forking_history
     assert_eq!(reminder.remaining_tokens, 75);
     assert_eq!(reviewer_config.parent_thread_id, Some(parent.thread_id));
     assert_eq!(reviewer_config.forked_from_thread_id, None);
-    assert_eq!(reviewer_config.originator, "codex_work_desktop");
+    assert_eq!(reviewer_config.originator, "codex_work_app");
     assert_eq!(
         reviewer.thread.multi_agent_version(),
         Some(MultiAgentVersion::Disabled)
@@ -1746,7 +1746,7 @@ async fn start_thread_seeds_extension_data_for_mcp_and_lifecycle_contributors() 
 
     let first_thread = manager
         .start_thread(StartThreadOptions {
-            metrics_service_name: Some("codex_work_desktop".to_string()),
+            metrics_service_name: Some("codex_work_app".to_string()),
             environments: Some(Vec::new()),
             thread_extension_init: selected_root_init("selected-a", "env-a"),
             ..StartThreadOptions::new(config.clone())
@@ -1880,7 +1880,7 @@ async fn start_thread_seeds_extension_data_for_mcp_and_lifecycle_contributors() 
         codex_apps_headers
             .expect("Codex Apps headers should be configured")
             .get("originator"),
-        Some(&"codex_work_desktop".to_string())
+        Some(&"codex_work_app".to_string())
     );
     for (policy, disabled_plugin_ids, selected_enabled, expected_mcp_loads) in [
         ("", vec!["plugin-selected-a".to_string()], false, 1),

@@ -310,7 +310,8 @@ pub struct Config {
     pub apps: Option<AppsConfig>,
     pub browser_use: Option<BrowserUseConfig>,
     pub computer_use: Option<ComputerUseConfig>,
-    pub desktop: Option<HashMap<String, JsonValue>>,
+    #[serde(default, alias = "desktop")]
+    pub app: Option<HashMap<String, JsonValue>>,
     #[serde(default, flatten)]
     pub additional: HashMap<String, JsonValue>,
 }

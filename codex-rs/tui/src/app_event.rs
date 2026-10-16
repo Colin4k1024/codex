@@ -876,8 +876,8 @@ pub(crate) enum AppEvent {
         url: String,
     },
 
-    /// Open the current thread in Codex Desktop.
-    OpenDesktopThread {
+    /// Open the current thread in the Codex app.
+    OpenAppThread {
         thread_id: ThreadId,
     },
 

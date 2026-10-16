@@ -12,7 +12,7 @@ pub const SESSION_SOURCE_TAG: &str = "session_source";
 
 const OTHER_ORIGINATOR_TAG_VALUE: &str = "other";
 const KNOWN_ORIGINATOR_TAG_VALUES: &[&str] = &[
-    "codex_desktop",
+    "codex_app",
     "codex-app-server",
     "codex_mcp_server",
     "codex_cli_rs",
@@ -88,7 +88,7 @@ mod tests {
             auth_mode: Some("api_key"),
             session_source: "cli",
             originator: "codex_cli",
-            service_name: Some("desktop_app"),
+            service_name: Some("codex_app"),
             model: "gpt-5.1",
             app_version: "1.2.3",
         }
@@ -101,7 +101,7 @@ mod tests {
                 (AUTH_MODE_TAG, "api_key"),
                 (SESSION_SOURCE_TAG, "cli"),
                 (ORIGINATOR_TAG, "codex_cli"),
-                (SERVICE_NAME_TAG, "desktop_app"),
+                (SERVICE_NAME_TAG, "codex_app"),
                 (MODEL_TAG, "gpt-5.1"),
                 (APP_VERSION_TAG, "1.2.3"),
             ]

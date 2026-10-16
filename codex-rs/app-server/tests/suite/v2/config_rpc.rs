@@ -1269,11 +1269,11 @@ async fn config_read_includes_desktop_settings() -> Result<()> {
     write_config(
         &codex_home,
         r#"
-[desktop]
+[app]
 appearanceTheme = "dark"
 selected-avatar-id = "codex"
 
-[desktop.workspace]
+[app.workspace]
 collapsed = true
 width = 320
 "#,
@@ -1294,7 +1294,7 @@ width = 320
     let ConfigReadResponse { config, .. } =
         timeout(DEFAULT_READ_TIMEOUT, mcp.read_response(request_id)).await??;
 
-    let desktop = config.desktop.expect("desktop settings present");
+    let desktop = config.app.expect("desktop settings present");
     assert_eq!(desktop.get("appearanceTheme"), Some(&json!("dark")));
     assert_eq!(desktop.get("selected-avatar-id"), Some(&json!("codex")));
     assert_eq!(
@@ -2036,7 +2036,7 @@ async fn config_value_write_updates_desktop_settings() -> Result<()> {
     let write_id = mcp
         .send_config_value_write_request(ConfigValueWriteParams {
             file_path: None,
-            key_path: "desktop.appearanceTheme".to_string(),
+            key_path: "app.appearanceTheme".to_string(),
             value: json!("dark"),
             merge_strategy: MergeStrategy::Replace,
             expected_version: None,
@@ -2054,7 +2054,7 @@ async fn config_value_write_updates_desktop_settings() -> Result<()> {
         .await?;
     let read: ConfigReadResponse =
         timeout(DEFAULT_READ_TIMEOUT, mcp.read_response(read_id)).await??;
-    let desktop = read.config.desktop.expect("desktop settings present");
+    let desktop = read.config.app.expect("desktop settings present");
     assert_eq!(desktop.get("appearanceTheme"), Some(&json!("dark")));
 
     Ok(())
@@ -2521,12 +2521,12 @@ async fn config_batch_write_updates_multiple_desktop_settings() -> Result<()> {
             file_path: Some(codex_home.join("config.toml").display().to_string()),
             edits: vec![
                 ConfigEdit {
-                    key_path: "desktop.selected-avatar-id".to_string(),
+                    key_path: "app.selected-avatar-id".to_string(),
                     value: json!("codex"),
                     merge_strategy: MergeStrategy::Replace,
                 },
                 ConfigEdit {
-                    key_path: "desktop.workspace".to_string(),
+                    key_path: "app.workspace".to_string(),
                     value: json!({
                         "collapsed": true,
                         "width": 320,
@@ -2550,7 +2550,7 @@ async fn config_batch_write_updates_multiple_desktop_settings() -> Result<()> {
         .await?;
     let read: ConfigReadResponse =
         timeout(DEFAULT_READ_TIMEOUT, mcp.read_response(read_id)).await??;
-    let desktop = read.config.desktop.expect("desktop settings present");
+    let desktop = read.config.app.expect("desktop settings present");
     assert_eq!(desktop.get("selected-avatar-id"), Some(&json!("codex")));
     assert_eq!(
         desktop.get("workspace"),

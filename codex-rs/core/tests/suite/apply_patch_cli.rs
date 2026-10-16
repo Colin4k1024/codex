@@ -1921,7 +1921,7 @@ async fn apply_patch_turn_diff_paths_stay_repo_relative_when_session_cwd_is_nest
 #[test_case("codex_work_web", true, "work.txt"; "web work uses cwd when enabled")]
 #[test_case("codex_work_mobile", true, "work.txt"; "mobile work uses cwd when enabled")]
 #[test_case("codex_work_web", false, "subdir/work.txt"; "disabled feature keeps repository root")]
-#[test_case("codex_work_desktop", true, "work.txt"; "desktop uses cwd when enabled")]
+#[test_case("codex_work_app", true, "work.txt"; "desktop uses cwd when enabled")]
 #[test_case("codex_work_cca", true, "work.txt"; "legacy cca uses cwd when enabled")]
 #[test_case("codex_cli_rs", true, "work.txt"; "coding originator uses cwd when enabled")]
 #[test_case("codex_cli_rs", false, "subdir/work.txt"; "coding originator keeps repository root when disabled")]

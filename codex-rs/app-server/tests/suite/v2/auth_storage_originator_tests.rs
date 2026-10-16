@@ -150,7 +150,7 @@ async fn concurrent_connections_export_their_own_storage_originator() -> Result<
         let response = read_response_for_id(client, /*id*/ 2).await?;
         assert_eq!(response.result, json!({"type": "apiKey"}));
     }
-    assert_saved_originators(&collector, &["codex_desktop", "codex_vscode", "other"]).await
+    assert_saved_originators(&collector, &["codex_app", "codex_vscode", "other"]).await
 }
 
 #[tokio::test]

@@ -1,0 +1,16 @@
+{
+  "name": "codex-opencode-adapter",
+  "version": "0.1.0",
+  "description": "Adapter service that translates codex app-server JSON-RPC to OpenCode HTTP/SSE API",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "bun src/index.ts",
+    "dev": "bun --watch src/index.ts",
+    "build": "bun build src/index.ts --outdir dist --target node"
+  },
+  "dependencies": {
+    "@hono/node-server": "^2.1.5",
+    "hono": "^4.6.0"
+  }
+}

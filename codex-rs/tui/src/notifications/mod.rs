@@ -11,12 +11,12 @@ use codex_terminal_detection::terminal_info;
 use osc9::Osc9Backend;
 
 #[derive(Debug)]
-pub enum DesktopNotificationBackend {
+pub enum AppNotificationBackend {
     Osc9(Osc9Backend),
     Bel(BelBackend),
 }
 
-impl DesktopNotificationBackend {
+impl AppNotificationBackend {
     pub fn for_method(method: NotificationMethod) -> Self {
         match method {
             NotificationMethod::Auto => {
@@ -33,21 +33,21 @@ impl DesktopNotificationBackend {
 
     pub fn method(&self) -> NotificationMethod {
         match self {
-            DesktopNotificationBackend::Osc9(_) => NotificationMethod::Osc9,
-            DesktopNotificationBackend::Bel(_) => NotificationMethod::Bel,
+            AppNotificationBackend::Osc9(_) => NotificationMethod::Osc9,
+            AppNotificationBackend::Bel(_) => NotificationMethod::Bel,
         }
     }
 
     pub fn notify(&mut self, message: &str) -> io::Result<()> {
         match self {
-            DesktopNotificationBackend::Osc9(backend) => backend.notify(message),
-            DesktopNotificationBackend::Bel(backend) => backend.notify(message),
+            AppNotificationBackend::Osc9(backend) => backend.notify(message),
+            AppNotificationBackend::Bel(backend) => backend.notify(message),
         }
     }
 }
 
-pub fn detect_backend(method: NotificationMethod) -> DesktopNotificationBackend {
-    DesktopNotificationBackend::for_method(method)
+pub fn detect_backend(method: NotificationMethod) -> AppNotificationBackend {
+    AppNotificationBackend::for_method(method)
 }
 
 fn supports_osc9(terminal: &TerminalInfo) -> bool {
@@ -84,7 +84,7 @@ mod tests {
     fn selects_osc9_method() {
         assert!(matches!(
             detect_backend(NotificationMethod::Osc9),
-            super::DesktopNotificationBackend::Osc9(_)
+            super::AppNotificationBackend::Osc9(_)
         ));
     }
 
@@ -92,7 +92,7 @@ mod tests {
     fn selects_bel_method() {
         assert!(matches!(
             detect_backend(NotificationMethod::Bel),
-            super::DesktopNotificationBackend::Bel(_)
+            super::AppNotificationBackend::Bel(_)
         ));
     }
 

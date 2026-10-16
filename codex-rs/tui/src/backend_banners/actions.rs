@@ -1,4 +1,4 @@
-//! Map backend CTA names to existing CLI actions and desktop-equivalent browser destinations.
+//! Map backend CTA names to existing CLI actions and app-equivalent browser destinations.
 
 use super::BackendBanner;
 use codex_app_server_protocol::AddCreditsNudgeCreditType;
@@ -69,7 +69,7 @@ impl BackendBanner {
                 url.set_fragment(Some("pricing"));
                 url.to_string()
             }
-            // Desktop-only referral and Premium dialogs need their own CLI flow.
+            // App-only referral and Premium dialogs need their own CLI flow.
             _ => return None,
         };
         let mut destination = url::Url::parse(&destination).ok()?;

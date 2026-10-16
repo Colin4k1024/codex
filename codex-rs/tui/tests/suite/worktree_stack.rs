@@ -92,7 +92,7 @@ async fn picker_side_worktree_fork_and_cd_run_on_the_production_stack() -> Resul
 
     let worktrees = WorktreeManager::new(WorktreeSettings::for_cli(
         codex_home.path(),
-        /*desktop*/ None,
+        /*app*/ None,
     )?);
     // Both launchers give codex-main and Tokio workers explicit 16 MiB stacks.
     let mut terminal = start(

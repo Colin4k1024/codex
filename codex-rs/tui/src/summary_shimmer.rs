@@ -1,4 +1,4 @@
-//! Smooth, whole-grapheme status shimmer with the desktop's cadenced sweep.
+//! Smooth, whole-grapheme status shimmer with the Codex app's cadenced sweep.
 //!
 //! Only brightness changes: the moving band uses the terminal foreground, while
 //! the remaining text blends halfway into the background. The wave spans at
@@ -21,7 +21,7 @@ use crate::terminal_palette::default_fg;
 use crate::terminal_palette::effective_stdout_color_level;
 use crate::terminal_palette::rgb_color;
 
-// Match the desktop app's thinking and reasoning header timings.
+// Match the Codex app's thinking and reasoning header timings.
 const START_DELAY: Duration = Duration::from_millis(/*millis*/ 600);
 const SWEEP_SECONDS: f64 = 1.0;
 const INTERVAL_SECONDS: f64 = 4.0;

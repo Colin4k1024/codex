@@ -3,7 +3,7 @@ use std::path::PathBuf;
 
 #[derive(Debug, Parser)]
 pub struct AppCommand {
-    /// Workspace path to open in the Desktop app.
+    /// Workspace path to open in the Codex app.
     #[arg(value_name = "PATH", default_value = ".")]
     pub path: PathBuf,
 
@@ -16,10 +16,10 @@ pub async fn run_app(cmd: AppCommand) -> anyhow::Result<()> {
     let workspace = std::fs::canonicalize(&cmd.path).unwrap_or(cmd.path);
     #[cfg(target_os = "macos")]
     {
-        crate::desktop_app::run_app_open_or_install(workspace, cmd.download_url_override).await
+        crate::app_launcher::run_app_open_or_install(workspace, cmd.download_url_override).await
     }
     #[cfg(target_os = "windows")]
     {
-        crate::desktop_app::run_app_open_or_install(workspace, cmd.download_url_override).await
+        crate::app_launcher::run_app_open_or_install(workspace, cmd.download_url_override).await
     }
 }

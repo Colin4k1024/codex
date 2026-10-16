@@ -3293,7 +3293,7 @@ async fn slash_fork_with_name_requests_named_fork() {
 }
 
 #[tokio::test]
-async fn slash_app_requests_desktop_handoff() {
+async fn slash_app_requests_app_handoff() {
     let (mut chat, mut rx, _op_rx) = make_chatwidget_manual(/*model_override*/ None).await;
     let thread_id = ThreadId::new();
     chat.thread_id = Some(thread_id);
@@ -3302,7 +3302,7 @@ async fn slash_app_requests_desktop_handoff() {
 
     assert_matches!(
         rx.try_recv(),
-        Ok(AppEvent::OpenDesktopThread {
+        Ok(AppEvent::OpenAppThread {
             thread_id: actual_thread_id,
         }) if actual_thread_id == thread_id
     );

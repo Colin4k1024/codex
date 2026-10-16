@@ -97,7 +97,7 @@ async fn delegated_voice_work_speaks_only_the_completed_final_answer_once() {
 
     assert!(
         chat.pending_notification.is_none(),
-        "voice-delegated turns should not trigger desktop completion notifications"
+        "voice-delegated turns should not trigger app completion notifications"
     );
     assert!(matches!(
         ops.try_recv(),

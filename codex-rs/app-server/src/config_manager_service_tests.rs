@@ -2356,22 +2356,22 @@ credential_broker = true
 "#,
         ),
         (
-            r#"[desktop.features.multi_agent_v2]
+            r#"[app.features.multi_agent_v2]
 custom = true
 "#,
-            "desktop.features.multi_agent_v2",
+            "app.features.multi_agent_v2",
             serde_json::json!(false),
-            r#"[desktop.features]
+            r#"[app.features]
 multi_agent_v2 = false
 "#,
         ),
         (
-            r#"[desktop.features]
+            r#"[app.features]
 multi_agent_v2 = true
 "#,
-            "desktop.features.multi_agent_v2",
+            "app.features.multi_agent_v2",
             serde_json::json!({"custom": true}),
-            r#"[desktop.features.multi_agent_v2]
+            r#"[app.features.multi_agent_v2]
 custom = true
 "#,
         ),

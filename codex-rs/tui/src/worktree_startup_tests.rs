@@ -78,7 +78,7 @@ async fn refreshed_bundle_rechecks_source_during_config_reload() -> anyhow::Resu
     loader_overrides.ignore_user_config = true;
     let manager = codex_worktree::WorktreeManager::new(codex_worktree::WorktreeSettings::for_cli(
         dir.path(),
-        /*desktop*/ None,
+        /*app*/ None,
     )?);
     let checkout = codex_worktree::ManagedWorktree {
         root: destination.clone(),

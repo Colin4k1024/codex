@@ -3,7 +3,7 @@ use pretty_assertions::assert_eq;
 use serde_json::json;
 
 #[test]
-fn desktop_question_reply_accepts_single_and_batched_envelopes() {
+fn app_question_reply_accepts_single_and_batched_envelopes() {
     let reply = json!({"questionItemId": "[\"request_user_input_async\",\"item\",0]", "question": "Which environment?", "answer": "Staging", "extra": true});
     for payload in [reply.clone(), json!([reply])] {
         let text = format!(

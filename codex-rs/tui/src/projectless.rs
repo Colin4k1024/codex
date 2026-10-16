@@ -1,4 +1,4 @@
-//! Select desktop-like execution defaults for positively discovered local projectless folders.
+//! Select Codex-app execution defaults for positively discovered local projectless folders.
 //! Saved trust, explicit choices, managed policy, and remote execution retain their own defaults.
 
 use crate::app_server_session::AppServerSession;

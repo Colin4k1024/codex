@@ -1,4 +1,4 @@
-//! Terminal history, desktop handoff, and clear-screen UI helpers for the TUI app.
+//! Terminal history, app handoff, and clear-screen UI helpers for the TUI app.
 //!
 //! This module owns rendering the fresh session header, clearing inline or alternate-screen UI
 //! state, and resetting transcript-related app state after `/clear` or Ctrl-L. Owned-screen sessions
@@ -8,7 +8,7 @@ use super::*;
 use crate::terminal_hyperlinks::HyperlinkLine;
 use std::sync::Weak;
 
-const DESKTOP_THREAD_OPENED_MESSAGE: &str = "Opened this session in the Desktop app.";
+const APP_THREAD_OPENED_MESSAGE: &str = "Opened this session in the Codex app.";
 
 pub(super) struct RenderedHistoryTail {
     pub(super) cell: Weak<dyn HistoryCell>,
@@ -284,16 +284,16 @@ impl App {
         }
     }
 
-    pub(super) fn open_desktop_thread(&mut self, thread_id: ThreadId) {
+    pub(super) fn open_app_thread(&mut self, thread_id: ThreadId) {
         let url = format!("codex://threads/{thread_id}");
-        if let Err(err) = open_desktop_thread_url(&url) {
+        if let Err(err) = open_app_thread_url(&url) {
             self.chat_widget
-                .add_error_message(desktop_thread_open_error_message(&err));
+                .add_error_message(app_thread_open_error_message(&err));
             return;
         }
 
         self.chat_widget.add_info_message(
-            DESKTOP_THREAD_OPENED_MESSAGE.to_string(),
+            APP_THREAD_OPENED_MESSAGE.to_string(),
             /*hint*/ None,
         );
     }
@@ -414,14 +414,14 @@ impl App {
     }
 }
 
-fn desktop_thread_open_error_message(err: &str) -> String {
+fn app_thread_open_error_message(err: &str) -> String {
     format!(
-        "Failed to open this session in the Desktop app: {err}. Install or launch the Desktop app and try again."
+        "Failed to open this session in the Codex app: {err}. Install or launch the Codex app and try again."
     )
 }
 
 #[cfg(target_os = "macos")]
-fn open_desktop_thread_url(url: &str) -> Result<(), String> {
+fn open_app_thread_url(url: &str) -> Result<(), String> {
     let status = std::process::Command::new("open")
         .arg(url)
         .status()
@@ -435,14 +435,14 @@ fn open_desktop_thread_url(url: &str) -> Result<(), String> {
 }
 
 #[cfg(target_os = "windows")]
-fn open_desktop_thread_url(url: &str) -> Result<(), String> {
-    let script = windows_desktop_app_launch_script(url);
+fn open_app_thread_url(url: &str) -> Result<(), String> {
+    let script = windows_app_launch_script(url);
     let output = std::process::Command::new("powershell.exe")
         .arg("-NoProfile")
         .arg("-Command")
         .arg(&script)
         .output()
-        .map_err(|err| format!("failed to launch the Desktop app through PowerShell: {err}"))?;
+        .map_err(|err| format!("failed to launch the Codex app through PowerShell: {err}"))?;
 
     if output.status.success() {
         return Ok(());
@@ -451,7 +451,7 @@ fn open_desktop_thread_url(url: &str) -> Result<(), String> {
     let stderr = String::from_utf8_lossy(&output.stderr).trim().to_string();
     if stderr.is_empty() {
         Err(format!(
-            "failed to launch the Desktop app through PowerShell with {}",
+            "failed to launch the Codex app through PowerShell with {}",
             output.status
         ))
     } else {
@@ -460,7 +460,7 @@ fn open_desktop_thread_url(url: &str) -> Result<(), String> {
 }
 
 #[cfg(target_os = "windows")]
-fn windows_desktop_app_launch_script(url: &str) -> String {
+fn windows_app_launch_script(url: &str) -> String {
     let url = powershell_single_quoted_string(url);
     format!(
         r#"
@@ -469,7 +469,7 @@ $url = {url}
 
 $package = Get-AppxPackage -Name OpenAI.Codex -ErrorAction SilentlyContinue
 if ($null -eq $package) {{
-    Write-Error 'Desktop app package is not installed'
+    Write-Error 'Codex app package is not installed'
     exit 1
 }}
 
@@ -482,7 +482,7 @@ $application = $manifest.Package.Applications.Application |
     }} |
     Select-Object -First 1
 if ($null -eq $application -or [string]::IsNullOrWhiteSpace($application.Executable)) {{
-    Write-Error 'Desktop app package does not declare a codex protocol executable'
+    Write-Error 'Codex app package does not declare a codex protocol executable'
     exit 1
 }}
 
@@ -492,11 +492,11 @@ $exe = Join-Path $package.InstallLocation $application.Executable
 $appDir = Split-Path -Parent $exe
 $app = Join-Path $appDir 'resources\app.asar'
 if (-not (Test-Path $exe)) {{
-    Write-Error "Desktop app executable not found at $exe"
+    Write-Error "Codex app executable not found at $exe"
     exit 1
 }}
 if (-not (Test-Path $app)) {{
-    Write-Error "Desktop app bundle not found at $app"
+    Write-Error "Codex app bundle not found at $app"
     exit 1
 }}
 
@@ -511,8 +511,8 @@ fn powershell_single_quoted_string(value: &str) -> String {
 }
 
 #[cfg(not(any(target_os = "macos", target_os = "windows")))]
-fn open_desktop_thread_url(_url: &str) -> Result<(), String> {
-    Err("The Desktop app is only available on macOS and Windows".to_string())
+fn open_app_thread_url(_url: &str) -> Result<(), String> {
+    Err("The Codex app is only available on macOS and Windows".to_string())
 }
 
 #[cfg(test)]

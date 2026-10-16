@@ -21,10 +21,10 @@ const ANNOUNCEMENT_TIP_URL: &str =
 const IS_MACOS: bool = cfg!(target_os = "macos");
 const IS_WINDOWS: bool = cfg!(target_os = "windows");
 
-const WINDOWS_APP_TOOLTIP: &str = "Use the **desktop app**. Install it from https://chatgpt.com/codex?app-landing-page=true and run `codex app`.";
+const WINDOWS_APP_TOOLTIP: &str = "Use the **Codex app**. Install it from https://chatgpt.com/codex?app-landing-page=true and run `codex app`.";
 const MACOS_APP_TOOLTIP: &str =
-    "Use the **desktop app**. Run `codex app` to open it. It installs automatically if needed.";
-const LINUX_APP_TOOLTIP: &str = "Use the **desktop app**. Install it from https://learn.chatgpt.com/docs/linux/linux-app and run `chatgpt`.";
+    "Use the **Codex app**. Run `codex app` to open it. It installs automatically if needed.";
+const LINUX_APP_TOOLTIP: &str = "Use the **Codex app**. Install it from https://learn.chatgpt.com/docs/linux/linux-app and run `chatgpt`.";
 
 const RAW_TOOLTIPS: &str = include_str!("../assets/tooltips.txt");
 
@@ -441,7 +441,7 @@ mod tests {
     }
 
     #[test]
-    fn desktop_app_tips_render_at_narrow_width() {
+    fn app_tips_render_at_narrow_width() {
         let cwd = std::env::current_dir().unwrap();
         for (platform, tip) in [
             ("macos", MACOS_APP_TOOLTIP),
@@ -453,25 +453,25 @@ mod tests {
                 .map(|line| format!("{:?} {:?}", line.line, line.hyperlinks))
                 .collect::<Vec<_>>()
                 .join("\n");
-            insta::assert_snapshot!(format!("desktop_app_tip_{platform}"), rendered);
+            insta::assert_snapshot!(format!("app_tip_{platform}"), rendered);
         }
     }
 
     #[test]
-    fn desktop_app_tooltip_uses_supported_platform_launcher() {
+    fn app_tooltip_uses_supported_platform_launcher() {
         let tooltip = TOOLTIPS
             .iter()
             .copied()
-            .find(|tip| tip.contains("desktop app"));
+            .find(|tip| tip.contains("Codex app"));
 
         if linux_app_tooltip(LinuxDesktopSession::current()).is_some() {
-            let tooltip = tooltip.expect("Linux should advertise the desktop app");
+            let tooltip = tooltip.expect("Linux should advertise the Codex app");
             assert_eq!(app_tooltip(), Some(tooltip));
         } else if IS_MACOS {
-            let tooltip = tooltip.expect("macOS should advertise the desktop app");
+            let tooltip = tooltip.expect("macOS should advertise the Codex app");
             assert_eq!(app_tooltip(), Some(tooltip));
         } else if IS_WINDOWS {
-            let tooltip = tooltip.expect("Windows should advertise the desktop app");
+            let tooltip = tooltip.expect("Windows should advertise the Codex app");
             assert_eq!(app_tooltip(), Some(tooltip));
         } else {
             assert_eq!(tooltip, None);
@@ -480,7 +480,7 @@ mod tests {
     }
 
     #[test]
-    fn linux_desktop_app_tooltip_requires_graphical_native_session() {
+    fn linux_app_tooltip_requires_graphical_native_session() {
         assert_eq!(
             linux_app_tooltip(LinuxDesktopSession {
                 has_display: true,

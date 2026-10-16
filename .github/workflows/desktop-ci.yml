@@ -1,9 +1,9 @@
-name: desktop-ci
+name: codex-opencode-adapter-ci
 
 on:
   pull_request:
     paths:
-      - desktop/**
+      - codex-opencode-adapter/**
       - codex-rs/app-server-protocol/**
       - .github/workflows/desktop-ci.yml
       - pnpm-lock.yaml
@@ -22,9 +22,7 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Install Rust
         # 1.95.0 fails on this ARM64 runner with E0463 dependency-resolution errors.
-        uses: dtolnay/rust-toolchain@e081816240890017053eacbb1bdf337761dc5582 # 1.98.1
-        with:
-          toolchain: 1.98.1
+        uses: dtolnay/rust-toolchain@a2627de80e5819949c7e1c83ed99b29085fc9bc4 # 1.98.1
       - name: Run protocol fixture tests
         working-directory: codex-rs
         env:
@@ -32,9 +30,8 @@ jobs:
           CARGO_TARGET_DIR: /tmp/codex-cargo-target
         run: cargo test --locked -p codex-app-server-protocol --lib schema_fixtures
 
-  build-test:
-    name: Desktop build and test
-    # Linux-only while hosted Actions billing is unavailable; #38 tracks the full matrix.
+  adapter-build:
+    name: Codex OpenCode adapter build and test
     runs-on: local-docker
     env:
       no_proxy: '*'
@@ -46,37 +43,16 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
         env:
-          npm_config_store_dir: ${{ runner.temp }}/pnpm-store
+          npm_config_store_dir: /tmp/codex-pnpm-store-${{ github.run_id }}
         with:
           node-version: 22
           cache: pnpm
-      - name: Install desktop dependencies
-        # The workspace contains an unrelated git-hosted package with an unreliable prepare script.
-        # Desktop does not consume that package, so install without scripts and run Electron's installer explicitly.
-        # A job-local store avoids concurrent runner corruption and lower network concurrency avoids registry resets.
+      - name: Install dependencies
         env:
-          npm_config_store_dir: ${{ runner.temp }}/pnpm-store
-        run: pnpm --filter codex-desktop... install --frozen-lockfile --ignore-scripts --network-concurrency 4
-      - name: Install Electron binary
-        run: node node_modules/electron/install.js
-      - name: Check generated protocol revision
-        run: pnpm --dir desktop/packages/app-server-protocol check
-      - name: Build generated protocol package
-        run: pnpm --dir desktop/packages/app-server-protocol build
-      - name: Test generated protocol package
-        run: pnpm --dir desktop/packages/app-server-protocol test
-      - name: Format
-        run: pnpm --dir desktop format
-      - name: Lint
-        run: pnpm --dir desktop lint
-      - name: Typecheck
-        run: pnpm --dir desktop typecheck
-      - name: Unit tests
-        run: pnpm --dir desktop test
-      - name: Build
-        run: pnpm --dir desktop build
-      - name: Electron smoke
-        shell: bash
-        run: |
-          export ELECTRON_DISABLE_SANDBOX=1
-          xvfb-run --auto-servernum --server-args="-screen 0 1280x800x24" pnpm --dir desktop test:electron
+          npm_config_store_dir: /tmp/codex-pnpm-store-${{ github.run_id }}
+          npm_config_registry: https://registry.npmmirror.com
+        run: pnpm --filter codex-opencode-adapter install --frozen-lockfile --network-concurrency 4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@4bc047ad259df6fc24a6c9b0f9a0cb08cf17fbe5 # v2.0.1
+      - name: Build adapter
+        run: pnpm --dir codex-opencode-adapter build

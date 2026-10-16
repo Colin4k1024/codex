@@ -1,0 +1,5 @@
+self-hosted-runner:
+  # Local Docker runner registered for this repository while hosted runner
+  # billing is unavailable. It must not mount the host Docker socket.
+  labels:
+    - local-docker

@@ -73,7 +73,7 @@ use serde::Serialize;
 use supports_color::Stream;
 
 mod background;
-mod desktop;
+mod app_diagnostics;
 mod disk;
 mod filesystem_paths;
 mod git;
@@ -91,8 +91,8 @@ mod updates;
 mod windows_dev_drive;
 
 #[cfg(test)]
-#[path = "doctor/desktop_tests.rs"]
-mod desktop_tests;
+#[path = "doctor/app_diagnostics_tests.rs"]
+mod app_diagnostics_tests;
 
 use background::background_server_check;
 use git::git_check;
@@ -589,15 +589,15 @@ async fn build_report(
         }
     }
 
-    progress.begin("desktop");
-    if let Some(desktop) = desktop::collect().await {
+    progress.begin("app");
+    if let Some(app_diag) = app_diagnostics::collect().await {
         #[cfg(any(target_os = "macos", target_os = "windows"))]
-        if let Some(application) = desktop.application.as_ref() {
-            updates::append_desktop_update(&mut checks, config_result.as_ref().ok(), application)
+        if let Some(application) = app_diag.application.as_ref() {
+            updates::append_app_update(&mut checks, config_result.as_ref().ok(), application)
                 .await;
         }
-        progress.finish("desktop", overall_status(&desktop.checks));
-        checks.extend(desktop.checks);
+        progress.finish("app", overall_status(&app_diag.checks));
+        checks.extend(app_diag.checks);
     }
 
     progress.settle();

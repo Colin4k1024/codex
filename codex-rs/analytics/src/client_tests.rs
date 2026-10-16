@@ -174,7 +174,7 @@ fn sample_artifact_operation_event(thread_id: &str) -> TrackEventRequest {
             model_slug: "gpt-5.1-codex".to_string(),
             thread_id: thread_id.to_string(),
             turn_id: "turn-1".to_string(),
-            product_client_id: "codex_desktop".to_string(),
+            product_client_id: "codex_app".to_string(),
         },
         ArtifactOperation {
             item_id: format!("item-{thread_id}"),
@@ -213,7 +213,7 @@ fn sample_mcp_tool_call_event(thread_id: &str, plugin_id: Option<&str>) -> Track
                 originating_response_id: None,
                 subsequent_response_id: None,
                 app_server_client: CodexAppServerClientMetadata {
-                    product_client_id: "codex_desktop".to_string(),
+                    product_client_id: "codex_app".to_string(),
                     client_name: None,
                     client_version: None,
                     rpc_transport: AppServerRpcTransport::InProcess,
@@ -267,7 +267,7 @@ fn sample_plugin_used_track_event(thread_id: &str, plugin_id: Option<&str>) -> T
                 has_skills: Some(true),
                 mcp_server_count: Some(1),
                 connector_ids: Some(vec!["calendar".to_string()]),
-                product_client_id: Some("codex_desktop".to_string()),
+                product_client_id: Some("codex_app".to_string()),
             },
             mcp_server_names: Some(vec!["mcp-1".to_string()]),
             thread_id: Some(thread_id.to_string()),
@@ -955,7 +955,7 @@ fn app_used_preserves_first_classification_and_emits_again_next_turn() {
         model_slug: "gpt-5".to_string(),
         thread_id: "thread-1".to_string(),
         turn_id: "turn-1".to_string(),
-        product_client_id: "codex_desktop".to_string(),
+        product_client_id: "codex_app".to_string(),
     };
     for (turn_id, elicitation_type) in [
         ("turn-1", Some(ElicitationType::AuthOrLink)),

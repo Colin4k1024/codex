@@ -217,13 +217,13 @@ foo = true"#;
 }
 
 #[test]
-fn strict_config_accepts_opaque_desktop_keys() {
+fn strict_config_accepts_opaque_app_keys() {
     let path = Path::new("/tmp/config.toml");
     let contents = r#"
-[desktop]
+[app]
 appearanceTheme = "dark"
 
-[desktop.workspace]
+[app.workspace]
 collapsed = true"#;
 
     let error = config_error_from_ignored_toml_fields::<ConfigToml>(path, contents);
