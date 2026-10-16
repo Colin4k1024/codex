@@ -1,9 +1,9 @@
-name: desktop-ci
+name: codex-opencode-adapter-ci
 
 on:
   pull_request:
     paths:
-      - desktop/**
+      - codex-opencode-adapter/**
       - codex-rs/app-server-protocol/**
       - .github/workflows/desktop-ci.yml
       - pnpm-lock.yaml
@@ -30,9 +30,8 @@ jobs:
           CARGO_TARGET_DIR: /tmp/codex-cargo-target
         run: cargo test --locked -p codex-app-server-protocol --lib schema_fixtures
 
-  build-test:
-    name: Desktop build and test
-    # Linux-only while hosted Actions billing is unavailable; #38 tracks the full matrix.
+  adapter-build:
+    name: Codex OpenCode adapter build and test
     runs-on: local-docker
     env:
       no_proxy: '*'
@@ -48,47 +47,12 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
-      - name: Install desktop dependencies
-        # The workspace contains an unrelated git-hosted package with an unreliable prepare script.
-        # Desktop does not consume that package, so install without scripts and run Electron's installer explicitly.
-        # A job-local overlay-filesystem store avoids concurrent runner corruption and grpcfuse file errors;
-        # lower network concurrency avoids registry resets.
+      - name: Install dependencies
         env:
           npm_config_store_dir: /tmp/codex-pnpm-store-${{ github.run_id }}
           npm_config_registry: https://registry.npmmirror.com
-        run: pnpm --filter codex-desktop... install --frozen-lockfile --ignore-scripts --network-concurrency 4
-      - name: Install Electron binary
-        env:
-          ELECTRON_MIRROR: https://npmmirror.com/mirrors/electron/
-        run: node node_modules/electron/install.js
-      - name: Check generated protocol revision
-        run: pnpm --dir desktop/packages/app-server-protocol check
-      - name: Build generated protocol package
-        run: pnpm --dir desktop/packages/app-server-protocol build
-      - name: Test generated protocol package
-        run: pnpm --dir desktop/packages/app-server-protocol test
-      - name: Format
-        run: pnpm --dir desktop format
-      - name: Lint
-        run: pnpm --dir desktop lint
-      - name: Typecheck
-        run: pnpm --dir desktop typecheck
-      - name: Unit tests
-        run: pnpm --dir desktop test
-      - name: Install Electron runtime libraries
-        # The secure local Docker runner is minimal; install Chromium/Electron's
-        # shared libraries inside the container, never on the host.
-        run: |
-          sed -i 's|http://ports.ubuntu.com/ubuntu-ports/|https://mirrors.aliyun.com/ubuntu-ports/|g' /etc/apt/sources.list.d/ubuntu.sources
-          apt-get update -qq
-          DEBIAN_FRONTEND=noninteractive apt-get install -y -qq --no-install-recommends \
-            libglib2.0-0 libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 \
-            libgtk-3-0 libgbm1 libasound2t64 libxss1 libxtst6 libxrandr2 \
-            libxcomposite1 libxdamage1 libxfixes3 libxkbcommon0 libpango-1.0-0 libcairo2
-      - name: Build
-        run: pnpm --dir desktop build
-      - name: Electron smoke
-        shell: bash
-        run: |
-          export ELECTRON_DISABLE_SANDBOX=1
-          xvfb-run --auto-servernum --server-args="-screen 0 1280x800x24" pnpm --dir desktop test:electron
+        run: pnpm --filter codex-opencode-adapter install --frozen-lockfile --network-concurrency 4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@4bc047ad259df6fc24a6c9b0f9a0cb08cf17fbe5 # v2.0.1
+      - name: Build adapter
+        run: pnpm --dir codex-opencode-adapter build
