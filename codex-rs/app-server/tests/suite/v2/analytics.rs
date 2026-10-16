@@ -929,7 +929,7 @@ enabled = true
     let thread_request = mcp
         .send_thread_start_request_with_auto_env(ThreadStartParams {
             model: Some("initial-model".to_string()),
-            service_name: Some("codex_work_desktop".to_string()),
+            service_name: Some("codex_work_app".to_string()),
             ..Default::default()
         })
         .await?;
@@ -1133,7 +1133,7 @@ enabled = true
         );
         assert_eq!(event_params["thread_id"], thread_id);
         assert_eq!(event_params["turn_id"], turn_id);
-        assert_eq!(event_params["originator"], "codex_work_desktop");
+        assert_eq!(event_params["originator"], "codex_work_app");
         assert_eq!(event_params["model_slug"], "invoking-model");
         assert_eq!(event_params["reasoning_effort"], "high");
     }

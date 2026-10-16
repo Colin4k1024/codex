@@ -47,7 +47,7 @@ use self::input_boundary::terminal_input_is_readable;
 use crate::custom_terminal;
 use crate::custom_terminal::Terminal as CustomTerminal;
 use crate::insert_history::HistoryLineWrapPolicy;
-use crate::notifications::DesktopNotificationBackend;
+use crate::notifications::AppNotificationBackend;
 use crate::notifications::detect_backend;
 use crate::terminal_hyperlinks::HyperlinkLine;
 use crate::terminal_hyperlinks::plain_hyperlink_lines;
@@ -680,7 +680,7 @@ pub struct Tui {
     enhanced_keys_supported: bool,
     // Cache the startup result so later configuration loads use the same terminal policy.
     pub(crate) terminal_app_over_ssh: bool,
-    notification_backend: Option<DesktopNotificationBackend>,
+    notification_backend: Option<AppNotificationBackend>,
     notification_condition: NotificationCondition,
     scrollback: ScrollbackStrategy,
     // When false, overlays stay on the inline screen.
@@ -1015,7 +1015,7 @@ impl Tui {
         output
     }
 
-    /// Emit a desktop notification now if the terminal is unfocused.
+    /// Emit an app notification now if the terminal is unfocused.
     /// Returns true if a notification was posted.
     pub fn notify(&mut self, message: impl AsRef<str>) -> bool {
         let terminal_focused = self.is_terminal_focused();

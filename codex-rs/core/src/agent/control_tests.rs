@@ -4712,14 +4712,14 @@ async fn spawn_thread_subagents_persist_parent_originator_across_new_and_full_fo
     let parent = harness
         .manager
         .start_thread(StartThreadOptions {
-            metrics_service_name: Some("codex_work_desktop".to_string()),
+            metrics_service_name: Some("codex_work_app".to_string()),
             environments: Some(Vec::new()),
             ..StartThreadOptions::new(harness.config.clone())
         })
         .await
         .expect("parent thread should start");
     let parent_originator = persisted_originator(&parent.thread).await;
-    assert_eq!(parent_originator, "codex_work_desktop");
+    assert_eq!(parent_originator, "codex_work_app");
 
     let child_thread_id = harness
         .control

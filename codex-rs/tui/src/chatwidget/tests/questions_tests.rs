@@ -955,7 +955,7 @@ prompt_stack_back = ["ctrl-x down", "shift-right"]
 }
 
 #[tokio::test]
-async fn desktop_async_answer_dismisses_only_its_question_and_preserves_the_other_draft() {
+async fn app_async_answer_dismisses_only_its_question_and_preserves_the_other_draft() {
     for replay_kind in [None, Some(ReplayKind::ThreadSnapshot)] {
         let (mut chat, _rx, _op_rx) = make_chatwidget_manual(/*model_override*/ None).await;
         let questions = vec![
@@ -972,7 +972,7 @@ async fn desktop_async_answer_dismisses_only_its_question_and_preserves_the_othe
         chat.bottom_pane
             .handle_paste("My draft for the second question".into());
         let reply = r#"<send_user_message_question_reply>
-[{"questionItemId":"[\"request_user_input_async\",\"questions\",0]","question":"Same title?","answer":"Answer from desktop"}]
+[{"questionItemId":"[\"request_user_input_async\",\"questions\",0]","question":"Same title?","answer":"Answer from app"}]
 </send_user_message_question_reply>"#;
         let reply = format!(
             "# Context from my IDE setup:\n\n## Open tabs:\n- lib.rs: src/lib.rs\n\n## My request for Codex:\n{reply}"
@@ -1003,7 +1003,7 @@ async fn desktop_async_answer_dismisses_only_its_question_and_preserves_the_othe
             /*config*/ None,
         );
         insta::assert_snapshot!(
-            "desktop_async_question_reply",
+            "app_async_question_reply",
             lines_to_single_string(&cells[0].transcript_lines(/*width*/ 80))
         );
         insta::assert_snapshot!(

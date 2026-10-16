@@ -60,7 +60,7 @@ use std::path::PathBuf;
 use std::sync::Arc;
 use std::sync::Mutex;
 
-pub(super) const TEST_PRODUCT_CLIENT_ID: &str = "codex_work_desktop";
+pub(super) const TEST_PRODUCT_CLIENT_ID: &str = "codex_work_app";
 
 pub(super) struct TestTurnMetadata {
     pub(super) root_turn_id: Mutex<Option<String>>,

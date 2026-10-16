@@ -3064,7 +3064,7 @@ async fn thread_list_rejects_originator_filter_but_accepts_empty_allowlist() -> 
     Ok(())
 }
 
-#[test_case::test_case("codex_work_desktop")]
+#[test_case::test_case("codex_work_app")]
 #[tokio::test]
 async fn thread_originator_is_preserved_in_list_read_and_resume(originator: &str) -> Result<()> {
     let server = create_mock_responses_server_repeating_assistant("Done").await;

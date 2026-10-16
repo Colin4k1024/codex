@@ -422,7 +422,7 @@ fn uses_quicksilver_alpha_header_for_realtime_v1() {
         /*voice_session_id*/ None,
         Some("sk-test"),
         RealtimeEventParser::V1,
-        "codex_work_desktop",
+        "codex_work_app",
     )
     .expect("headers")
     .expect("headers");
@@ -442,7 +442,7 @@ fn omits_quicksilver_alpha_header_for_realtime_v2() {
         /*voice_session_id*/ None,
         Some("sk-test"),
         RealtimeEventParser::RealtimeV2,
-        "codex_work_desktop",
+        "codex_work_app",
     )
     .expect("headers")
     .expect("headers");
@@ -457,7 +457,7 @@ fn uses_frameless_alpha_header_for_realtime_v3() {
         /*voice_session_id*/ None,
         Some("sk-test"),
         RealtimeEventParser::FramelessBidi,
-        "codex_work_desktop",
+        "codex_work_app",
     )
     .expect("headers")
     .expect("headers");
@@ -474,7 +474,7 @@ fn uses_frameless_alpha_header_for_realtime_v3() {
 fn realtime_headers_include_only_non_default_originator() {
     let default_originator = codex_login::default_client::originator();
     for (originator, expected_header) in [
-        ("codex_work_desktop", Some("codex_work_desktop")),
+        ("codex_work_app", Some("codex_work_app")),
         (default_originator.value.as_str(), None),
     ] {
         let headers = realtime_request_headers(
@@ -503,7 +503,7 @@ fn realtime_headers_keep_realtime_and_voice_session_ids_distinct() {
         Some("voice_session_1"),
         /*api_key*/ None,
         RealtimeEventParser::RealtimeV2,
-        "codex_work_desktop",
+        "codex_work_app",
     )
     .expect("headers")
     .expect("headers");

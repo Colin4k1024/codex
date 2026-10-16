@@ -105,7 +105,7 @@ impl SlashCommand {
             SlashCommand::Clear => "clear the terminal and start a new chat",
             SlashCommand::Fork => "fork the current chat",
             SlashCommand::Worktree => "start or continue a conversation in a new worktree",
-            SlashCommand::App => "continue this session in the Desktop app",
+            SlashCommand::App => "continue this session in the Codex app",
             SlashCommand::Quit | SlashCommand::Exit => "exit Codex",
             SlashCommand::Copy => "copy the last response or part of it",
             SlashCommand::Export => "export the conversation as markdown",

@@ -1420,7 +1420,7 @@ async fn turn_start_tracks_thread_originator_in_analytics() -> Result<()> {
         .start_thread(ThreadStartParams {
             model: Some("mock-model".to_string()),
             thread_source: Some(ThreadSource::User),
-            service_name: Some("codex_work_desktop".to_string()),
+            service_name: Some("codex_work_app".to_string()),
             ..Default::default()
         })
         .await?;
@@ -1480,7 +1480,7 @@ async fn turn_start_tracks_thread_originator_in_analytics() -> Result<()> {
     );
     assert_eq!(
         event["event_params"]["app_server_client"]["product_client_id"],
-        "codex_work_desktop"
+        "codex_work_app"
     );
     assert_eq!(event["event_params"]["model"], "mock-model");
     assert_eq!(event["event_params"]["model_provider"], "mock_provider");

@@ -323,7 +323,7 @@ impl ChatWidget {
                     return;
                 };
                 self.app_event_tx
-                    .send(AppEvent::OpenDesktopThread { thread_id });
+                    .send(AppEvent::OpenAppThread { thread_id });
             }
             SlashCommand::Init => {
                 const INIT_PROMPT: &str = include_str!("../../assets/prompt_for_init_command.md");

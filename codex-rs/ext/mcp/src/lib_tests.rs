@@ -26,7 +26,7 @@ async fn hosted_plugin_runtime_forwards_thread_originator() -> Result<(), Box<dy
             &config,
             &thread_init,
             &thread_store,
-            "codex_work_desktop",
+            "codex_work_app",
             /*ready_selected_capability_roots*/ &[],
             /*executor_capability_discovery*/ None,
             /*executor_capability_discovery_v2*/ None,
@@ -49,7 +49,7 @@ async fn hosted_plugin_runtime_forwards_thread_originator() -> Result<(), Box<dy
         http_headers
             .as_ref()
             .and_then(|headers| headers.get("originator")),
-        Some(&"codex_work_desktop".to_string())
+        Some(&"codex_work_app".to_string())
     );
 
     Ok(())
