@@ -277,7 +277,7 @@ stream_max_retries = 0
 }
 
 #[test]
-fn delegated_prompts_match_desktop_xml_contract() {
+fn delegated_prompts_match_app_xml_contract() {
     let output = FunctionCallOutputBody::Text(delegated_prompt("thread-1", "Check status"));
     for namespace in ["codex_tui", "codex_app"] {
         assert_eq!(

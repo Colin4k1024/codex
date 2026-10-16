@@ -725,7 +725,7 @@ impl ChatWidget {
             };
         }
         let prompt_request_end = prompt_request_offset + message.len();
-        // Prompt context uses the same delimiter and stripping behavior as the desktop app and IDE
+        // Prompt context uses the same delimiter and stripping behavior as the Codex app and IDE
         // extension. The raw user message goes to the agent, but every surface renders only the
         // request after that delimiter, so keep elements inside the visible request and shift their
         // byte ranges to match.

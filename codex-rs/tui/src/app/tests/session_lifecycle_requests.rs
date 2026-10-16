@@ -1479,7 +1479,7 @@ async fn local_daemon_registers_approval_gated_mcp_tools_for_both_start_paths_sc
     app.config.sqlite = SqliteConfig::new_for_testing(codex_home.path().abs());
     std::fs::write(
         codex_home.path().join("config.toml"),
-        "web_search = \"disabled\"\n[desktop]\ngit-worktree-root = 'relative'\n",
+        "web_search = \"disabled\"\n[app]\ngit-worktree-root = 'relative'\n",
     )?;
     // Keep the large lifecycle futures off the Windows test thread's stack.
     let (mut app_server, mut requests, mut proxy) = Box::pin(start_recording_app_server(
@@ -3774,7 +3774,7 @@ async fn managed_worktree_transitions_bind_owner_and_preserve_only_fork_history(
         r#"developer_instructions = "committed policy"
 model = "gpt-5.2"
 model_reasoning_effort = "high"
-[desktop]
+[app]
 git-worktree-root = {}
 "#,
         toml::Value::String(project_pool.display().to_string()),
@@ -3852,7 +3852,7 @@ model_reasoning_effort = "low"
         "type": "message", "role": "assistant", "content": [{"type": "output_text", "text": "managed fork history"}]
     }))?]).await?;
     let manager = codex_worktree::WorktreeManager::new(
-        codex_worktree::WorktreeSettings::for_cli(&home, /*desktop*/ None)
+        codex_worktree::WorktreeSettings::for_cli(&home, /*app*/ None)
             .map_err(|error| color_eyre::eyre::eyre!(error.to_string()))?,
     );
     let mut browser_entries = Vec::new();

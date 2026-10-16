@@ -201,19 +201,19 @@ fn merge_multi_agent_v2_boolean_preserves_existing_feature_table() {
     }
 }
 
-/// Opaque desktop settings retain ordinary scalar/table replacement semantics.
+/// Opaque app settings retain ordinary scalar/table replacement semantics.
 #[test]
-fn merge_multi_agent_v2_compatibility_excludes_opaque_desktop_paths() {
+fn merge_multi_agent_v2_compatibility_excludes_opaque_app_paths() {
     let cases = [
         (
-            "[desktop.features.multi_agent_v2]\nenabled = true\n",
-            "[desktop.features]\nmulti_agent_v2 = false\n",
-            "[desktop.features]\nmulti_agent_v2 = false\n",
+            "[app.features.multi_agent_v2]\nenabled = true\n",
+            "[app.features]\nmulti_agent_v2 = false\n",
+            "[app.features]\nmulti_agent_v2 = false\n",
         ),
         (
-            "[desktop.features]\nmulti_agent_v2 = true\n",
-            "[desktop.features.multi_agent_v2]\ncustom = true\n",
-            "[desktop.features.multi_agent_v2]\ncustom = true\n",
+            "[app.features]\nmulti_agent_v2 = true\n",
+            "[app.features.multi_agent_v2]\ncustom = true\n",
+            "[app.features.multi_agent_v2]\ncustom = true\n",
         ),
     ];
 
@@ -435,20 +435,20 @@ auth = ["bearer"]
     }
 }
 
-/// Repeated opaque desktop overrides continue to replace their previous value.
+/// Repeated opaque app overrides continue to replace their previous value.
 #[test]
-fn multi_agent_v2_cli_compatibility_excludes_opaque_desktop_paths() {
-    let path = "desktop.features.multi_agent_v2".to_string();
+fn multi_agent_v2_cli_compatibility_excludes_opaque_app_paths() {
+    let path = "app.features.multi_agent_v2".to_string();
     let enabled = (path.clone(), TomlValue::Boolean(true));
     let feature_table = (path, parse_toml("custom = true\n"));
 
     assert_eq!(
         crate::build_cli_overrides_layer(&[enabled.clone(), feature_table.clone()]),
-        parse_toml("[desktop.features.multi_agent_v2]\ncustom = true\n")
+        parse_toml("[app.features.multi_agent_v2]\ncustom = true\n")
     );
     assert_eq!(
         crate::build_cli_overrides_layer(&[feature_table, enabled]),
-        parse_toml("[desktop.features]\nmulti_agent_v2 = true\n")
+        parse_toml("[app.features]\nmulti_agent_v2 = true\n")
     );
 }
 

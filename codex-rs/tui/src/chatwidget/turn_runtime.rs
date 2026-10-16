@@ -127,7 +127,7 @@ impl ChatWidget {
         let sanitized_last_agent_message = last_agent_message.as_deref().map(|message| {
             parse_assistant_markdown(message, self.config.cwd.as_path()).visible_markdown
         });
-        // For desktop notifications: prefer the notification payload, fall back to
+        // For app notifications: prefer the notification payload, fall back to
         // the item-level copy source if present, otherwise send an empty string.
         let notification_response = sanitized_last_agent_message
             .as_ref()

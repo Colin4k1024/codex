@@ -25,60 +25,57 @@ pub struct WorktreeSettings {
 
 impl WorktreeSettings {
     /// Shares Desktop's allocation root while leaving CLI cleanup disabled.
-    pub fn for_cli(codex_home: &Path, desktop: Option<&HashMap<String, Value>>) -> Result<Self> {
-        let desktop = desktop
-            .and_then(|settings| settings.get(WORKTREE_ROOT))
-            .map(|root| HashMap::from([(WORKTREE_ROOT.to_owned(), root.clone())]));
+    pub fn for_cli(codex_home: &Path, app_config: Option<&HashMap<String, Value>>) -> Result<Self> {
         Ok(Self {
             auto_cleanup_enabled: false,
-            ..Self::from_desktop_config(codex_home, desktop.as_ref())?
+            ..Self::from_app_config(codex_home, app_config)?
         })
     }
 
-    /// Resolves existing `[desktop]` values without introducing another config format.
-    pub fn from_desktop_config(
+    /// Resolves existing `[app]` values without introducing another config format.
+    pub fn from_app_config(
         codex_home: &Path,
-        desktop: Option<&HashMap<String, Value>>,
+        app_config: Option<&HashMap<String, Value>>,
     ) -> Result<Self> {
-        let root = match desktop.and_then(|settings| settings.get(WORKTREE_ROOT)) {
+        let root = match app_config.and_then(|settings| settings.get(WORKTREE_ROOT)) {
             None | Some(Value::Null) => codex_home.join("worktrees"),
             Some(value) => {
                 let configured = value
                     .as_str()
-                    .context("desktop.git-worktree-root must be a string")?
+                    .context("app.git-worktree-root must be a string")?
                     .trim();
                 if configured.is_empty() {
                     codex_home.join("worktrees")
                 } else {
                     let path = PathBuf::from(configured);
                     if !path.is_absolute() {
-                        bail!("desktop.git-worktree-root must be an absolute path");
+                        bail!("app.git-worktree-root must be an absolute path");
                     }
                     path
                 }
             }
         };
 
-        let auto_cleanup_enabled = desktop
+        let auto_cleanup_enabled = app_config
             .and_then(|settings| settings.get(AUTO_CLEANUP))
             .map(|value| {
                 value
                     .as_bool()
-                    .context("desktop.worktree-auto-cleanup-enabled must be a boolean")
+                    .context("app.worktree-auto-cleanup-enabled must be a boolean")
             })
             .transpose()?
             .unwrap_or(true);
 
-        let keep_count = desktop
+        let keep_count = app_config
             .and_then(|settings| settings.get(KEEP_COUNT))
             .map(|value| {
                 let count = value
                     .as_u64()
-                    .context("desktop.worktree-keep-count must be a positive integer")?;
+                    .context("app.worktree-keep-count must be a positive integer")?;
                 if count == 0 {
-                    bail!("desktop.worktree-keep-count must be a positive integer");
+                    bail!("app.worktree-keep-count must be a positive integer");
                 }
-                usize::try_from(count).context("desktop.worktree-keep-count is too large")
+                usize::try_from(count).context("app.worktree-keep-count is too large")
             })
             .transpose()?
             .unwrap_or(DEFAULT_WORKTREE_KEEP_COUNT);

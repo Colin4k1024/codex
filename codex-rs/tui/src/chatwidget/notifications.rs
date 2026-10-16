@@ -1,4 +1,4 @@
-//! Desktop notification coalescing for `ChatWidget`.
+//! App notification coalescing for `ChatWidget`.
 
 use super::*;
 

@@ -13,7 +13,7 @@ use thiserror::Error;
 
 use super::IdeContext;
 
-// The desktop IPC client gives requests 5 seconds to complete. Match that prompt-time budget here:
+// The app IPC client gives requests 5 seconds to complete. Match that prompt-time budget here:
 // fetching IDE context includes router discovery and extension event-loop work, so a shorter TUI
 // deadline can incorrectly skip context even though the IDE answers normally.
 const IDE_CONTEXT_REQUEST_TIMEOUT: Duration = Duration::from_secs(5);

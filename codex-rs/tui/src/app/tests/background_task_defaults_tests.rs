@@ -1129,7 +1129,7 @@ async fn command_center_new_checkout_and_worktree_preserve_source_and_default_br
             ),
         )?;
         let manager =
-            WorktreeManager::new(WorktreeSettings::for_cli(&home, /*desktop*/ None).unwrap());
+            WorktreeManager::new(WorktreeSettings::for_cli(&home, /*app*/ None).unwrap());
         let selected = manager
             .create(&CreateWorktree {
                 source_cwd: source.join("subdir"),

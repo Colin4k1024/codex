@@ -9,7 +9,7 @@ use super::IdeContext;
 const MAX_ACTIVE_SELECTION_CHARS: usize = 40_000;
 const MAX_OPEN_TABS: usize = 100;
 const MAX_OPEN_TABS_CHARS: usize = 20_000;
-// Match the desktop app and IDE extension delimiter exactly. IDE context is serialized into the
+// Match the Codex app and IDE extension delimiter exactly. IDE context is serialized into the
 // raw prompt before this marker, then transcript rendering strips back to the request after the last
 // marker. Keeping the same marker and stripping semantics lets threads created with IDE context in
 // one surface replay cleanly in the others.
@@ -292,7 +292,7 @@ mod tests {
     }
 
     #[test]
-    fn apply_ide_context_uses_desktop_prompt_request_delimiter() {
+    fn apply_ide_context_uses_app_prompt_request_delimiter() {
         let context = IdeContext {
             active_file: Some(ActiveFile {
                 descriptor: descriptor("lib.rs", "src/lib.rs"),

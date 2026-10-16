@@ -39,7 +39,7 @@ impl RepositoryFixture {
 
     fn manager(&self) -> WorktreeManager {
         let settings =
-            WorktreeSettings::from_desktop_config(&self.codex_home, /*desktop*/ None)
+            WorktreeSettings::from_app_config(&self.codex_home, /*app*/ None)
                 .expect("load default worktree settings");
         WorktreeManager::new(settings)
     }
@@ -173,7 +173,7 @@ fn cli_creation_shares_default_and_custom_desktop_pools_without_enabling_cleanup
         let desktop =
             root.map(|root| HashMap::from([("git-worktree-root".to_owned(), json!(root))]));
         let desktop_settings =
-            WorktreeSettings::from_desktop_config(&fixture.codex_home, desktop.as_ref())
+            WorktreeSettings::from_app_config(&fixture.codex_home, desktop.as_ref())
                 .expect("resolve desktop settings");
         let mut cli_desktop = desktop.unwrap_or_default();
         cli_desktop.insert("worktree-auto-cleanup-enabled".to_owned(), json!("unused"));
@@ -433,7 +433,7 @@ fn creation_ignores_inherited_git_environment() {
         let source = root.join("project");
         let source_cwd = source.join("nested/component");
         let settings =
-            WorktreeSettings::from_desktop_config(&root.join("codex-home"), /*desktop*/ None)
+            WorktreeSettings::from_app_config(&root.join("codex-home"), /*app*/ None)
                 .expect("fixture operation succeeds");
         let base = default_worktree_base(&source_cwd).expect("resolve source default");
         assert_eq!(base, "refs/remotes/origin/source-default");
@@ -620,9 +620,9 @@ fn creation_rolls_back_when_the_base_lacks_the_source_subdirectory() {
 fn creation_rejects_relative_roots_before_resolving_the_source() {
     let directory = TempDir::new().expect("create temporary directory");
     let source = directory.path().join("missing-source");
-    let settings = WorktreeSettings::from_desktop_config(
+    let settings = WorktreeSettings::from_app_config(
         Path::new("relative-codex-home"),
-        /*desktop*/ None,
+        /*app*/ None,
     )
     .expect("load settings with a relative default root");
     let error = create_worktree(&WorktreeManager::new(settings), &source, /*base*/ None)

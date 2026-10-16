@@ -795,7 +795,7 @@ pub enum CopyOnSelect {
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Default, JsonSchema)]
 #[schemars(deny_unknown_fields)]
 pub struct TuiNotificationSettings {
-    /// Enable desktop notifications from the TUI.
+    /// Enable app notifications from the TUI.
     /// Defaults to `true`.
     #[serde(default, rename = "notifications")]
     pub notifications: Notifications,

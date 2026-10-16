@@ -1,4 +1,4 @@
-//! Recognize the desktop's existing async-question reply envelope for display and dismissal.
+//! Recognize the Codex app's existing async-question reply envelope for display and dismissal.
 //! Only complete envelopes, optionally following the standard IDE context prefix, are interpreted.
 
 use codex_app_server_protocol::UserInput;

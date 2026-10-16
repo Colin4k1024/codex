@@ -7120,12 +7120,12 @@ approval_mode = "approve"
 fn desktop_toml_round_trips_opaque_nested_values() -> anyhow::Result<()> {
     let parsed = toml::from_str::<ConfigToml>(
         r#"
-[desktop]
+[app]
 appearanceTheme = "dark"
 selected-avatar-id = "codex"
 recentViews = ["threads", "settings"]
 
-[desktop.workspace]
+[app.workspace]
 collapsed = true
 width = 320
 pane = { selected = "console", expanded = false }
