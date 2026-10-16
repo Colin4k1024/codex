@@ -9,7 +9,7 @@ use tokio::time::timeout;
 
 use super::super::CheckStatus;
 use super::super::DoctorCheck;
-use super::platform::desktop_check;
+use super::platform::app_check;
 
 const MAX_EVENTS_PER_CHANNEL: usize = 256;
 const MAX_RENDERED_EVENTS: usize = 16;
@@ -204,7 +204,7 @@ fn classify(channels: &[Option<Vec<Evidence>>]) -> DoctorCheck {
         (CheckStatus::Warning, true) => "recent Codex security audit or detection requires review",
         (CheckStatus::Fail, _) => "endpoint security blocked or quarantined a Codex executable",
     };
-    let mut check = desktop_check("desktop.security.enforcement", status, summary).details(details);
+    let mut check = app_check("app.security.enforcement", status, summary).details(details);
     if status != CheckStatus::Ok {
         check = check.remediation(
             "ask your organization's security administrator to review endpoint security events and the approved Codex application policy",

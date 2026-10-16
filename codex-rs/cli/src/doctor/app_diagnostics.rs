@@ -24,15 +24,15 @@ const MAX_DIRECTORY_ENTRIES: usize = 256;
 const MAX_LOG_FILES: usize = 64;
 const MAX_SESSION_LOG_FILES: usize = 8;
 const MAX_LOG_SEGMENT_BYTES: u64 = 10 * 1024 * 1024;
-const HANDSHAKE_CHECK_ID: &str = "desktop.app_server.handshake";
+const HANDSHAKE_CHECK_ID: &str = "app.app_server.handshake";
 
-pub(super) struct DesktopDiagnostics {
+pub(super) struct AppDiagnostics {
     pub(super) checks: Vec<DoctorCheck>,
     #[cfg(any(target_os = "macos", target_os = "windows"))]
     pub(super) application: Option<platform::InstalledApp>,
 }
 
-struct DesktopLog {
+struct AppLog {
     path: PathBuf,
     session_id: String,
     process_id: u32,
@@ -50,21 +50,21 @@ enum HandshakeOutcome {
     Failure,
 }
 
-enum DesktopLogEvent {
+enum AppLogEvent {
     ConnectionContext { local_websocket: bool },
     Handshake(HandshakeEvent),
 }
 
-pub(super) async fn collect() -> Option<DesktopDiagnostics> {
+pub(super) async fn collect() -> Option<AppDiagnostics> {
     let application = match platform::installed_app().await {
         Ok(Some(application)) => application,
         Ok(None) => return None,
         Err(_) => {
-            return Some(DesktopDiagnostics {
+            return Some(AppDiagnostics {
                 checks: vec![
                     unavailable(
-                        "desktop.app.version",
-                        "the desktop application installation could not be inspected",
+                        "app.version",
+                        "the Codex application installation could not be inspected",
                     ),
                     #[cfg(target_os = "windows")]
                     windows_security::collect().await,
@@ -75,27 +75,27 @@ pub(super) async fn collect() -> Option<DesktopDiagnostics> {
         }
     };
 
-    let directory = desktop_log_root(application.identity);
+    let directory = app_log_root(application.identity);
     let (running, handshake) = match &directory {
-        Some(root) => inspect_desktop_session(
+        Some(root) => inspect_app_session(
             &root.join(Utc::now().format("%Y/%m/%d").to_string()),
             |pid| platform::application_running(&application, pid),
         ),
-        None => (false, stopped_desktop_check()),
+        None => (false, stopped_app_check()),
     };
     let log_directory = directory
         .as_deref()
         .map_or_else(|| "unavailable".to_string(), redacted_path);
-    let application_check = platform::desktop_check(
-        "desktop.app.version",
+    let application_check = platform::app_check(
+        "app.version",
         CheckStatus::Ok,
-        "the desktop application is installed",
+        "the Codex application is installed",
     )
     .detail(format!("version: {}", application.version))
     .detail(format!("running: {running}"))
     .detail(format!("log directory: {log_directory}"));
 
-    Some(DesktopDiagnostics {
+    Some(AppDiagnostics {
         checks: vec![
             application_check,
             handshake,
@@ -109,21 +109,21 @@ pub(super) async fn collect() -> Option<DesktopDiagnostics> {
     })
 }
 
-pub(super) fn inspect_desktop_session(
+pub(super) fn inspect_app_session(
     directory: &Path,
     application_running: impl Fn(u32) -> bool,
 ) -> (bool, DoctorCheck) {
-    let logs = discover_desktop_logs(directory);
+    let logs = discover_app_logs(directory);
     let Some(session) = logs.iter().find(|log| application_running(log.process_id)) else {
-        return (false, stopped_desktop_check());
+        return (false, stopped_app_check());
     };
 
     let check = latest_session_handshake(&logs, &session.session_id).map_or_else(
         || {
-            platform::desktop_check(
+            platform::app_check(
                 HANDSHAKE_CHECK_ID,
                 CheckStatus::Ok,
-                "no desktop app-server handshake was recorded",
+                "no app-server handshake was recorded",
             )
         },
         |event| event.outcome.into_check(),
@@ -132,7 +132,7 @@ pub(super) fn inspect_desktop_session(
     (true, check)
 }
 
-fn desktop_log_root(identity: &str) -> Option<PathBuf> {
+fn app_log_root(identity: &str) -> Option<PathBuf> {
     let root = match env::consts::OS {
         "macos" => PathBuf::from(env::var_os("HOME")?)
             .join("Library/Logs")
@@ -149,7 +149,7 @@ fn desktop_log_root(identity: &str) -> Option<PathBuf> {
     Some(root)
 }
 
-fn discover_desktop_logs(directory: &Path) -> Vec<DesktopLog> {
+fn discover_app_logs(directory: &Path) -> Vec<AppLog> {
     let Ok(entries) = fs::read_dir(directory) else {
         return Vec::new();
     };
@@ -157,14 +157,14 @@ fn discover_desktop_logs(directory: &Path) -> Vec<DesktopLog> {
     let mut logs = entries
         .take(MAX_DIRECTORY_ENTRIES)
         .filter_map(Result::ok)
-        .filter_map(DesktopLog::from_entry)
+        .filter_map(AppLog::from_entry)
         .collect::<Vec<_>>();
     logs.sort_unstable_by_key(|log| Reverse(log.modified));
     logs.truncate(MAX_LOG_FILES);
     logs
 }
 
-fn latest_session_handshake(logs: &[DesktopLog], session_id: &str) -> Option<HandshakeEvent> {
+fn latest_session_handshake(logs: &[AppLog], session_id: &str) -> Option<HandshakeEvent> {
     let mut latest: Option<HandshakeEvent> = None;
 
     for log in logs
@@ -178,13 +178,13 @@ fn latest_session_handshake(logs: &[DesktopLog], session_id: &str) -> Option<Han
         let mut local_websocket = false;
 
         for line in String::from_utf8_lossy(&contents).lines() {
-            match DesktopLogEvent::parse(line) {
-                Some(DesktopLogEvent::ConnectionContext {
+            match AppLogEvent::parse(line) {
+                Some(AppLogEvent::ConnectionContext {
                     local_websocket: local,
                 }) => {
                     local_websocket = local;
                 }
-                Some(DesktopLogEvent::Handshake(event))
+                Some(AppLogEvent::Handshake(event))
                     if (!event.websocket || local_websocket)
                         && latest
                             .as_ref()
@@ -200,7 +200,7 @@ fn latest_session_handshake(logs: &[DesktopLog], session_id: &str) -> Option<Han
     latest
 }
 
-impl DesktopLog {
+impl AppLog {
     fn from_entry(entry: fs::DirEntry) -> Option<Self> {
         let metadata = entry.metadata().ok()?;
         if !metadata.is_file() {
@@ -232,7 +232,7 @@ fn read_log_segment(path: &Path) -> io::Result<Vec<u8>> {
     Ok(contents)
 }
 
-impl DesktopLogEvent {
+impl AppLogEvent {
     fn parse(line: &str) -> Option<Self> {
         let (timestamp, line) = line.split_once(' ')?;
         let timestamp = DateTime::parse_from_rfc3339(timestamp).ok()?;
@@ -273,15 +273,15 @@ impl HandshakeOutcome {
         let (status, summary) = match self {
             Self::Success => (
                 CheckStatus::Ok,
-                "the desktop app-server initialized successfully",
+                "the app-server initialized successfully",
             ),
             Self::Failure => (
                 CheckStatus::Fail,
-                "the desktop app-server failed to initialize",
+                "the app-server failed to initialize",
             ),
         };
 
-        platform::desktop_check(HANDSHAKE_CHECK_ID, status, summary)
+        platform::app_check(HANDSHAKE_CHECK_ID, status, summary)
     }
 }
 
@@ -292,17 +292,17 @@ fn log_field<'a>(fields: &'a str, name: &str) -> Option<&'a str> {
     })
 }
 
-fn stopped_desktop_check() -> DoctorCheck {
-    platform::desktop_check(
+fn stopped_app_check() -> DoctorCheck {
+    platform::app_check(
         HANDSHAKE_CHECK_ID,
         CheckStatus::Ok,
-        "the desktop application is not running",
+        "the Codex application is not running",
     )
 }
 
 fn unavailable(id: &'static str, summary: &'static str) -> DoctorCheck {
-    platform::desktop_check(id, CheckStatus::Warning, summary)
-        .remediation("restore desktop diagnostic access and rerun codex doctor")
+    platform::app_check(id, CheckStatus::Warning, summary)
+        .remediation("restore diagnostic access and rerun codex doctor")
 }
 
 fn redacted_path(path: &Path) -> String {

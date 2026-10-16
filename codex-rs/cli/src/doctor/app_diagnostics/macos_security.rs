@@ -1,6 +1,6 @@
 use super::super::CheckStatus;
 use super::super::DoctorCheck;
-use super::platform::desktop_check;
+use super::platform::app_check;
 use std::io;
 use std::path::Path;
 use std::process::Output;
@@ -139,23 +139,23 @@ fn classify_security_events(output: &str) -> Evidence {
 }
 
 fn enforcement_check(gatekeeper: Evidence, events: Evidence) -> DoctorCheck {
-    let id = "desktop.security.enforcement";
+    let id = "app.security.enforcement";
     let (status, summary, remedy) = if events == Evidence::Malware {
         (
             CheckStatus::Fail,
-            "macos XProtect blocked or remediated the desktop application",
+            "macos XProtect blocked or remediated the Codex application",
             "collect the XProtect detection and ask your security administrator to review the official Codex installation",
         )
     } else if gatekeeper == Evidence::Blocked {
         (
             CheckStatus::Fail,
-            "macos gatekeeper rejected the desktop application",
+            "macos gatekeeper rejected the Codex application",
             "ask your security administrator to review the application policy",
         )
     } else if events == Evidence::Blocked {
         (
             CheckStatus::Fail,
-            "a recent macos security event blocked the desktop application",
+            "a recent macos security event blocked the Codex application",
             "ask your security administrator to review the matching prevention event",
         )
     } else if events == Evidence::Exhausted {
@@ -167,13 +167,13 @@ fn enforcement_check(gatekeeper: Evidence, events: Evidence) -> DoctorCheck {
     } else if events == Evidence::Audit {
         (
             CheckStatus::Warning,
-            "recent desktop security events are audit-only",
+            "recent security events are audit-only",
             "ask your security administrator to verify the application policy",
         )
     } else if gatekeeper == Evidence::Unavailable {
         (
             CheckStatus::Warning,
-            "the desktop security assessment was unavailable",
+            "the security assessment was unavailable",
             "check access to macos gatekeeper diagnostics",
         )
     } else if events == Evidence::Unavailable {
@@ -183,14 +183,14 @@ fn enforcement_check(gatekeeper: Evidence, events: Evidence) -> DoctorCheck {
             "check access to macos unified security logs and rerun codex doctor",
         )
     } else {
-        return desktop_check(
+        return app_check(
             id,
             CheckStatus::Ok,
-            "the desktop application passed available macos security assessments",
+            "the Codex application passed available macos security assessments",
         )
         .detail("gatekeeper: accepted");
     };
-    desktop_check(id, status, summary).remediation(remedy)
+    app_check(id, status, summary).remediation(remedy)
 }
 
 fn is_truncated(output: &Output) -> bool {

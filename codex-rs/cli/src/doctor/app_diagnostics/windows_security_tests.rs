@@ -68,7 +68,7 @@ fn evidence_is_bounded_redacted_and_correctly_classified() {
     let block = fixture(/*id*/ 1121, "codex.exe", &[("User", secret)]);
     let events = parse_events(&format!("{audits}{block}"), CHANNELS[0]);
     let check = classify(&[Some(events)]);
-    assert_eq!(check.id, "desktop.security.enforcement");
+    assert_eq!(check.id, "app.security.enforcement");
     assert_eq!(check.status, CheckStatus::Fail);
     assert_eq!(check.details.len(), MAX_RENDERED_EVENTS);
     assert!(!serde_json::to_string(&check).unwrap().contains(secret));

@@ -4,13 +4,13 @@ use std::path::Path;
 use pretty_assertions::assert_eq;
 
 use super::CheckStatus;
-use super::desktop::inspect_desktop_session;
+use super::app_diagnostics::inspect_app_session;
 
 const CURRENT_SESSION: &str = "12345678-1234-1234-1234-123456789abc";
 const CURRENT_PROCESS: u32 = 12345;
 
 #[test]
-fn current_desktop_session_reports_the_latest_local_handshake() {
+fn current_app_session_reports_the_latest_local_handshake() {
     let directory = tempfile::tempdir().expect("temporary directory should be created");
     write_log(
         directory.path(),
@@ -23,14 +23,14 @@ fn current_desktop_session_reports_the_latest_local_handshake() {
         ),
     );
 
-    let (running, check) = inspect_desktop_session(directory.path(), |pid| pid == CURRENT_PROCESS);
+    let (running, check) = inspect_app_session(directory.path(), |pid| pid == CURRENT_PROCESS);
 
     assert!(running);
-    assert_eq!(check.id, "desktop.app_server.handshake");
+    assert_eq!(check.id, "app.app_server.handshake");
     assert_eq!(check.status, CheckStatus::Ok);
     assert_eq!(
         check.summary,
-        "the desktop app-server initialized successfully"
+        "the app-server initialized successfully"
     );
 }
 
@@ -42,11 +42,11 @@ fn failed_handshake_does_not_expose_sensitive_log_fields() {
         "2026-08-07T12:00:00.000Z error [AppServerConnection] initialize_handshake_result errorMessage=\"desktop-secret outcome=success\" outcome=failure transportKind=stdio\n",
     );
 
-    let (running, check) = inspect_desktop_session(directory.path(), |_| true);
+    let (running, check) = inspect_app_session(directory.path(), |_| true);
 
     assert!(running);
     assert_eq!(check.status, CheckStatus::Fail);
-    assert_eq!(check.summary, "the desktop app-server failed to initialize");
+    assert_eq!(check.summary, "the app-server failed to initialize");
     assert!(
         !serde_json::to_string(&check)
             .unwrap()
@@ -65,25 +65,25 @@ fn handshake_failure_in_the_middle_of_a_log_segment_is_detected() {
         ),
     );
 
-    let (running, check) = inspect_desktop_session(directory.path(), |_| true);
+    let (running, check) = inspect_app_session(directory.path(), |_| true);
 
     assert!(running);
     assert_eq!(check.status, CheckStatus::Fail);
 }
 
 #[test]
-fn stopped_desktop_does_not_report_a_failure() {
+fn stopped_app_does_not_report_a_failure() {
     let directory = tempfile::tempdir().expect("temporary directory should be created");
     write_log(
         directory.path(),
         "2026-08-07T12:00:00.000Z error [AppServerConnection] initialize_handshake_result outcome=failure transportKind=stdio\n",
     );
 
-    let (running, check) = inspect_desktop_session(directory.path(), |_| false);
+    let (running, check) = inspect_app_session(directory.path(), |_| false);
 
     assert!(!running);
     assert_eq!(check.status, CheckStatus::Ok);
-    assert_eq!(check.summary, "the desktop application is not running");
+    assert_eq!(check.summary, "the Codex application is not running");
 }
 
 fn write_log(directory: &Path, contents: &str) {
@@ -93,5 +93,5 @@ fn write_log(directory: &Path, contents: &str) {
         )),
         contents,
     )
-    .expect("desktop log fixture should be created");
+    .expect("app log fixture should be created");
 }

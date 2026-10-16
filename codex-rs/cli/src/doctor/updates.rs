@@ -24,7 +24,7 @@ use super::DoctorCheck;
 #[cfg(any(target_os = "macos", target_os = "windows"))]
 use super::DoctorIssue;
 #[cfg(any(target_os = "macos", target_os = "windows"))]
-use super::desktop::platform::InstalledApp;
+use super::app_diagnostics::platform::InstalledApp;
 use super::doctor_install_context;
 use super::doctor_managed_by_npm;
 #[cfg(any(target_os = "macos", target_os = "windows"))]
@@ -94,7 +94,7 @@ pub(super) async fn updates_check(config: &Config) -> DoctorCheck {
 }
 
 #[cfg(any(target_os = "macos", target_os = "windows"))]
-pub(super) async fn append_desktop_update(
+pub(super) async fn append_app_update(
     checks: &mut [DoctorCheck],
     config: Option<&Config>,
     application: &InstalledApp,
@@ -113,9 +113,9 @@ pub(super) async fn append_desktop_update(
         && let Some(update) = checks.iter_mut().find(|check| check.id == "updates.status")
     {
         update.details.extend([
-            "desktop update status: ready to install".to_string(),
-            format!("desktop latest build: {build}"),
-            format!("desktop application: {}", application.identity),
+            "app update status: ready to install".to_string(),
+            format!("app latest build: {build}"),
+            format!("app application: {}", application.identity),
         ]);
     }
 
@@ -129,25 +129,25 @@ pub(super) async fn append_desktop_update(
         return;
     };
     #[cfg(target_os = "macos")]
-    let desktop_update_url = std::env::var_os("HOME")
+    let app_update_url = std::env::var_os("HOME")
         .map(PathBuf::from)
         .map(|home| {
-            macos_desktop_update_url(&home, application, &os_info::get().version().to_string())
+            macos_app_update_url(&home, application, &os_info::get().version().to_string())
         })
         .unwrap_or_else(|| DESKTOP_UPDATE_URL.to_string());
     #[cfg(target_os = "windows")]
-    let desktop_update_url = DESKTOP_UPDATE_URL;
+    let app_update_url = DESKTOP_UPDATE_URL;
     #[cfg(target_os = "macos")]
-    let desktop_update_url = desktop_update_url.as_str();
-    let desktop_update_display_url = desktop_update_url
+    let app_update_url = app_update_url.as_str();
+    let app_update_display_url = app_update_url
         .split_once('?')
-        .map_or(desktop_update_url, |(endpoint, _)| endpoint);
+        .map_or(app_update_url, |(endpoint, _)| endpoint);
     let client = RouteAwareClientPool::new_without_request_logging(
         config.http_client_factory(),
         ClientRouteClass::Other,
     );
     let outcome = match client
-        .request(Method::GET, desktop_update_url)
+        .request(Method::GET, app_update_url)
         .timeout(deadline.saturating_duration_since(tokio::time::Instant::now()))
         .send()
         .await
@@ -157,7 +157,7 @@ pub(super) async fn append_desktop_update(
             #[cfg(target_os = "windows")]
             if status == 404 && response.url().scheme() == "https" {
                 checks[reachability_index].details.push(format!(
-                    "desktop assets CDN: {desktop_update_display_url} reachable (HTTP 404; no update available)"
+                    "app assets CDN: {app_update_display_url} reachable (HTTP 404; no update available)"
                 ));
                 return;
             }
@@ -169,30 +169,30 @@ pub(super) async fn append_desktop_update(
                 Err(format!("HTTP {status}"))
             } else {
                 checks[reachability_index].details.push(format!(
-                    "desktop assets CDN: {desktop_update_display_url} reachable (HTTP {status})"
+                    "app assets CDN: {app_update_display_url} reachable (HTTP {status})"
                 ));
                 #[cfg(target_os = "windows")]
                 if let Some(update) = checks.iter_mut().find(|check| check.id == "updates.status") {
                     match response.bytes().await {
                         Ok(body) => match windows_store_update(&body, &application.version) {
                             Ok(Some(build)) => update.details.extend([
-                                "desktop update status: available".to_string(),
-                                format!("desktop latest build: {build}"),
-                                format!("desktop application: {}", application.identity),
+                                "app update status: available".to_string(),
+                                format!("app latest build: {build}"),
+                                format!("app application: {}", application.identity),
                             ]),
                             Ok(None) => {}
                             Err(error) => {
                                 update.status = update.status.max(CheckStatus::Warning);
                                 update
                                     .details
-                                    .push(format!("desktop update manifest: {error}"));
+                                    .push(format!("app update manifest: {error}"));
                             }
                         },
                         Err(_) => {
                             update.status = update.status.max(CheckStatus::Warning);
                             update
                                 .details
-                                .push("desktop update manifest: response could not be read".into());
+                                .push("app update manifest: response could not be read".into());
                         }
                     }
                 }
@@ -205,33 +205,33 @@ pub(super) async fn append_desktop_update(
     if let Err(error) = outcome {
         let reachability = &mut checks[reachability_index];
         reachability.details.push(format!(
-            "desktop assets CDN: {desktop_update_display_url} {error} (optional)"
+            "app assets CDN: {app_update_display_url} {error} (optional)"
         ));
         if reachability.status == CheckStatus::Ok {
             reachability.status = CheckStatus::Warning;
-            reachability.summary = "desktop update and runtime CDN is unreachable".to_string();
+            reachability.summary = "app update and runtime CDN is unreachable".to_string();
         }
         reachability.issues.push(
             DoctorIssue::new(
                 CheckStatus::Warning,
-                "desktop update and runtime CDN is unreachable",
+                "app update and runtime CDN is unreachable",
             )
-            .measured(format!("{desktop_update_display_url} {error}"))
-            .expected("desktop update and runtime CDN reachable over HTTPS")
+            .measured(format!("{app_update_display_url} {error}"))
+            .expected("app update and runtime CDN reachable over HTTPS")
             .remedy(
-                if desktop_update_display_url.starts_with("https://chatgpt.com/") {
+                if app_update_display_url.starts_with("https://chatgpt.com/") {
                     "check proxy, firewall, DNS, and certificate access to chatgpt.com"
                 } else {
                     "check proxy, firewall, DNS, and certificate access to persistent.oaistatic.com"
                 },
             )
-            .field("desktop assets CDN"),
+            .field("app assets CDN"),
         );
     }
 }
 
 #[cfg(target_os = "macos")]
-fn macos_desktop_update_url(home: &Path, application: &InstalledApp, os_version: &str) -> String {
+fn macos_app_update_url(home: &Path, application: &InstalledApp, os_version: &str) -> String {
     #[derive(Deserialize)]
     #[serde(rename_all = "camelCase")]
     struct ProductionAppcastState {
@@ -348,7 +348,7 @@ async fn latest_macos_staged_build(root: &Path, installed_build: u64) -> Option<
         inspected += 1;
         let Ok(result) = tokio::time::timeout_at(
             deadline,
-            super::desktop::platform::inspect_macos_bundle(&bundle),
+            super::app_diagnostics::platform::inspect_macos_bundle(&bundle),
         )
         .await
         else {
@@ -577,7 +577,7 @@ mod tests {
             build: 6139,
         };
         assert_eq!(
-            macos_desktop_update_url(home.path(), &application, "26.6.0"),
+            macos_app_update_url(home.path(), &application, "26.6.0"),
             DESKTOP_UPDATE_URL
         );
 
@@ -598,7 +598,7 @@ mod tests {
             "arm64"
         };
         assert_eq!(
-            macos_desktop_update_url(home.path(), &application, "26.6.0"),
+            macos_app_update_url(home.path(), &application, "26.6.0"),
             format!(
                 "{BACKEND_DESKTOP_UPDATE_URL}?installation_id=028e90f8-5f2a-47db-a05c-6a48f548d728&arch={arch}&app_version=26.623.10000&beta=false&os-version=26.6.0&plan_type=unknown"
             )

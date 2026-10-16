@@ -139,12 +139,12 @@ pub(super) fn application_running(_application: &InstalledApp, _candidate_pid: u
     false
 }
 
-pub(super) fn desktop_check(
+pub(super) fn app_check(
     id: impl Into<String>,
     status: CheckStatus,
     summary: impl Into<String>,
 ) -> DoctorCheck {
-    DoctorCheck::new(id, "desktop", status, summary)
+    DoctorCheck::new(id, "app", status, summary)
 }
 
 #[cfg(target_os = "windows")]

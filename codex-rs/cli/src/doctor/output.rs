@@ -35,8 +35,8 @@ const GROUPS: &[OutputGroup] = &[
         keys: &["config", "auth", "mcp", "sandbox"],
     },
     OutputGroup {
-        title: "Desktop App",
-        keys: &["desktop"],
+        title: "App",
+        keys: &["app"],
     },
     OutputGroup {
         title: "Updates",
@@ -504,7 +504,7 @@ fn notes_for_report(report: &DoctorReport) -> Vec<DoctorNote> {
         update_note(check, report)
             .into_iter()
             .for_each(|note| notes.push(note));
-        desktop_update_note(check)
+        app_update_note(check)
             .into_iter()
             .for_each(|note| notes.push(note));
     }
@@ -556,9 +556,9 @@ fn update_note(check: &DoctorCheck, report: &DoctorReport) -> Option<DoctorNote>
     })
 }
 
-fn desktop_update_note(check: &DoctorCheck) -> Option<DoctorNote> {
-    let status = detail::detail_value(check, "desktop update status")?;
-    let build = detail::detail_value(check, "desktop latest build")?;
+fn app_update_note(check: &DoctorCheck) -> Option<DoctorNote> {
+    let status = detail::detail_value(check, "app update status")?;
+    let build = detail::detail_value(check, "app latest build")?;
     let summary = match status.as_str() {
         "ready to install" => format!("build {build} available (ready to install)"),
         "available" => format!("build {build} available"),
@@ -566,7 +566,7 @@ fn desktop_update_note(check: &DoctorCheck) -> Option<DoctorNote> {
     };
     Some(DoctorNote {
         status: DisplayStatus::Update,
-        name: "desktop".to_string(),
+        name: "app".to_string(),
         summary,
     })
 }
@@ -1448,19 +1448,19 @@ Background Server
         report.checks.push(security);
         report.checks.extend([
             DoctorCheck::new(
-                "desktop.app.version",
-                "desktop",
+                "app.version",
+                "app",
                 CheckStatus::Ok,
-                "the desktop application is installed",
+                "the Codex application is installed",
             )
             .detail("version: 1.2.3")
             .detail("running: true")
             .detail("log directory: $HOME/Library/Logs/com.openai.codex"),
             DoctorCheck::new(
-                "desktop.app_server.handshake",
-                "desktop",
+                "app.app_server.handshake",
+                "app",
                 CheckStatus::Ok,
-                "the desktop app-server initialized successfully",
+                "the app-server initialized successfully",
             ),
         ]);
         let update = report
@@ -1473,10 +1473,10 @@ Background Server
             ("ready to install", "build 123 available (ready to install)"),
         ] {
             update.details = vec![
-                format!("desktop update status: {status}"),
-                "desktop latest build: 123".to_string(),
+                format!("app update status: {status}"),
+                "app latest build: 123".to_string(),
             ];
-            assert_eq!(desktop_update_note(update).unwrap().summary, expected);
+            assert_eq!(app_update_note(update).unwrap().summary, expected);
         }
         insta::assert_snapshot!(
             "doctor_human_report_environment_rows",
