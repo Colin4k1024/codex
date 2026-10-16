@@ -43,6 +43,39 @@ interface ServiceInfo {
 
 // ---------- codex app-server bridge ----------
 
+import { existsSync as existsSyncSync } from "node:fs"
+import { dirname as pathDirname, join as pathJoin } from "node:path"
+import { fileURLToPath } from "node:url"
+
+function resolveCodexCommand(): string {
+  // 1. Explicit env var takes highest priority
+  if (process.env.CODEX_APP_SERVER_COMMAND) return process.env.CODEX_APP_SERVER_COMMAND
+
+  // 2. Look for codex in the same directory as this adapter binary
+  //    (covers staged copies inside OpenCode desktop's userData)
+  const here = dirnameOfThisBinary()
+  if (here) {
+    const localCodex = pathJoin(here, "codex")
+    if (existsSyncSync(localCodex)) return localCodex
+  }
+
+  // 3. Fallback to PATH lookup
+  return "codex"
+}
+
+function dirnameOfThisBinary(): string | undefined {
+  try {
+    // When compiled with bun --compile, __dirname points to the binary's location
+    // When running from source, import.meta.url gives the script path
+    const url = typeof globalThis.__dirname !== "undefined"
+      ? `file://${globalThis.__dirname}`
+      : import.meta.url
+    return pathDirname(fileURLToPath(url))
+  } catch {
+    return undefined
+  }
+}
+
 class CodexBridge {
   private child: ChildProcess | null = null
   private buffer = ""
@@ -60,7 +93,7 @@ class CodexBridge {
   private readonly serverRequests = new Map<string | number, ServerRequestFrame>()
 
   async start(): Promise<void> {
-    const command = process.env.CODEX_APP_SERVER_COMMAND ?? "codex"
+    const command = resolveCodexCommand()
     const args = process.env.CODEX_APP_SERVER_ARGS?.split(" ") ?? ["app-server"]
 
     this.child = spawn(command, args, {
@@ -236,13 +269,17 @@ class CodexBridge {
   }
 
   private broadcast(type: string, properties: unknown, directory?: string): void {
+    // OpenCode v2 SSE format: plain JSON objects, one per line, no "data:" prefix.
+    // The client expects: {"id": ..., "type": "server.connected"|..., "data": {...}}
     const event = {
-      directory: directory ?? "global",
-      payload: { id: String(Date.now()), type, properties },
+      id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      type,
+      data: properties ?? {},
+      ...(directory ? { directory } : {}),
     }
-    const data = `data: ${JSON.stringify(event)}\n\n`
+    const data = JSON.stringify(event) + "\n"
     for (const client of this.sseClients) {
-      if (client.directory && event.directory !== "global" && client.directory !== event.directory) continue
+      if (client.directory && directory && client.directory !== directory) continue
       try {
         client.res.write(data)
       } catch {
@@ -596,7 +633,7 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse, password
     })
     const client = { res, directory: url.searchParams.get("directory") }
     bridge.addSseClient(client)
-    res.write(`data: ${JSON.stringify({ directory: "global", payload: { id: "0", type: "server.connected", properties: {} } })}\n\n`)
+    res.write(JSON.stringify({ id: "0", type: "server.connected", data: {} }) + "\n")
     const keepalive = setInterval(() => {
       try {
         res.write(`: keepalive\n\n`)
@@ -625,6 +662,17 @@ async function handleRequest(req: IncomingMessage, res: ServerResponse, password
 async function main() {
   const port = Number(process.env.PORT ?? 0)
   const hostname = process.env.HOSTNAME ?? "127.0.0.1"
+
+  // When spawned by OpenCode desktop, SIGTERM from the parent may propagate
+  // to us. We must survive so the desktop can reconnect after reconnecting.
+  // The desktop is responsible for our lifecycle; ignore SIGTERM/SIGINT.
+  process.on("SIGTERM", () => {
+    // Only shut down when the parent desktop is actually gone.
+    // This is a no-op check; we rely on the desktop to kill us explicitly.
+  })
+  process.on("SIGINT", () => {
+    void shutdown(server)
+  })
 
   await bridge.start()
 
@@ -659,8 +707,11 @@ async function main() {
   console.log(`[adapter] service registered at ${url}`)
   console.log(`[adapter] service file: ${getServiceFilePath()}`)
 
-  process.on("SIGINT", () => void shutdown(server))
-  process.on("SIGTERM", () => void shutdown(server))
+  // Keep the process alive until explicitly terminated.
+  // The service file tells OpenCode desktop where to connect;
+  // exiting early causes the desktop to respawn and reconnect in a loop.
+  // A pending promise keeps the Node.js event loop alive indefinitely.
+  await new Promise(() => {})
 }
 
 async function shutdown(server: ReturnType<typeof createServer>) {
