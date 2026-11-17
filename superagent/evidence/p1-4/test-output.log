@@ -4,6 +4,7 @@ test_doctor_fails_tampered_pack (__main__.DoctorTests.test_doctor_fails_tampered
 test_dir_symlink_rejected (__main__.InstallerTests.test_dir_symlink_rejected) ... ok
 test_install_dir_pack (__main__.InstallerTests.test_install_dir_pack) ... ok
 test_install_tar_pack (__main__.InstallerTests.test_install_tar_pack) ... ok
+test_mid_swap_failure_rolls_back_fresh_install (__main__.InstallerTests.test_mid_swap_failure_rolls_back_fresh_install) ... ok
 test_mid_swap_failure_rolls_back_whole_pack (__main__.InstallerTests.test_mid_swap_failure_rolls_back_whole_pack) ... ok
 test_pinned_mismatch_rejected (__main__.InstallerTests.test_pinned_mismatch_rejected) ... ok
 test_reinstall_idempotent (__main__.InstallerTests.test_reinstall_idempotent) ... ok
@@ -17,9 +18,10 @@ test_user_codex_guard (__main__.InstallerTests.test_user_codex_guard) ... ok
 test_user_config_untouched (__main__.InstallerTests.test_user_config_untouched) ... ok
 
 ----------------------------------------------------------------------
-Ran 17 tests in 3.352s
+Ran 18 tests in 1.444s
 
 OK
+{"digest": "53362ff89b96ad235462735aed69c061dbd7f97591255f9bb623c256fb987b6c", "file_count": 4, "name": "fixture-pack", "schema_version": 1, "source_commit": "unknown", "version": "0.1.0"}
 {"digest": "53362ff89b96ad235462735aed69c061dbd7f97591255f9bb623c256fb987b6c", "file_count": 4, "name": "fixture-pack", "schema_version": 1, "source_commit": "unknown", "version": "0.1.0"}
 {"digest": "53362ff89b96ad235462735aed69c061dbd7f97591255f9bb623c256fb987b6c", "file_count": 4, "name": "fixture-pack", "schema_version": 1, "source_commit": "unknown", "version": "0.1.0"}
 {"digest": "53362ff89b96ad235462735aed69c061dbd7f97591255f9bb623c256fb987b6c", "file_count": 4, "name": "fixture-pack", "schema_version": 1, "source_commit": "unknown", "version": "0.1.0"}

@@ -187,6 +187,26 @@ class InstallerTests(unittest.TestCase):
         self.assertEqual(after, baseline)
         self.assertFalse(any(".old-" in k for k in after))
 
+    def test_mid_swap_failure_rolls_back_fresh_install(self):
+        self.assertFalse(os.path.exists(self.home))
+        real_swap = install_pack.swap_item
+        calls = {"n": 0}
+
+        def flaky(staged, target):
+            calls["n"] += 1
+            if calls["n"] == 2:
+                raise OSError("simulated mid-swap failure on fresh install")
+            return real_swap(staged, target)
+
+        install_pack.swap_item = flaky
+        try:
+            with self.assertRaises(OSError):
+                install_pack.install(self.pack, self.home)
+        finally:
+            install_pack.swap_item = real_swap
+        self.assertEqual(tree_state(self.home), {})
+        self.assertEqual(os.listdir(self.home), [])
+
     def test_tar_extract_fallback_pre_3_12(self):
         from unittest import mock
         tar = os.path.join(self.tmp, "fb.tar.gz")

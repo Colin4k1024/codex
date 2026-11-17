@@ -186,13 +186,17 @@ def install(pack_arg, codex_home, pinned=None, user_home=None):
                 swaps.append((target, backup))
         except OSError:
             for target, backup in reversed(swaps):
-                if backup is None:
-                    continue
                 if os.path.isdir(target):
                     shutil.rmtree(target, ignore_errors=True)
-                elif os.path.exists(target):
+                elif os.path.lexists(target):
                     os.remove(target)
-                os.rename(backup, target)
+                if backup is not None:
+                    os.rename(backup, target)
+                else:
+                    try:
+                        os.rmdir(os.path.dirname(target))
+                    except OSError:
+                        pass
             raise
         else:
             for _target, backup in swaps:
