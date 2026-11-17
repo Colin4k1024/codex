@@ -242,7 +242,7 @@
             "max_attempts": {
               "type": "integer",
               "format": "uint32",
-              "minimum": 0.0
+              "minimum": 1.0
             },
             "type": {
               "type": "string",
@@ -253,7 +253,7 @@
             "wall_timeout_secs": {
               "type": "integer",
               "format": "uint64",
-              "minimum": 0.0
+              "minimum": 1.0
             }
           },
           "additionalProperties": false

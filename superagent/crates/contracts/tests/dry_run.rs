@@ -66,9 +66,14 @@ fn self_dependency_detected() {
 
 #[test]
 fn loop_missing_required_fields_fails_deserialization() {
-    for field in ["\"max_attempts\": 2,", "\"wall_timeout_secs\": 1800,", "\"gate\": \"tests-pass\""] {
-        let bad = VALID.replace(field, "");
-        assert!(serde_json::from_str::<Workflow>(&bad).is_err(), "missing {field} must fail");
+    let base: serde_json::Value = serde_json::from_str(VALID).unwrap();
+    for field in ["max_attempts", "wall_timeout_secs", "gate"] {
+        let mut bad = base.clone();
+        let nodes = bad["nodes"].as_array_mut().unwrap();
+        let loop_node = nodes.iter_mut().find(|n| n["id"] == "fix-loop").unwrap();
+        assert!(loop_node.as_object_mut().unwrap().remove(field).is_some());
+        let err = serde_json::from_value::<Workflow>(bad).unwrap_err();
+        assert!(err.to_string().contains(&format!("missing field `{field}`")), "{err}");
     }
 }
 
@@ -199,4 +204,11 @@ fn node_schema_enumerates_known_types_only() {
     for t in ["capability", "verification", "loop"] {
         assert!(text.contains(t), "schema must enumerate {t}");
     }
+}
+
+#[test]
+fn node_schema_loop_bounds_at_schema_level() {
+    let schema = serde_json::to_value(schemars::schema_for!(superagent_contracts::Node)).unwrap();
+    let text = schema.to_string();
+    assert!(text.contains("\"minimum\":1.0"), "loop bounds must be enforced in JSON Schema: {text}");
 }
