@@ -1,0 +1,6 @@
+{
+  "skill_discoverable": true,
+  "mechanism": "pack skills installed to CODEX_HOME/skills (engine default discovery root); skills/list lists team-delivery without extraRoots",
+  "mode": "discovery-only (model-free)",
+  "allPass": true
+}
