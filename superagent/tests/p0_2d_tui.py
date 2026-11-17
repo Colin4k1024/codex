@@ -28,6 +28,10 @@ HOME_A = os.path.expanduser("~/Library/Application Support/SuperAgent/codex-home
 EV = sys.argv[1] if len(sys.argv) > 1 else f"{ROOT}/superagent/evidence/p0-2"
 HOME_B = f"{EV}/home-b"
 os.makedirs(EV, exist_ok=True)
+# Hard wall-clock guard: pty cleanup can block if the TUI child ignores signals;
+# alarm forces exit so the probe never hangs indefinitely (evidence is salvaged
+# from the leader rollout regardless).
+signal.alarm(600)
 
 WORK = tempfile.mkdtemp(prefix="p02d-")
 
