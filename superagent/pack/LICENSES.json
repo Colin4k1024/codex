@@ -1,0 +1,10 @@
+{
+  "licenses": [
+    {
+      "id": "Apache-2.0",
+      "source": "original — SuperAgent initiative (Colin4k1024/codex), authored in-repo",
+      "paths": ["**"]
+    }
+  ],
+  "third_party": []
+}

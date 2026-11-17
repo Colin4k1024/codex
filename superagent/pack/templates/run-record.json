@@ -1,0 +1,11 @@
+{
+  "$comment": "run 记录版本绑定示例（P1-1 #73 规则载体）：run 固定 bundle digest 与 workflow digest；恢复/重放必须使用原 pin 的包；pin 的包缺失或 digest 不符 → 显式阻塞（pack.py verify --pinned），绝不静默用新版本规则执行。升级=新 run 新 pin，旧 run 不受影响。",
+  "run_id": "example-run-0001",
+  "bundle_digest": "<64-hex manifest.digest pinned at run start>",
+  "bundle_version": "0.1.0",
+  "workflow_digest": "<64-hex workflow definition digest>",
+  "input_summary": "<bounded summary>",
+  "repo_identity": "<remote url>",
+  "start_head": "<commit sha>",
+  "config_digest": "<64-hex config summary>"
+}
