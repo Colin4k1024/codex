@@ -172,11 +172,10 @@ try:
                    "command execution tool. If the command is denied by the user, do not retry and do not "
                    "create the file with any other tool; reply exactly DENIED."}],
     })
-    pending_note = client.wait_notification(
-        lambda n: n.get("method") == "item/started"
-        and "approval" in str(n.get("params", {}).get("item", {}).get("type", "")).lower(),
-        timeout=240)
-    deadline = time.time() + 120
+    # The approval arrives as a deferred server request
+    # (item/commandExecution/requestApproval), not as an item/started whose type
+    # contains "approval". Wait for the pending server request directly.
+    deadline = time.time() + 240
     while not client.pending_server_requests and time.time() < deadline:
         time.sleep(0.5)
     pending_ids = list(client.pending_server_requests)
@@ -200,7 +199,7 @@ try:
         "serverRequestDecisions": client.server_request_decisions,
         "turnStartResponse": resp,
     }
-    save("trace-b2-transcript.json", {"results": [ts, resp], "pendingApprovalNote": pending_note,
+    save("trace-b2-transcript.json", {"results": [ts, resp], "pendingApprovalIds": pending_ids,
                                       **client.transcript()})
 finally:
     client.close()

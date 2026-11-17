@@ -4,10 +4,10 @@
       "id": 2,
       "result": {
         "thread": {
-          "id": "01a1e88d-9b42-7040-8c30-4d0d0054b03f",
+          "id": "01a1e993-d54e-7711-91f1-bee3c358bd85",
           "environments": null,
           "extra": null,
-          "sessionId": "01a1e88d-9b42-7040-8c30-4d0d0054b03f",
+          "sessionId": "01a1e993-d54e-7711-91f1-bee3c358bd85",
           "forkedFromId": null,
           "attachedToThreadId": null,
           "parentThreadId": null,
@@ -20,14 +20,14 @@
           "modelProvider": "openai",
           "model": "gpt-6-astra",
           "reasoningEffort": null,
-          "createdAt": 1794902956,
-          "updatedAt": 1794902966,
-          "recencyAt": 1794902957,
+          "createdAt": 1794920142,
+          "updatedAt": 1794920185,
+          "recencyAt": 1794920142,
           "status": {
             "type": "notLoaded"
           },
-          "path": "/Users/fanjia/Library/Application Support/SuperAgent/codex-home/sessions/2026/11/17/rollout-2026-11-17T16-09-16-01a1e88d-9b42-7040-8c30-4d0d0054b03f.jsonl",
-          "cwd": "/private/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-d-xqning4o",
+          "path": "/Users/<user>/Library/Application Support/SuperAgent/codex-home/sessions/2026/11/17/rollout-2026-11-17T20-55-42-01a1e993-d54e-7711-91f1-bee3c358bd85.jsonl",
+          "cwd": "/private/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-d-cgow9eqq",
           "cliVersion": "0.0.0",
           "originator": "superagent-spike",
           "source": "vscode",
@@ -40,12 +40,12 @@
           "daybreakEnabled": null,
           "turns": [
             {
-              "id": "01a1e88d-9bc8-7f03-a696-8d1b1e91531e",
-              "rootTurnId": "01a1e88d-9bc8-7f03-a696-8d1b1e91531e",
+              "id": "01a1e993-d5b2-78d1-b2c5-2e37bd050ba1",
+              "rootTurnId": "01a1e993-d5b2-78d1-b2c5-2e37bd050ba1",
               "items": [
                 {
                   "type": "userMessage",
-                  "id": "01a1e88d-aa50-7c60-8f06-7cf354b20dcd",
+                  "id": "01a1e993-f322-79c2-9003-6eece01e1435",
                   "clientId": null,
                   "content": [
                     {
@@ -54,26 +54,26 @@
                       "text_elements": []
                     }
                   ],
-                  "startedAtMs": 1794902960721,
-                  "completedAtMs": 1794902960721
+                  "startedAtMs": 1794920149795,
+                  "completedAtMs": 1794920149795
                 },
                 {
                   "type": "agentMessage",
                   "moderation": null,
-                  "id": "msg_046127930b1790f4016afc0bb590f087d0a7f9ee799ecb5c68",
-                  "text": "I’ll run `sleep 45`, wait for it to finish, then create `d.txt` containing `RECONCILED`.",
+                  "id": "msg_0109327f58a3fdb9016afc4ef8646487d0802d3dfbebae762f",
+                  "text": "I’ll run `sleep 45`, wait for it to finish, then create `d.txt` containing `RECONCILED`.\n",
                   "phase": "commentary",
                   "memoryCitation": null,
                   "delivery": null,
                   "questions": null,
-                  "startedAtMs": 1794902965584,
-                  "completedAtMs": 1794902966476
+                  "startedAtMs": 1794920184305,
+                  "completedAtMs": 1794920185014
                 }
               ],
               "itemsView": "full",
               "status": "interrupted",
               "error": null,
-              "startedAt": 1794902957,
+              "startedAt": 1794920142,
               "completedAt": null,
               "durationMs": null
             }
@@ -81,7 +81,7 @@
         },
         "readState": {
           "firstUnread": null,
-          "revision": "initial:01a1e88d-9b42-7040-8c30-4d0d0054b03f"
+          "revision": "initial:01a1e993-d54e-7711-91f1-bee3c358bd85"
         }
       }
     }
@@ -90,7 +90,7 @@
     "id": 1,
     "result": {
       "userAgent": "superagent-spike/0.0.0 (Mac OS 26.6.2; arm64) xterm-256color (superagent-spike; 0.1.0)",
-      "codexHome": "/Users/fanjia/Library/Application Support/SuperAgent/codex-home",
+      "codexHome": "<scrubbed>",
       "platformFamily": "unix",
       "platformOs": "macos"
     }
@@ -100,11 +100,19 @@
       "method": "remoteControl/status/changed",
       "params": {
         "status": "disabled",
-        "serverName": "fanjiadeMacBook-Pro.local",
-        "installationId": "33846316-8915-4e37-85c1-1cdfd3b9fabe",
+        "serverName": "<scrubbed>",
+        "installationId": "<scrubbed>",
         "environmentId": null
       },
-      "emittedAtMs": 1794902967494
+      "emittedAtMs": 1794920185904
+    },
+    {
+      "method": "account/updated",
+      "params": {
+        "authMode": "<scrubbed>",
+        "planType": "<scrubbed>"
+      },
+      "emittedAtMs": 1794920187168
     },
     {
       "method": "deprecationNotice",
@@ -112,15 +120,45 @@
         "summary": "Full-history hydration is deprecated for paginated threads; omit `includeTurns` or set it to `false`, then page with `thread/turns/list` and `thread/items/list`.",
         "details": null
       },
-      "emittedAtMs": 1794902967503
+      "emittedAtMs": 1794920206719
     }
   ],
-  "notificationCount": 2,
+  "notificationCount": 3,
   "serverRequests": [],
   "serverRequestDecisions": [],
-  "maxFrameBytesSeen": 2053,
+  "pendingServerRequestIds": [],
+  "maxFrameBytesSeen": 2055,
   "frameLimitBytes": 16777216,
   "frameViolations": [],
+  "spawnArgv": [
+    "/Users/<user>/Desktop/code/codex/superagent/packaging/superagent-engine",
+    "app-server",
+    "--listen",
+    "stdio://"
+  ],
+  "spawnWiring": {
+    "stdin": "PIPE (JSONL requests)",
+    "stdout": "PIPE (JSONL frames only)",
+    "stderr": "PIPE (collected separately, ring buffer 2000 lines)",
+    "env": {
+      "CODEX_HOME": "<set per run>"
+    }
+  },
+  "runLogPath": null,
+  "runLogLimitBytes": 104857600,
+  "runLogRotations": 0,
+  "runLogBytesRetained": 0,
+  "defaultTimeoutsByMethod": {
+    "initialize": 30,
+    "thread/start": 60,
+    "thread/read": 60,
+    "thread/list": 60,
+    "thread/resume": 60,
+    "turn/start": 30,
+    "turn/interrupt": 30,
+    "command/exec": 90,
+    "command/exec/terminate": 30
+  },
   "stderrTail": [],
   "exitCode": null
 }

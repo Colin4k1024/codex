@@ -1,0 +1,795 @@
+{
+  "results": [
+    {
+      "id": 2,
+      "result": {
+        "thread": {
+          "id": "01a1e992-0ba6-7470-bc75-b501036bbff4",
+          "environments": [
+            {
+              "environmentId": "local",
+              "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-b4-zhn7rn5q",
+              "runtimeWorkspaceRoots": [
+                "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-b4-zhn7rn5q"
+              ]
+            }
+          ],
+          "extra": null,
+          "sessionId": "01a1e992-0ba6-7470-bc75-b501036bbff4",
+          "forkedFromId": null,
+          "attachedToThreadId": null,
+          "parentThreadId": null,
+          "preview": "",
+          "ephemeral": false,
+          "section": null,
+          "sectionEnteredAt": null,
+          "projectId": null,
+          "historyMode": "paginated",
+          "modelProvider": "openai",
+          "model": "gpt-6-astra",
+          "reasoningEffort": null,
+          "createdAt": 1794920025,
+          "updatedAt": 1794920025,
+          "recencyAt": 1794920025,
+          "status": {
+            "type": "idle"
+          },
+          "path": "/Users/<user>/Desktop/code/codex/superagent/evidence/p0-6/home-b/sessions/2026/11/17/rollout-2026-11-17T20-53-45-01a1e992-0ba6-7470-bc75-b501036bbff4.jsonl",
+          "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-b4-zhn7rn5q",
+          "cliVersion": "0.0.0",
+          "originator": "superagent-spike",
+          "source": "vscode",
+          "canAcceptDirectInput": true,
+          "threadSource": null,
+          "agentNickname": null,
+          "agentRole": null,
+          "gitInfo": null,
+          "name": null,
+          "daybreakEnabled": null,
+          "turns": []
+        },
+        "model": "gpt-6-astra",
+        "modelProvider": "openai",
+        "serviceTier": null,
+        "disabledPluginIds": [],
+        "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-b4-zhn7rn5q",
+        "runtimeWorkspaceRoots": [
+          "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-b4-zhn7rn5q"
+        ],
+        "instructionSources": [],
+        "approvalPolicy": "on-request",
+        "approvalsReviewer": "user",
+        "sandbox": {
+          "type": "readOnly",
+          "networkAccess": false
+        },
+        "activePermissionProfile": null,
+        "reasoningEffort": null,
+        "multiAgentMode": "explicitRequestOnly"
+      }
+    },
+    {
+      "id": 3,
+      "result": {
+        "turn": {
+          "id": "01a1e992-0c01-7d71-afec-74a0879a71bf",
+          "rootTurnId": "01a1e992-0c01-7d71-afec-74a0879a71bf",
+          "items": [],
+          "itemsView": "notLoaded",
+          "status": "inProgress",
+          "error": null,
+          "startedAt": null,
+          "completedAt": null,
+          "durationMs": null
+        }
+      }
+    }
+  ],
+  "initialize": {
+    "id": 1,
+    "result": {
+      "userAgent": "superagent-spike/0.0.0 (Mac OS 26.6.2; arm64) xterm-256color (superagent-spike; 0.1.0)",
+      "codexHome": "<scrubbed>",
+      "platformFamily": "unix",
+      "platformOs": "macos"
+    }
+  },
+  "notifications": [
+    {
+      "method": "remoteControl/status/changed",
+      "params": {
+        "status": "disabled",
+        "serverName": "<scrubbed>",
+        "installationId": "<scrubbed>",
+        "environmentId": null
+      },
+      "emittedAtMs": 1794920024996
+    },
+    {
+      "method": "thread/started",
+      "params": {
+        "thread": {
+          "id": "01a1e992-0ba6-7470-bc75-b501036bbff4",
+          "environments": [
+            {
+              "environmentId": "local",
+              "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-b4-zhn7rn5q",
+              "runtimeWorkspaceRoots": [
+                "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-b4-zhn7rn5q"
+              ]
+            }
+          ],
+          "extra": null,
+          "sessionId": "01a1e992-0ba6-7470-bc75-b501036bbff4",
+          "forkedFromId": null,
+          "attachedToThreadId": null,
+          "parentThreadId": null,
+          "preview": "",
+          "ephemeral": false,
+          "section": null,
+          "sectionEnteredAt": null,
+          "projectId": null,
+          "historyMode": "paginated",
+          "modelProvider": "openai",
+          "model": "gpt-6-astra",
+          "reasoningEffort": null,
+          "createdAt": 1794920025,
+          "updatedAt": 1794920025,
+          "recencyAt": 1794920025,
+          "status": {
+            "type": "idle"
+          },
+          "path": "/Users/<user>/Desktop/code/codex/superagent/evidence/p0-6/home-b/sessions/2026/11/17/rollout-2026-11-17T20-53-45-01a1e992-0ba6-7470-bc75-b501036bbff4.jsonl",
+          "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-b4-zhn7rn5q",
+          "cliVersion": "0.0.0",
+          "originator": "superagent-spike",
+          "source": "vscode",
+          "canAcceptDirectInput": true,
+          "threadSource": null,
+          "agentNickname": null,
+          "agentRole": null,
+          "gitInfo": null,
+          "name": null,
+          "daybreakEnabled": null,
+          "turns": []
+        }
+      },
+      "emittedAtMs": 1794920025088
+    },
+    {
+      "method": "mcpServer/startupStatus/updated",
+      "params": {
+        "threadId": "01a1e992-0ba6-7470-bc75-b501036bbff4",
+        "name": "codex_apps",
+        "environmentId": null,
+        "status": "starting",
+        "error": null,
+        "failureReason": null
+      },
+      "emittedAtMs": 1794920025088
+    },
+    {
+      "method": "thread/status/changed",
+      "params": {
+        "threadId": "01a1e992-0ba6-7470-bc75-b501036bbff4",
+        "status": {
+          "type": "active",
+          "activeFlags": []
+        }
+      },
+      "emittedAtMs": 1794920025095
+    },
+    {
+      "method": "turn/started",
+      "params": {
+        "threadId": "01a1e992-0ba6-7470-bc75-b501036bbff4",
+        "turn": {
+          "id": "01a1e992-0c01-7d71-afec-74a0879a71bf",
+          "rootTurnId": "01a1e992-0c01-7d71-afec-74a0879a71bf",
+          "items": [],
+          "itemsView": "notLoaded",
+          "status": "inProgress",
+          "error": null,
+          "startedAt": 1794920025,
+          "completedAt": null,
+          "durationMs": null
+        }
+      },
+      "emittedAtMs": 1794920025095
+    },
+    {
+      "method": "account/updated",
+      "params": {
+        "authMode": "<scrubbed>",
+        "planType": "<scrubbed>"
+      },
+      "emittedAtMs": 1794920026312
+    },
+    {
+      "method": "mcpServer/startupStatus/updated",
+      "params": {
+        "threadId": "01a1e992-0ba6-7470-bc75-b501036bbff4",
+        "name": "codex_apps",
+        "environmentId": null,
+        "status": "ready",
+        "error": null,
+        "failureReason": null
+      },
+      "emittedAtMs": 1794920026993
+    },
+    {
+      "method": "mcpServer/startupStatus/updated",
+      "params": {
+        "threadId": "01a1e992-0ba6-7470-bc75-b501036bbff4",
+        "name": "codex_apps",
+        "environmentId": null,
+        "status": "ready",
+        "error": null,
+        "failureReason": null
+      },
+      "emittedAtMs": 1794920027204
+    },
+    {
+      "method": "item/started",
+      "params": {
+        "item": {
+          "type": "userMessage",
+          "id": "01a1e992-2851-7000-8ef9-829e5305ba3b",
+          "clientId": null,
+          "content": [
+            {
+              "type": "text",
+              "text": "Use the request_user_input tool to ask the user one question: 'Proceed with the probe?' with options yes/no. If the tool is unavailable or the user provides no answer, reply exactly NO-INPUT. Do not use any other tool.",
+              "text_elements": []
+            }
+          ],
+          "startedAtMs": 1794920032338,
+          "completedAtMs": null
+        },
+        "threadId": "01a1e992-0ba6-7470-bc75-b501036bbff4",
+        "turnId": "01a1e992-0c01-7d71-afec-74a0879a71bf",
+        "startedAtMs": 1794920032338
+      },
+      "emittedAtMs": 1794920032338
+    },
+    {
+      "method": "item/completed",
+      "params": {
+        "item": {
+          "type": "userMessage",
+          "id": "01a1e992-2851-7000-8ef9-829e5305ba3b",
+          "clientId": null,
+          "content": [
+            {
+              "type": "text",
+              "text": "Use the request_user_input tool to ask the user one question: 'Proceed with the probe?' with options yes/no. If the tool is unavailable or the user provides no answer, reply exactly NO-INPUT. Do not use any other tool.",
+              "text_elements": []
+            }
+          ],
+          "startedAtMs": 1794920032338,
+          "completedAtMs": 1794920032338
+        },
+        "threadId": "01a1e992-0ba6-7470-bc75-b501036bbff4",
+        "turnId": "01a1e992-0c01-7d71-afec-74a0879a71bf",
+        "contentTokenCount": null,
+        "completedAtMs": 1794920032338
+      },
+      "emittedAtMs": 1794920032340
+    },
+    {
+      "method": "error",
+      "params": {
+        "error": {
+          "message": "Reconnecting... 2/5",
+          "codexErrorInfo": {
+            "responseStreamDisconnected": {
+              "httpStatusCode": null
+            }
+          },
+          "additionalDetails": "stream disconnected before completion: Network is unreachable (os error 51)",
+          "misalignment": null
+        },
+        "willRetry": true,
+        "threadId": "01a1e992-0ba6-7470-bc75-b501036bbff4",
+        "turnId": "01a1e992-0c01-7d71-afec-74a0879a71bf"
+      },
+      "emittedAtMs": 1794920040855
+    },
+    {
+      "method": "error",
+      "params": {
+        "error": {
+          "message": "Reconnecting... 3/5",
+          "codexErrorInfo": {
+            "responseStreamDisconnected": {
+              "httpStatusCode": null
+            }
+          },
+          "additionalDetails": "stream disconnected before completion: Network is unreachable (os error 51)",
+          "misalignment": null
+        },
+        "willRetry": true,
+        "threadId": "01a1e992-0ba6-7470-bc75-b501036bbff4",
+        "turnId": "01a1e992-0c01-7d71-afec-74a0879a71bf"
+      },
+      "emittedAtMs": 1794920045400
+    },
+    {
+      "method": "error",
+      "params": {
+        "error": {
+          "message": "Reconnecting... 4/5",
+          "codexErrorInfo": {
+            "responseStreamDisconnected": {
+              "httpStatusCode": null
+            }
+          },
+          "additionalDetails": "stream disconnected before completion: Network is unreachable (os error 51)",
+          "misalignment": null
+        },
+        "willRetry": true,
+        "threadId": "01a1e992-0ba6-7470-bc75-b501036bbff4",
+        "turnId": "01a1e992-0c01-7d71-afec-74a0879a71bf"
+      },
+      "emittedAtMs": 1794920050423
+    },
+    {
+      "method": "error",
+      "params": {
+        "error": {
+          "message": "Reconnecting... 5/5",
+          "codexErrorInfo": {
+            "responseStreamDisconnected": {
+              "httpStatusCode": null
+            }
+          },
+          "additionalDetails": "stream disconnected before completion: Network is unreachable (os error 51)",
+          "misalignment": null
+        },
+        "willRetry": true,
+        "threadId": "01a1e992-0ba6-7470-bc75-b501036bbff4",
+        "turnId": "01a1e992-0c01-7d71-afec-74a0879a71bf"
+      },
+      "emittedAtMs": 1794920056105
+    },
+    {
+      "method": "warning",
+      "params": {
+        "threadId": "01a1e992-0ba6-7470-bc75-b501036bbff4",
+        "message": "Falling back from WebSockets to HTTPS transport. stream disconnected before completion: Network is unreachable (os error 51)"
+      },
+      "emittedAtMs": 1794920063424
+    },
+    {
+      "method": "turn/moderationMetadata",
+      "params": {
+        "threadId": "01a1e992-0ba6-7470-bc75-b501036bbff4",
+        "turnId": "01a1e992-0c01-7d71-afec-74a0879a71bf",
+        "metadata": {
+          "prompt": {
+            "omnimod": {
+              "protection_type": "omnimod",
+              "outputs": [
+                {
+                  "results": [
+                    {
+                      "category_flags": {
+                        "A1": false,
+                        "A2": false,
+                        "A3": false,
+                        "C1": false,
+                        "C11": false,
+                        "C2": false,
+                        "E1": false,
+                        "E2": false,
+                        "E3": false,
+                        "H1": false,
+                        "H2": false,
+                        "H3": false,
+                        "JB1": false,
+                        "K1": false,
+                        "K2": false,
+                        "K3": false,
+                        "K4": false,
+                        "P1": false,
+                        "P2": false,
+                        "P3": false,
+                        "P4": false,
+                        "PD1": false,
+                        "PD4": false,
+                        "S1": false,
+                        "S3+": false,
+                        "S4": false,
+                        "SH": false,
+                        "TXT-C3": false,
+                        "TXT-C4": false,
+                        "V1": false,
+                        "V2+": false,
+                        "V4+": false,
+                        "REFUSED": false,
+                        "CBRN-B1+": false,
+                        "IMG-C1": false,
+                        "IMG-C11": false,
+                        "IMG-C2": false,
+                        "IMG-S1": false,
+                        "IMG-SH": false,
+                        "IMG-V1": false,
+                        "IMG-V2+": false,
+                        "IMG-V4+": false
+                      }
+                    }
+                  ],
+                  "is_blocked": false
+                }
+              ]
+            }
+          },
+          "generation": {},
+          "tool_call": {},
+          "tool_response": {}
+        }
+      },
+      "emittedAtMs": 1794920068166
+    },
+    {
+      "method": "thread/tokenUsage/updated",
+      "params": {
+        "threadId": "01a1e992-0ba6-7470-bc75-b501036bbff4",
+        "turnId": "01a1e992-0c01-7d71-afec-74a0879a71bf",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 19791,
+            "inputTokens": 19726,
+            "cachedInputTokens": 0,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 65,
+            "reasoningOutputTokens": 0
+          },
+          "last": {
+            "totalTokens": 19791,
+            "inputTokens": 19726,
+            "cachedInputTokens": 0,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 65,
+            "reasoningOutputTokens": 0
+          },
+          "modelContextWindow": 258400
+        }
+      },
+      "emittedAtMs": 1794920068248
+    },
+    {
+      "method": "account/rateLimits/updated",
+      "params": {
+        "rateLimits": {
+          "limitId": "codex",
+          "limitName": null,
+          "normalModelSlug": null,
+          "primary": {
+            "usedPercent": 51,
+            "windowDurationMins": 300,
+            "resetsAt": 1794936244
+          },
+          "secondary": {
+            "usedPercent": 37,
+            "windowDurationMins": 10080,
+            "resetsAt": 1795325947
+          },
+          "credits": {
+            "hasCredits": false,
+            "unlimited": false,
+            "balance": "0"
+          },
+          "individualLimit": null,
+          "spendControlReached": null,
+          "planType": "<scrubbed>",
+          "rateLimitReachedType": null
+        }
+      },
+      "emittedAtMs": 1794920068248
+    },
+    {
+      "method": "item/started",
+      "params": {
+        "item": {
+          "type": "agentMessage",
+          "moderation": null,
+          "id": "msg_00e08d4cf9809020016afc4e89303087d0b780576ab2e1a1d9",
+          "text": "",
+          "phase": "final_answer",
+          "memoryCitation": null,
+          "delivery": null,
+          "questions": null,
+          "startedAtMs": 1794920073103,
+          "completedAtMs": null
+        },
+        "threadId": "01a1e992-0ba6-7470-bc75-b501036bbff4",
+        "turnId": "01a1e992-0c01-7d71-afec-74a0879a71bf",
+        "startedAtMs": 1794920073103
+      },
+      "emittedAtMs": 1794920073103
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e992-0ba6-7470-bc75-b501036bbff4",
+        "turnId": "01a1e992-0c01-7d71-afec-74a0879a71bf",
+        "itemId": "msg_00e08d4cf9809020016afc4e89303087d0b780576ab2e1a1d9",
+        "delta": "NO"
+      },
+      "emittedAtMs": 1794920073151
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e992-0ba6-7470-bc75-b501036bbff4",
+        "turnId": "01a1e992-0c01-7d71-afec-74a0879a71bf",
+        "itemId": "msg_00e08d4cf9809020016afc4e89303087d0b780576ab2e1a1d9",
+        "delta": "-"
+      },
+      "emittedAtMs": 1794920073186
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e992-0ba6-7470-bc75-b501036bbff4",
+        "turnId": "01a1e992-0c01-7d71-afec-74a0879a71bf",
+        "itemId": "msg_00e08d4cf9809020016afc4e89303087d0b780576ab2e1a1d9",
+        "delta": "INPUT"
+      },
+      "emittedAtMs": 1794920073220
+    },
+    {
+      "method": "turn/moderationMetadata",
+      "params": {
+        "threadId": "01a1e992-0ba6-7470-bc75-b501036bbff4",
+        "turnId": "01a1e992-0c01-7d71-afec-74a0879a71bf",
+        "metadata": {
+          "prompt": {
+            "omnimod": {
+              "protection_type": "omnimod",
+              "outputs": [
+                {
+                  "results": [
+                    {
+                      "category_flags": {
+                        "A1": false,
+                        "A2": false,
+                        "A3": false,
+                        "C1": false,
+                        "C11": false,
+                        "C2": false,
+                        "E1": false,
+                        "E2": false,
+                        "E3": false,
+                        "H1": false,
+                        "H2": false,
+                        "H3": false,
+                        "JB1": false,
+                        "K1": false,
+                        "K2": false,
+                        "K3": false,
+                        "K4": false,
+                        "P1": false,
+                        "P2": false,
+                        "P3": false,
+                        "P4": false,
+                        "PD1": false,
+                        "PD4": false,
+                        "S1": false,
+                        "S3+": false,
+                        "S4": false,
+                        "SH": false,
+                        "TXT-C3": false,
+                        "TXT-C4": false,
+                        "V1": false,
+                        "V2+": false,
+                        "V4+": false,
+                        "REFUSED": false,
+                        "CBRN-B1+": false,
+                        "IMG-C1": false,
+                        "IMG-C11": false,
+                        "IMG-C2": false,
+                        "IMG-S1": false,
+                        "IMG-SH": false,
+                        "IMG-V1": false,
+                        "IMG-V2+": false,
+                        "IMG-V4+": false
+                      }
+                    }
+                  ],
+                  "is_blocked": false
+                }
+              ]
+            }
+          },
+          "generation": {},
+          "tool_call": {},
+          "tool_response": {}
+        }
+      },
+      "emittedAtMs": 1794920073238
+    },
+    {
+      "method": "item/completed",
+      "params": {
+        "item": {
+          "type": "agentMessage",
+          "moderation": null,
+          "id": "msg_00e08d4cf9809020016afc4e89303087d0b780576ab2e1a1d9",
+          "text": "NO-INPUT",
+          "phase": "final_answer",
+          "memoryCitation": null,
+          "delivery": null,
+          "questions": null,
+          "startedAtMs": 1794920073103,
+          "completedAtMs": 1794920073238
+        },
+        "threadId": "01a1e992-0ba6-7470-bc75-b501036bbff4",
+        "turnId": "01a1e992-0c01-7d71-afec-74a0879a71bf",
+        "contentTokenCount": 4,
+        "completedAtMs": 1794920073238
+      },
+      "emittedAtMs": 1794920073243
+    },
+    {
+      "method": "thread/tokenUsage/updated",
+      "params": {
+        "threadId": "01a1e992-0ba6-7470-bc75-b501036bbff4",
+        "turnId": "01a1e992-0c01-7d71-afec-74a0879a71bf",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 39609,
+            "inputTokens": 39537,
+            "cachedInputTokens": 19584,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 72,
+            "reasoningOutputTokens": 0
+          },
+          "last": {
+            "totalTokens": 19818,
+            "inputTokens": 19811,
+            "cachedInputTokens": 19584,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 7,
+            "reasoningOutputTokens": 0
+          },
+          "modelContextWindow": 258400
+        }
+      },
+      "emittedAtMs": 1794920073265
+    },
+    {
+      "method": "account/rateLimits/updated",
+      "params": {
+        "rateLimits": {
+          "limitId": "codex",
+          "limitName": null,
+          "normalModelSlug": null,
+          "primary": {
+            "usedPercent": 53,
+            "windowDurationMins": 300,
+            "resetsAt": 1794936244
+          },
+          "secondary": {
+            "usedPercent": 37,
+            "windowDurationMins": 10080,
+            "resetsAt": 1795325947
+          },
+          "credits": {
+            "hasCredits": false,
+            "unlimited": false,
+            "balance": "0"
+          },
+          "individualLimit": null,
+          "spendControlReached": null,
+          "planType": "<scrubbed>",
+          "rateLimitReachedType": null
+        }
+      },
+      "emittedAtMs": 1794920073265
+    },
+    {
+      "method": "thread/readState/changed",
+      "params": {
+        "threadId": "01a1e992-0ba6-7470-bc75-b501036bbff4",
+        "readState": {
+          "firstUnread": {
+            "type": "turn",
+            "turnId": "01a1e992-0c01-7d71-afec-74a0879a71bf"
+          },
+          "revision": "69bd875d-6f8b-47f8-b4ea-42e3a662ca7a"
+        }
+      },
+      "emittedAtMs": 1794920073271
+    },
+    {
+      "method": "thread/status/changed",
+      "params": {
+        "threadId": "01a1e992-0ba6-7470-bc75-b501036bbff4",
+        "status": {
+          "type": "idle"
+        }
+      },
+      "emittedAtMs": 1794920073271
+    },
+    {
+      "method": "turn/completed",
+      "params": {
+        "threadId": "01a1e992-0ba6-7470-bc75-b501036bbff4",
+        "turn": {
+          "id": "01a1e992-0c01-7d71-afec-74a0879a71bf",
+          "rootTurnId": "01a1e992-0c01-7d71-afec-74a0879a71bf",
+          "items": [
+            {
+              "type": "agentMessage",
+              "moderation": null,
+              "id": "msg_00e08d4cf9809020016afc4e89303087d0b780576ab2e1a1d9",
+              "text": "NO-INPUT",
+              "phase": "final_answer",
+              "memoryCitation": null,
+              "delivery": null,
+              "questions": null,
+              "startedAtMs": 1794920073103,
+              "completedAtMs": 1794920073238
+            }
+          ],
+          "itemsView": "summary",
+          "status": "completed",
+          "error": null,
+          "startedAt": 1794920025,
+          "completedAt": 1794920073,
+          "durationMs": 48178
+        }
+      },
+      "emittedAtMs": 1794920073271
+    }
+  ],
+  "notificationCount": 29,
+  "serverRequests": [],
+  "serverRequestDecisions": [],
+  "pendingServerRequestIds": [],
+  "maxFrameBytesSeen": 1629,
+  "frameLimitBytes": 16777216,
+  "frameViolations": [],
+  "spawnArgv": [
+    "/Users/<user>/Desktop/code/codex/superagent/packaging/superagent-engine",
+    "app-server",
+    "--listen",
+    "stdio://"
+  ],
+  "spawnWiring": {
+    "stdin": "PIPE (JSONL requests)",
+    "stdout": "PIPE (JSONL frames only)",
+    "stderr": "PIPE (collected separately, ring buffer 2000 lines)",
+    "env": {
+      "CODEX_HOME": "<set per run>"
+    }
+  },
+  "runLogPath": null,
+  "runLogLimitBytes": 104857600,
+  "runLogRotations": 0,
+  "runLogBytesRetained": 0,
+  "defaultTimeoutsByMethod": {
+    "initialize": 30,
+    "thread/start": 60,
+    "thread/read": 60,
+    "thread/list": 60,
+    "thread/resume": 60,
+    "turn/start": 30,
+    "turn/interrupt": 30,
+    "command/exec": 90,
+    "command/exec/terminate": 30
+  },
+  "stderrTail": [
+    "\u001b[2m2026-11-17T12:53:50.483685Z\u001b[0m \u001b[31mERROR\u001b[0m \u001b[2mcodex_api::endpoint::responses_websocket\u001b[0m\u001b[2m:\u001b[0m failed to connect to Responses WebSocket \u001b[3mstage\u001b[0m\u001b[2m=\u001b[0mUnknown",
+    "\u001b[2m2026-11-17T12:53:56.497562Z\u001b[0m \u001b[31mERROR\u001b[0m \u001b[2mcodex_api::endpoint::responses_websocket\u001b[0m\u001b[2m:\u001b[0m failed to connect to Responses WebSocket \u001b[3mstage\u001b[0m\u001b[2m=\u001b[0mUnknown",
+    "\u001b[2m2026-11-17T12:54:00.855214Z\u001b[0m \u001b[31mERROR\u001b[0m \u001b[2mcodex_api::endpoint::responses_websocket\u001b[0m\u001b[2m:\u001b[0m failed to connect to Responses WebSocket \u001b[3mstage\u001b[0m\u001b[2m=\u001b[0mUnknown",
+    "\u001b[2m2026-11-17T12:54:05.400297Z\u001b[0m \u001b[31mERROR\u001b[0m \u001b[2mcodex_api::endpoint::responses_websocket\u001b[0m\u001b[2m:\u001b[0m failed to connect to Responses WebSocket \u001b[3mstage\u001b[0m\u001b[2m=\u001b[0mUnknown",
+    "\u001b[2m2026-11-17T12:54:10.422785Z\u001b[0m \u001b[31mERROR\u001b[0m \u001b[2mcodex_api::endpoint::responses_websocket\u001b[0m\u001b[2m:\u001b[0m failed to connect to Responses WebSocket \u001b[3mstage\u001b[0m\u001b[2m=\u001b[0mUnknown",
+    "\u001b[2m2026-11-17T12:54:16.104753Z\u001b[0m \u001b[31mERROR\u001b[0m \u001b[2mcodex_api::endpoint::responses_websocket\u001b[0m\u001b[2m:\u001b[0m failed to connect to Responses WebSocket \u001b[3mstage\u001b[0m\u001b[2m=\u001b[0mUnknown",
+    "\u001b[2m2026-11-17T12:54:23.422723Z\u001b[0m \u001b[31mERROR\u001b[0m \u001b[2mcodex_api::endpoint::responses_websocket\u001b[0m\u001b[2m:\u001b[0m failed to connect to Responses WebSocket \u001b[3mstage\u001b[0m\u001b[2m=\u001b[0mUnknown",
+    "\u001b[2m2026-11-17T12:54:28.208973Z\u001b[0m \u001b[31mERROR\u001b[0m \u001b[2mcodex_core::tools::router\u001b[0m\u001b[2m:\u001b[0m \u001b[3merror\u001b[0m\u001b[2m=\u001b[0mrequest_user_input is unavailable in Default mode"
+  ],
+  "exitCode": null
+}
