@@ -23,7 +23,8 @@ HOME_C = f"{EV}/home-c"
 os.makedirs(HOME_C, exist_ok=True)
 with open(f"{HOME_C}/config.toml", "w") as fh:
     fh.write("# P0-2c V1 leader home\n")
-    fh.write(open(f"{ROOT}/superagent/tests/p0-2/config-overlay-v1.toml").read())
+    fh.write(open(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                               "p0-2", "config-overlay-v1.toml")).read())
 if os.path.exists(f"{HOME_A}/auth.json"):
     shutil.copyfile(f"{HOME_A}/auth.json", f"{HOME_C}/auth.json")
 
