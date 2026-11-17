@@ -1,0 +1,247 @@
+{
+  "traceA": {
+    "pass": true,
+    "threadId": "01a1e88c-f8c2-7073-9b1e-979a24eca2d6",
+    "turnStarted": {
+      "method": "turn/started",
+      "params": {
+        "threadId": "01a1e88c-f8c2-7073-9b1e-979a24eca2d6",
+        "turn": {
+          "id": "01a1e88c-f9cd-7df2-b07e-92ed6a4d4e6b",
+          "rootTurnId": "01a1e88c-f9cd-7df2-b07e-92ed6a4d4e6b",
+          "items": [],
+          "itemsView": "notLoaded",
+          "status": "inProgress",
+          "error": null,
+          "startedAt": 1794902915,
+          "completedAt": null,
+          "durationMs": null
+        }
+      },
+      "emittedAtMs": 1794902915568
+    },
+    "turnCompleted": {
+      "method": "turn/completed",
+      "params": {
+        "threadId": "01a1e88c-f8c2-7073-9b1e-979a24eca2d6",
+        "turn": {
+          "id": "01a1e88c-f9cd-7df2-b07e-92ed6a4d4e6b",
+          "rootTurnId": "01a1e88c-f9cd-7df2-b07e-92ed6a4d4e6b",
+          "items": [
+            {
+              "type": "agentMessage",
+              "moderation": null,
+              "id": "msg_0dbfaf3393cbeddb016afc0b95352887d0a0f8ba95b05455e0",
+              "text": "DONE",
+              "phase": "final_answer",
+              "memoryCitation": null,
+              "delivery": null,
+              "questions": null,
+              "startedAtMs": 1794902933255,
+              "completedAtMs": 1794902933307
+            }
+          ],
+          "itemsView": "summary",
+          "status": "completed",
+          "error": null,
+          "startedAt": 1794902915,
+          "completedAt": 1794902933,
+          "durationMs": 17800
+        }
+      },
+      "emittedAtMs": 1794902933348
+    },
+    "turnStartResponse": {
+      "id": 3,
+      "result": {
+        "turn": {
+          "id": "01a1e88c-f9cd-7df2-b07e-92ed6a4d4e6b",
+          "rootTurnId": "01a1e88c-f9cd-7df2-b07e-92ed6a4d4e6b",
+          "items": [],
+          "itemsView": "notLoaded",
+          "status": "inProgress",
+          "error": null,
+          "startedAt": null,
+          "completedAt": null,
+          "durationMs": null
+        }
+      }
+    },
+    "fileContent": "SUPERAGENT_P06_OK",
+    "notificationCount": 32,
+    "maxFrameBytesSeen": 1695,
+    "frameViolations": []
+  },
+  "traceB": {
+    "pass": true,
+    "approvalDeclined": true,
+    "sideEffectFileExists": false,
+    "serverRequestDecisions": [
+      {
+        "method": "item/commandExecution/requestApproval",
+        "payload": {
+          "result": {
+            "decision": "decline"
+          }
+        }
+      }
+    ],
+    "turnStartResponse": {
+      "id": 3,
+      "result": {
+        "turn": {
+          "id": "01a1e88d-40ea-7cb1-9676-4bdd5be428c2",
+          "rootTurnId": "01a1e88d-40ea-7cb1-9676-4bdd5be428c2",
+          "items": [],
+          "itemsView": "notLoaded",
+          "status": "inProgress",
+          "error": null,
+          "startedAt": null,
+          "completedAt": null,
+          "durationMs": null
+        }
+      }
+    }
+  },
+  "traceC": {
+    "pass": true,
+    "turnId": "01a1e88d-6e39-7f13-b346-9a56a361d766",
+    "sleepBeforeInterrupt": "84022 sleep 60",
+    "sleepAfterInterrupt": "",
+    "cleanupSeconds": 3,
+    "interruptResponse": {
+      "id": 4,
+      "result": {}
+    },
+    "turnCompleted": {
+      "method": "turn/completed",
+      "params": {
+        "threadId": "01a1e88d-6d9a-7ba1-9eb6-d0ae52d7f72a",
+        "turn": {
+          "id": "01a1e88d-6e39-7f13-b346-9a56a361d766",
+          "rootTurnId": "01a1e88d-6e39-7f13-b346-9a56a361d766",
+          "items": [],
+          "itemsView": "notLoaded",
+          "status": "interrupted",
+          "error": null,
+          "startedAt": 1794902945,
+          "completedAt": 1794902953,
+          "durationMs": 8371
+        }
+      },
+      "emittedAtMs": 1794902953712
+    },
+    "turnStatus": "interrupted",
+    "turnStartResponse": {
+      "id": 3,
+      "result": {
+        "turn": {
+          "id": "01a1e88d-6e39-7f13-b346-9a56a361d766",
+          "rootTurnId": "01a1e88d-6e39-7f13-b346-9a56a361d766",
+          "items": [],
+          "itemsView": "notLoaded",
+          "status": "inProgress",
+          "error": null,
+          "startedAt": null,
+          "completedAt": null,
+          "durationMs": null
+        }
+      }
+    }
+  },
+  "traceD": {
+    "pass": true,
+    "threadId": "01a1e88d-9b42-7040-8c30-4d0d0054b03f",
+    "crashExitCode": -9,
+    "orphanSleepAfterCrash": "84971 sleep 45",
+    "reconciledLastTurnStatus": "interrupted",
+    "terminalProven": true,
+    "disposition": "reconciled-terminal",
+    "threadReadResponse": {
+      "id": 2,
+      "result": {
+        "thread": {
+          "id": "01a1e88d-9b42-7040-8c30-4d0d0054b03f",
+          "environments": null,
+          "extra": null,
+          "sessionId": "01a1e88d-9b42-7040-8c30-4d0d0054b03f",
+          "forkedFromId": null,
+          "attachedToThreadId": null,
+          "parentThreadId": null,
+          "preview": "Use your command execution tool to run `sleep 45` and wait for it to finish. Then create d.txt containing RECONCILED.",
+          "ephemeral": false,
+          "section": null,
+          "sectionEnteredAt": null,
+          "projectId": null,
+          "historyMode": "paginated",
+          "modelProvider": "openai",
+          "model": "gpt-6-astra",
+          "reasoningEffort": null,
+          "createdAt": 1794902956,
+          "updatedAt": 1794902966,
+          "recencyAt": 1794902957,
+          "status": {
+            "type": "notLoaded"
+          },
+          "path": "/Users/fanjia/Library/Application Support/SuperAgent/codex-home/sessions/2026/11/17/rollout-2026-11-17T16-09-16-01a1e88d-9b42-7040-8c30-4d0d0054b03f.jsonl",
+          "cwd": "/private/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-d-xqning4o",
+          "cliVersion": "0.0.0",
+          "originator": "superagent-spike",
+          "source": "vscode",
+          "canAcceptDirectInput": null,
+          "threadSource": null,
+          "agentNickname": null,
+          "agentRole": null,
+          "gitInfo": null,
+          "name": null,
+          "daybreakEnabled": null,
+          "turns": [
+            {
+              "id": "01a1e88d-9bc8-7f03-a696-8d1b1e91531e",
+              "rootTurnId": "01a1e88d-9bc8-7f03-a696-8d1b1e91531e",
+              "items": [
+                {
+                  "type": "userMessage",
+                  "id": "01a1e88d-aa50-7c60-8f06-7cf354b20dcd",
+                  "clientId": null,
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Use your command execution tool to run `sleep 45` and wait for it to finish. Then create d.txt containing RECONCILED.",
+                      "text_elements": []
+                    }
+                  ],
+                  "startedAtMs": 1794902960721,
+                  "completedAtMs": 1794902960721
+                },
+                {
+                  "type": "agentMessage",
+                  "moderation": null,
+                  "id": "msg_046127930b1790f4016afc0bb590f087d0a7f9ee799ecb5c68",
+                  "text": "I’ll run `sleep 45`, wait for it to finish, then create `d.txt` containing `RECONCILED`.",
+                  "phase": "commentary",
+                  "memoryCitation": null,
+                  "delivery": null,
+                  "questions": null,
+                  "startedAtMs": 1794902965584,
+                  "completedAtMs": 1794902966476
+                }
+              ],
+              "itemsView": "full",
+              "status": "interrupted",
+              "error": null,
+              "startedAt": 1794902957,
+              "completedAt": null,
+              "durationMs": null
+            }
+          ]
+        },
+        "readState": {
+          "firstUnread": null,
+          "revision": "initial:01a1e88d-9b42-7040-8c30-4d0d0054b03f"
+        }
+      }
+    }
+  },
+  "allPass": true
+}

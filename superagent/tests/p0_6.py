@@ -98,7 +98,10 @@ finally:
 home_b = f"{EV}/home-b"
 os.makedirs(home_b, exist_ok=True)
 with open(f"{home_b}/config.toml", "w") as fh:
-    fh.write('# P0-6 trace B: force command approval\napproval_policy = "untrusted"\nsandbox_mode = "workspace-write"\n')
+    fh.write('# P0-6 trace B: force command approval via read-only sandbox escalation\n'
+             '# ("untrusted" approval_policy was removed upstream; on-request + read-only\n'
+             '# makes any write command escalate to item/commandExecution/requestApproval)\n'
+             'approval_policy = "on-request"\nsandbox_mode = "read-only"\n')
 auth_src = f"{HOME_A}/auth.json"
 if os.path.exists(auth_src):
     shutil.copyfile(auth_src, f"{home_b}/auth.json")
@@ -146,8 +149,12 @@ try:
     })
     started = client.wait_notification(is_note("turn/started"), timeout=120)
     turn_id = turn_id_from(started)
-    time.sleep(8)
-    before = pgrep("sleep 60")
+    before = ""
+    for _ in range(60):
+        before = pgrep("sleep 60")
+        if before:
+            break
+        time.sleep(1)
     interrupt_resp = client.request("turn/interrupt", {"threadId": thread_id, "turnId": turn_id}, timeout=30)
     completed_note = client.wait_notification(is_note("turn/completed"), timeout=120)
     try:
@@ -156,12 +163,20 @@ try:
         resp = {"error": {"message": "turn/start response not received after interrupt"}}
     time.sleep(3)
     after = pgrep("sleep 60")
+    cleanup_seconds = 3
+    for _ in range(20):
+        if not after:
+            break
+        time.sleep(1)
+        cleanup_seconds += 1
+        after = pgrep("sleep 60")
     status = completed_note.get("params", {}).get("turn", {}).get("status")
     summary["traceC"] = {
         "pass": bool(before) and not after and "error" not in interrupt_resp,
         "turnId": turn_id,
         "sleepBeforeInterrupt": before,
         "sleepAfterInterrupt": after,
+        "cleanupSeconds": cleanup_seconds,
         "interruptResponse": interrupt_resp,
         "turnCompleted": completed_note,
         "turnStatus": status,
@@ -186,7 +201,10 @@ try:
                    "Then create d.txt containing RECONCILED."}],
     })
     client.wait_notification(is_note("turn/started"), timeout=120)
-    time.sleep(8)
+    for _ in range(60):
+        if pgrep("sleep 45"):
+            break
+        time.sleep(1)
     last_notes = list(client.notifications)
     client.proc.kill()
     client.proc.wait(timeout=10)

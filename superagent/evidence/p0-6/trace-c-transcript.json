@@ -1,0 +1,368 @@
+{
+  "results": [
+    {
+      "id": 2,
+      "result": {
+        "thread": {
+          "id": "01a1e88d-6d9a-7ba1-9eb6-d0ae52d7f72a",
+          "environments": [
+            {
+              "environmentId": "local",
+              "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-c-jhvyzjc7",
+              "runtimeWorkspaceRoots": [
+                "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-c-jhvyzjc7"
+              ]
+            }
+          ],
+          "extra": null,
+          "sessionId": "01a1e88d-6d9a-7ba1-9eb6-d0ae52d7f72a",
+          "forkedFromId": null,
+          "attachedToThreadId": null,
+          "parentThreadId": null,
+          "preview": "",
+          "ephemeral": false,
+          "section": null,
+          "sectionEnteredAt": null,
+          "projectId": null,
+          "historyMode": "paginated",
+          "modelProvider": "openai",
+          "model": "gpt-6-astra",
+          "reasoningEffort": null,
+          "createdAt": 1794902945,
+          "updatedAt": 1794902945,
+          "recencyAt": 1794902945,
+          "status": {
+            "type": "idle"
+          },
+          "path": "/Users/fanjia/Library/Application Support/SuperAgent/codex-home/sessions/2026/11/17/rollout-2026-11-17T16-09-05-01a1e88d-6d9a-7ba1-9eb6-d0ae52d7f72a.jsonl",
+          "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-c-jhvyzjc7",
+          "cliVersion": "0.0.0",
+          "originator": "superagent-spike",
+          "source": "vscode",
+          "canAcceptDirectInput": true,
+          "threadSource": null,
+          "agentNickname": null,
+          "agentRole": null,
+          "gitInfo": null,
+          "name": null,
+          "daybreakEnabled": null,
+          "turns": []
+        },
+        "model": "gpt-6-astra",
+        "modelProvider": "openai",
+        "serviceTier": null,
+        "disabledPluginIds": [],
+        "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-c-jhvyzjc7",
+        "runtimeWorkspaceRoots": [
+          "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-c-jhvyzjc7"
+        ],
+        "instructionSources": [],
+        "approvalPolicy": "never",
+        "approvalsReviewer": "user",
+        "sandbox": {
+          "type": "workspaceWrite",
+          "writableRoots": [],
+          "networkAccess": false,
+          "excludeTmpdirEnvVar": false,
+          "excludeSlashTmp": false
+        },
+        "activePermissionProfile": null,
+        "reasoningEffort": null,
+        "multiAgentMode": "explicitRequestOnly"
+      }
+    },
+    {
+      "id": 4,
+      "result": {}
+    },
+    {
+      "id": 3,
+      "result": {
+        "turn": {
+          "id": "01a1e88d-6e39-7f13-b346-9a56a361d766",
+          "rootTurnId": "01a1e88d-6e39-7f13-b346-9a56a361d766",
+          "items": [],
+          "itemsView": "notLoaded",
+          "status": "inProgress",
+          "error": null,
+          "startedAt": null,
+          "completedAt": null,
+          "durationMs": null
+        }
+      }
+    }
+  ],
+  "initialize": {
+    "id": 1,
+    "result": {
+      "userAgent": "superagent-spike/0.0.0 (Mac OS 26.6.2; arm64) xterm-256color (superagent-spike; 0.1.0)",
+      "codexHome": "/Users/fanjia/Library/Application Support/SuperAgent/codex-home",
+      "platformFamily": "unix",
+      "platformOs": "macos"
+    }
+  },
+  "notifications": [
+    {
+      "method": "remoteControl/status/changed",
+      "params": {
+        "status": "disabled",
+        "serverName": "fanjiadeMacBook-Pro.local",
+        "installationId": "33846316-8915-4e37-85c1-1cdfd3b9fabe",
+        "environmentId": null
+      },
+      "emittedAtMs": 1794902945173
+    },
+    {
+      "method": "thread/started",
+      "params": {
+        "thread": {
+          "id": "01a1e88d-6d9a-7ba1-9eb6-d0ae52d7f72a",
+          "environments": [
+            {
+              "environmentId": "local",
+              "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-c-jhvyzjc7",
+              "runtimeWorkspaceRoots": [
+                "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-c-jhvyzjc7"
+              ]
+            }
+          ],
+          "extra": null,
+          "sessionId": "01a1e88d-6d9a-7ba1-9eb6-d0ae52d7f72a",
+          "forkedFromId": null,
+          "attachedToThreadId": null,
+          "parentThreadId": null,
+          "preview": "",
+          "ephemeral": false,
+          "section": null,
+          "sectionEnteredAt": null,
+          "projectId": null,
+          "historyMode": "paginated",
+          "modelProvider": "openai",
+          "model": "gpt-6-astra",
+          "reasoningEffort": null,
+          "createdAt": 1794902945,
+          "updatedAt": 1794902945,
+          "recencyAt": 1794902945,
+          "status": {
+            "type": "idle"
+          },
+          "path": "/Users/fanjia/Library/Application Support/SuperAgent/codex-home/sessions/2026/11/17/rollout-2026-11-17T16-09-05-01a1e88d-6d9a-7ba1-9eb6-d0ae52d7f72a.jsonl",
+          "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-c-jhvyzjc7",
+          "cliVersion": "0.0.0",
+          "originator": "superagent-spike",
+          "source": "vscode",
+          "canAcceptDirectInput": true,
+          "threadSource": null,
+          "agentNickname": null,
+          "agentRole": null,
+          "gitInfo": null,
+          "name": null,
+          "daybreakEnabled": null,
+          "turns": []
+        }
+      },
+      "emittedAtMs": 1794902945332
+    },
+    {
+      "method": "mcpServer/startupStatus/updated",
+      "params": {
+        "threadId": "01a1e88d-6d9a-7ba1-9eb6-d0ae52d7f72a",
+        "name": "codex_apps",
+        "environmentId": null,
+        "status": "starting",
+        "error": null,
+        "failureReason": null
+      },
+      "emittedAtMs": 1794902945332
+    },
+    {
+      "method": "thread/status/changed",
+      "params": {
+        "threadId": "01a1e88d-6d9a-7ba1-9eb6-d0ae52d7f72a",
+        "status": {
+          "type": "active",
+          "activeFlags": []
+        }
+      },
+      "emittedAtMs": 1794902945361
+    },
+    {
+      "method": "turn/started",
+      "params": {
+        "threadId": "01a1e88d-6d9a-7ba1-9eb6-d0ae52d7f72a",
+        "turn": {
+          "id": "01a1e88d-6e39-7f13-b346-9a56a361d766",
+          "rootTurnId": "01a1e88d-6e39-7f13-b346-9a56a361d766",
+          "items": [],
+          "itemsView": "notLoaded",
+          "status": "inProgress",
+          "error": null,
+          "startedAt": 1794902945,
+          "completedAt": null,
+          "durationMs": null
+        }
+      },
+      "emittedAtMs": 1794902945361
+    },
+    {
+      "method": "account/updated",
+      "params": {
+        "authMode": "chatgpt",
+        "planType": "plus"
+      },
+      "emittedAtMs": 1794902946659
+    },
+    {
+      "method": "mcpServer/startupStatus/updated",
+      "params": {
+        "threadId": "01a1e88d-6d9a-7ba1-9eb6-d0ae52d7f72a",
+        "name": "codex_apps",
+        "environmentId": null,
+        "status": "ready",
+        "error": null,
+        "failureReason": null
+      },
+      "emittedAtMs": 1794902948242
+    },
+    {
+      "method": "item/started",
+      "params": {
+        "item": {
+          "type": "userMessage",
+          "id": "01a1e88d-83ba-7dc0-81f3-7cb872846c1b",
+          "clientId": null,
+          "content": [
+            {
+              "type": "text",
+              "text": "Use your command execution tool to run `sleep 60` and wait for it to finish. Do nothing else before it finishes.",
+              "text_elements": []
+            }
+          ],
+          "startedAtMs": 1794902950842,
+          "completedAtMs": null
+        },
+        "threadId": "01a1e88d-6d9a-7ba1-9eb6-d0ae52d7f72a",
+        "turnId": "01a1e88d-6e39-7f13-b346-9a56a361d766",
+        "startedAtMs": 1794902950842
+      },
+      "emittedAtMs": 1794902950842
+    },
+    {
+      "method": "item/completed",
+      "params": {
+        "item": {
+          "type": "userMessage",
+          "id": "01a1e88d-83ba-7dc0-81f3-7cb872846c1b",
+          "clientId": null,
+          "content": [
+            {
+              "type": "text",
+              "text": "Use your command execution tool to run `sleep 60` and wait for it to finish. Do nothing else before it finishes.",
+              "text_elements": []
+            }
+          ],
+          "startedAtMs": 1794902950842,
+          "completedAtMs": 1794902950842
+        },
+        "threadId": "01a1e88d-6d9a-7ba1-9eb6-d0ae52d7f72a",
+        "turnId": "01a1e88d-6e39-7f13-b346-9a56a361d766",
+        "contentTokenCount": null,
+        "completedAtMs": 1794902950842
+      },
+      "emittedAtMs": 1794902950844
+    },
+    {
+      "method": "thread/tokenUsage/updated",
+      "params": {
+        "threadId": "01a1e88d-6d9a-7ba1-9eb6-d0ae52d7f72a",
+        "turnId": "01a1e88d-6e39-7f13-b346-9a56a361d766",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 19872,
+            "inputTokens": 19838,
+            "cachedInputTokens": 0,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 34,
+            "reasoningOutputTokens": 0
+          },
+          "last": {
+            "totalTokens": 19872,
+            "inputTokens": 19838,
+            "cachedInputTokens": 0,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 34,
+            "reasoningOutputTokens": 0
+          },
+          "modelContextWindow": 258400
+        }
+      },
+      "emittedAtMs": 1794902953705
+    },
+    {
+      "method": "account/rateLimits/updated",
+      "params": {
+        "rateLimits": {
+          "limitId": "codex",
+          "limitName": null,
+          "normalModelSlug": null,
+          "primary": {
+            "usedPercent": 68,
+            "windowDurationMins": 300,
+            "resetsAt": 1794918188
+          },
+          "secondary": {
+            "usedPercent": 24,
+            "windowDurationMins": 10080,
+            "resetsAt": 1795325947
+          },
+          "credits": {
+            "hasCredits": false,
+            "unlimited": false,
+            "balance": "0"
+          },
+          "individualLimit": null,
+          "spendControlReached": null,
+          "planType": "plus",
+          "rateLimitReachedType": null
+        }
+      },
+      "emittedAtMs": 1794902953705
+    },
+    {
+      "method": "thread/status/changed",
+      "params": {
+        "threadId": "01a1e88d-6d9a-7ba1-9eb6-d0ae52d7f72a",
+        "status": {
+          "type": "idle"
+        }
+      },
+      "emittedAtMs": 1794902953712
+    },
+    {
+      "method": "turn/completed",
+      "params": {
+        "threadId": "01a1e88d-6d9a-7ba1-9eb6-d0ae52d7f72a",
+        "turn": {
+          "id": "01a1e88d-6e39-7f13-b346-9a56a361d766",
+          "rootTurnId": "01a1e88d-6e39-7f13-b346-9a56a361d766",
+          "items": [],
+          "itemsView": "notLoaded",
+          "status": "interrupted",
+          "error": null,
+          "startedAt": 1794902945,
+          "completedAt": 1794902953,
+          "durationMs": 8371
+        }
+      },
+      "emittedAtMs": 1794902953712
+    }
+  ],
+  "notificationCount": 13,
+  "serverRequests": [],
+  "serverRequestDecisions": [],
+  "maxFrameBytesSeen": 1695,
+  "frameLimitBytes": 16777216,
+  "frameViolations": [],
+  "stderrTail": [],
+  "exitCode": null
+}

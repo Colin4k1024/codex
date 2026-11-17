@@ -1,0 +1,693 @@
+{
+  "results": [
+    {
+      "id": 2,
+      "result": {
+        "thread": {
+          "id": "01a1e88c-f8c2-7073-9b1e-979a24eca2d6",
+          "environments": [
+            {
+              "environmentId": "local",
+              "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-a-oosy1rne",
+              "runtimeWorkspaceRoots": [
+                "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-a-oosy1rne"
+              ]
+            }
+          ],
+          "extra": null,
+          "sessionId": "01a1e88c-f8c2-7073-9b1e-979a24eca2d6",
+          "forkedFromId": null,
+          "attachedToThreadId": null,
+          "parentThreadId": null,
+          "preview": "",
+          "ephemeral": false,
+          "section": null,
+          "sectionEnteredAt": null,
+          "projectId": null,
+          "historyMode": "paginated",
+          "modelProvider": "openai",
+          "model": "gpt-6-astra",
+          "reasoningEffort": null,
+          "createdAt": 1794902915,
+          "updatedAt": 1794902915,
+          "recencyAt": 1794902915,
+          "status": {
+            "type": "idle"
+          },
+          "path": "/Users/fanjia/Library/Application Support/SuperAgent/codex-home/sessions/2026/11/17/rollout-2026-11-17T16-08-35-01a1e88c-f8c2-7073-9b1e-979a24eca2d6.jsonl",
+          "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-a-oosy1rne",
+          "cliVersion": "0.0.0",
+          "originator": "superagent-spike",
+          "source": "vscode",
+          "canAcceptDirectInput": true,
+          "threadSource": null,
+          "agentNickname": null,
+          "agentRole": null,
+          "gitInfo": null,
+          "name": null,
+          "daybreakEnabled": null,
+          "turns": []
+        },
+        "model": "gpt-6-astra",
+        "modelProvider": "openai",
+        "serviceTier": null,
+        "disabledPluginIds": [],
+        "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-a-oosy1rne",
+        "runtimeWorkspaceRoots": [
+          "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-a-oosy1rne"
+        ],
+        "instructionSources": [],
+        "approvalPolicy": "never",
+        "approvalsReviewer": "user",
+        "sandbox": {
+          "type": "workspaceWrite",
+          "writableRoots": [],
+          "networkAccess": false,
+          "excludeTmpdirEnvVar": false,
+          "excludeSlashTmp": false
+        },
+        "activePermissionProfile": null,
+        "reasoningEffort": null,
+        "multiAgentMode": "explicitRequestOnly"
+      }
+    },
+    {
+      "id": 3,
+      "result": {
+        "turn": {
+          "id": "01a1e88c-f9cd-7df2-b07e-92ed6a4d4e6b",
+          "rootTurnId": "01a1e88c-f9cd-7df2-b07e-92ed6a4d4e6b",
+          "items": [],
+          "itemsView": "notLoaded",
+          "status": "inProgress",
+          "error": null,
+          "startedAt": null,
+          "completedAt": null,
+          "durationMs": null
+        }
+      }
+    }
+  ],
+  "initialize": {
+    "id": 1,
+    "result": {
+      "userAgent": "superagent-spike/0.0.0 (Mac OS 26.6.2; arm64) xterm-256color (superagent-spike; 0.1.0)",
+      "codexHome": "/Users/fanjia/Library/Application Support/SuperAgent/codex-home",
+      "platformFamily": "unix",
+      "platformOs": "macos"
+    }
+  },
+  "notifications": [
+    {
+      "method": "remoteControl/status/changed",
+      "params": {
+        "status": "disabled",
+        "serverName": "fanjiadeMacBook-Pro.local",
+        "installationId": "33846316-8915-4e37-85c1-1cdfd3b9fabe",
+        "environmentId": null
+      },
+      "emittedAtMs": 1794902915253
+    },
+    {
+      "method": "thread/started",
+      "params": {
+        "thread": {
+          "id": "01a1e88c-f8c2-7073-9b1e-979a24eca2d6",
+          "environments": [
+            {
+              "environmentId": "local",
+              "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-a-oosy1rne",
+              "runtimeWorkspaceRoots": [
+                "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-a-oosy1rne"
+              ]
+            }
+          ],
+          "extra": null,
+          "sessionId": "01a1e88c-f8c2-7073-9b1e-979a24eca2d6",
+          "forkedFromId": null,
+          "attachedToThreadId": null,
+          "parentThreadId": null,
+          "preview": "",
+          "ephemeral": false,
+          "section": null,
+          "sectionEnteredAt": null,
+          "projectId": null,
+          "historyMode": "paginated",
+          "modelProvider": "openai",
+          "model": "gpt-6-astra",
+          "reasoningEffort": null,
+          "createdAt": 1794902915,
+          "updatedAt": 1794902915,
+          "recencyAt": 1794902915,
+          "status": {
+            "type": "idle"
+          },
+          "path": "/Users/fanjia/Library/Application Support/SuperAgent/codex-home/sessions/2026/11/17/rollout-2026-11-17T16-08-35-01a1e88c-f8c2-7073-9b1e-979a24eca2d6.jsonl",
+          "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-a-oosy1rne",
+          "cliVersion": "0.0.0",
+          "originator": "superagent-spike",
+          "source": "vscode",
+          "canAcceptDirectInput": true,
+          "threadSource": null,
+          "agentNickname": null,
+          "agentRole": null,
+          "gitInfo": null,
+          "name": null,
+          "daybreakEnabled": null,
+          "turns": []
+        }
+      },
+      "emittedAtMs": 1794902915524
+    },
+    {
+      "method": "mcpServer/startupStatus/updated",
+      "params": {
+        "threadId": "01a1e88c-f8c2-7073-9b1e-979a24eca2d6",
+        "name": "codex_apps",
+        "environmentId": null,
+        "status": "starting",
+        "error": null,
+        "failureReason": null
+      },
+      "emittedAtMs": 1794902915525
+    },
+    {
+      "method": "thread/status/changed",
+      "params": {
+        "threadId": "01a1e88c-f8c2-7073-9b1e-979a24eca2d6",
+        "status": {
+          "type": "active",
+          "activeFlags": []
+        }
+      },
+      "emittedAtMs": 1794902915568
+    },
+    {
+      "method": "turn/started",
+      "params": {
+        "threadId": "01a1e88c-f8c2-7073-9b1e-979a24eca2d6",
+        "turn": {
+          "id": "01a1e88c-f9cd-7df2-b07e-92ed6a4d4e6b",
+          "rootTurnId": "01a1e88c-f9cd-7df2-b07e-92ed6a4d4e6b",
+          "items": [],
+          "itemsView": "notLoaded",
+          "status": "inProgress",
+          "error": null,
+          "startedAt": 1794902915,
+          "completedAt": null,
+          "durationMs": null
+        }
+      },
+      "emittedAtMs": 1794902915568
+    },
+    {
+      "method": "account/updated",
+      "params": {
+        "authMode": "chatgpt",
+        "planType": "plus"
+      },
+      "emittedAtMs": 1794902916163
+    },
+    {
+      "method": "mcpServer/startupStatus/updated",
+      "params": {
+        "threadId": "01a1e88c-f8c2-7073-9b1e-979a24eca2d6",
+        "name": "codex_apps",
+        "environmentId": null,
+        "status": "ready",
+        "error": null,
+        "failureReason": null
+      },
+      "emittedAtMs": 1794902917097
+    },
+    {
+      "method": "item/started",
+      "params": {
+        "item": {
+          "type": "userMessage",
+          "id": "01a1e88d-1adf-70c2-9b91-9d9589f1a82d",
+          "clientId": null,
+          "content": [
+            {
+              "type": "text",
+              "text": "Create a file named p06.txt in the current directory whose content is exactly SUPERAGENT_P06_OK (no trailing newline). Then reply DONE.",
+              "text_elements": []
+            }
+          ],
+          "startedAtMs": 1794902924002,
+          "completedAtMs": null
+        },
+        "threadId": "01a1e88c-f8c2-7073-9b1e-979a24eca2d6",
+        "turnId": "01a1e88c-f9cd-7df2-b07e-92ed6a4d4e6b",
+        "startedAtMs": 1794902924002
+      },
+      "emittedAtMs": 1794902924003
+    },
+    {
+      "method": "item/completed",
+      "params": {
+        "item": {
+          "type": "userMessage",
+          "id": "01a1e88d-1adf-70c2-9b91-9d9589f1a82d",
+          "clientId": null,
+          "content": [
+            {
+              "type": "text",
+              "text": "Create a file named p06.txt in the current directory whose content is exactly SUPERAGENT_P06_OK (no trailing newline). Then reply DONE.",
+              "text_elements": []
+            }
+          ],
+          "startedAtMs": 1794902924002,
+          "completedAtMs": 1794902924002
+        },
+        "threadId": "01a1e88c-f8c2-7073-9b1e-979a24eca2d6",
+        "turnId": "01a1e88c-f9cd-7df2-b07e-92ed6a4d4e6b",
+        "contentTokenCount": null,
+        "completedAtMs": 1794902924002
+      },
+      "emittedAtMs": 1794902924008
+    },
+    {
+      "method": "item/started",
+      "params": {
+        "item": {
+          "type": "agentMessage",
+          "moderation": null,
+          "id": "msg_0dbfaf3393cbeddb016afc0b90725c87d0ab4373e705c67dcb",
+          "text": "",
+          "phase": "commentary",
+          "memoryCitation": null,
+          "delivery": null,
+          "questions": null,
+          "startedAtMs": 1794902928538,
+          "completedAtMs": null
+        },
+        "threadId": "01a1e88c-f8c2-7073-9b1e-979a24eca2d6",
+        "turnId": "01a1e88c-f9cd-7df2-b07e-92ed6a4d4e6b",
+        "startedAtMs": 1794902928538
+      },
+      "emittedAtMs": 1794902928538
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e88c-f8c2-7073-9b1e-979a24eca2d6",
+        "turnId": "01a1e88c-f9cd-7df2-b07e-92ed6a4d4e6b",
+        "itemId": "msg_0dbfaf3393cbeddb016afc0b90725c87d0ab4373e705c67dcb",
+        "delta": "I"
+      },
+      "emittedAtMs": 1794902928538
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e88c-f8c2-7073-9b1e-979a24eca2d6",
+        "turnId": "01a1e88c-f9cd-7df2-b07e-92ed6a4d4e6b",
+        "itemId": "msg_0dbfaf3393cbeddb016afc0b90725c87d0ab4373e705c67dcb",
+        "delta": "’ll"
+      },
+      "emittedAtMs": 1794902928538
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e88c-f8c2-7073-9b1e-979a24eca2d6",
+        "turnId": "01a1e88c-f9cd-7df2-b07e-92ed6a4d4e6b",
+        "itemId": "msg_0dbfaf3393cbeddb016afc0b90725c87d0ab4373e705c67dcb",
+        "delta": " create"
+      },
+      "emittedAtMs": 1794902928538
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e88c-f8c2-7073-9b1e-979a24eca2d6",
+        "turnId": "01a1e88c-f9cd-7df2-b07e-92ed6a4d4e6b",
+        "itemId": "msg_0dbfaf3393cbeddb016afc0b90725c87d0ab4373e705c67dcb",
+        "delta": " the"
+      },
+      "emittedAtMs": 1794902928538
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e88c-f8c2-7073-9b1e-979a24eca2d6",
+        "turnId": "01a1e88c-f9cd-7df2-b07e-92ed6a4d4e6b",
+        "itemId": "msg_0dbfaf3393cbeddb016afc0b90725c87d0ab4373e705c67dcb",
+        "delta": " file"
+      },
+      "emittedAtMs": 1794902928538
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e88c-f8c2-7073-9b1e-979a24eca2d6",
+        "turnId": "01a1e88c-f9cd-7df2-b07e-92ed6a4d4e6b",
+        "itemId": "msg_0dbfaf3393cbeddb016afc0b90725c87d0ab4373e705c67dcb",
+        "delta": " with"
+      },
+      "emittedAtMs": 1794902928538
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e88c-f8c2-7073-9b1e-979a24eca2d6",
+        "turnId": "01a1e88c-f9cd-7df2-b07e-92ed6a4d4e6b",
+        "itemId": "msg_0dbfaf3393cbeddb016afc0b90725c87d0ab4373e705c67dcb",
+        "delta": " the"
+      },
+      "emittedAtMs": 1794902928538
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e88c-f8c2-7073-9b1e-979a24eca2d6",
+        "turnId": "01a1e88c-f9cd-7df2-b07e-92ed6a4d4e6b",
+        "itemId": "msg_0dbfaf3393cbeddb016afc0b90725c87d0ab4373e705c67dcb",
+        "delta": " exact"
+      },
+      "emittedAtMs": 1794902928538
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e88c-f8c2-7073-9b1e-979a24eca2d6",
+        "turnId": "01a1e88c-f9cd-7df2-b07e-92ed6a4d4e6b",
+        "itemId": "msg_0dbfaf3393cbeddb016afc0b90725c87d0ab4373e705c67dcb",
+        "delta": " content"
+      },
+      "emittedAtMs": 1794902928538
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e88c-f8c2-7073-9b1e-979a24eca2d6",
+        "turnId": "01a1e88c-f9cd-7df2-b07e-92ed6a4d4e6b",
+        "itemId": "msg_0dbfaf3393cbeddb016afc0b90725c87d0ab4373e705c67dcb",
+        "delta": ".\n"
+      },
+      "emittedAtMs": 1794902928538
+    },
+    {
+      "method": "item/completed",
+      "params": {
+        "item": {
+          "type": "agentMessage",
+          "moderation": null,
+          "id": "msg_0dbfaf3393cbeddb016afc0b90725c87d0ab4373e705c67dcb",
+          "text": "I’ll create the file with the exact content.\n",
+          "phase": "commentary",
+          "memoryCitation": null,
+          "delivery": null,
+          "questions": null,
+          "startedAtMs": 1794902928538,
+          "completedAtMs": 1794902928776
+        },
+        "threadId": "01a1e88c-f8c2-7073-9b1e-979a24eca2d6",
+        "turnId": "01a1e88c-f9cd-7df2-b07e-92ed6a4d4e6b",
+        "contentTokenCount": 11,
+        "completedAtMs": 1794902928776
+      },
+      "emittedAtMs": 1794902928778
+    },
+    {
+      "method": "item/started",
+      "params": {
+        "item": {
+          "type": "commandExecution",
+          "id": "exec-f85c7e15-2e3a-49e6-bc0f-7e5eecaf8928",
+          "pluginId": null,
+          "scriptPath": null,
+          "command": "/bin/zsh -lc 'printf %s SUPERAGENT_P06_OK > p06.txt'",
+          "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-a-oosy1rne",
+          "processId": "30926",
+          "source": "unifiedExecStartup",
+          "status": "inProgress",
+          "commandActions": [
+            {
+              "type": "unknown",
+              "command": "printf %s SUPERAGENT_P06_OK > p06.txt"
+            }
+          ],
+          "aggregatedOutput": null,
+          "exitCode": null,
+          "durationMs": null,
+          "startedAtMs": 1794902929497,
+          "completedAtMs": null
+        },
+        "threadId": "01a1e88c-f8c2-7073-9b1e-979a24eca2d6",
+        "turnId": "01a1e88c-f9cd-7df2-b07e-92ed6a4d4e6b",
+        "startedAtMs": 1794902929497
+      },
+      "emittedAtMs": 1794902929501
+    },
+    {
+      "method": "item/completed",
+      "params": {
+        "item": {
+          "type": "commandExecution",
+          "id": "exec-f85c7e15-2e3a-49e6-bc0f-7e5eecaf8928",
+          "pluginId": null,
+          "scriptPath": null,
+          "command": "/bin/zsh -lc 'printf %s SUPERAGENT_P06_OK > p06.txt'",
+          "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-a-oosy1rne",
+          "processId": "30926",
+          "source": "unifiedExecStartup",
+          "status": "completed",
+          "commandActions": [
+            {
+              "type": "unknown",
+              "command": "printf %s SUPERAGENT_P06_OK > p06.txt"
+            }
+          ],
+          "aggregatedOutput": null,
+          "exitCode": 0,
+          "durationMs": 0,
+          "startedAtMs": 1794902929497,
+          "completedAtMs": 1794902929497
+        },
+        "threadId": "01a1e88c-f8c2-7073-9b1e-979a24eca2d6",
+        "turnId": "01a1e88c-f9cd-7df2-b07e-92ed6a4d4e6b",
+        "contentTokenCount": null,
+        "completedAtMs": 1794902929497
+      },
+      "emittedAtMs": 1794902929501
+    },
+    {
+      "method": "thread/tokenUsage/updated",
+      "params": {
+        "threadId": "01a1e88c-f8c2-7073-9b1e-979a24eca2d6",
+        "turnId": "01a1e88c-f9cd-7df2-b07e-92ed6a4d4e6b",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 19881,
+            "inputTokens": 19826,
+            "cachedInputTokens": 0,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 55,
+            "reasoningOutputTokens": 0
+          },
+          "last": {
+            "totalTokens": 19881,
+            "inputTokens": 19826,
+            "cachedInputTokens": 0,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 55,
+            "reasoningOutputTokens": 0
+          },
+          "modelContextWindow": 258400
+        }
+      },
+      "emittedAtMs": 1794902929508
+    },
+    {
+      "method": "account/rateLimits/updated",
+      "params": {
+        "rateLimits": {
+          "limitId": "codex",
+          "limitName": null,
+          "normalModelSlug": null,
+          "primary": {
+            "usedPercent": 63,
+            "windowDurationMins": 300,
+            "resetsAt": 1794918188
+          },
+          "secondary": {
+            "usedPercent": 23,
+            "windowDurationMins": 10080,
+            "resetsAt": 1795325947
+          },
+          "credits": {
+            "hasCredits": false,
+            "unlimited": false,
+            "balance": "0"
+          },
+          "individualLimit": null,
+          "spendControlReached": null,
+          "planType": "plus",
+          "rateLimitReachedType": null
+        }
+      },
+      "emittedAtMs": 1794902929508
+    },
+    {
+      "method": "item/started",
+      "params": {
+        "item": {
+          "type": "agentMessage",
+          "moderation": null,
+          "id": "msg_0dbfaf3393cbeddb016afc0b95352887d0a0f8ba95b05455e0",
+          "text": "",
+          "phase": "final_answer",
+          "memoryCitation": null,
+          "delivery": null,
+          "questions": null,
+          "startedAtMs": 1794902933255,
+          "completedAtMs": null
+        },
+        "threadId": "01a1e88c-f8c2-7073-9b1e-979a24eca2d6",
+        "turnId": "01a1e88c-f9cd-7df2-b07e-92ed6a4d4e6b",
+        "startedAtMs": 1794902933255
+      },
+      "emittedAtMs": 1794902933255
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e88c-f8c2-7073-9b1e-979a24eca2d6",
+        "turnId": "01a1e88c-f9cd-7df2-b07e-92ed6a4d4e6b",
+        "itemId": "msg_0dbfaf3393cbeddb016afc0b95352887d0a0f8ba95b05455e0",
+        "delta": "DONE"
+      },
+      "emittedAtMs": 1794902933255
+    },
+    {
+      "method": "item/completed",
+      "params": {
+        "item": {
+          "type": "agentMessage",
+          "moderation": null,
+          "id": "msg_0dbfaf3393cbeddb016afc0b95352887d0a0f8ba95b05455e0",
+          "text": "DONE",
+          "phase": "final_answer",
+          "memoryCitation": null,
+          "delivery": null,
+          "questions": null,
+          "startedAtMs": 1794902933255,
+          "completedAtMs": 1794902933307
+        },
+        "threadId": "01a1e88c-f8c2-7073-9b1e-979a24eca2d6",
+        "turnId": "01a1e88c-f9cd-7df2-b07e-92ed6a4d4e6b",
+        "contentTokenCount": 2,
+        "completedAtMs": 1794902933307
+      },
+      "emittedAtMs": 1794902933310
+    },
+    {
+      "method": "thread/tokenUsage/updated",
+      "params": {
+        "threadId": "01a1e88c-f8c2-7073-9b1e-979a24eca2d6",
+        "turnId": "01a1e88c-f9cd-7df2-b07e-92ed6a4d4e6b",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 39822,
+            "inputTokens": 39762,
+            "cachedInputTokens": 19712,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 60,
+            "reasoningOutputTokens": 0
+          },
+          "last": {
+            "totalTokens": 19941,
+            "inputTokens": 19936,
+            "cachedInputTokens": 19712,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 5,
+            "reasoningOutputTokens": 0
+          },
+          "modelContextWindow": 258400
+        }
+      },
+      "emittedAtMs": 1794902933335
+    },
+    {
+      "method": "account/rateLimits/updated",
+      "params": {
+        "rateLimits": {
+          "limitId": "codex",
+          "limitName": null,
+          "normalModelSlug": null,
+          "primary": {
+            "usedPercent": 65,
+            "windowDurationMins": 300,
+            "resetsAt": 1794918188
+          },
+          "secondary": {
+            "usedPercent": 23,
+            "windowDurationMins": 10080,
+            "resetsAt": 1795325947
+          },
+          "credits": {
+            "hasCredits": false,
+            "unlimited": false,
+            "balance": "0"
+          },
+          "individualLimit": null,
+          "spendControlReached": null,
+          "planType": "plus",
+          "rateLimitReachedType": null
+        }
+      },
+      "emittedAtMs": 1794902933335
+    },
+    {
+      "method": "thread/status/changed",
+      "params": {
+        "threadId": "01a1e88c-f8c2-7073-9b1e-979a24eca2d6",
+        "status": {
+          "type": "idle"
+        }
+      },
+      "emittedAtMs": 1794902933348
+    },
+    {
+      "method": "turn/completed",
+      "params": {
+        "threadId": "01a1e88c-f8c2-7073-9b1e-979a24eca2d6",
+        "turn": {
+          "id": "01a1e88c-f9cd-7df2-b07e-92ed6a4d4e6b",
+          "rootTurnId": "01a1e88c-f9cd-7df2-b07e-92ed6a4d4e6b",
+          "items": [
+            {
+              "type": "agentMessage",
+              "moderation": null,
+              "id": "msg_0dbfaf3393cbeddb016afc0b95352887d0a0f8ba95b05455e0",
+              "text": "DONE",
+              "phase": "final_answer",
+              "memoryCitation": null,
+              "delivery": null,
+              "questions": null,
+              "startedAtMs": 1794902933255,
+              "completedAtMs": 1794902933307
+            }
+          ],
+          "itemsView": "summary",
+          "status": "completed",
+          "error": null,
+          "startedAt": 1794902915,
+          "completedAt": 1794902933,
+          "durationMs": 17800
+        }
+      },
+      "emittedAtMs": 1794902933348
+    }
+  ],
+  "notificationCount": 32,
+  "serverRequests": [],
+  "serverRequestDecisions": [],
+  "maxFrameBytesSeen": 1695,
+  "frameLimitBytes": 16777216,
+  "frameViolations": [],
+  "stderrTail": [],
+  "exitCode": null
+}

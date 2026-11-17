@@ -1,0 +1,126 @@
+{
+  "results": [
+    {
+      "id": 2,
+      "result": {
+        "thread": {
+          "id": "01a1e88d-9b42-7040-8c30-4d0d0054b03f",
+          "environments": null,
+          "extra": null,
+          "sessionId": "01a1e88d-9b42-7040-8c30-4d0d0054b03f",
+          "forkedFromId": null,
+          "attachedToThreadId": null,
+          "parentThreadId": null,
+          "preview": "Use your command execution tool to run `sleep 45` and wait for it to finish. Then create d.txt containing RECONCILED.",
+          "ephemeral": false,
+          "section": null,
+          "sectionEnteredAt": null,
+          "projectId": null,
+          "historyMode": "paginated",
+          "modelProvider": "openai",
+          "model": "gpt-6-astra",
+          "reasoningEffort": null,
+          "createdAt": 1794902956,
+          "updatedAt": 1794902966,
+          "recencyAt": 1794902957,
+          "status": {
+            "type": "notLoaded"
+          },
+          "path": "/Users/fanjia/Library/Application Support/SuperAgent/codex-home/sessions/2026/11/17/rollout-2026-11-17T16-09-16-01a1e88d-9b42-7040-8c30-4d0d0054b03f.jsonl",
+          "cwd": "/private/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-d-xqning4o",
+          "cliVersion": "0.0.0",
+          "originator": "superagent-spike",
+          "source": "vscode",
+          "canAcceptDirectInput": null,
+          "threadSource": null,
+          "agentNickname": null,
+          "agentRole": null,
+          "gitInfo": null,
+          "name": null,
+          "daybreakEnabled": null,
+          "turns": [
+            {
+              "id": "01a1e88d-9bc8-7f03-a696-8d1b1e91531e",
+              "rootTurnId": "01a1e88d-9bc8-7f03-a696-8d1b1e91531e",
+              "items": [
+                {
+                  "type": "userMessage",
+                  "id": "01a1e88d-aa50-7c60-8f06-7cf354b20dcd",
+                  "clientId": null,
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Use your command execution tool to run `sleep 45` and wait for it to finish. Then create d.txt containing RECONCILED.",
+                      "text_elements": []
+                    }
+                  ],
+                  "startedAtMs": 1794902960721,
+                  "completedAtMs": 1794902960721
+                },
+                {
+                  "type": "agentMessage",
+                  "moderation": null,
+                  "id": "msg_046127930b1790f4016afc0bb590f087d0a7f9ee799ecb5c68",
+                  "text": "I’ll run `sleep 45`, wait for it to finish, then create `d.txt` containing `RECONCILED`.",
+                  "phase": "commentary",
+                  "memoryCitation": null,
+                  "delivery": null,
+                  "questions": null,
+                  "startedAtMs": 1794902965584,
+                  "completedAtMs": 1794902966476
+                }
+              ],
+              "itemsView": "full",
+              "status": "interrupted",
+              "error": null,
+              "startedAt": 1794902957,
+              "completedAt": null,
+              "durationMs": null
+            }
+          ]
+        },
+        "readState": {
+          "firstUnread": null,
+          "revision": "initial:01a1e88d-9b42-7040-8c30-4d0d0054b03f"
+        }
+      }
+    }
+  ],
+  "initialize": {
+    "id": 1,
+    "result": {
+      "userAgent": "superagent-spike/0.0.0 (Mac OS 26.6.2; arm64) xterm-256color (superagent-spike; 0.1.0)",
+      "codexHome": "/Users/fanjia/Library/Application Support/SuperAgent/codex-home",
+      "platformFamily": "unix",
+      "platformOs": "macos"
+    }
+  },
+  "notifications": [
+    {
+      "method": "remoteControl/status/changed",
+      "params": {
+        "status": "disabled",
+        "serverName": "fanjiadeMacBook-Pro.local",
+        "installationId": "33846316-8915-4e37-85c1-1cdfd3b9fabe",
+        "environmentId": null
+      },
+      "emittedAtMs": 1794902967494
+    },
+    {
+      "method": "deprecationNotice",
+      "params": {
+        "summary": "Full-history hydration is deprecated for paginated threads; omit `includeTurns` or set it to `false`, then page with `thread/turns/list` and `thread/items/list`.",
+        "details": null
+      },
+      "emittedAtMs": 1794902967503
+    }
+  ],
+  "notificationCount": 2,
+  "serverRequests": [],
+  "serverRequestDecisions": [],
+  "maxFrameBytesSeen": 2053,
+  "frameLimitBytes": 16777216,
+  "frameViolations": [],
+  "stderrTail": [],
+  "exitCode": null
+}
