@@ -86,11 +86,33 @@ def find_call(substr):
     return [c for c in leader_calls if substr in str(c.get("call", {}).get("name", ""))]
 
 
+def collab_tool(name):
+    # V1 collab tools surface as collabAgentToolCall items with camelCase tool
+    # names (spawnAgent/wait/closeAgent/resumeAgent), not as snake_case
+    # function_call rollout entries. Detect from the authoritative item stream.
+    return [c for c in collab_items
+            if c.get("tool") == name and c.get("status") == "completed"
+            and c.get("receiverThreadIds")]
+
+
 spawn_calls = find_call("spawn_agent")
 close_calls = find_call("close_agent")
 resume_calls = find_call("resume_agent")
 wait_calls = find_call("wait_agent")
+spawn_collab = collab_tool("spawnAgent")
+wait_collab = collab_tool("wait")
+close_collab = collab_tool("closeAgent")
+resume_collab = collab_tool("resumeAgent")
 leader_summary = "\n".join(final_text)
+
+spawn_ok = bool(spawn_calls or spawn_collab)
+wait_ok = bool(wait_calls or wait_collab)
+close_ok = bool(close_calls or close_collab)
+resume_ok = bool(resume_calls or resume_collab)
+close_has_result = bool(
+    (close_calls and all(c.get("output") for c in close_calls))
+    or any(c.get("agentsStates") for c in close_collab)
+)
 
 summary = {
     "leaderThreadId": leader_id,
@@ -98,17 +120,22 @@ summary = {
     "multiAgentVersionExpected": "v1",
     "childThreads": child_ids,
     "collabItems": collab_items,
-    "spawnCallFound": bool(spawn_calls),
-    "waitCallFound": bool(wait_calls),
-    "closeCallFound": bool(close_calls),
+    "spawnCallFound": spawn_ok,
+    "waitCallFound": wait_ok,
+    "closeCallFound": close_ok,
     "closeCalls": close_calls,
-    "resumeCallFound": bool(resume_calls),
+    "closeCollabItems": close_collab,
+    "resumeCallFound": resume_ok,
     "resumeCalls": resume_calls,
+    "resumeCollabItems": resume_collab,
+    "detectionNote": "V1 collab tools emit camelCase collabAgentToolCall items; "
+                     "detection accepts rollout function calls OR completed collab "
+                     "items with receiverThreadIds. close requires a result "
+                     "(rollout output or collab agentsStates).",
     "leaderFinalMessage": leader_summary[-3000:],
     "turnCompleted": completed,
 }
-summary["allPass"] = bool(spawn_calls and close_calls and resume_calls
-                          and all(c.get("output") for c in close_calls))
+summary["allPass"] = bool(spawn_ok and wait_ok and close_ok and resume_ok and close_has_result)
 save("p0-2c-v1-summary.json", summary)
 print(json.dumps({k: v for k, v in summary.items()
                   if k in ("allPass", "spawnCallFound", "waitCallFound", "closeCallFound",
