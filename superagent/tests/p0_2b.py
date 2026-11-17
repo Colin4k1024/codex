@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """P0-2b (issue #65) supplementary probe: MAv2 tool round-trips + role config layer.
 
-Proves: spawn_agent(nickname)/list_agents/send_message/interrupt_agent/wait_agent
-round-trips; close_agent disposition under V2; role developer_instructions and
-sandbox_mode applied to child threads; nickname visibility; trigger method.
+Proves: spawn_agent/list_agents/send_message/interrupt_agent/wait_agent round-trips;
+close_agent attempt disposition under V2 (V1 round-trip lives in p0_2c_v1.py);
+per-role model/effort overrides vs default_subagent_model; nickname auto-assignment
+without task_name; developer_instructions via rollout; sandbox role-layer finding.
 """
 import json
 import os
@@ -12,7 +13,7 @@ import sys
 import tempfile
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from spike_client import Client
+from spike_client import Client, rollout_function_calls
 
 ROOT = "/Users/fanjia/Desktop/code/codex"
 ENGINE = f"{ROOT}/superagent/packaging/superagent-engine"
@@ -22,18 +23,15 @@ os.makedirs(EV, exist_ok=True)
 HOME_B = f"{EV}/home-b"
 os.makedirs(f"{HOME_B}/agents", exist_ok=True)
 
+DEFAULT_SUBAGENT_MODEL = "gpt-5.6-terra"
+PLANNER_ROLE_MODEL = "gpt-5.6-sol"
+
 with open(f"{HOME_B}/config.toml", "w") as fh:
     fh.write("# P0-2b dedicated home: MAv2 + roles overlay\n")
     fh.write(open(f"{ROOT}/superagent/tests/p0-2/config-overlay.toml").read())
 for role in ("planner", "implementer", "verifier"):
-    src = f"{ROOT}/superagent/tests/p0-2/agents/{role}.toml"
-    dst = f"{HOME_B}/agents/{role}.toml"
-    shutil.copyfile(src, dst)
-# role-level model-layer override: planner reasoning effort high (leader runs low).
-# sandbox_mode is deliberately also set to read-only to TEST whether the role layer
-# applies it (code says AgentRoleOverrides excludes sandbox; expect inheritance).
-with open(f"{HOME_B}/agents/planner.toml", "a") as fh:
-    fh.write('\nsandbox_mode = "read-only"\nmodel_reasoning_effort = "high"\n')
+    shutil.copyfile(f"{ROOT}/superagent/tests/p0-2/agents/{role}.toml",
+                    f"{HOME_B}/agents/{role}.toml")
 if os.path.exists(f"{HOME_A}/auth.json"):
     shutil.copyfile(f"{HOME_A}/auth.json", f"{HOME_B}/auth.json")
 
@@ -67,16 +65,18 @@ PROMPT = (
     "Then reply with a one-step plan to create hello.txt. Do not create hello.txt yourself.'\n"
     "2) spawn_agent with agent_type=implementer, task_name=hephaestus, task: 'Use your command execution tool "
     "to run `sleep 30` and wait for it to finish. Then create hello.txt containing exactly HELLO-MAV2.'\n"
-    "3) list_agents; note the nicknames and statuses returned.\n"
-    "4) send_message to the implementer agent: 'After the sleep finishes, also create extra.txt containing EXTRA.'\n"
-    "5) interrupt_agent the implementer agent.\n"
-    "6) wait_agent for both agents and report their final statuses.\n"
-    "7) Attempt close_agent on the implementer agent. If that tool does not exist or errors, quote the exact error.\n"
-    "Finally reply with a numbered summary of the results of steps 1-7, including the nicknames you observed."
+    "3) spawn_agent with agent_type=verifier and WITHOUT any task_name parameter, task: 'Reply with a one-line "
+    "acceptance checklist for creating hello.txt. Do not create or modify any file.'\n"
+    "4) list_agents; note the agent paths, nicknames and statuses returned.\n"
+    "5) send_message to the implementer agent: 'After the sleep finishes, also create extra.txt containing EXTRA.'\n"
+    "6) interrupt_agent the implementer agent.\n"
+    "7) wait_agent for all three agents and report their final statuses.\n"
+    "8) Attempt close_agent on the implementer agent. If that tool does not exist or errors, quote the exact error.\n"
+    "Finally reply with a numbered summary of steps 1-8, including every nickname and model you observed."
 )
 
 summary = {}
-client = Client(ENGINE, HOME_B, deadline=780)
+client = Client(ENGINE, HOME_B, deadline=900)
 try:
     ts = client.request("thread/start", {"cwd": WORK}, timeout=60)
     leader_id = ts["result"]["thread"]["id"]
@@ -113,11 +113,9 @@ for n in notes:
     if it.get("type") == "agentMessage":
         final_text.append(it.get("text") or "")
 
-blob = json.dumps(client.transcript(), ensure_ascii=False)
 tools_seen = sorted({t["tool"] for t in tool_calls})
 leader_summary = "\n".join(final_text)
 
-# role config layer proof: read child histories + rollout files
 role_proof = {}
 recon = Client(ENGINE, HOME_B, deadline=180)
 try:
@@ -143,6 +141,7 @@ try:
             "sandboxProbeExitCode": probe_exit,
             "plannerInstructionsInRollout": False,
             "implementerInstructionsInRollout": False,
+            "verifierInstructionsInRollout": False,
         }
         save(f"p0-2b-child-read-{path.strip('/').replace('/', '_')}.json", read)
 finally:
@@ -164,30 +163,59 @@ for root, _dirs, files in os.walk(HOME_B):
                     v["plannerInstructionsInRollout"] = True
                 if "IMPLEMENTER of a SuperAgent team" in content:
                     v["implementerInstructionsInRollout"] = True
+                if "VERIFIER of a SuperAgent team" in content:
+                    v["verifierInstructionsInRollout"] = True
 
 by_role = {}
 for v in role_proof.values():
     by_role.setdefault(v.get("agentRole"), []).append(v)
 instr_ok = any(v["plannerInstructionsInRollout"] for v in by_role.get("planner", [])) and \
-           any(v["implementerInstructionsInRollout"] for v in by_role.get("implementer", []))
-nickname_ok = any(v.get("agentNickname") for v in role_proof.values())
+           any(v["implementerInstructionsInRollout"] for v in by_role.get("implementer", [])) and \
+           any(v["verifierInstructionsInRollout"] for v in by_role.get("verifier", []))
 
-# round-trip detection: collab items only stream 'wait'; spawn/send/interrupt are
-# evidenced by subAgentActivity kinds + leader tool-result narration.
+# nickname auto-assignment: verifier spawned WITHOUT task_name must carry a candidate nickname
+verifier_proof = next(iter(by_role.get("verifier", [])), {})
+nickname_auto_ok = verifier_proof.get("agentNickname") == "Themis"
+nickname_ok = nickname_auto_ok and any(v.get("agentNickname") for v in by_role.get("planner", []))
+
+# model layer: role override (planner=sol) vs default_subagent_model (implementer/verifier=terra)
+planner_proof = next(iter(by_role.get("planner", [])), {})
+implementer_proof = next(iter(by_role.get("implementer", [])), {})
+planner_meta = next((m for p, m in child_spawn_meta.items()
+                     if planner_proof and m and child_ids.get(p) == planner_proof.get("threadId")), {})
+role_model_ok = planner_proof.get("model") == PLANNER_ROLE_MODEL and \
+                planner_meta.get("reasoningEffort") == "high"
+default_model_ok = implementer_proof.get("model") == DEFAULT_SUBAGENT_MODEL and \
+                   verifier_proof.get("model") == DEFAULT_SUBAGENT_MODEL
+model_layer_ok = role_model_ok and default_model_ok
+
+# close_agent attempt evidence from leader rollout function calls
+leader_files, leader_calls = rollout_function_calls(HOME_B, leader_id)
+close_calls = [c for c in leader_calls if "close_agent" in str(c.get("call", {}).get("name", ""))]
+save("p0-2b-leader-function-calls.json", {"leaderThreadId": leader_id, "rolloutFiles": leader_files,
+                                          "calls": leader_calls})
+if close_calls:
+    close_disposition = "attempted-in-v2"
+elif "close_agent" in leader_summary and ("not available" in leader_summary or "does not exist" in leader_summary
+                                         or "unsupported" in leader_summary or "unknown tool" in leader_summary.lower()):
+    close_disposition = "unavailable-in-v2-narrated"
+else:
+    close_disposition = "unknown"
+close_evidence = {
+    "disposition": close_disposition,
+    "functionCalls": close_calls,
+    "leaderRolloutFiles": leader_files,
+    "note": "V2 tool schema has no close_agent (core/src/tools/spec_plan.rs:794 lists it for V1 only); "
+            "real close_agent/resume_agent round-trip is proven separately in p0-2c-v1-summary.json.",
+}
+
 child_paths = [p for p in child_ids if p != "/root"]
-spawn_ok = len(child_ids) >= 2 and sum(1 for a in activities if a["kind"] == "started") >= 2
+spawn_ok = len(child_ids) >= 3 and sum(1 for a in activities if a["kind"] == "started") >= 3
 send_ok = any(a["kind"] == "interacted" and a["path"] in child_paths for a in activities)
 interrupt_ok = any(a["kind"] == "interrupted" and a["path"] in child_paths for a in activities)
 wait_ok = any(t["tool"] == "wait" and t["status"] == "completed" for t in tool_calls)
 list_ok = ("list_agents" in leader_summary or "Listed agents" in leader_summary) \
           and "/root/athena" in leader_summary
-close_disposition = "unavailable-in-v2" if "close_agent" in leader_summary and \
-                    ("not available" in leader_summary or "does not exist" in leader_summary) else "unknown"
-
-planner_meta = next((m for p, m in child_spawn_meta.items()
-                     if by_role.get("planner") and
-                     any(v["threadId"] == child_ids.get(p) for v in by_role["planner"])), {})
-model_layer_ok = planner_meta.get("reasoningEffort") == "high"
 
 planner_probe = next((v for v in by_role.get("planner", []) if v["sandboxProbeAttempt"]), {})
 sandbox_finding = {
@@ -204,6 +232,8 @@ sandbox_finding = {
 summary = {
     "leaderThreadId": leader_id,
     "workdir": WORK,
+    "config": {"defaultSubagentModel": DEFAULT_SUBAGENT_MODEL, "plannerRoleModel": PLANNER_ROLE_MODEL,
+               "leaderModelExpected": "gpt-6-astra"},
     "childThreads": child_ids,
     "childSpawnMeta": child_spawn_meta,
     "activities": activities,
@@ -214,20 +244,26 @@ summary = {
     "sendObserved": send_ok,
     "interruptObserved": interrupt_ok,
     "waitObserved": wait_ok,
-    "closeAgentDisposition": close_disposition,
+    "closeAgentEvidence": close_evidence,
     "nicknameObserved": nickname_ok,
+    "nicknameAutoAssigned": nickname_auto_ok,
     "roleInstructionsEffective": instr_ok,
     "roleModelLayerEffective": model_layer_ok,
+    "roleModelOverrideEffective": role_model_ok,
+    "defaultSubagentModelEffective": default_model_ok,
     "sandboxFinding": sandbox_finding,
     "roleProof": role_proof,
     "leaderFinalMessage": leader_summary[-4000:],
     "turnCompleted": completed,
 }
 summary["allPass"] = all([spawn_ok, list_ok, send_ok, interrupt_ok, wait_ok,
-                          instr_ok, model_layer_ok, nickname_ok])
+                          instr_ok, model_layer_ok, nickname_ok,
+                          close_disposition != "unknown"])
 save("p0-2b-summary.json", summary)
 print(json.dumps({k: v for k, v in summary.items()
                   if k in ("allPass", "toolsSeen", "spawnObserved", "listObserved", "sendObserved",
-                           "interruptObserved", "waitObserved", "closeAgentDisposition", "nicknameObserved",
-                           "roleInstructionsEffective", "roleModelLayerEffective")}, indent=2))
+                           "interruptObserved", "waitObserved", "nicknameObserved", "nicknameAutoAssigned",
+                           "roleInstructionsEffective", "roleModelLayerEffective",
+                           "roleModelOverrideEffective", "defaultSubagentModelEffective")}, indent=2))
+print("closeAgentDisposition=" + close_disposition)
 sys.exit(0 if summary["allPass"] else 1)

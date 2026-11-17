@@ -167,6 +167,41 @@ class Client:
             }
 
 
+def rollout_function_calls(home, session_id):
+    """Extract function_call / function_call_output pairs from rollout JSONL."""
+    calls = {}
+    files = []
+    for root, _dirs, names in os.walk(home):
+        for fn in names:
+            if not fn.endswith(".jsonl"):
+                continue
+            path = os.path.join(root, fn)
+            try:
+                content = open(path, encoding="utf-8", errors="replace").read()
+            except OSError:
+                continue
+            if session_id not in content:
+                continue
+            files.append(path)
+            for lineno, line in enumerate(content.splitlines(), 1):
+                try:
+                    rec = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+                payload = rec.get("payload", {})
+                if payload.get("type") == "function_call":
+                    calls.setdefault(payload.get("call_id"), {})["call"] = {
+                        "file": path, "line": lineno, "name": payload.get("name"),
+                        "arguments": str(payload.get("arguments"))[:600],
+                    }
+                elif payload.get("type") == "function_call_output":
+                    calls.setdefault(payload.get("call_id"), {})["output"] = {
+                        "file": path, "line": lineno,
+                        "output": str(payload.get("output"))[:800],
+                    }
+    return files, list(calls.values())
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--engine", required=True)
