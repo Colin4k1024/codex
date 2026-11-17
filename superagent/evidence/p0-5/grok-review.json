@@ -1,0 +1,51 @@
+{
+  "verdict": "APPROVE",
+  "summary": "All four issue #68 task criteria and the acceptance line are proven by concrete evidence in the commit. The spike-greet capability pack loads via skills/extraRoots/set, merges into the catalog, and its prompt is injected (model echoes the exact passphrase). Both $mention and implicit triggering are demonstrated. Cross-restart persistence is demonstrated as NOT_PERSISTENT, and the SkillsConfig claim (no extraRoots field) independently verified against codex-rs/config/src/skills_config.rs. max_context_tokens=1 cap behavior is demonstrated (catalog still lists skill, model reports NO_SKILLS). The F-2 adjudication written conclusion follows from the evidence. No codex-rs core changed, no secrets committed. Three minor non-blocking notes only.",
+  "criteria": [
+    {
+      "criterion": "Example skill dir loads via skills/extraRoots/set; directory merge and prompt injection visible",
+      "status": "PASS",
+      "evidence": "skills-session1.json: extraRoots/set (params {extraRoots:[...p0-5/skills]}) -> result {}; subsequent skills/list includes spike-greet (path .../superagent/tests/p0-5/skills/spike-greet/SKILL.md, scope user) interleaved with the pre-existing user/system skills (merge visible). Fixture SKILL.md (superagent/tests/p0-5/skills/spike-greet/SKILL.md) defines the exact passphrase SUPERAGENT_SPIKE_OK; mention-implicit.json shows the model returned that exact passphrase, proving the skill body reached model context (injection visible)."
+    },
+    {
+      "criterion": "$ mention and implicit trigger verification",
+      "status": "PASS",
+      "evidence": "mention-implicit.json: mentionTexts=[SUPERAGENT_SPIKE_OK] with mentionTriggered=true (turn input '$spike-greet'); implicitTexts=[SUPERAGENT_SPIKE_OK] with implicitTriggered=true (follow-up 'What is the spike passphrase greeting?'). Both flags true, reproduced by superagent/tests/p0_5b.py::mention_and_implicit."
+    },
+    {
+      "criterion": "Restart persistence check; if not persistent, verify config path (SkillsConfig)",
+      "status": "PASS",
+      "evidence": "skills-session2.json (fresh process, skills/list only, no extraRoots/set) omits spike-greet -> persistence-conclusion.json visible_after_restart=false, persistence=NOT_PERSISTENT. SkillsConfig claim verified: codex-rs/config/src/skills_config.rs SkillsConfig struct (lines 40-56) has only bundled / include_instructions / max_context_tokens / config — no extraRoots field, so config.toml cannot persist it. ExtraRoots/set is runtime-only: catalog_processor.rs skills_extra_roots_set_response registers watcher roots, calls set_extra_roots, sends SkillsChanged; host_service.rs holds extra_roots in RwLock."
+    },
+    {
+      "criterion": "max_context_tokens directory cap behavior",
+      "status": "PASS",
+      "evidence": "context-cap.json: catalogStillListsSkill=true, modelReply=[\"NO_SKILLS\"], skillExcludedFromModel=true under [skills] max_context_tokens=1; p0-5b-summary-cap.json allPass=true. Code cross-check: render.rs skill_metadata_budget lines 169-195 (config cap 10_000, default 2% of context window), warning_message lines 140-156."
+    },
+    {
+      "criterion": "Acceptance: skill visible + triggerable; written persistence conclusion triggering F-2 adjudication",
+      "status": "PASS",
+      "evidence": "skills-persistence-conclusion.md + persistence-conclusion.json record NOT_PERSISTENT and F-2 adjudication ('not fork; product installer re-sets extraRoots each session, per #102'), with the product-side workaround feasibility backed by session1 (fresh process -> set -> visible)."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "minor",
+      "title": "Conclusion says budget overrun is warned, but stderr capture is empty",
+      "detail": "skills-persistence-conclusion.md section 5 states excluded skills are '剔除并告警' citing render.rs:140-156, while context-cap.json records budgetWarningInStderr: []. The mechanism exists in code (extension.rs emit_warning -> warnings channel, not engine stderr), so the cap criterion is still proven; the wording conflates a code-level warning path with an observed runtime stderr warning.",
+      "required_fix": "None required for acceptance. Optional: reword the conclusion to '剔除并（通过 warnings 通道）告警' or capture the warnings channel in the test instead of stderr."
+    },
+    {
+      "severity": "minor",
+      "title": "Runner script does not fail on phase failure",
+      "detail": "superagent/tests/p0-5b-run.sh sets 'set -uo pipefail' but not 'set -e'; phase exit codes are echoed, yet the script ends with '== P0-5b run done ==' and returns 0 even if a phase fails.",
+      "required_fix": "None required for this evidence commit. Optional: add 'set -e' or aggregate phase exit codes into the final exit status for CI."
+    },
+    {
+      "severity": "minor",
+      "title": "Mention/implicit and cap phases ship derived summaries, not raw turn captures",
+      "detail": "Unlike skills-session1/2.json (full engine trace), mention-implicit.json and context-cap.json are computed summaries. Reproducibility is carried by the committed p0_5b.py script, which is acceptable for a spike, and no success is fabricated (passphrase and NO_SKILLS replies are concrete).",
+      "required_fix": "None required."
+    }
+  ]
+}
