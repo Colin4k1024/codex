@@ -22,7 +22,24 @@ pub(super) struct ThreadUsageStatusHistory {
 }
 
 impl App {
-    pub(super) fn insert_history_cell(&mut self, tui: &mut tui::Tui, cell: Box<dyn HistoryCell>) {
+    pub(super) fn link_viewed_image(&self, cell: &mut dyn HistoryCell) {
+        if let Some(image) = cell
+            .as_any_mut()
+            .downcast_mut::<history_cell::ViewImageHistoryCell>()
+            && !self.app_server_target.uses_remote_workspace()
+            && crate::projectless::has_only_local_environments(&self.environment_manager)
+            && !crate::clipboard_copy::is_ssh_session()
+        {
+            image.link_local_image();
+        }
+    }
+
+    pub(super) fn insert_history_cell(
+        &mut self,
+        tui: &mut tui::Tui,
+        mut cell: Box<dyn HistoryCell>,
+    ) {
+        self.link_viewed_image(cell.as_mut());
         // Global deprecations can be delivered again by hidden threads. Scope deduplication to
         // retained history so clearing or rebuilding a transcript can show the notice again.
         if let Some(notice) = cell
@@ -121,7 +138,7 @@ impl App {
         &mut self,
         tui: &mut tui::Tui,
         thread_id: ThreadId,
-        request_id: u64,
+        request_id: Uuid,
         result: std::result::Result<crate::chatwidget::ThreadUsageOutcome, String>,
     ) -> Result<()> {
         let may_update_status = match &result {
@@ -292,10 +309,8 @@ impl App {
             return;
         }
 
-        self.chat_widget.add_info_message(
-            APP_THREAD_OPENED_MESSAGE.to_string(),
-            /*hint*/ None,
-        );
+        self.chat_widget
+            .add_info_message(APP_THREAD_OPENED_MESSAGE.to_string(), /*hint*/ None);
     }
 
     pub(super) fn clear_ui_header_lines_with_version(
@@ -323,6 +338,14 @@ impl App {
 
     pub(super) fn clear_ui_header_lines(&self, width: u16) -> Vec<Line<'static>> {
         self.clear_ui_header_lines_with_version(width, CODEX_CLI_VERSION)
+    }
+
+    pub(super) fn start_cleared_display(&mut self, tui: &mut tui::Tui) {
+        self.reset_terminal_display_state();
+        self.transcript_cells
+            .retain(|cell| !cell.as_any().is::<history_cell::ClearScreenHeader>());
+        let header = history_cell::ClearScreenHeader(self.clear_ui_header_cell(CODEX_CLI_VERSION));
+        self.insert_history_cell(tui, Box::new(header));
     }
 
     pub(super) fn queue_clear_ui_header(&mut self, tui: &mut tui::Tui) {
@@ -389,8 +412,12 @@ impl App {
     }
 
     pub(super) fn reset_transcript_state_after_clear(&mut self) {
-        self.overlay = None;
         self.transcript_cells.clear();
+        self.reset_terminal_display_state();
+    }
+
+    fn reset_terminal_display_state(&mut self) {
+        self.overlay = None;
         self.turn_tips.dismiss();
         self.chat_widget.warning_display_state.dismissed.clear();
         self.chat_widget.warning_display_state.transcript = Arc::default();
@@ -467,7 +494,9 @@ fn windows_app_launch_script(url: &str) -> String {
 $ErrorActionPreference = 'Stop'
 $url = {url}
 
-$package = Get-AppxPackage -Name OpenAI.Codex -ErrorAction SilentlyContinue
+$package = Get-AppxPackage -Name OpenAI.Codex -ErrorAction SilentlyContinue |
+    Where-Object {{ $_.PublisherId -in @('2p2nqsd0c76g0', '3k8sg7r9htsxt') }} |
+    Select-Object -First 1
 if ($null -eq $package) {{
     Write-Error 'Codex app package is not installed'
     exit 1

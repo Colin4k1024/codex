@@ -271,14 +271,8 @@ impl AppLogEvent {
 impl HandshakeOutcome {
     fn into_check(self) -> DoctorCheck {
         let (status, summary) = match self {
-            Self::Success => (
-                CheckStatus::Ok,
-                "the app-server initialized successfully",
-            ),
-            Self::Failure => (
-                CheckStatus::Fail,
-                "the app-server failed to initialize",
-            ),
+            Self::Success => (CheckStatus::Ok, "the app-server initialized successfully"),
+            Self::Failure => (CheckStatus::Fail, "the app-server failed to initialize"),
         };
 
         platform::app_check(HANDSHAKE_CHECK_ID, status, summary)

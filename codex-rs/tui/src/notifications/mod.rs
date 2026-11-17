@@ -1,5 +1,5 @@
 mod bel;
-mod osc9;
+mod osc;
 
 use std::io;
 
@@ -8,11 +8,12 @@ use codex_config::types::NotificationMethod;
 use codex_terminal_detection::TerminalInfo;
 use codex_terminal_detection::TerminalName;
 use codex_terminal_detection::terminal_info;
-use osc9::Osc9Backend;
+use osc::OscBackend;
+use osc::OscProtocol;
 
 #[derive(Debug)]
 pub enum AppNotificationBackend {
-    Osc9(Osc9Backend),
+    Osc(OscBackend),
     Bel(BelBackend),
 }
 
@@ -21,26 +22,30 @@ impl AppNotificationBackend {
         match method {
             NotificationMethod::Auto => {
                 if supports_osc9(&terminal_info()) {
-                    Self::Osc9(Osc9Backend::new())
+                    Self::Osc(OscBackend::new(OscProtocol::Osc9))
                 } else {
                     Self::Bel(BelBackend)
                 }
             }
-            NotificationMethod::Osc9 => Self::Osc9(Osc9Backend::new()),
+            NotificationMethod::Osc9 => Self::Osc(OscBackend::new(OscProtocol::Osc9)),
+            NotificationMethod::Osc777 => Self::Osc(OscBackend::new(OscProtocol::Osc777)),
             NotificationMethod::Bel => Self::Bel(BelBackend),
         }
     }
 
     pub fn method(&self) -> NotificationMethod {
         match self {
-            AppNotificationBackend::Osc9(_) => NotificationMethod::Osc9,
+            AppNotificationBackend::Osc(backend) => match backend.protocol {
+                OscProtocol::Osc9 => NotificationMethod::Osc9,
+                OscProtocol::Osc777 => NotificationMethod::Osc777,
+            },
             AppNotificationBackend::Bel(_) => NotificationMethod::Bel,
         }
     }
 
     pub fn notify(&mut self, message: &str) -> io::Result<()> {
         match self {
-            AppNotificationBackend::Osc9(backend) => backend.notify(message),
+            AppNotificationBackend::Osc(backend) => backend.notify(message),
             AppNotificationBackend::Bel(backend) => backend.notify(message),
         }
     }
@@ -72,6 +77,7 @@ mod tests {
 
     fn test_terminal(name: TerminalName) -> TerminalInfo {
         TerminalInfo {
+            backend: None,
             name,
             term_program: None,
             version: None,
@@ -81,19 +87,14 @@ mod tests {
     }
 
     #[test]
-    fn selects_osc9_method() {
-        assert!(matches!(
-            detect_backend(NotificationMethod::Osc9),
-            super::AppNotificationBackend::Osc9(_)
-        ));
-    }
-
-    #[test]
-    fn selects_bel_method() {
-        assert!(matches!(
-            detect_backend(NotificationMethod::Bel),
-            super::AppNotificationBackend::Bel(_)
-        ));
+    fn selects_explicit_notification_method() {
+        for method in [
+            NotificationMethod::Osc9,
+            NotificationMethod::Osc777,
+            NotificationMethod::Bel,
+        ] {
+            assert_eq!(detect_backend(method).method(), method);
+        }
     }
 
     #[test]

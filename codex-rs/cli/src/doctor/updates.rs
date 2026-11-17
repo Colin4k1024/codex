@@ -131,9 +131,7 @@ pub(super) async fn append_app_update(
     #[cfg(target_os = "macos")]
     let app_update_url = std::env::var_os("HOME")
         .map(PathBuf::from)
-        .map(|home| {
-            macos_app_update_url(&home, application, &os_info::get().version().to_string())
-        })
+        .map(|home| macos_app_update_url(&home, application, &os_info::get().version().to_string()))
         .unwrap_or_else(|| DESKTOP_UPDATE_URL.to_string());
     #[cfg(target_os = "windows")]
     let app_update_url = DESKTOP_UPDATE_URL;
@@ -183,9 +181,7 @@ pub(super) async fn append_app_update(
                             Ok(None) => {}
                             Err(error) => {
                                 update.status = update.status.max(CheckStatus::Warning);
-                                update
-                                    .details
-                                    .push(format!("app update manifest: {error}"));
+                                update.details.push(format!("app update manifest: {error}"));
                             }
                         },
                         Err(_) => {

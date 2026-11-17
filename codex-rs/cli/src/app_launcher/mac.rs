@@ -20,10 +20,7 @@ pub async fn run_mac_app_open_or_install(
     // When using a local DMG, install it directly (skip codesign verification for testing)
     if let Some(dmg_path) = local_dmg {
         if !dmg_path.exists() {
-            anyhow::bail!(
-                "local DMG not found at {}",
-                dmg_path.display()
-            );
+            anyhow::bail!("local DMG not found at {}", dmg_path.display());
         }
         eprintln!(
             "Using local DMG at {dmg_path} (skipping code signature verification)...",
@@ -409,10 +406,7 @@ async fn open_codex_app_local(app_path: &Path, workspace: &Path) -> anyhow::Resu
         if let Ok(contents) = std::fs::read_to_string(&service_file) {
             if let Ok(info) = serde_json::from_str::<serde_json::Value>(&contents) {
                 if let Some(url) = info.get("url").and_then(|v| v.as_str()) {
-                    eprintln!(
-                        "Codex app adapter running at {url} (pid: {pid})",
-                        url = url
-                    );
+                    eprintln!("Codex app adapter running at {url} (pid: {pid})", url = url);
                     return Ok(());
                 }
             }

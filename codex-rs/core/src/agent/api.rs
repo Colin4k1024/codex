@@ -39,6 +39,12 @@ const _: Option<&dyn AgentControl> = None;
 /// remote ownership, retries and recovery are separate backend work.
 /// Boxed Send futures allow callers to use `Arc<dyn AgentControl>`.
 pub trait AgentControl: Send + Sync {
+    /// Expose the account only when this controller actually owns native billing.
+    /// External controllers keep their own ledger and need not provide a numeric read.
+    fn native_rollout_budget(&self) -> Option<std::sync::Arc<crate::RolloutBudget>> {
+        None
+    }
+
     fn identity(&self) -> SessionId;
 
     /// Resolve an ID or a name relative to the caller's captured source, without loading.
@@ -70,10 +76,7 @@ pub trait AgentControl: Send + Sync {
 
     /// Take queued, non-turn-starting mail in order, without loading the recipient.
     /// This in-memory operation performs no I/O; returning transfers ownership to the caller.
-    fn take_mailbox(
-        &self,
-        agent: ThreadId,
-    ) -> Vec<codex_protocol::protocol::InterAgentCommunication>;
+    fn take_mailbox(&self, agent: ThreadId) -> Vec<crate::PendingAgentMessage>;
 
     /// Observe whether unread mail is available. Subscribe before the first read so
     /// arrivals cannot be missed; notifications do not consume mail or start a turn.
@@ -127,7 +130,11 @@ pub trait AgentControl: Send + Sync {
     /// Account for one inference response, including compaction. Each call records usage;
     /// callers report it once. `SessionBudgetExceeded` means the usage was recorded and
     /// the shared budget is now exhausted.
-    fn record_usage(&self, usage: TokenUsage) -> BoxFuture<'_, Result<()>>;
+    fn record_usage(
+        &self,
+        usage: Option<TokenUsage>,
+        hook_charge: codex_hooks::HookCharge,
+    ) -> BoxFuture<'_, Result<()>>;
 
     /// Report the terminal result to the parent and completion activity to the task
     /// initiator. Local delivery remains best effort and uses the reporting runtime's
@@ -235,6 +242,7 @@ pub struct DeliveryReceipt {
     pub submission_id: String,
 }
 
+#[derive(Clone)]
 pub struct AgentTurnOutcome {
     pub thread_id: ThreadId,
     pub turn_id: String,

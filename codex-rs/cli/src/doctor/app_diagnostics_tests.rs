@@ -28,10 +28,7 @@ fn current_app_session_reports_the_latest_local_handshake() {
     assert!(running);
     assert_eq!(check.id, "app.app_server.handshake");
     assert_eq!(check.status, CheckStatus::Ok);
-    assert_eq!(
-        check.summary,
-        "the app-server initialized successfully"
-    );
+    assert_eq!(check.summary, "the app-server initialized successfully");
 }
 
 #[test]

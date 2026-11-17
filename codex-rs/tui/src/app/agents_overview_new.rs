@@ -2,6 +2,7 @@
 //! Worktrees start at the repository default branch and bind only the new session.
 
 use super::*;
+use crate::app_server_session::is_server_shutting_down_error;
 use crate::startup_draft::StartupDraftInitialScreen;
 use crate::startup_draft::StartupDraftPump;
 use crate::startup_draft::StartupDraftSessionAction;
@@ -55,7 +56,7 @@ impl App {
                 Box::new(StartupDraftPump::new(
                     tui,
                     StartupDraftInitialScreen::Composer,
-                    StartupDraftSessionAction::NewFromCommandCenter,
+                    StartupDraftSessionAction::NewWhileRunning,
                 ))
             });
         let mut display_config = self.chat_widget.config_ref().clone();
@@ -113,9 +114,14 @@ impl App {
             }
             return Ok(AppRunControl::Continue);
         }
-        let Some((config, remote_cwd)) = self
-            .agents_overview_session_config(tui, app_server, cwd, startup_draft.as_deref_mut())
-            .await
+        // Keep folder consent and config loading off the session-start stack frame.
+        let Some((config, remote_cwd)) = Box::pin(self.agents_overview_session_config(
+            tui,
+            app_server,
+            cwd,
+            startup_draft.as_deref_mut(),
+        ))
+        .await
         else {
             if let Some((_, checkout)) = &managed_worktree {
                 self.agents_overview_retained_worktree_error(
@@ -161,23 +167,17 @@ impl App {
                 /*session_start_source*/ None,
                 remote_cwd.as_deref(),
                 selected_profile.as_ref(),
+                self.backend_preference_context.local_cwd.as_deref(),
             )),
         )
         .await;
         let started = match result {
             Ok(started) => started,
             Err(error) => {
-                // Older servers omit the reason. Only use their specific message when
-                // data is absent, so other invalid requests aren't misclassified.
                 let (title, message) = if matches!(
                     error.downcast_ref::<TypedRequestError>(),
                     Some(TypedRequestError::Server { source, .. })
-                        if source.code == -32600
-                            && match &source.data {
-                                Some(data) => data.get("reason").and_then(serde_json::Value::as_str)
-                                    == Some("serverShuttingDown"),
-                                None => source.message == "Server is draining; retry after reconnecting",
-                            }
+                        if is_server_shutting_down_error(source)
                 ) {
                     let mut message = String::from(
                         "New sessions are paused while active turns finish or are canceled. The default shutdown wait is up to one minute.",
@@ -221,6 +221,8 @@ impl App {
                 return Ok(AppRunControl::Continue);
             }
         }
+        self.backend_registry
+            .register_started(app_server.backend_id(), &started)?;
         self.agents_overview
             .blank_sessions
             .insert(thread_id, started.clone());
@@ -260,12 +262,10 @@ impl App {
         {
             return;
         }
-        if !self.config.features.enabled(Feature::Worktrees)
-            || crate::uses_remote_workspace_or_environment(
-                &self.app_server_target,
-                self.environment_manager.as_ref(),
-            )
-        {
+        if crate::uses_remote_workspace_or_environment(
+            &self.app_server_target,
+            self.environment_manager.as_ref(),
+        ) {
             self.add_agents_overview_error(
                 "Managed worktrees require local worktree support.".to_string(),
             );

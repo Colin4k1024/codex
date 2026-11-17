@@ -38,9 +38,8 @@ impl RepositoryFixture {
     }
 
     fn manager(&self) -> WorktreeManager {
-        let settings =
-            WorktreeSettings::from_app_config(&self.codex_home, /*app*/ None)
-                .expect("load default worktree settings");
+        let settings = WorktreeSettings::from_app_config(&self.codex_home, /*app*/ None)
+            .expect("load default worktree settings");
         WorktreeManager::new(settings)
     }
 }
@@ -620,11 +619,9 @@ fn creation_rolls_back_when_the_base_lacks_the_source_subdirectory() {
 fn creation_rejects_relative_roots_before_resolving_the_source() {
     let directory = TempDir::new().expect("create temporary directory");
     let source = directory.path().join("missing-source");
-    let settings = WorktreeSettings::from_app_config(
-        Path::new("relative-codex-home"),
-        /*app*/ None,
-    )
-    .expect("load settings with a relative default root");
+    let settings =
+        WorktreeSettings::from_app_config(Path::new("relative-codex-home"), /*app*/ None)
+            .expect("load settings with a relative default root");
     let error = create_worktree(&WorktreeManager::new(settings), &source, /*base*/ None)
         .expect_err("relative roots must fail before source discovery");
 

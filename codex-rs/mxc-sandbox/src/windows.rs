@@ -1,17 +1,22 @@
 //! Resolve executor-local state and launch the decoded MXC helper request.
 
 use std::collections::HashMap;
+use std::os::windows::ffi::OsStrExt;
+use std::path::Path;
 use std::path::PathBuf;
 
 use anyhow::Result;
 use anyhow::ensure;
+use codex_utils_path_uri::PathUri;
 use windows_sys::Win32::Foundation::RPC_E_CHANGED_MODE;
+use windows_sys::Win32::Storage::FileSystem::GetDriveTypeW;
 use windows_sys::Win32::Storage::FileSystem::GetLogicalDrives;
 use windows_sys::Win32::System::Com::COINIT_MULTITHREADED;
 use windows_sys::Win32::System::Com::CoInitializeEx;
 use windows_sys::Win32::System::Com::CoTaskMemFree;
 use windows_sys::Win32::System::Com::CoUninitialize;
 use windows_sys::Win32::System::SystemInformation::GetWindowsDirectoryW;
+use windows_sys::Win32::System::WindowsProgramming::DRIVE_REMOTE;
 use windows_sys::Win32::UI::Shell::FOLDERID_ProgramData;
 use windows_sys::Win32::UI::Shell::FOLDERID_ProgramFiles;
 use windows_sys::Win32::UI::Shell::FOLDERID_ProgramFilesX86;
@@ -26,6 +31,9 @@ impl Drop for ComUninitializeGuard {
 }
 
 pub(super) fn run() -> Result<i32> {
+    if let Some(codex_home) = std::env::args_os().nth(2) {
+        codex_windows_sandbox::init_runtime_log(Path::new(&codex_home));
+    }
     ensure!(
         crate::is_available(),
         "native MXC is unavailable on this Windows build"
@@ -83,6 +91,30 @@ pub(super) fn volume_roots(
         }
     }
     Ok(volumes)
+}
+
+// Default reads cover local volumes and cwd shares, not unrelated network shares.
+// Explicit grants follow the normal policy path.
+pub(super) fn implicit_read_roots(
+    volume_roots: &[PathBuf],
+    policy_cwd: &Path,
+    command_cwd: &Path,
+) -> std::io::Result<Vec<PathUri>> {
+    volume_roots
+        .iter()
+        .filter(|root| {
+            let wide = root
+                .as_os_str()
+                .encode_wide()
+                .chain([0])
+                .collect::<Vec<_>>();
+            let drive_type = unsafe { GetDriveTypeW(wide.as_ptr()) };
+            drive_type != DRIVE_REMOTE
+                || policy_cwd.starts_with(root)
+                || command_cwd.starts_with(root)
+        })
+        .map(PathUri::from_host_native_path)
+        .collect()
 }
 
 fn platform_read_roots() -> Result<Vec<PathBuf>> {
