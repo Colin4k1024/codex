@@ -1,0 +1,190 @@
+{
+  "success": {
+    "params": {
+      "command": [
+        "python3",
+        "-c",
+        "print('gate-ok')"
+      ],
+      "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-psd11vxl",
+      "sandboxPolicy": {
+        "type": "workspaceWrite",
+        "writableRoots": [
+          "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-psd11vxl"
+        ],
+        "networkAccess": false
+      }
+    },
+    "response": {
+      "id": 2,
+      "result": {
+        "exitCode": 0,
+        "stdout": "gate-ok\n",
+        "stderr": ""
+      }
+    },
+    "pass": true
+  },
+  "failure": {
+    "params": {
+      "command": [
+        "python3",
+        "-c",
+        "import sys; sys.exit(3)"
+      ],
+      "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-psd11vxl",
+      "sandboxPolicy": {
+        "type": "workspaceWrite",
+        "writableRoots": [
+          "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-psd11vxl"
+        ],
+        "networkAccess": false
+      }
+    },
+    "response": {
+      "id": 3,
+      "result": {
+        "exitCode": 3,
+        "stdout": "",
+        "stderr": ""
+      }
+    },
+    "pass": true
+  },
+  "timeout": {
+    "params": {
+      "command": [
+        "sleep",
+        "10"
+      ],
+      "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-psd11vxl",
+      "sandboxPolicy": {
+        "type": "workspaceWrite",
+        "writableRoots": [
+          "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-psd11vxl"
+        ],
+        "networkAccess": false
+      },
+      "timeoutMs": 1500
+    },
+    "response": {
+      "id": 4,
+      "result": {
+        "exitCode": 124,
+        "stdout": "",
+        "stderr": ""
+      }
+    },
+    "pass": true,
+    "observed": {
+      "exitCode": 124,
+      "stdout": "",
+      "stderr": ""
+    }
+  },
+  "cancel": {
+    "params": {
+      "command": [
+        "sleep",
+        "30"
+      ],
+      "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-psd11vxl",
+      "sandboxPolicy": {
+        "type": "workspaceWrite",
+        "writableRoots": [
+          "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-psd11vxl"
+        ],
+        "networkAccess": false
+      },
+      "processId": "p07-cancel-probe"
+    },
+    "terminateResponse": {
+      "id": 6,
+      "result": {}
+    },
+    "execResponse": {
+      "id": 5,
+      "result": {
+        "exitCode": 137,
+        "stdout": "",
+        "stderr": ""
+      }
+    },
+    "sleepBeforeTerminate": "68056 sleep 30",
+    "sleepAfterTerminate": "",
+    "pass": true
+  },
+  "escapeWrite": {
+    "params": {
+      "command": [
+        "python3",
+        "-c",
+        "open('/Users/fanjia/p0-7-escape-probe.txt', 'w').write('escaped')"
+      ],
+      "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-psd11vxl",
+      "sandboxPolicy": {
+        "type": "workspaceWrite",
+        "writableRoots": [
+          "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-psd11vxl"
+        ],
+        "networkAccess": false
+      }
+    },
+    "response": {
+      "id": 7,
+      "result": {
+        "exitCode": 1,
+        "stdout": "",
+        "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    open('/Users/fanjia/p0-7-escape-probe.txt', 'w').write('escaped')\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nPermissionError: [Errno 1] Operation not permitted: '/Users/fanjia/p0-7-escape-probe.txt'\n"
+      }
+    },
+    "escapeFileExists": false,
+    "pass": true
+  },
+  "networkBlocked": {
+    "params": {
+      "command": [
+        "python3",
+        "-c",
+        "import urllib.request; urllib.request.urlopen('https://example.com', timeout=8); print('NET-OK')"
+      ],
+      "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-psd11vxl",
+      "sandboxPolicy": {
+        "type": "workspaceWrite",
+        "writableRoots": [
+          "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-psd11vxl"
+        ],
+        "networkAccess": false
+      }
+    },
+    "response": {
+      "id": 8,
+      "result": {
+        "exitCode": 1,
+        "stdout": "",
+        "stderr": "Traceback (most recent call last):\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/urllib/request.py\", line 1321, in do_open\n    h.request(req.get_method(), req.selector, req.data, headers,\n    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n              encode_chunked=req.has_header('Transfer-encoding'))\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/client.py\", line 1367, in request\n    self._send_request(method, url, body, headers, encode_chunked)\n    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/client.py\", line 1413, in _send_request\n    self.endheaders(body, encode_chunked=encode_chunked)\n    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/client.py\", line 1362, in endheaders\n    self._send_output(message_body, encode_chunked=encode_chunked)\n    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/client.py\", line 1122, in _send_output\n    self.send(msg)\n    ~~~~~~~~~^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/client.py\", line 1066, in send\n    self.connect()\n    ~~~~~~~~~~~~^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/client.py\", line 1501, in connect\n    super().connect()\n    ~~~~~~~~~~~~~~~^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/client.py\", line 1032, in connect\n    self.sock = self._create_connection(\n                ~~~~~~~~~~~~~~~~~~~~~~~^\n        (self.host,self.port), self.timeout, self.source_address)\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socket.py\", line 874, in create_connection\n    raise exceptions[0]\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socket.py\", line 859, in create_connection\n    sock.connect(sa)\n    ~~~~~~~~~~~~^^^^\nPermissionError: [Errno 1] Operation not permitted\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import urllib.request; urllib.request.urlopen('https://example.com', timeout=8); print('NET-OK')\n                           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/urllib/request.py\", line 187, in urlopen\n    return opener.open(url, data, timeout)\n           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/urllib/request.py\", line 487, in open\n    response = self._open(req, data)\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/urllib/request.py\", line 504, in _open\n    result = self._call_chain(self.handle_open, protocol, protocol +\n                              '_open', req)\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/urllib/request.py\", line 464, in _call_chain\n    result = func(*args)\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/urllib/request.py\", line 1369, in https_open\n    return self.do_open(http.client.HTTPSConnection, req,\n           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                        context=self._context)\n                        ^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/lib/python3.14/urllib/request.py\", line 1324, in do_open\n    raise URLError(err)\nurllib.error.URLError: <urlopen error [Errno 1] Operation not permitted>\n"
+      }
+    },
+    "pass": true
+  },
+  "invalidPolicyBlocked": {
+    "params": {
+      "sandboxPolicy": {
+        "type": "workspaceWrite",
+        "writableRoots": [
+          "relative/not-absolute"
+        ],
+        "networkAccess": false
+      }
+    },
+    "response": {
+      "error": {
+        "code": -32600,
+        "message": "Invalid request: AbsolutePathBuf deserialized without a base path"
+      },
+      "id": 9
+    },
+    "markerExists": false,
+    "pass": true
+  }
+}

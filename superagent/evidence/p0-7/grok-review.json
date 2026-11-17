@@ -1,0 +1,5 @@
+{
+  "verdict": "APPROVE",
+  "summary": "commit 范围仅含 superagent 证据与测试改动，未触碰 codex-rs core。对照 #70 逐条核查：① 成功/失败/超时/取消四态均有真实 command/exec 响应（exitCode 0/3/124/137），退出码可用于门禁判定；② 越权写（escapeWrite：PermissionError，escapeFileExists=false）与网络限制（networkBlocked：NET-OK 未出现在 stdout，exitCode=1）均被沙箱阻止；③ 所有用例显式传入 sandboxPolicy，相对路径 writableRoot 等无法表达的策略返回结构化错误且标记文件未落地，证明 fail-closed、未退回宿主 shell；④ 取消后 pgrep 前后对比（sleepBeforeTerminate='68056 sleep 30' → sleepAfterTerminate=''）证明子进程被清理。验收三要素（退出码可靠、越权被阻、取消有清理证据）均满足。p0_7.py 中 networkBlocked 判定从整段 JSON 改为仅检查 stdout，是为避免 stderr traceback 回显源码中 'NET-OK' 字面量造成假失败，属测试修正而非弱化验收。未发现伪造成功、密钥泄露或越界改动。",
+  "findings": []
+}

@@ -1,0 +1,35 @@
+{
+  "workspace": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-psd11vxl",
+  "sandboxPolicy": {
+    "type": "workspaceWrite",
+    "writableRoots": [
+      "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-psd11vxl"
+    ],
+    "networkAccess": false
+  },
+  "cases": {
+    "success": {
+      "pass": true
+    },
+    "failure": {
+      "pass": true
+    },
+    "timeout": {
+      "pass": true
+    },
+    "cancel": {
+      "pass": true
+    },
+    "escapeWrite": {
+      "pass": true
+    },
+    "networkBlocked": {
+      "pass": true
+    },
+    "invalidPolicyBlocked": {
+      "pass": true
+    }
+  },
+  "outputDeltaCount": 0,
+  "allPass": true
+}
