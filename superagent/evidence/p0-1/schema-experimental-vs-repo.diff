@@ -1,0 +1,180 @@
+Files /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/ClientRequest.json and /Users/fanjia/Desktop/code/codex/codex-rs/app-server-protocol/schema/json/ClientRequest.json differ
+Files /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/CommandExecutionRequestApprovalParams.json and /Users/fanjia/Desktop/code/codex/codex-rs/app-server-protocol/schema/json/CommandExecutionRequestApprovalParams.json differ
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental: FuzzyFileSearchSessionStartParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental: FuzzyFileSearchSessionStartResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental: FuzzyFileSearchSessionStopParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental: FuzzyFileSearchSessionStopResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental: FuzzyFileSearchSessionUpdateParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental: FuzzyFileSearchSessionUpdateResponse.json
+Files /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/McpServerElicitationRequestParams.json and /Users/fanjia/Desktop/code/codex/codex-rs/app-server-protocol/schema/json/McpServerElicitationRequestParams.json differ
+Files /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/ServerNotification.json and /Users/fanjia/Desktop/code/codex/codex-rs/app-server-protocol/schema/json/ServerNotification.json differ
+Files /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/ServerRequest.json and /Users/fanjia/Desktop/code/codex/codex-rs/app-server-protocol/schema/json/ServerRequest.json differ
+Files /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/codex_app_server_protocol.schemas.json and /Users/fanjia/Desktop/code/codex/codex-rs/app-server-protocol/schema/json/codex_app_server_protocol.schemas.json differ
+Files /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/codex_app_server_protocol.v2.schemas.json and /Users/fanjia/Desktop/code/codex/codex-rs/app-server-protocol/schema/json/codex_app_server_protocol.v2.schemas.json differ
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: AccountSessionsListParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: AccountSessionsResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: AccountSessionsSwitchParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: AccountSessionsSwitchResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: BedrockCheckGovCloudRequirementsParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: BedrockCheckGovCloudRequirementsResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: BedrockDiscoverParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: BedrockDiscoverResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: BedrockSetupParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: BedrockSetupResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: CollaborationModeListParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: CollaborationModeListResponse.json
+Files /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2/CommandExecParams.json and /Users/fanjia/Desktop/code/codex/codex-rs/app-server-protocol/schema/json/v2/CommandExecParams.json differ
+Files /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2/ConfigReadResponse.json and /Users/fanjia/Desktop/code/codex/codex-rs/app-server-protocol/schema/json/v2/ConfigReadResponse.json differ
+Files /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2/ConfigRequirementsReadResponse.json and /Users/fanjia/Desktop/code/codex/codex-rs/app-server-protocol/schema/json/v2/ConfigRequirementsReadResponse.json differ
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: EnvironmentAddParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: EnvironmentAddResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: EnvironmentInfoParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: EnvironmentInfoResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: EnvironmentStatusParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: EnvironmentStatusResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: GcpSetupParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: GcpSetupResponse.json
+Files /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2/GetAccountResponse.json and /Users/fanjia/Desktop/code/codex/codex-rs/app-server-protocol/schema/json/v2/GetAccountResponse.json differ
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: McpServerEventStreamStartParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: McpServerEventStreamStartResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: McpServerEventStreamStopParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: McpServerEventStreamStopResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: MemoryResetResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: MemoryStatusParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: MemoryStatusResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: MockExperimentalMethodParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: MockExperimentalMethodResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: NullableRemoteControlDisableParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: NullableRemoteControlEnableParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: PluginSearchParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: PluginSearchResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ProcessKillParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ProcessKillResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ProcessResizePtyParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ProcessResizePtyResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ProcessSpawnParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ProcessSpawnResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ProcessWriteStdinParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ProcessWriteStdinResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ProjectCreateParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ProjectCreateResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ProjectDeleteParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ProjectDeleteResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ProjectImportParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ProjectImportResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ProjectListParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ProjectListResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ProjectMoveParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ProjectMoveResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ProjectReadParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ProjectReadResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ProjectUpdateParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ProjectUpdateResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: RemoteControlClientsListParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: RemoteControlClientsListResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: RemoteControlClientsRevokeParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: RemoteControlClientsRevokeResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: RemoteControlDisableResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: RemoteControlEnableResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: RemoteControlPairingStartParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: RemoteControlPairingStartResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: RemoteControlPairingStatusParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: RemoteControlPairingStatusResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: RemoteControlStatusReadResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: RolloutCompressResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ServerDiagnosticsParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ServerDiagnosticsResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadBackgroundTerminalsCleanParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadBackgroundTerminalsCleanResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadBackgroundTerminalsListParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadBackgroundTerminalsListResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadBackgroundTerminalsTerminateParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadBackgroundTerminalsTerminateResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadDecrementElicitationParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadDecrementElicitationResponse.json
+Files /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2/ThreadForkParams.json and /Users/fanjia/Desktop/code/codex/codex-rs/app-server-protocol/schema/json/v2/ThreadForkParams.json differ
+Files /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2/ThreadForkResponse.json and /Users/fanjia/Desktop/code/codex/codex-rs/app-server-protocol/schema/json/v2/ThreadForkResponse.json differ
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadGuardianReviewParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadGuardianReviewResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadIncrementElicitationParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadIncrementElicitationResponse.json
+Files /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2/ThreadItemsListParams.json and /Users/fanjia/Desktop/code/codex/codex-rs/app-server-protocol/schema/json/v2/ThreadItemsListParams.json differ
+Files /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2/ThreadItemsListResponse.json and /Users/fanjia/Desktop/code/codex/codex-rs/app-server-protocol/schema/json/v2/ThreadItemsListResponse.json differ
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadItemsReadParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadItemsReadResponse.json
+Files /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2/ThreadListParams.json and /Users/fanjia/Desktop/code/codex/codex-rs/app-server-protocol/schema/json/v2/ThreadListParams.json differ
+Files /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2/ThreadListResponse.json and /Users/fanjia/Desktop/code/codex/codex-rs/app-server-protocol/schema/json/v2/ThreadListResponse.json differ
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadMemoryModeSetParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadMemoryModeSetResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadMemoryReadParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadMemoryReadResponse.json
+Files /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2/ThreadMetadataUpdateParams.json and /Users/fanjia/Desktop/code/codex/codex-rs/app-server-protocol/schema/json/v2/ThreadMetadataUpdateParams.json differ
+Files /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2/ThreadMetadataUpdateResponse.json and /Users/fanjia/Desktop/code/codex/codex-rs/app-server-protocol/schema/json/v2/ThreadMetadataUpdateResponse.json differ
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadPredictionRequestParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadPredictionRequestResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadPrepareApprovedPlanParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadPrepareApprovedPlanResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadQueueAddParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadQueueAddResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadQueueDeleteParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadQueueDeleteResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadQueueListParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadQueueListResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadQueueReorderParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadQueueReorderResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadQueueStartParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadQueueStartResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadQueueUpdateParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadQueueUpdateResponse.json
+Files /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2/ThreadReadResponse.json and /Users/fanjia/Desktop/code/codex/codex-rs/app-server-protocol/schema/json/v2/ThreadReadResponse.json differ
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadReadStateUpdateParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadReadStateUpdateResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadRealtimeAppendAudioParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadRealtimeAppendAudioResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadRealtimeAppendSpeechParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadRealtimeAppendSpeechResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadRealtimeAppendTextParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadRealtimeAppendTextResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadRealtimeListParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadRealtimeListResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadRealtimeListVoicesParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadRealtimeListVoicesResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadRealtimeStartParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadRealtimeStartResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadRealtimeStopParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadRealtimeStopResponse.json
+Files /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2/ThreadResumeParams.json and /Users/fanjia/Desktop/code/codex/codex-rs/app-server-protocol/schema/json/v2/ThreadResumeParams.json differ
+Files /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2/ThreadResumeResponse.json and /Users/fanjia/Desktop/code/codex/codex-rs/app-server-protocol/schema/json/v2/ThreadResumeResponse.json differ
+Files /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2/ThreadRevertResponse.json and /Users/fanjia/Desktop/code/codex/codex-rs/app-server-protocol/schema/json/v2/ThreadRevertResponse.json differ
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadSampleCancelParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadSampleCancelResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadSampleParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadSampleResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadSearchOccurrencesParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadSearchOccurrencesResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadSearchParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadSearchResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadSettingsUpdateParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadSettingsUpdateResponse.json
+Files /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2/ThreadSettingsUpdatedNotification.json and /Users/fanjia/Desktop/code/codex/codex-rs/app-server-protocol/schema/json/v2/ThreadSettingsUpdatedNotification.json differ
+Files /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2/ThreadStartParams.json and /Users/fanjia/Desktop/code/codex/codex-rs/app-server-protocol/schema/json/v2/ThreadStartParams.json differ
+Files /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2/ThreadStartResponse.json and /Users/fanjia/Desktop/code/codex/codex-rs/app-server-protocol/schema/json/v2/ThreadStartResponse.json differ
+Files /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2/ThreadStartedNotification.json and /Users/fanjia/Desktop/code/codex/codex-rs/app-server-protocol/schema/json/v2/ThreadStartedNotification.json differ
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadTimelineListParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: ThreadTimelineListResponse.json
+Files /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2/ThreadUnarchiveResponse.json and /Users/fanjia/Desktop/code/codex/codex-rs/app-server-protocol/schema/json/v2/ThreadUnarchiveResponse.json differ
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: TurnSettingsUpdateParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: TurnSettingsUpdateResponse.json
+Files /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2/TurnStartParams.json and /Users/fanjia/Desktop/code/codex/codex-rs/app-server-protocol/schema/json/v2/TurnStartParams.json differ
+Files /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2/TurnSteerParams.json and /Users/fanjia/Desktop/code/codex/codex-rs/app-server-protocol/schema/json/v2/TurnSteerParams.json differ
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: UserVerificationCancelParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: UserVerificationCancelResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: UserVerificationDeleteParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: UserVerificationDeleteResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: UserVerificationEnrollParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: UserVerificationEnrollResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: UserVerificationRpcError.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: UserVerificationStatusParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: UserVerificationStatusResponse.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: UserVerificationVerifyParams.json
+Only in /Users/fanjia/Desktop/code/codex/superagent/evidence/p0-1/schema-engine-experimental/v2: UserVerificationVerifyResponse.json

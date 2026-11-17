@@ -1,0 +1,16 @@
+{
+  "engine_name": "superagent-engine",
+  "source_repo": "Colin4k1024/codex",
+  "source_commit": "425a848a9ce98dd31dda1adb62e2edd56ef26765",
+  "engine_sha256": "2421b8b5605f7487c092d8988c8eb941827448b15cf5c87802e6d99fa4ad6a2f",
+  "code_mode_host_sha256": "c5dd418686ee2fef22b223f1ea54c063e18074a9fadc97bf83c00a28cc7c27bb",
+  "v8_artifact_source": "https://github.com/openai/codex/releases/tag/rusty-v8-v152.2.0 (ptrcomp_sandbox release, aarch64-apple-darwin)",
+  "schema_bundle_sha256": "69a699528d65d5d5ead524f37f491114fd177147ba73869285783432b830e404",
+  "schema_default_tar_sha256": "e54491bc8cfc9ab01da8dd350707c9fc40b084d5a9cac1aa43c9fc996a3821ff",
+  "schema_experimental_tar_sha256": "af8823178f93bfa58e4d5f2354c119613059a011605e6925dc2201c5aef654ca",
+  "platform": "Darwin arm64",
+  "build_profile": "release",
+  "codex_home": "/Users/fanjia/Library/Application Support/SuperAgent/codex-home",
+  "auth_mode": "explicit-reuse-copy-from-~/.codex (2026-11-17 goal decision)",
+  "rename_reason": "endpoint security SIGKILLs processes named codex (exit 137); renamed binary verified runnable"
+}

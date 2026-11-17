@@ -1,0 +1,15 @@
+# Product engine binary (419MB; reproducible from source_commit + engine_sha256 in evidence)
+packaging/superagent-engine
+packaging/codex-code-mode-host
+# Credentials and live state — never commit
+**/auth.json
+**/home-b/
+**/*.sqlite
+**/*.sqlite-*
+**/codex-home/
+# Raw generated schema dirs (archived as *.tar.gz in evidence)
+evidence/p0-1/schema-engine/
+evidence/p0-1/schema-engine-experimental/
+# Python cache
+__pycache__/
+*.pyc
