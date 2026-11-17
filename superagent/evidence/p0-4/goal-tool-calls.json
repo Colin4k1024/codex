@@ -1,0 +1,5 @@
+{
+  "prompt": "You have goal tools available: create_goal, get_goal, update_goal. Call them in this exact order, actually invoking the tools (do not just describe them): 1) create_goal with objective 'P04C-TOOL-PROBE'; 2) get_goal and note the returned status; 3) update_goal to record progress 'halfway done'; 4) get_goal again. Then reply with exactly GOAL-TOOLS-OK.",
+  "goalCalls": [],
+  "allFunctionCallCount": 1
+}

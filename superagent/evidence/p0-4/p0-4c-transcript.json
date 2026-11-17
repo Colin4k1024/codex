@@ -1,0 +1,1032 @@
+{
+  "results": [
+    {
+      "id": 2,
+      "result": {
+        "thread": {
+          "id": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+          "environments": [
+            {
+              "environmentId": "local",
+              "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p04c-work-8_tvfr7o",
+              "runtimeWorkspaceRoots": [
+                "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p04c-work-8_tvfr7o"
+              ]
+            }
+          ],
+          "extra": null,
+          "sessionId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+          "forkedFromId": null,
+          "attachedToThreadId": null,
+          "parentThreadId": null,
+          "preview": "",
+          "ephemeral": false,
+          "section": null,
+          "sectionEnteredAt": null,
+          "projectId": null,
+          "historyMode": "paginated",
+          "modelProvider": "openai",
+          "model": "gpt-6-astra",
+          "reasoningEffort": null,
+          "createdAt": 1794919597,
+          "updatedAt": 1794919597,
+          "recencyAt": 1794919597,
+          "status": {
+            "type": "idle"
+          },
+          "path": "/Users/<user>/Library/Application Support/SuperAgent/codex-home/sessions/2026/11/17/rollout-2026-11-17T20-46-37-01a1e98b-869e-7ea1-a07c-3e6ba8eacc05.jsonl",
+          "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p04c-work-8_tvfr7o",
+          "cliVersion": "0.0.0",
+          "originator": "superagent-spike",
+          "source": "vscode",
+          "canAcceptDirectInput": true,
+          "threadSource": null,
+          "agentNickname": null,
+          "agentRole": null,
+          "gitInfo": null,
+          "name": null,
+          "daybreakEnabled": null,
+          "turns": []
+        },
+        "model": "gpt-6-astra",
+        "modelProvider": "openai",
+        "serviceTier": null,
+        "disabledPluginIds": [],
+        "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p04c-work-8_tvfr7o",
+        "runtimeWorkspaceRoots": [
+          "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p04c-work-8_tvfr7o"
+        ],
+        "instructionSources": [],
+        "approvalPolicy": "never",
+        "approvalsReviewer": "user",
+        "sandbox": {
+          "type": "workspaceWrite",
+          "writableRoots": [],
+          "networkAccess": false,
+          "excludeTmpdirEnvVar": false,
+          "excludeSlashTmp": false
+        },
+        "activePermissionProfile": null,
+        "reasoningEffort": null,
+        "multiAgentMode": "explicitRequestOnly"
+      }
+    },
+    {
+      "id": 3,
+      "result": {
+        "turn": {
+          "id": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+          "rootTurnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+          "items": [],
+          "itemsView": "notLoaded",
+          "status": "inProgress",
+          "error": null,
+          "startedAt": null,
+          "completedAt": null,
+          "durationMs": null
+        }
+      }
+    }
+  ],
+  "initialize": {
+    "id": 1,
+    "result": {
+      "userAgent": "superagent-spike/0.0.0 (Mac OS 26.6.2; arm64) xterm-256color (superagent-spike; 0.1.0)",
+      "codexHome": "<scrubbed>",
+      "platformFamily": "unix",
+      "platformOs": "macos"
+    }
+  },
+  "notifications": [
+    {
+      "method": "remoteControl/status/changed",
+      "params": {
+        "status": "disabled",
+        "serverName": "<scrubbed>",
+        "installationId": "<scrubbed>",
+        "environmentId": null
+      },
+      "emittedAtMs": 1794919597723
+    },
+    {
+      "method": "thread/started",
+      "params": {
+        "thread": {
+          "id": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+          "environments": [
+            {
+              "environmentId": "local",
+              "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p04c-work-8_tvfr7o",
+              "runtimeWorkspaceRoots": [
+                "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p04c-work-8_tvfr7o"
+              ]
+            }
+          ],
+          "extra": null,
+          "sessionId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+          "forkedFromId": null,
+          "attachedToThreadId": null,
+          "parentThreadId": null,
+          "preview": "",
+          "ephemeral": false,
+          "section": null,
+          "sectionEnteredAt": null,
+          "projectId": null,
+          "historyMode": "paginated",
+          "modelProvider": "openai",
+          "model": "gpt-6-astra",
+          "reasoningEffort": null,
+          "createdAt": 1794919597,
+          "updatedAt": 1794919597,
+          "recencyAt": 1794919597,
+          "status": {
+            "type": "idle"
+          },
+          "path": "/Users/<user>/Library/Application Support/SuperAgent/codex-home/sessions/2026/11/17/rollout-2026-11-17T20-46-37-01a1e98b-869e-7ea1-a07c-3e6ba8eacc05.jsonl",
+          "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p04c-work-8_tvfr7o",
+          "cliVersion": "0.0.0",
+          "originator": "superagent-spike",
+          "source": "vscode",
+          "canAcceptDirectInput": true,
+          "threadSource": null,
+          "agentNickname": null,
+          "agentRole": null,
+          "gitInfo": null,
+          "name": null,
+          "daybreakEnabled": null,
+          "turns": []
+        }
+      },
+      "emittedAtMs": 1794919597807
+    },
+    {
+      "method": "warning",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "message": "Under-development features enabled: agent_message_board. Under-development features are incomplete and may behave unpredictably. To suppress this warning, set `suppress_unstable_features_warning = true` in /Users/<user>/Library/Application Support/SuperAgent/codex-home/config.toml."
+      },
+      "emittedAtMs": 1794919597807
+    },
+    {
+      "method": "mcpServer/startupStatus/updated",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "name": "codex_apps",
+        "environmentId": null,
+        "status": "starting",
+        "error": null,
+        "failureReason": null
+      },
+      "emittedAtMs": 1794919597807
+    },
+    {
+      "method": "thread/status/changed",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "status": {
+          "type": "active",
+          "activeFlags": []
+        }
+      },
+      "emittedAtMs": 1794919597813
+    },
+    {
+      "method": "turn/started",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turn": {
+          "id": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+          "rootTurnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+          "items": [],
+          "itemsView": "notLoaded",
+          "status": "inProgress",
+          "error": null,
+          "startedAt": 1794919597,
+          "completedAt": null,
+          "durationMs": null
+        }
+      },
+      "emittedAtMs": 1794919597813
+    },
+    {
+      "method": "account/updated",
+      "params": {
+        "authMode": "<scrubbed>",
+        "planType": "<scrubbed>"
+      },
+      "emittedAtMs": 1794919598679
+    },
+    {
+      "method": "mcpServer/startupStatus/updated",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "name": "codex_apps",
+        "environmentId": null,
+        "status": "ready",
+        "error": null,
+        "failureReason": null
+      },
+      "emittedAtMs": 1794919599627
+    },
+    {
+      "method": "item/started",
+      "params": {
+        "item": {
+          "type": "userMessage",
+          "id": "01a1e98b-a019-7db2-bc30-db556f12d4e8",
+          "clientId": null,
+          "content": [
+            {
+              "type": "text",
+              "text": "You have goal tools available: create_goal, get_goal, update_goal. Call them in this exact order, actually invoking the tools (do not just describe them): 1) create_goal with objective 'P04C-TOOL-PROBE'; 2) get_goal and note the returned status; 3) update_goal to record progress 'halfway done'; 4) get_goal again. Then reply with exactly GOAL-TOOLS-OK.",
+              "text_elements": []
+            }
+          ],
+          "startedAtMs": 1794919604250,
+          "completedAtMs": null
+        },
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "startedAtMs": 1794919604250
+      },
+      "emittedAtMs": 1794919604250
+    },
+    {
+      "method": "item/completed",
+      "params": {
+        "item": {
+          "type": "userMessage",
+          "id": "01a1e98b-a019-7db2-bc30-db556f12d4e8",
+          "clientId": null,
+          "content": [
+            {
+              "type": "text",
+              "text": "You have goal tools available: create_goal, get_goal, update_goal. Call them in this exact order, actually invoking the tools (do not just describe them): 1) create_goal with objective 'P04C-TOOL-PROBE'; 2) get_goal and note the returned status; 3) update_goal to record progress 'halfway done'; 4) get_goal again. Then reply with exactly GOAL-TOOLS-OK.",
+              "text_elements": []
+            }
+          ],
+          "startedAtMs": 1794919604250,
+          "completedAtMs": 1794919604250
+        },
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "contentTokenCount": null,
+        "completedAtMs": 1794919604250
+      },
+      "emittedAtMs": 1794919604252
+    },
+    {
+      "method": "error",
+      "params": {
+        "error": {
+          "message": "Reconnecting... 2/5",
+          "codexErrorInfo": {
+            "responseStreamDisconnected": {
+              "httpStatusCode": null
+            }
+          },
+          "additionalDetails": "stream disconnected before completion: Network is unreachable (os error 51)",
+          "misalignment": null
+        },
+        "willRetry": true,
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3"
+      },
+      "emittedAtMs": 1794919612805
+    },
+    {
+      "method": "error",
+      "params": {
+        "error": {
+          "message": "Reconnecting... 3/5",
+          "codexErrorInfo": {
+            "responseStreamDisconnected": {
+              "httpStatusCode": null
+            }
+          },
+          "additionalDetails": "stream disconnected before completion: Network is unreachable (os error 51)",
+          "misalignment": null
+        },
+        "willRetry": true,
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3"
+      },
+      "emittedAtMs": 1794919617405
+    },
+    {
+      "method": "error",
+      "params": {
+        "error": {
+          "message": "Reconnecting... 4/5",
+          "codexErrorInfo": {
+            "responseStreamDisconnected": {
+              "httpStatusCode": null
+            }
+          },
+          "additionalDetails": "stream disconnected before completion: Network is unreachable (os error 51)",
+          "misalignment": null
+        },
+        "willRetry": true,
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3"
+      },
+      "emittedAtMs": 1794919622377
+    },
+    {
+      "method": "error",
+      "params": {
+        "error": {
+          "message": "Reconnecting... 5/5",
+          "codexErrorInfo": {
+            "responseStreamDisconnected": {
+              "httpStatusCode": null
+            }
+          },
+          "additionalDetails": "stream disconnected before completion: Network is unreachable (os error 51)",
+          "misalignment": null
+        },
+        "willRetry": true,
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3"
+      },
+      "emittedAtMs": 1794919628254
+    },
+    {
+      "method": "warning",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "message": "Falling back from WebSockets to HTTPS transport. stream disconnected before completion: Network is unreachable (os error 51)"
+      },
+      "emittedAtMs": 1794919635582
+    },
+    {
+      "method": "item/started",
+      "params": {
+        "item": {
+          "type": "reasoning",
+          "id": "rs_026eb9f1b0b4886d016afc4cd7584887d0914deaec1e03ca26",
+          "summary": [],
+          "content": [],
+          "startedAtMs": 1794919639333,
+          "completedAtMs": null
+        },
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "startedAtMs": 1794919639333
+      },
+      "emittedAtMs": 1794919639333
+    },
+    {
+      "method": "item/completed",
+      "params": {
+        "item": {
+          "type": "reasoning",
+          "id": "rs_026eb9f1b0b4886d016afc4cd7584887d0914deaec1e03ca26",
+          "summary": [],
+          "content": [],
+          "startedAtMs": 1794919639333,
+          "completedAtMs": 1794919647767
+        },
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "contentTokenCount": null,
+        "completedAtMs": 1794919647767
+      },
+      "emittedAtMs": 1794919647773
+    },
+    {
+      "method": "item/started",
+      "params": {
+        "item": {
+          "type": "agentMessage",
+          "moderation": null,
+          "id": "msg_026eb9f1b0b4886d016afc4cdfc67c87d0983b82106c225399",
+          "text": "",
+          "phase": "commentary",
+          "memoryCitation": null,
+          "delivery": null,
+          "questions": null,
+          "startedAtMs": 1794919647775,
+          "completedAtMs": null
+        },
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "startedAtMs": 1794919647775
+      },
+      "emittedAtMs": 1794919647776
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "itemId": "msg_026eb9f1b0b4886d016afc4cdfc67c87d0983b82106c225399",
+        "delta": "I"
+      },
+      "emittedAtMs": 1794919647776
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "itemId": "msg_026eb9f1b0b4886d016afc4cdfc67c87d0983b82106c225399",
+        "delta": "’ll"
+      },
+      "emittedAtMs": 1794919647776
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "itemId": "msg_026eb9f1b0b4886d016afc4cdfc67c87d0983b82106c225399",
+        "delta": " invoke"
+      },
+      "emittedAtMs": 1794919647776
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "itemId": "msg_026eb9f1b0b4886d016afc4cdfc67c87d0983b82106c225399",
+        "delta": " the"
+      },
+      "emittedAtMs": 1794919647776
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "itemId": "msg_026eb9f1b0b4886d016afc4cdfc67c87d0983b82106c225399",
+        "delta": " tools"
+      },
+      "emittedAtMs": 1794919647776
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "itemId": "msg_026eb9f1b0b4886d016afc4cdfc67c87d0983b82106c225399",
+        "delta": " in"
+      },
+      "emittedAtMs": 1794919647776
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "itemId": "msg_026eb9f1b0b4886d016afc4cdfc67c87d0983b82106c225399",
+        "delta": " order"
+      },
+      "emittedAtMs": 1794919647915
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "itemId": "msg_026eb9f1b0b4886d016afc4cdfc67c87d0983b82106c225399",
+        "delta": "."
+      },
+      "emittedAtMs": 1794919647915
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "itemId": "msg_026eb9f1b0b4886d016afc4cdfc67c87d0983b82106c225399",
+        "delta": " The"
+      },
+      "emittedAtMs": 1794919647916
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "itemId": "msg_026eb9f1b0b4886d016afc4cdfc67c87d0983b82106c225399",
+        "delta": " update"
+      },
+      "emittedAtMs": 1794919648046
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "itemId": "msg_026eb9f1b0b4886d016afc4cdfc67c87d0983b82106c225399",
+        "delta": " tool"
+      },
+      "emittedAtMs": 1794919648060
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "itemId": "msg_026eb9f1b0b4886d016afc4cdfc67c87d0983b82106c225399",
+        "delta": " has"
+      },
+      "emittedAtMs": 1794919648208
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "itemId": "msg_026eb9f1b0b4886d016afc4cdfc67c87d0983b82106c225399",
+        "delta": " no"
+      },
+      "emittedAtMs": 1794919648249
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "itemId": "msg_026eb9f1b0b4886d016afc4cdfc67c87d0983b82106c225399",
+        "delta": " progress"
+      },
+      "emittedAtMs": 1794919648261
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "itemId": "msg_026eb9f1b0b4886d016afc4cdfc67c87d0983b82106c225399",
+        "delta": " field"
+      },
+      "emittedAtMs": 1794919648267
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "itemId": "msg_026eb9f1b0b4886d016afc4cdfc67c87d0983b82106c225399",
+        "delta": ","
+      },
+      "emittedAtMs": 1794919648279
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "itemId": "msg_026eb9f1b0b4886d016afc4cdfc67c87d0983b82106c225399",
+        "delta": " so"
+      },
+      "emittedAtMs": 1794919648290
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "itemId": "msg_026eb9f1b0b4886d016afc4cdfc67c87d0983b82106c225399",
+        "delta": " the"
+      },
+      "emittedAtMs": 1794919648444
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "itemId": "msg_026eb9f1b0b4886d016afc4cdfc67c87d0983b82106c225399",
+        "delta": " “"
+      },
+      "emittedAtMs": 1794919648459
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "itemId": "msg_026eb9f1b0b4886d016afc4cdfc67c87d0983b82106c225399",
+        "delta": "half"
+      },
+      "emittedAtMs": 1794919648466
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "itemId": "msg_026eb9f1b0b4886d016afc4cdfc67c87d0983b82106c225399",
+        "delta": "way"
+      },
+      "emittedAtMs": 1794919648473
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "itemId": "msg_026eb9f1b0b4886d016afc4cdfc67c87d0983b82106c225399",
+        "delta": " done"
+      },
+      "emittedAtMs": 1794919648475
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "itemId": "msg_026eb9f1b0b4886d016afc4cdfc67c87d0983b82106c225399",
+        "delta": "”"
+      },
+      "emittedAtMs": 1794919648484
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "itemId": "msg_026eb9f1b0b4886d016afc4cdfc67c87d0983b82106c225399",
+        "delta": " update"
+      },
+      "emittedAtMs": 1794919648488
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "itemId": "msg_026eb9f1b0b4886d016afc4cdfc67c87d0983b82106c225399",
+        "delta": " may"
+      },
+      "emittedAtMs": 1794919648501
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "itemId": "msg_026eb9f1b0b4886d016afc4cdfc67c87d0983b82106c225399",
+        "delta": " be"
+      },
+      "emittedAtMs": 1794919648501
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "itemId": "msg_026eb9f1b0b4886d016afc4cdfc67c87d0983b82106c225399",
+        "delta": " rejected"
+      },
+      "emittedAtMs": 1794919648504
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "itemId": "msg_026eb9f1b0b4886d016afc4cdfc67c87d0983b82106c225399",
+        "delta": ".\n"
+      },
+      "emittedAtMs": 1794919648504
+    },
+    {
+      "method": "item/completed",
+      "params": {
+        "item": {
+          "type": "agentMessage",
+          "moderation": null,
+          "id": "msg_026eb9f1b0b4886d016afc4cdfc67c87d0983b82106c225399",
+          "text": "I’ll invoke the tools in order. The update tool has no progress field, so the “halfway done” update may be rejected.\n",
+          "phase": "commentary",
+          "memoryCitation": null,
+          "delivery": null,
+          "questions": null,
+          "startedAtMs": 1794919647775,
+          "completedAtMs": 1794919648643
+        },
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "contentTokenCount": 29,
+        "completedAtMs": 1794919648643
+      },
+      "emittedAtMs": 1794919648647
+    },
+    {
+      "method": "thread/goal/updated",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "goal": {
+          "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+          "objective": "P04C-TOOL-PROBE",
+          "status": "active",
+          "tokenBudget": null,
+          "tokensUsed": 0,
+          "timeUsedSeconds": 0,
+          "createdAt": 1794919649,
+          "updatedAt": 1794919649
+        }
+      },
+      "emittedAtMs": 1794919649527
+    },
+    {
+      "method": "thread/tokenUsage/updated",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 21515,
+            "inputTokens": 21272,
+            "cachedInputTokens": 0,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 243,
+            "reasoningOutputTokens": 137
+          },
+          "last": {
+            "totalTokens": 21515,
+            "inputTokens": 21272,
+            "cachedInputTokens": 0,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 243,
+            "reasoningOutputTokens": 137
+          },
+          "modelContextWindow": 258400
+        }
+      },
+      "emittedAtMs": 1794919649537
+    },
+    {
+      "method": "account/rateLimits/updated",
+      "params": {
+        "rateLimits": {
+          "limitId": "codex",
+          "limitName": null,
+          "normalModelSlug": null,
+          "primary": {
+            "usedPercent": 29,
+            "windowDurationMins": 300,
+            "resetsAt": 1794936244
+          },
+          "secondary": {
+            "usedPercent": 33,
+            "windowDurationMins": 10080,
+            "resetsAt": 1795325947
+          },
+          "credits": {
+            "hasCredits": false,
+            "unlimited": false,
+            "balance": "0"
+          },
+          "individualLimit": null,
+          "spendControlReached": null,
+          "planType": "<scrubbed>",
+          "rateLimitReachedType": null
+        }
+      },
+      "emittedAtMs": 1794919649537
+    },
+    {
+      "method": "item/started",
+      "params": {
+        "item": {
+          "type": "agentMessage",
+          "moderation": null,
+          "id": "msg_026eb9f1b0b4886d016afc4ce5fc2487d0811d5621a25dca38",
+          "text": "",
+          "phase": "final_answer",
+          "memoryCitation": null,
+          "delivery": null,
+          "questions": null,
+          "startedAtMs": 1794919654005,
+          "completedAtMs": null
+        },
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "startedAtMs": 1794919654005
+      },
+      "emittedAtMs": 1794919654005
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "itemId": "msg_026eb9f1b0b4886d016afc4ce5fc2487d0811d5621a25dca38",
+        "delta": "GO"
+      },
+      "emittedAtMs": 1794919654058
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "itemId": "msg_026eb9f1b0b4886d016afc4ce5fc2487d0811d5621a25dca38",
+        "delta": "AL"
+      },
+      "emittedAtMs": 1794919654076
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "itemId": "msg_026eb9f1b0b4886d016afc4ce5fc2487d0811d5621a25dca38",
+        "delta": "-"
+      },
+      "emittedAtMs": 1794919654133
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "itemId": "msg_026eb9f1b0b4886d016afc4ce5fc2487d0811d5621a25dca38",
+        "delta": "TOOLS"
+      },
+      "emittedAtMs": 1794919654184
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "itemId": "msg_026eb9f1b0b4886d016afc4ce5fc2487d0811d5621a25dca38",
+        "delta": "-"
+      },
+      "emittedAtMs": 1794919654213
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "itemId": "msg_026eb9f1b0b4886d016afc4ce5fc2487d0811d5621a25dca38",
+        "delta": "OK"
+      },
+      "emittedAtMs": 1794919654259
+    },
+    {
+      "method": "item/completed",
+      "params": {
+        "item": {
+          "type": "agentMessage",
+          "moderation": null,
+          "id": "msg_026eb9f1b0b4886d016afc4ce5fc2487d0811d5621a25dca38",
+          "text": "GOAL-TOOLS-OK",
+          "phase": "final_answer",
+          "memoryCitation": null,
+          "delivery": null,
+          "questions": null,
+          "startedAtMs": 1794919654005,
+          "completedAtMs": 1794919654265
+        },
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "contentTokenCount": 7,
+        "completedAtMs": 1794919654265
+      },
+      "emittedAtMs": 1794919654266
+    },
+    {
+      "method": "thread/tokenUsage/updated",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 43352,
+            "inputTokens": 43099,
+            "cachedInputTokens": 21376,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 253,
+            "reasoningOutputTokens": 137
+          },
+          "last": {
+            "totalTokens": 21837,
+            "inputTokens": 21827,
+            "cachedInputTokens": 21376,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 10,
+            "reasoningOutputTokens": 0
+          },
+          "modelContextWindow": 258400
+        }
+      },
+      "emittedAtMs": 1794919654325
+    },
+    {
+      "method": "account/rateLimits/updated",
+      "params": {
+        "rateLimits": {
+          "limitId": "codex",
+          "limitName": null,
+          "normalModelSlug": null,
+          "primary": {
+            "usedPercent": 33,
+            "windowDurationMins": 300,
+            "resetsAt": 1794936244
+          },
+          "secondary": {
+            "usedPercent": 34,
+            "windowDurationMins": 10080,
+            "resetsAt": 1795325947
+          },
+          "credits": {
+            "hasCredits": false,
+            "unlimited": false,
+            "balance": "0"
+          },
+          "individualLimit": null,
+          "spendControlReached": null,
+          "planType": "<scrubbed>",
+          "rateLimitReachedType": null
+        }
+      },
+      "emittedAtMs": 1794919654325
+    },
+    {
+      "method": "thread/goal/updated",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "goal": {
+          "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+          "objective": "P04C-TOOL-PROBE",
+          "status": "active",
+          "tokenBudget": null,
+          "tokensUsed": 21976,
+          "timeUsedSeconds": 4,
+          "createdAt": 1794919649,
+          "updatedAt": 1794919654
+        }
+      },
+      "emittedAtMs": 1794919654327
+    },
+    {
+      "method": "thread/status/changed",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "status": {
+          "type": "idle"
+        }
+      },
+      "emittedAtMs": 1794919654328
+    },
+    {
+      "method": "turn/completed",
+      "params": {
+        "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+        "turn": {
+          "id": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+          "rootTurnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+          "items": [
+            {
+              "type": "agentMessage",
+              "moderation": null,
+              "id": "msg_026eb9f1b0b4886d016afc4ce5fc2487d0811d5621a25dca38",
+              "text": "GOAL-TOOLS-OK",
+              "phase": "final_answer",
+              "memoryCitation": null,
+              "delivery": null,
+              "questions": null,
+              "startedAtMs": 1794919654005,
+              "completedAtMs": 1794919654265
+            }
+          ],
+          "itemsView": "summary",
+          "status": "completed",
+          "error": null,
+          "startedAt": 1794919597,
+          "completedAt": 1794919654,
+          "durationMs": 56517
+        }
+      },
+      "emittedAtMs": 1794919654328
+    }
+  ],
+  "notificationCount": 63,
+  "serverRequests": [],
+  "serverRequestDecisions": [],
+  "maxFrameBytesSeen": 1715,
+  "frameLimitBytes": 16777216,
+  "frameViolations": [],
+  "stderrTail": [
+    "\u001b[2m2026-11-17T12:46:42.853550Z\u001b[0m \u001b[31mERROR\u001b[0m \u001b[2mcodex_api::endpoint::responses_websocket\u001b[0m\u001b[2m:\u001b[0m failed to connect to Responses WebSocket \u001b[3mstage\u001b[0m\u001b[2m=\u001b[0mUnknown",
+    "\u001b[2m2026-11-17T12:46:48.428083Z\u001b[0m \u001b[31mERROR\u001b[0m \u001b[2mcodex_api::endpoint::responses_websocket\u001b[0m\u001b[2m:\u001b[0m failed to connect to Responses WebSocket \u001b[3mstage\u001b[0m\u001b[2m=\u001b[0mUnknown",
+    "\u001b[2m2026-11-17T12:46:52.804901Z\u001b[0m \u001b[31mERROR\u001b[0m \u001b[2mcodex_api::endpoint::responses_websocket\u001b[0m\u001b[2m:\u001b[0m failed to connect to Responses WebSocket \u001b[3mstage\u001b[0m\u001b[2m=\u001b[0mUnknown",
+    "\u001b[2m2026-11-17T12:46:57.404869Z\u001b[0m \u001b[31mERROR\u001b[0m \u001b[2mcodex_api::endpoint::responses_websocket\u001b[0m\u001b[2m:\u001b[0m failed to connect to Responses WebSocket \u001b[3mstage\u001b[0m\u001b[2m=\u001b[0mUnknown",
+    "\u001b[2m2026-11-17T12:47:02.376712Z\u001b[0m \u001b[31mERROR\u001b[0m \u001b[2mcodex_api::endpoint::responses_websocket\u001b[0m\u001b[2m:\u001b[0m failed to connect to Responses WebSocket \u001b[3mstage\u001b[0m\u001b[2m=\u001b[0mUnknown",
+    "\u001b[2m2026-11-17T12:47:08.253802Z\u001b[0m \u001b[31mERROR\u001b[0m \u001b[2mcodex_api::endpoint::responses_websocket\u001b[0m\u001b[2m:\u001b[0m failed to connect to Responses WebSocket \u001b[3mstage\u001b[0m\u001b[2m=\u001b[0mUnknown",
+    "\u001b[2m2026-11-17T12:47:15.579309Z\u001b[0m \u001b[31mERROR\u001b[0m \u001b[2mcodex_api::endpoint::responses_websocket\u001b[0m\u001b[2m:\u001b[0m failed to connect to Responses WebSocket \u001b[3mstage\u001b[0m\u001b[2m=\u001b[0mUnknown",
+    "\u001b[2m2026-11-17T12:47:29.531117Z\u001b[0m \u001b[31mERROR\u001b[0m \u001b[2mcodex_core::tools::router\u001b[0m\u001b[2m:\u001b[0m \u001b[3merror\u001b[0m\u001b[2m=\u001b[0mmissing field `status` at line 1 column 27"
+  ],
+  "exitCode": null
+}

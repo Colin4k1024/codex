@@ -1,0 +1,63 @@
+{
+  "threadId": "01a1e98b-869e-7ea1-a07c-3e6ba8eacc05",
+  "rolloutFiles": [
+    "/Users/<user>/Library/Application Support/SuperAgent/codex-home/sessions/2026/11/17/rollout-2026-11-17T20-46-37-01a1e98b-869e-7ea1-a07c-3e6ba8eacc05.jsonl"
+  ],
+  "perTool": {
+    "create_goal": {
+      "callCount": 1,
+      "withOutput": 1,
+      "samples": [],
+      "codeModeCalls": [
+        {
+          "call_id": "call_X9D8rlgiMhcypCnVMGzIgR7v",
+          "input": "text(await tools.create_goal({objective:\"P04C-TOOL-PROBE\"}));\ntext(await tools.get_goal({}));\ntry { text(await tools.update_goal({progress:\"halfway done\"})); } catch (e) { text(String(e)); }\ntext(await tools.get_goal({}));\n",
+          "output": "[{\"type\": \"input_text\", \"text\": \"Script completed\\nWall time 0.0 seconds\\nOutput:\\n\"}, {\"type\": \"input_text\", \"text\": \"{\\\"completionBudgetReport\\\":null,\\\"goal\\\":{\\\"createdAt\\\":1794919649,\\\"objective\\\":\\\"P04C-TOOL-PROBE\\\",\\\"status\\\":\\\"active\\\",\\\"threadId\\\":\\\"01a1e98b-869e-7ea1-a07c-3e6ba8eacc05\\\",\\\"timeUsedSeconds\\\":0,\\\"tokensUsed\\\":0,\\\"updatedAt\\\":1794919649},\\\"remainingTokens\\\":null}\"}, {\"type\": \"input_text\", \"text\": \"{\\\"completionBudgetReport\\\":null,\\\"goal\\\":{\\\"createdAt\\\":1794919649,\\\"objective\\\":\\\"P04C-TOOL-PROBE\\\",\\\"status\\\":\\\"active\\\",\\\"threadId\\\":\\\"01a1e98b-869e-7ea1-a07c-3e6ba8eacc05\\\",\\\"timeUsedSeconds\\\":0,\\\"tokensUsed\\\":0,\\\"updatedAt\\\":1794919649},\\\"remainingTokens\\\":null}\"}, {\"type\": \"input_text\", \"text\": \"missing field `status` at line 1 column 27\"}, {\"type\": \"input_text\", \"text\": \"{\\\"completionBudgetReport\\\":null,\\\"goal\\\":{\\\"createdAt\\\":1794919649,\\\"objective\\\":\\\"P04C-TOOL-PROBE\\\",\\\"status\\\":\\\"active\\\",\\\"threadId\\\":\\\"01a1e98b-869e-7ea1-a07c-3e6ba8eacc05\\\",\\\"timeUsedSeconds\\\":0,\\\"tokensUsed\\\":0,\\\"updatedAt\\\":1794919649},\\\"remainingTokens\\\":null}\"}]"
+        }
+      ]
+    },
+    "get_goal": {
+      "callCount": 1,
+      "withOutput": 1,
+      "samples": [],
+      "codeModeCalls": [
+        {
+          "call_id": "call_X9D8rlgiMhcypCnVMGzIgR7v",
+          "input": "text(await tools.create_goal({objective:\"P04C-TOOL-PROBE\"}));\ntext(await tools.get_goal({}));\ntry { text(await tools.update_goal({progress:\"halfway done\"})); } catch (e) { text(String(e)); }\ntext(await tools.get_goal({}));\n",
+          "output": "[{\"type\": \"input_text\", \"text\": \"Script completed\\nWall time 0.0 seconds\\nOutput:\\n\"}, {\"type\": \"input_text\", \"text\": \"{\\\"completionBudgetReport\\\":null,\\\"goal\\\":{\\\"createdAt\\\":1794919649,\\\"objective\\\":\\\"P04C-TOOL-PROBE\\\",\\\"status\\\":\\\"active\\\",\\\"threadId\\\":\\\"01a1e98b-869e-7ea1-a07c-3e6ba8eacc05\\\",\\\"timeUsedSeconds\\\":0,\\\"tokensUsed\\\":0,\\\"updatedAt\\\":1794919649},\\\"remainingTokens\\\":null}\"}, {\"type\": \"input_text\", \"text\": \"{\\\"completionBudgetReport\\\":null,\\\"goal\\\":{\\\"createdAt\\\":1794919649,\\\"objective\\\":\\\"P04C-TOOL-PROBE\\\",\\\"status\\\":\\\"active\\\",\\\"threadId\\\":\\\"01a1e98b-869e-7ea1-a07c-3e6ba8eacc05\\\",\\\"timeUsedSeconds\\\":0,\\\"tokensUsed\\\":0,\\\"updatedAt\\\":1794919649},\\\"remainingTokens\\\":null}\"}, {\"type\": \"input_text\", \"text\": \"missing field `status` at line 1 column 27\"}, {\"type\": \"input_text\", \"text\": \"{\\\"completionBudgetReport\\\":null,\\\"goal\\\":{\\\"createdAt\\\":1794919649,\\\"objective\\\":\\\"P04C-TOOL-PROBE\\\",\\\"status\\\":\\\"active\\\",\\\"threadId\\\":\\\"01a1e98b-869e-7ea1-a07c-3e6ba8eacc05\\\",\\\"timeUsedSeconds\\\":0,\\\"tokensUsed\\\":0,\\\"updatedAt\\\":1794919649},\\\"remainingTokens\\\":null}\"}]"
+        }
+      ]
+    },
+    "update_goal": {
+      "callCount": 1,
+      "withOutput": 1,
+      "samples": [],
+      "codeModeCalls": [
+        {
+          "call_id": "call_X9D8rlgiMhcypCnVMGzIgR7v",
+          "input": "text(await tools.create_goal({objective:\"P04C-TOOL-PROBE\"}));\ntext(await tools.get_goal({}));\ntry { text(await tools.update_goal({progress:\"halfway done\"})); } catch (e) { text(String(e)); }\ntext(await tools.get_goal({}));\n",
+          "output": "[{\"type\": \"input_text\", \"text\": \"Script completed\\nWall time 0.0 seconds\\nOutput:\\n\"}, {\"type\": \"input_text\", \"text\": \"{\\\"completionBudgetReport\\\":null,\\\"goal\\\":{\\\"createdAt\\\":1794919649,\\\"objective\\\":\\\"P04C-TOOL-PROBE\\\",\\\"status\\\":\\\"active\\\",\\\"threadId\\\":\\\"01a1e98b-869e-7ea1-a07c-3e6ba8eacc05\\\",\\\"timeUsedSeconds\\\":0,\\\"tokensUsed\\\":0,\\\"updatedAt\\\":1794919649},\\\"remainingTokens\\\":null}\"}, {\"type\": \"input_text\", \"text\": \"{\\\"completionBudgetReport\\\":null,\\\"goal\\\":{\\\"createdAt\\\":1794919649,\\\"objective\\\":\\\"P04C-TOOL-PROBE\\\",\\\"status\\\":\\\"active\\\",\\\"threadId\\\":\\\"01a1e98b-869e-7ea1-a07c-3e6ba8eacc05\\\",\\\"timeUsedSeconds\\\":0,\\\"tokensUsed\\\":0,\\\"updatedAt\\\":1794919649},\\\"remainingTokens\\\":null}\"}, {\"type\": \"input_text\", \"text\": \"missing field `status` at line 1 column 27\"}, {\"type\": \"input_text\", \"text\": \"{\\\"completionBudgetReport\\\":null,\\\"goal\\\":{\\\"createdAt\\\":1794919649,\\\"objective\\\":\\\"P04C-TOOL-PROBE\\\",\\\"status\\\":\\\"active\\\",\\\"threadId\\\":\\\"01a1e98b-869e-7ea1-a07c-3e6ba8eacc05\\\",\\\"timeUsedSeconds\\\":0,\\\"tokensUsed\\\":0,\\\"updatedAt\\\":1794919649},\\\"remainingTokens\\\":null}\"}]"
+        }
+      ]
+    }
+  },
+  "goalToolsRoundTrip": true,
+  "replyOk": true,
+  "turnStartResponse": {
+    "id": 3,
+    "result": {
+      "turn": {
+        "id": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "rootTurnId": "01a1e98b-86f0-7d61-9625-c081942b72c3",
+        "items": [],
+        "itemsView": "notLoaded",
+        "status": "inProgress",
+        "error": null,
+        "startedAt": null,
+        "completedAt": null,
+        "durationMs": null
+      }
+    }
+  },
+  "allPass": true
+}
