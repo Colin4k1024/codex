@@ -87,13 +87,27 @@ try:
     cases["escapeWrite"]["pass"] = (not os.path.exists(ESCAPE_TARGET)) and (
         r.get("result", {}).get("exitCode") not in (0, None) or "error" in r)
 
-    # 6. network must be blocked (networkAccess=false)
+    # 6. network must be blocked (networkAccess=false); check stdout only —
+    # stderr tracebacks echo the source line containing the NET-OK literal
     r = exec_call("networkBlocked", ["python3", "-c",
                   "import urllib.request; urllib.request.urlopen('https://example.com', timeout=8); print('NET-OK')"],
                   timeout=60)
-    out = json.dumps(r)
-    cases["networkBlocked"]["pass"] = "NET-OK" not in out and (
-        r.get("result", {}).get("exitCode") not in (0, None) or "error" in r)
+    res = r.get("result", {})
+    cases["networkBlocked"]["pass"] = "NET-OK" not in (res.get("stdout") or "") and (
+        res.get("exitCode") not in (0, None) or "error" in r)
+
+    # 7. inexpressible policy (relative writableRoot) must fail closed, never run via host shell
+    marker = os.path.join(WORK, "p07-invalid-policy-marker.txt")
+    bad_policy = {"type": "workspaceWrite", "writableRoots": ["relative/not-absolute"],
+                  "networkAccess": False}
+    r = client.request("command/exec", {"command": ["python3", "-c",
+                      f"open({marker!r}, 'w').write('ran')"],
+                      "cwd": WORK, "sandboxPolicy": bad_policy}, timeout=60)
+    cases["invalidPolicyBlocked"] = {
+        "params": {"sandboxPolicy": bad_policy}, "response": r,
+        "markerExists": os.path.exists(marker),
+        "pass": "error" in r and not os.path.exists(marker),
+    }
 
     deltas = [n for n in client.notifications if n.get("method") == "command/exec/outputDelta"]
     summary = {
