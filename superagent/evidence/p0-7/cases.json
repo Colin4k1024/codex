@@ -6,11 +6,11 @@
         "-c",
         "print('gate-ok')"
       ],
-      "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-psd11vxl",
+      "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-42nv5c3i",
       "sandboxPolicy": {
         "type": "workspaceWrite",
         "writableRoots": [
-          "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-psd11vxl"
+          "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-42nv5c3i"
         ],
         "networkAccess": false
       }
@@ -32,11 +32,11 @@
         "-c",
         "import sys; sys.exit(3)"
       ],
-      "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-psd11vxl",
+      "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-42nv5c3i",
       "sandboxPolicy": {
         "type": "workspaceWrite",
         "writableRoots": [
-          "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-psd11vxl"
+          "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-42nv5c3i"
         ],
         "networkAccess": false
       }
@@ -57,11 +57,11 @@
         "sleep",
         "10"
       ],
-      "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-psd11vxl",
+      "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-42nv5c3i",
       "sandboxPolicy": {
         "type": "workspaceWrite",
         "writableRoots": [
-          "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-psd11vxl"
+          "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-42nv5c3i"
         ],
         "networkAccess": false
       },
@@ -88,11 +88,11 @@
         "sleep",
         "30"
       ],
-      "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-psd11vxl",
+      "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-42nv5c3i",
       "sandboxPolicy": {
         "type": "workspaceWrite",
         "writableRoots": [
-          "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-psd11vxl"
+          "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-42nv5c3i"
         ],
         "networkAccess": false
       },
@@ -110,7 +110,7 @@
         "stderr": ""
       }
     },
-    "sleepBeforeTerminate": "68056 sleep 30",
+    "sleepBeforeTerminate": "91184 sleep 30",
     "sleepAfterTerminate": "",
     "pass": true
   },
@@ -119,13 +119,13 @@
       "command": [
         "python3",
         "-c",
-        "open('/Users/fanjia/p0-7-escape-probe.txt', 'w').write('escaped')"
+        "open('/Users/<user>/p0-7-escape-probe.txt', 'w').write('escaped')"
       ],
-      "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-psd11vxl",
+      "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-42nv5c3i",
       "sandboxPolicy": {
         "type": "workspaceWrite",
         "writableRoots": [
-          "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-psd11vxl"
+          "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-42nv5c3i"
         ],
         "networkAccess": false
       }
@@ -135,7 +135,7 @@
       "result": {
         "exitCode": 1,
         "stdout": "",
-        "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    open('/Users/fanjia/p0-7-escape-probe.txt', 'w').write('escaped')\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nPermissionError: [Errno 1] Operation not permitted: '/Users/fanjia/p0-7-escape-probe.txt'\n"
+        "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    open('/Users/<user>/p0-7-escape-probe.txt', 'w').write('escaped')\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nPermissionError: [Errno 1] Operation not permitted: '/Users/<user>/p0-7-escape-probe.txt'\n"
       }
     },
     "escapeFileExists": false,
@@ -148,11 +148,11 @@
         "-c",
         "import urllib.request; urllib.request.urlopen('https://example.com', timeout=8); print('NET-OK')"
       ],
-      "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-psd11vxl",
+      "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-42nv5c3i",
       "sandboxPolicy": {
         "type": "workspaceWrite",
         "writableRoots": [
-          "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-psd11vxl"
+          "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-42nv5c3i"
         ],
         "networkAccess": false
       }
@@ -185,6 +185,89 @@
       "id": 9
     },
     "markerExists": false,
+    "pass": true
+  },
+  "cancelTree": {
+    "params": {
+      "command": [
+        "python3",
+        "-c",
+        "import subprocess,time; subprocess.Popen(['sleep','47']); print('TREE-PARENT-READY',flush=True); time.sleep(47) # p07-tree-parent"
+      ],
+      "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-42nv5c3i",
+      "sandboxPolicy": {
+        "type": "workspaceWrite",
+        "writableRoots": [
+          "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-42nv5c3i"
+        ],
+        "networkAccess": false
+      },
+      "processId": "p07-cancel-tree"
+    },
+    "terminateResponse": {
+      "id": 11,
+      "result": {}
+    },
+    "execResponse": {
+      "id": 10,
+      "result": {
+        "exitCode": 137,
+        "stdout": "TREE-PARENT-READY\n",
+        "stderr": ""
+      }
+    },
+    "parentBefore": "91279 /opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python -c import subprocess,time; subprocess.Popen(['sleep','47']); print('TREE-PARENT-READY',flush=True); time.sleep(47) # p07-tree-parent",
+    "descendantBefore": "91288 sleep 47",
+    "parentAfter": "",
+    "descendantAfter": "",
+    "pass": true
+  },
+  "semanticPolicyBlocked": {
+    "params": {
+      "sandboxPolicy": {
+        "type": "readOnly",
+        "networkAccess": false,
+        "access": {
+          "type": "restricted"
+        }
+      }
+    },
+    "response": {
+      "error": {
+        "code": -32600,
+        "message": "Invalid request: readOnly.access is no longer supported; use permissionProfile for restricted reads"
+      },
+      "id": 12
+    },
+    "markerExists": false,
+    "rejectionIsSemantic": true,
+    "pass": true
+  },
+  "defaultPolicyNoHostWrite": {
+    "params": {
+      "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-42nv5c3i",
+      "note": "no sandboxPolicy, no permissionProfile"
+    },
+    "response": {
+      "id": 13,
+      "result": {
+        "exitCode": 1,
+        "stdout": "",
+        "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    open('/Users/<user>/p0-7-escape-probe.txt', 'w').write('escaped-default')\n    ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nPermissionError: [Errno 1] Operation not permitted: '/Users/<user>/p0-7-escape-probe.txt'\n"
+      }
+    },
+    "escapeFileExists": false,
+    "pass": true
+  },
+  "defaultPolicyInWorkspace": {
+    "response": {
+      "id": 14,
+      "result": {
+        "exitCode": 0,
+        "stdout": "default-ok\n",
+        "stderr": ""
+      }
+    },
     "pass": true
   }
 }

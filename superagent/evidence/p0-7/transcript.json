@@ -3,7 +3,7 @@
     "id": 1,
     "result": {
       "userAgent": "superagent-spike/0.0.0 (Mac OS 26.6.2; arm64) xterm-256color (superagent-spike; 0.1.0)",
-      "codexHome": "/Users/fanjia/Library/Application Support/SuperAgent/codex-home",
+      "codexHome": "<scrubbed>",
       "platformFamily": "unix",
       "platformOs": "macos"
     }
@@ -13,19 +13,19 @@
       "method": "remoteControl/status/changed",
       "params": {
         "status": "disabled",
-        "serverName": "fanjiadeMacBook-Pro.local",
-        "installationId": "33846316-8915-4e37-85c1-1cdfd3b9fabe",
+        "serverName": "<scrubbed>",
+        "installationId": "<scrubbed>",
         "environmentId": null
       },
-      "emittedAtMs": 1794902616079
+      "emittedAtMs": 1794906010165
     },
     {
       "method": "account/updated",
       "params": {
-        "authMode": "chatgpt",
-        "planType": "plus"
+        "authMode": "<scrubbed>",
+        "planType": "<scrubbed>"
       },
-      "emittedAtMs": 1794902616873
+      "emittedAtMs": 1794906010923
     }
   ],
   "notificationCount": 2,

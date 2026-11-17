@@ -1,9 +1,9 @@
 {
-  "workspace": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-psd11vxl",
+  "workspace": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-42nv5c3i",
   "sandboxPolicy": {
     "type": "workspaceWrite",
     "writableRoots": [
-      "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-psd11vxl"
+      "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p07-work-42nv5c3i"
     ],
     "networkAccess": false
   },
@@ -27,6 +27,18 @@
       "pass": true
     },
     "invalidPolicyBlocked": {
+      "pass": true
+    },
+    "cancelTree": {
+      "pass": true
+    },
+    "semanticPolicyBlocked": {
+      "pass": true
+    },
+    "defaultPolicyNoHostWrite": {
+      "pass": true
+    },
+    "defaultPolicyInWorkspace": {
       "pass": true
     }
   },
