@@ -1,0 +1,22 @@
+{
+  "leaderThreadId": "01a1e983-9a29-7d81-aabc-e7f23eff068e",
+  "rolloutFiles": [
+    "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-c/sessions/2026/11/17/rollout-2026-11-17T20-38-45-01a1e984-53cc-7952-a82e-bbcda443d437.jsonl",
+    "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-c/sessions/2026/11/17/rollout-2026-11-17T20-37-59-01a1e983-9a29-7d81-aabc-e7f23eff068e.jsonl"
+  ],
+  "calls": [
+    {
+      "call": {
+        "file": "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-c/sessions/2026/11/17/rollout-2026-11-17T20-37-59-01a1e983-9a29-7d81-aabc-e7f23eff068e.jsonl",
+        "line": 38,
+        "name": "wait",
+        "arguments": "{\"cell_id\":\"3\",\"yield_time_ms\":30000,\"max_tokens\":2000}"
+      },
+      "output": {
+        "file": "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-c/sessions/2026/11/17/rollout-2026-11-17T20-37-59-01a1e983-9a29-7d81-aabc-e7f23eff068e.jsonl",
+        "line": 41,
+        "output": "[{'type': 'input_text', 'text': 'Script completed\\nWall time 1.1 seconds\\nOutput:\\n'}, {'type': 'input_text', 'text': '{\"status\":{\"01a1e984-53cc-7952-a82e-bbcda443d437\":{\"completed\":\"V1-CHILD-OK\"}},\"timed_out\":false}'}]"
+      }
+    }
+  ]
+}
