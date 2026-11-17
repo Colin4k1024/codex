@@ -1,5 +1,43 @@
 {
   "verdict": "APPROVE",
-  "summary": "commit 范围仅含 superagent 证据与测试改动，未触碰 codex-rs core。对照 #70 逐条核查：① 成功/失败/超时/取消四态均有真实 command/exec 响应（exitCode 0/3/124/137），退出码可用于门禁判定；② 越权写（escapeWrite：PermissionError，escapeFileExists=false）与网络限制（networkBlocked：NET-OK 未出现在 stdout，exitCode=1）均被沙箱阻止；③ 所有用例显式传入 sandboxPolicy，相对路径 writableRoot 等无法表达的策略返回结构化错误且标记文件未落地，证明 fail-closed、未退回宿主 shell；④ 取消后 pgrep 前后对比（sleepBeforeTerminate='68056 sleep 30' → sleepAfterTerminate=''）证明子进程被清理。验收三要素（退出码可靠、越权被阻、取消有清理证据）均满足。p0_7.py 中 networkBlocked 判定从整段 JSON 改为仅检查 stdout，是为避免 stderr traceback 回显源码中 'NET-OK' 字面量造成假失败，属测试修正而非弱化验收。未发现伪造成功、密钥泄露或越界改动。",
-  "findings": []
+  "summary": "Issue #70 acceptance criteria are all proven by the committed evidence in the reviewed diff. The four command/exec states are evidenced with real, distinct exit codes (0/3/124/137). Unauthorized host write and network access are denied by the sandbox with no side effects (escapeFileExists=false; stdout empty). Explicit sandboxPolicy is passed on all policy-exercising calls, and both inexpressible-policy classes fail closed (malformed relative writableRoot at deserialization; well-formed but unsupported legacy readOnly.access=restricted at semantic Deserialize, permissions.rs:618-620) with no command execution and no host-shell fallback (markerExists=false in both cases). Cancel cleanup is proven at process-tree level: parent PID 91279 and descendant sleep-47 PID 91288 both present before terminate, both empty after terminate, with exitCode 137. The prior review's blocker (tree cleanup), major (semantic blocked path), and two minor findings (default-permission inheritance, transcript PII) are each addressed by a new passing case or by scrub(). No codex-rs core changes, no weakened acceptance, no secrets committed.",
+  "criteria_verified": [
+    {
+      "criterion": "command/exec 成功/失败/超时/取消四态",
+      "status": "PROVEN",
+      "evidence": "cases.json success ('print(gate-ok)' -> stdout marker, exitCode 0), failure (sys.exit(3) -> exitCode 3), timeout (sleep 10 -> exitCode 124), cancel (sleep 30 -> exitCode 137 with sleepBeforeTerminate present and sleepAfterTerminate empty). summary.json allPass=true; exec-gate-conclusion.md documents the four codes as distinct and reliable."
+    },
+    {
+      "criterion": "越权写入与网络限制被沙箱阻止",
+      "status": "PROVEN",
+      "evidence": "escapeWrite writes to /Users/<user>/p0-7-escape-probe.txt outside writableRoots: result exitCode 1, stderr 'PermissionError: [Errno 1] Operation not permitted', escapeFileExists=false. networkBlocked (networkAccess=false) yields empty stdout (no 'NET-OK') and socket PermissionError; the stdout-only check avoids a stderr-traceback false match and tightens rather than weakens the assertion."
+    },
+    {
+      "criterion": "显式传入沙箱策略；无法表达当前策略时返回 blocked，不退回宿主 shell",
+      "status": "PROVEN",
+      "evidence": "All policy-exercising calls carry an explicit workspaceWrite sandboxPolicy. invalidPolicyBlocked (relative writableRoot) is rejected -32600 with marker not created. semanticPolicyBlocked sends well-formed readOnly {access:{type:'restricted'}} and receives -32600 'readOnly.access is no longer supported; use permissionProfile for restricted reads' from SandboxPolicy Deserialize (appendix permissions.rs:618-620), with markerExists=false and rejectionIsSemantic=true — the exact semantic-rejection fix the prior major finding required. Both paths fail closed with no command execution and no host-shell fallback."
+    },
+    {
+      "criterion": "取消后确认子进程树清理",
+      "status": "PROVEN",
+      "evidence": "cancelTree case: parent python spawns detached descendant sleep-47. parentBefore '91279 ...Python... # p07-tree-parent' and descendantBefore '91288 sleep 47' both non-empty before command/exec/terminate (id 11, result {}, no error); parentAfter and descendantAfter both empty after terminate; execResponse exitCode 137, stdout 'TREE-PARENT-READY\\n'. Exercises the process-group escalation path cited from core/src/exec.rs:1041-1101 (terminate_process_group + grace + kill_process_group), fixing the prior blocker."
+    },
+    {
+      "criterion": "验收：门禁程序退出码可靠；越权被阻；取消有清理证据",
+      "status": "PROVEN",
+      "evidence": "Exit codes 0/3/124/137 are distinct and map to success/failure/timeout/SIGKILL-escalated-cancel, so a VerificationExecutor gate can branch on them directly. escapeWrite and networkBlocked are denied without side effects. cancel and cancelTree both provide pgrep before/after evidence that the process (and its tree) is reaped. summary.json has allPass values true for all 11 cases."
+    }
+  ],
+  "findings": [],
+  "residual_notes": [
+    "The managed-constraint rejection path (can_set_legacy_sandbox_policy -> can_set_permission_profile blocking a policy under a managed permission profile) is not exercised because it requires a managed environment; exec-gate-conclusion.md documents this as a deployment-time constraint rather than a P0 gap. This does not block the P0 behavior: fail-closed no-host-shell-fallback is demonstrated via two concrete rejection paths.",
+    "defaultPolicyNoHostWrite proves the no-explicit-policy fallback (processor else branch, command_exec_processor.rs:242-262) does not grant host-level write; it cannot fully distinguish 'restricted default' from 'no approval inheritance' in isolation, but it satisfies the safety property the minor finding asked to document."
+  ],
+  "positive_checks": {
+    "no_core_codex-rs_changes": "true — diff touches only superagent/evidence/p0-7/* and superagent/tests/p0_7.py",
+    "no_weakened_acceptance": "networkBlocked stdout-only assertion is a tightening fix; all other pass conditions are stricter than before",
+    "no_secrets_or_pii": "transcript PII (installationId/serverName/codexHome/authMode/planType) scrubbed to <scrubbed>; username/hostname scrubbed to <user>/<host>; no credentials or tokens present",
+    "no_fabricated_success": "request ids, PIDs, workspaces, and timestamps are internally consistent with a fresh run (ids 10/11/12/13/14 sequential; PIDs 91279<91288 ascending; workspace p07-work-42nv5c3i consistent across cases/summary)",
+    "context_budget": "no prompts or skills changed in this diff"
+  }
 }
