@@ -1,0 +1,49 @@
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+warning: failed to parse serde attribute
+  | 
+  | deny_unknown_fields 
+  | 
+  = note: ts-rs failed to parse this attribute. It will be ignored.
+warning: failed to parse serde attribute
+  | 
+  | deny_unknown_fields 
+  | 
+  = note: ts-rs failed to parse this attribute. It will be ignored.
+   Compiling superagent-storage v0.1.0 (/Users/fanjia/Desktop/code/codex/superagent/crates/storage)
+    Finished `release` profile [optimized] target(s) in 0.88s
+     Running unittests src/lib.rs (target/release/deps/superagent_storage-8eda4f54053dcc86)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/storage.rs (target/release/deps/storage-792c576d2a0b38c3)
+
+running 16 tests
+test event_sequence_is_monotonic_and_replayable ... ok
+test lease_on_missing_run_is_not_found ... ok
+test attempt_state_transitions_explicit ... ok
+test event_append_breakpoint_injectable ... ok
+test fault_after_persist_breakpoint_is_injectable ... ok
+test duplicate_run_id_rejected ... ok
+test intent_persists_then_binds_in_separate_transactions ... ok
+test duplicate_attempt_no_rejected ... ok
+test fault_between_persist_and_bind_leaves_recoverable_intent ... ok
+test artifact_reference_stored_without_blob ... ok
+test seed_nodes_from_contracts_workflow ... ok
+test run_fixed_identity_round_trips ... ok
+test oversize_summaries_rejected_explicitly ... ok
+test expired_lease_can_be_taken_over ... ok
+test exclusive_lease_contention_rejected ... ok
+test migration_is_idempotent_and_versions ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+   Doc-tests superagent_storage
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
