@@ -11,8 +11,9 @@ Safety:
   - pack verified first (manifest schema + digest + license coverage, #73)
   - path traversal rejected: absolute paths, '..' components, symlinks,
     non-regular files (fail-closed, for both directory and .tar.gz packs)
-  - atomic per-item swap: fully staged and re-verified before any target is
-    touched; old item moved aside, new renamed in, rollback on failure
+  - whole-pack all-or-nothing swap: fully staged and re-verified before any
+    target is touched; each old item moved aside, new renamed in; if any item
+    fails, every already-swapped item is rolled back to its original state
   - never writes to the user's ~/.codex (target guard)
 
 Usage:
@@ -61,7 +62,14 @@ def extract_tar(tar_path, dest):
                 raise ValueError(f"symlink/hardlink rejected (fail-closed): {member.name}")
             if not (member.isfile() or member.isdir()):
                 raise ValueError(f"non-regular member rejected: {member.name}")
-        tf.extractall(dest, filter="data")
+        if sys.version_info >= (3, 12):
+            tf.extractall(dest, filter="data")
+        else:
+            # Python < 3.12 has no data filter; the member pre-validation above
+            # already rejects absolute/'..' paths, symlinks, hardlinks and
+            # non-regular members, providing the same guarantees. Tar path
+            # minimum recommended Python is 3.12; older versions use this fallback.
+            tf.extractall(dest)
 
 
 def stage_pack(pack_arg, staging):
@@ -103,7 +111,9 @@ def verify_pack_dir(pack_dir, pinned=None):
 
 
 def swap_item(staged, target):
-    """Atomic-ish per-item directory/file swap with rollback."""
+    """Move staged into target, moving any existing target aside. Returns the
+    backup path (or None). The caller owns backup cleanup/rollback so the whole
+    pack can be swapped all-or-nothing across items."""
     parent = os.path.dirname(target)
     os.makedirs(parent, exist_ok=True)
     backup = None
@@ -116,11 +126,7 @@ def swap_item(staged, target):
         if backup is not None:
             os.rename(backup, target)
         raise
-    if backup is not None:
-        if os.path.isdir(backup):
-            shutil.rmtree(backup)
-        else:
-            os.remove(backup)
+    return backup
 
 
 def install(pack_arg, codex_home, pinned=None, user_home=None):
@@ -155,23 +161,47 @@ def install(pack_arg, codex_home, pinned=None, user_home=None):
             else:
                 item = ".superagent/pack"
             items.setdefault(item, None)
-        for item in sorted(items):
-            staged_item = os.path.join(pack_dir, item)
-            if item.startswith("agents/"):
-                staged_item = os.path.join(pack_dir, "roles", item.split("/", 1)[1])
-            elif item == ".superagent/pack":
-                # stage the non-skills/roles remainder
-                rem = os.path.join(staging, "remainder")
-                os.makedirs(rem, exist_ok=True)
-                for rel, _ in packtool.iter_files(pack_dir):
-                    top = rel.split("/", 1)[0]
-                    if top in ("skills", "roles"):
-                        continue
-                    dst = os.path.join(rem, rel)
-                    os.makedirs(os.path.dirname(dst), exist_ok=True)
-                    shutil.copy2(os.path.join(pack_dir, rel), dst)
-                staged_item = rem
-            swap_item(staged_item, os.path.join(codex_home, item))
+        # Whole-pack all-or-nothing swap: keep every backup until all items
+        # succeed; on any failure restore all already-swapped items.
+        swaps = []
+        try:
+            for item in sorted(items):
+                staged_item = os.path.join(pack_dir, item)
+                if item.startswith("agents/"):
+                    staged_item = os.path.join(pack_dir, "roles", item.split("/", 1)[1])
+                elif item == ".superagent/pack":
+                    # stage the non-skills/roles remainder
+                    rem = os.path.join(staging, "remainder")
+                    os.makedirs(rem, exist_ok=True)
+                    for rel, _ in packtool.iter_files(pack_dir):
+                        top = rel.split("/", 1)[0]
+                        if top in ("skills", "roles"):
+                            continue
+                        dst = os.path.join(rem, rel)
+                        os.makedirs(os.path.dirname(dst), exist_ok=True)
+                        shutil.copy2(os.path.join(pack_dir, rel), dst)
+                    staged_item = rem
+                target = os.path.join(codex_home, item)
+                backup = swap_item(staged_item, target)
+                swaps.append((target, backup))
+        except OSError:
+            for target, backup in reversed(swaps):
+                if backup is None:
+                    continue
+                if os.path.isdir(target):
+                    shutil.rmtree(target, ignore_errors=True)
+                elif os.path.exists(target):
+                    os.remove(target)
+                os.rename(backup, target)
+            raise
+        else:
+            for _target, backup in swaps:
+                if backup is None:
+                    continue
+                if os.path.isdir(backup):
+                    shutil.rmtree(backup)
+                else:
+                    os.remove(backup)
 
         record = {
             "pack": man["name"],

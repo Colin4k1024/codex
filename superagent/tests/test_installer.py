@@ -165,6 +165,49 @@ class InstallerTests(unittest.TestCase):
         install_pack.install(self.pack, self.home, user_home=user_home)
         self.assertEqual(tree_state(user_codex), before)
 
+    def test_mid_swap_failure_rolls_back_whole_pack(self):
+        install_pack.install(self.pack, self.home)
+        baseline = tree_state(self.home)
+        real_swap = install_pack.swap_item
+        calls = {"n": 0}
+
+        def flaky(staged, target):
+            calls["n"] += 1
+            if calls["n"] == 2:
+                raise OSError("simulated mid-swap failure")
+            return real_swap(staged, target)
+
+        install_pack.swap_item = flaky
+        try:
+            with self.assertRaises(OSError):
+                install_pack.install(self.pack, self.home)
+        finally:
+            install_pack.swap_item = real_swap
+        after = tree_state(self.home)
+        self.assertEqual(after, baseline)
+        self.assertFalse(any(".old-" in k for k in after))
+
+    def test_tar_extract_fallback_pre_3_12(self):
+        from unittest import mock
+        tar = os.path.join(self.tmp, "fb.tar.gz")
+        make_tar(self.pack, tar)
+        dest = os.path.join(self.tmp, "fb-out")
+        os.makedirs(dest)
+        with mock.patch.object(install_pack.sys, "version_info", (3, 9, 0)):
+            install_pack.extract_tar(tar, dest)
+        self.assertTrue(os.path.isfile(os.path.join(dest, "skills", "p1-4-greet", "SKILL.md")))
+
+    def test_tar_traversal_rejected_pre_3_12(self):
+        from unittest import mock
+        tar = os.path.join(self.tmp, "fb-evil.tar.gz")
+        make_tar(self.pack, tar, extra=[("../evil.txt", b"pwned", tarfile.REGTYPE)])
+        dest = os.path.join(self.tmp, "fb-evil-out")
+        os.makedirs(dest)
+        with mock.patch.object(install_pack.sys, "version_info", (3, 9, 0)):
+            with self.assertRaises(ValueError):
+                install_pack.extract_tar(tar, dest)
+        self.assertFalse(os.path.exists(os.path.join(self.tmp, "evil.txt")))
+
 
 class DoctorTests(unittest.TestCase):
     def setUp(self):

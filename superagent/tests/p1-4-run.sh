@@ -3,12 +3,16 @@
 # Also serves as the #102 closure-gate trace (f2-decision.md §6).
 # Model-free: skills/list RPC only; no turn is started.
 set -uo pipefail
-ROOT=/Users/fanjia/Desktop/code/codex
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 EV=$ROOT/superagent/evidence/p1-4
 HOME_DIR="$HOME/Library/Application Support/SuperAgent/codex-home"
-ENGINE=$ROOT/superagent/packaging/superagent-engine
+ENGINE=${SUPERAGENT_ENGINE:-$ROOT/superagent/packaging/superagent-engine}
 FIXTURE=$ROOT/superagent/tests/p1-4/pack
-export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890
+# Proxy is opt-in (portable default: none). Set SUPERAGENT_PROXY=http://host:port
+# if your network requires it; this model-free RPC chain needs no network.
+if [ -n "${SUPERAGENT_PROXY:-}" ]; then
+  export https_proxy="$SUPERAGENT_PROXY" http_proxy="$SUPERAGENT_PROXY"
+fi
 mkdir -p "$EV"
 
 echo "== 0. user ~/.codex snapshot (before) =="
