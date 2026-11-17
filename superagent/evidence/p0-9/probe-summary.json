@@ -1,0 +1,286 @@
+{
+  "workdir": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p09-probe-9768wo8v",
+  "probes": {
+    "experimental:environment/info": {
+      "response": {
+        "id": 2,
+        "result": {
+          "shell": {
+            "name": "zsh",
+            "path": "/bin/zsh"
+          },
+          "cwd": "file:///Users/<user>/Desktop/code/codex"
+        }
+      },
+      "status": "AVAILABLE"
+    },
+    "experimental:memory/status": {
+      "response": {
+        "id": 3,
+        "result": {
+          "v2ConsolidatedThreads": 0,
+          "v2Ready": true
+        }
+      },
+      "status": "AVAILABLE"
+    },
+    "experimental:collaborationMode/list": {
+      "response": {
+        "id": 4,
+        "result": {
+          "data": [
+            {
+              "name": "Plan",
+              "mode": "plan",
+              "model": null,
+              "reasoning_effort": "medium"
+            },
+            {
+              "name": "Default",
+              "mode": "default",
+              "model": null,
+              "reasoning_effort": null
+            }
+          ]
+        }
+      },
+      "status": "AVAILABLE"
+    },
+    "experimental:thread/start.historyMode=paginated": {
+      "response": {
+        "id": 5,
+        "result": {
+          "thread": {
+            "id": "01a1e8d5-5e7f-7b01-abb4-f5fa88dad71c",
+            "environments": [
+              {
+                "environmentId": "local",
+                "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p09-probe-9768wo8v",
+                "runtimeWorkspaceRoots": [
+                  "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p09-probe-9768wo8v"
+                ]
+              }
+            ],
+            "extra": null,
+            "sessionId": "01a1e8d5-5e7f-7b01-abb4-f5fa88dad71c",
+            "forkedFromId": null,
+            "attachedToThreadId": null,
+            "parentThreadId": null,
+            "preview": "",
+            "ephemeral": false,
+            "section": null,
+            "sectionEnteredAt": null,
+            "projectId": null,
+            "historyMode": "paginated",
+            "modelProvider": "openai",
+            "model": "gpt-6-astra",
+            "reasoningEffort": null,
+            "createdAt": 1794907662,
+            "updatedAt": 1794907662,
+            "recencyAt": 1794907662,
+            "status": {
+              "type": "idle"
+            },
+            "path": "/Users/<user>/Library/Application Support/SuperAgent/codex-home/sessions/2026/11/17/rollout-2026-11-17T17-27-42-01a1e8d5-5e7f-7b01-abb4-f5fa88dad71c.jsonl",
+            "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p09-probe-9768wo8v",
+            "cliVersion": "0.0.0",
+            "originator": "superagent-spike",
+            "source": "vscode",
+            "canAcceptDirectInput": true,
+            "threadSource": null,
+            "agentNickname": null,
+            "agentRole": null,
+            "gitInfo": null,
+            "name": null,
+            "daybreakEnabled": null,
+            "turns": []
+          },
+          "model": "gpt-6-astra",
+          "modelProvider": "openai",
+          "serviceTier": null,
+          "disabledPluginIds": [],
+          "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p09-probe-9768wo8v",
+          "runtimeWorkspaceRoots": [
+            "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p09-probe-9768wo8v"
+          ],
+          "instructionSources": [],
+          "approvalPolicy": "never",
+          "approvalsReviewer": "user",
+          "sandbox": {
+            "type": "workspaceWrite",
+            "writableRoots": [],
+            "networkAccess": false,
+            "excludeTmpdirEnvVar": false,
+            "excludeSlashTmp": false
+          },
+          "activePermissionProfile": null,
+          "reasoningEffort": null,
+          "multiAgentMode": "explicitRequestOnly"
+        }
+      },
+      "status": "AVAILABLE"
+    },
+    "experimental:turn/start.permissions=unknown-profile": {
+      "status": "SKIPPED_NO_MODEL"
+    },
+    "experimental:turn/start.environments=[]": {
+      "status": "SKIPPED_NO_MODEL"
+    },
+    "experimental:thread/items/list": {
+      "response": {
+        "error": {
+          "code": -32601,
+          "message": "thread/items/list is not supported yet"
+        },
+        "id": 6
+      },
+      "status": "UNSUPPORTED_SERVER_SIDE"
+    },
+    "experimental:thread/goal/set": {
+      "response": {
+        "id": 7,
+        "result": {
+          "goal": {
+            "threadId": "01a1e8d5-5e7f-7b01-abb4-f5fa88dad71c",
+            "objective": "p09 probe goal",
+            "status": "active",
+            "tokenBudget": null,
+            "tokensUsed": 0,
+            "timeUsedSeconds": 0,
+            "createdAt": 1794907662,
+            "updatedAt": 1794907662
+          }
+        }
+      },
+      "status": "AVAILABLE"
+    },
+    "experimental:thread/goal/get": {
+      "response": {
+        "id": 8,
+        "result": {
+          "goal": {
+            "threadId": "01a1e8d5-5e7f-7b01-abb4-f5fa88dad71c",
+            "objective": "p09 probe goal",
+            "status": "active",
+            "tokenBudget": null,
+            "tokensUsed": 0,
+            "timeUsedSeconds": 0,
+            "createdAt": 1794907662,
+            "updatedAt": 1794907662
+          }
+        }
+      },
+      "status": "AVAILABLE"
+    },
+    "experimental:thread/goal/clear": {
+      "response": {
+        "id": 9,
+        "result": {
+          "cleared": true
+        }
+      },
+      "status": "AVAILABLE"
+    },
+    "experimental:thread/queue/add": {
+      "response": {
+        "id": 10,
+        "result": {
+          "queuedSubmission": {
+            "id": "01a1e8d5-6a15-7a72-bf2f-a4333faac473",
+            "input": [
+              {
+                "type": "text",
+                "text": "p09 queue probe",
+                "text_elements": []
+              }
+            ],
+            "clientUserMessageId": "p09-q1",
+            "responsesapiClientMetadata": null
+          }
+        }
+      },
+      "status": "AVAILABLE"
+    },
+    "experimental:thread/queue/list": {
+      "response": {
+        "id": 11,
+        "result": {
+          "data": [
+            {
+              "id": "01a1e8d5-6a15-7a72-bf2f-a4333faac473",
+              "input": [
+                {
+                  "type": "text",
+                  "text": "p09 queue probe",
+                  "text_elements": []
+                }
+              ],
+              "clientUserMessageId": "p09-q1",
+              "responsesapiClientMetadata": null
+            }
+          ],
+          "nextCursor": null
+        }
+      },
+      "status": "AVAILABLE"
+    },
+    "experimental:thread/queue/delete": {
+      "response": {
+        "id": 12,
+        "result": {
+          "deleted": true
+        }
+      },
+      "status": "AVAILABLE",
+      "queuedSubmissionIdUsed": "01a1e8d5-6a15-7a72-bf2f-a4333faac473"
+    },
+    "plain:environment/info": {
+      "response": {
+        "error": {
+          "code": -32600,
+          "message": "environment/info requires experimentalApi capability"
+        },
+        "id": 2
+      },
+      "status": "GATED_REQUIRES_EXPERIMENTAL"
+    },
+    "plain:memory/status": {
+      "response": {
+        "error": {
+          "code": -32600,
+          "message": "memory/status requires experimentalApi capability"
+        },
+        "id": 3
+      },
+      "status": "GATED_REQUIRES_EXPERIMENTAL"
+    },
+    "plain:thread/start.historyMode=paginated": {
+      "response": {
+        "error": {
+          "code": -32600,
+          "message": "thread/start.historyMode requires experimentalApi capability"
+        },
+        "id": 4
+      },
+      "status": "GATED_REQUIRES_EXPERIMENTAL"
+    }
+  },
+  "summary": {
+    "experimental:environment/info": "AVAILABLE",
+    "experimental:memory/status": "AVAILABLE",
+    "experimental:collaborationMode/list": "AVAILABLE",
+    "experimental:thread/start.historyMode=paginated": "AVAILABLE",
+    "experimental:turn/start.permissions=unknown-profile": "SKIPPED_NO_MODEL",
+    "experimental:turn/start.environments=[]": "SKIPPED_NO_MODEL",
+    "experimental:thread/items/list": "UNSUPPORTED_SERVER_SIDE",
+    "experimental:thread/goal/set": "AVAILABLE",
+    "experimental:thread/goal/get": "AVAILABLE",
+    "experimental:thread/goal/clear": "AVAILABLE",
+    "experimental:thread/queue/add": "AVAILABLE",
+    "experimental:thread/queue/list": "AVAILABLE",
+    "experimental:thread/queue/delete": "AVAILABLE",
+    "plain:environment/info": "GATED_REQUIRES_EXPERIMENTAL",
+    "plain:memory/status": "GATED_REQUIRES_EXPERIMENTAL",
+    "plain:thread/start.historyMode=paginated": "GATED_REQUIRES_EXPERIMENTAL"
+  }
+}
