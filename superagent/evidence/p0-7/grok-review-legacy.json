@@ -53,7 +53,7 @@
     {
       "severity": "minor",
       "criterion": "no secrets committed",
-      "finding": "transcript.json persists device/user identifiers and account metadata: installationId '33846316-8915-4e37-85c1-1cdfd3b9fabe', serverName 'fanjiadeMacBook-Pro.local', absolute codexHome path, authMode 'chatgpt', planType 'plus'. Not credentials, but PII that should not live in repo evidence.",
+      "finding": "transcript.json persists device/user identifiers and account metadata: installationId '<installation-id>', serverName '<host>', absolute codexHome path, authMode 'chatgpt', planType 'plus'. Not credentials, but PII that should not live in repo evidence.",
       "evidence": "transcript.json 'initialize' and 'notifications' blocks.",
       "required_fix": "Scrub installationId, serverName, codexHome, authMode, and planType from the committed transcript.json before merge."
     }
