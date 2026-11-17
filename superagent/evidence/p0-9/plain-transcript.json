@@ -17,45 +17,15 @@
         "installationId": "<scrubbed>",
         "environmentId": null
       },
-      "emittedAtMs": 1794907663041
+      "emittedAtMs": 1794918605652
     }
   ],
   "notificationCount": 1,
   "serverRequests": [],
   "serverRequestDecisions": [],
-  "pendingServerRequestIds": [],
   "maxFrameBytesSeen": 243,
   "frameLimitBytes": 16777216,
   "frameViolations": [],
-  "spawnArgv": [
-    "/Users/<user>/Desktop/code/codex/superagent/packaging/superagent-engine",
-    "app-server",
-    "--listen",
-    "stdio://"
-  ],
-  "spawnWiring": {
-    "stdin": "PIPE (JSONL requests)",
-    "stdout": "PIPE (JSONL frames only)",
-    "stderr": "PIPE (collected separately, ring buffer 2000 lines)",
-    "env": {
-      "CODEX_HOME": "<set per run>"
-    }
-  },
-  "runLogPath": null,
-  "runLogLimitBytes": 104857600,
-  "runLogRotations": 0,
-  "runLogBytesRetained": 0,
-  "defaultTimeoutsByMethod": {
-    "initialize": 30,
-    "thread/start": 60,
-    "thread/read": 60,
-    "thread/list": 60,
-    "thread/resume": 60,
-    "turn/start": 30,
-    "turn/interrupt": 30,
-    "command/exec": 90,
-    "command/exec/terminate": 30
-  },
   "stderrTail": [],
   "exitCode": null
 }

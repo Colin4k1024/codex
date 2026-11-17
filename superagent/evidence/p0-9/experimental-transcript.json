@@ -17,7 +17,7 @@
         "installationId": "<scrubbed>",
         "environmentId": null
       },
-      "emittedAtMs": 1794907659880
+      "emittedAtMs": 1794918604186
     },
     {
       "method": "account/updated",
@@ -25,24 +25,24 @@
         "authMode": "<scrubbed>",
         "planType": "<scrubbed>"
       },
-      "emittedAtMs": 1794907660867
+      "emittedAtMs": 1794918605295
     },
     {
       "method": "thread/started",
       "params": {
         "thread": {
-          "id": "01a1e8d5-5e7f-7b01-abb4-f5fa88dad71c",
+          "id": "01a1e97c-5d9f-7bc0-8ca3-a7f74756d005",
           "environments": [
             {
               "environmentId": "local",
-              "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p09-probe-9768wo8v",
+              "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p09-probe-e8vo3ta3",
               "runtimeWorkspaceRoots": [
-                "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p09-probe-9768wo8v"
+                "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p09-probe-e8vo3ta3"
               ]
             }
           ],
           "extra": null,
-          "sessionId": "01a1e8d5-5e7f-7b01-abb4-f5fa88dad71c",
+          "sessionId": "01a1e97c-5d9f-7bc0-8ca3-a7f74756d005",
           "forkedFromId": null,
           "attachedToThreadId": null,
           "parentThreadId": null,
@@ -55,14 +55,14 @@
           "modelProvider": "openai",
           "model": "gpt-6-astra",
           "reasoningEffort": null,
-          "createdAt": 1794907662,
-          "updatedAt": 1794907662,
-          "recencyAt": 1794907662,
+          "createdAt": 1794918605,
+          "updatedAt": 1794918605,
+          "recencyAt": 1794918605,
           "status": {
             "type": "idle"
           },
-          "path": "/Users/<user>/Library/Application Support/SuperAgent/codex-home/sessions/2026/11/17/rollout-2026-11-17T17-27-42-01a1e8d5-5e7f-7b01-abb4-f5fa88dad71c.jsonl",
-          "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p09-probe-9768wo8v",
+          "path": "/Users/<user>/Library/Application Support/SuperAgent/codex-home/sessions/2026/11/17/rollout-2026-11-17T20-30-05-01a1e97c-5d9f-7bc0-8ca3-a7f74756d005.jsonl",
+          "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p09-probe-e8vo3ta3",
           "cliVersion": "0.0.0",
           "originator": "superagent-spike",
           "source": "vscode",
@@ -76,135 +76,136 @@
           "turns": []
         }
       },
-      "emittedAtMs": 1794907662665
+      "emittedAtMs": 1794918605453
     },
     {
       "method": "warning",
       "params": {
-        "threadId": "01a1e8d5-5e7f-7b01-abb4-f5fa88dad71c",
+        "threadId": "01a1e97c-5d9f-7bc0-8ca3-a7f74756d005",
         "message": "Under-development features enabled: agent_message_board. Under-development features are incomplete and may behave unpredictably. To suppress this warning, set `suppress_unstable_features_warning = true` in /Users/<user>/Library/Application Support/SuperAgent/codex-home/config.toml."
       },
-      "emittedAtMs": 1794907662666
+      "emittedAtMs": 1794918605453
     },
     {
       "method": "mcpServer/startupStatus/updated",
       "params": {
-        "threadId": "01a1e8d5-5e7f-7b01-abb4-f5fa88dad71c",
+        "threadId": "01a1e97c-5d9f-7bc0-8ca3-a7f74756d005",
         "name": "codex_apps",
         "environmentId": null,
         "status": "starting",
         "error": null,
         "failureReason": null
       },
-      "emittedAtMs": 1794907662666
+      "emittedAtMs": 1794918605453
     },
     {
-      "method": "thread/goal/updated",
+      "method": "thread/settings/updated",
       "params": {
-        "threadId": "01a1e8d5-5e7f-7b01-abb4-f5fa88dad71c",
-        "turnId": null,
-        "goal": {
-          "threadId": "01a1e8d5-5e7f-7b01-abb4-f5fa88dad71c",
-          "objective": "p09 probe goal",
-          "status": "active",
-          "tokenBudget": null,
-          "tokensUsed": 0,
-          "timeUsedSeconds": 0,
-          "createdAt": 1794907662,
-          "updatedAt": 1794907662
+        "threadId": "01a1e97c-5d9f-7bc0-8ca3-a7f74756d005",
+        "threadSettings": {
+          "disabledPluginIds": [],
+          "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p09-probe-e8vo3ta3",
+          "environments": [],
+          "approvalPolicy": "never",
+          "approvalsReviewer": "user",
+          "sandboxPolicy": {
+            "type": "workspaceWrite",
+            "writableRoots": [
+              "/private/tmp",
+              "/private/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T"
+            ],
+            "networkAccess": false,
+            "excludeTmpdirEnvVar": false,
+            "excludeSlashTmp": false
+          },
+          "activePermissionProfile": null,
+          "model": "gpt-6-astra",
+          "modelProvider": "openai",
+          "serviceTier": null,
+          "effort": null,
+          "summary": null,
+          "collaborationMode": {
+            "mode": "default",
+            "settings": {
+              "model": "gpt-6-astra",
+              "reasoning_effort": null,
+              "developer_instructions": null
+            }
+          },
+          "multiAgentMode": "explicitRequestOnly",
+          "personality": null
         }
       },
-      "emittedAtMs": 1794907662853
-    },
-    {
-      "method": "thread/goal/cleared",
-      "params": {
-        "threadId": "01a1e8d5-5e7f-7b01-abb4-f5fa88dad71c"
-      },
-      "emittedAtMs": 1794907662866
+      "emittedAtMs": 1794918605462
     },
     {
       "method": "thread/status/changed",
       "params": {
-        "threadId": "01a1e8d5-5e7f-7b01-abb4-f5fa88dad71c",
+        "threadId": "01a1e97c-5d9f-7bc0-8ca3-a7f74756d005",
         "status": {
           "type": "active",
           "activeFlags": []
         }
       },
-      "emittedAtMs": 1794907662868
+      "emittedAtMs": 1794918605467
     },
     {
       "method": "turn/started",
       "params": {
-        "threadId": "01a1e8d5-5e7f-7b01-abb4-f5fa88dad71c",
+        "threadId": "01a1e97c-5d9f-7bc0-8ca3-a7f74756d005",
         "turn": {
-          "id": "01a1e8d5-6a06-7721-a33b-7cb4d1ccffd8",
-          "rootTurnId": "01a1e8d5-6a06-7721-a33b-7cb4d1ccffd8",
+          "id": "01a1e97c-6290-7581-8e5e-93d4e9498b79",
+          "rootTurnId": "01a1e97c-6290-7581-8e5e-93d4e9498b79",
           "items": [],
           "itemsView": "notLoaded",
           "status": "inProgress",
           "error": null,
-          "startedAt": 1794907662,
+          "startedAt": 1794918605,
           "completedAt": null,
           "durationMs": null
         }
       },
-      "emittedAtMs": 1794907662868
+      "emittedAtMs": 1794918605467
+    },
+    {
+      "method": "thread/goal/updated",
+      "params": {
+        "threadId": "01a1e97c-5d9f-7bc0-8ca3-a7f74756d005",
+        "turnId": null,
+        "goal": {
+          "threadId": "01a1e97c-5d9f-7bc0-8ca3-a7f74756d005",
+          "objective": "p09 probe goal",
+          "status": "active",
+          "tokenBudget": null,
+          "tokensUsed": 0,
+          "timeUsedSeconds": 0,
+          "createdAt": 1794918605,
+          "updatedAt": 1794918605
+        }
+      },
+      "emittedAtMs": 1794918605471
+    },
+    {
+      "method": "thread/goal/cleared",
+      "params": {
+        "threadId": "01a1e97c-5d9f-7bc0-8ca3-a7f74756d005"
+      },
+      "emittedAtMs": 1794918605473
     },
     {
       "method": "thread/queue/changed",
       "params": {
-        "threadId": "01a1e8d5-5e7f-7b01-abb4-f5fa88dad71c"
+        "threadId": "01a1e97c-5d9f-7bc0-8ca3-a7f74756d005"
       },
-      "emittedAtMs": 1794907662870
-    },
-    {
-      "method": "thread/queue/changed",
-      "params": {
-        "threadId": "01a1e8d5-5e7f-7b01-abb4-f5fa88dad71c"
-      },
-      "emittedAtMs": 1794907662872
+      "emittedAtMs": 1794918605476
     }
   ],
   "notificationCount": 11,
   "serverRequests": [],
   "serverRequestDecisions": [],
-  "pendingServerRequestIds": [],
   "maxFrameBytesSeen": 1715,
   "frameLimitBytes": 16777216,
   "frameViolations": [],
-  "spawnArgv": [
-    "/Users/<user>/Desktop/code/codex/superagent/packaging/superagent-engine",
-    "app-server",
-    "--listen",
-    "stdio://"
-  ],
-  "spawnWiring": {
-    "stdin": "PIPE (JSONL requests)",
-    "stdout": "PIPE (JSONL frames only)",
-    "stderr": "PIPE (collected separately, ring buffer 2000 lines)",
-    "env": {
-      "CODEX_HOME": "<set per run>"
-    }
-  },
-  "runLogPath": null,
-  "runLogLimitBytes": 104857600,
-  "runLogRotations": 0,
-  "runLogBytesRetained": 0,
-  "defaultTimeoutsByMethod": {
-    "initialize": 30,
-    "thread/start": 60,
-    "thread/read": 60,
-    "thread/list": 60,
-    "thread/resume": 60,
-    "turn/start": 30,
-    "turn/interrupt": 30,
-    "command/exec": 90,
-    "command/exec/terminate": 30
-  },
-  "stderrTail": [
-    "\u001b[2m2026-11-17T09:27:41.069091Z\u001b[0m \u001b[31mERROR\u001b[0m \u001b[2mcodex_models_manager::manager\u001b[0m\u001b[2m:\u001b[0m failed to load models cache: trailing characters at line 633 column 2"
-  ],
+  "stderrTail": [],
   "exitCode": null
 }

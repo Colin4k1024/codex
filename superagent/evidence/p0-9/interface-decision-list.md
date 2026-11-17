@@ -1,8 +1,9 @@
 # P0-9 / #72 接口决策与 fork 缺口清单（DRAFT — 依赖 #65/#67/#69/#71 关闭后定稿）
 
-日期：2026-11-17 · 状态：**草稿**（P0-2/P0-4/P0-6/P0-8 整改重跑待模型配额恢复）
-复现：`python3 superagent/tests/p0_9_probe.py superagent/evidence/p0-9 --no-model`（无模型部分）；
-完整探针去掉 --no-model（turn/start permissions/environments 两项需模型）。
+日期：2026-11-17 · 状态：**草稿**（配额恢复后 turn/start permissions/environments 运行时探针已完成；
+#65/#67/#69 整改重跑仍未通过/未跑，四条 trace 验收未满足，依赖未全部关闭，故保留 DRAFT）
+复现：`python3 superagent/tests/p0_9_probe.py superagent/evidence/p0-9`（完整探针，含 turn/start 两项模型探针；
+本次实测见 probe-summary.json，workdir=p09-probe-e8vo3ta3，model=gpt-6-astra）。
 
 ## 1. 引擎版本 / 摘要（p0-1/engine-manifest.json，#64 已合并）
 
@@ -23,8 +24,8 @@
 | thread/items/list | **UNSUPPORTED_SERVER_SIDE** | — |
 | thread/goal/set/get/clear | AVAILABLE | 未测（goal 在 v2 schema 内，推定非 gated） |
 | thread/queue/add/list/delete | AVAILABLE | 未测（#[experimental] 标注，推定 gated） |
-| turn/start permissions=<profile> | 待模型探针 | — |
-| turn/start environments=[] | 待模型探针 | — |
+| turn/start permissions=<profile> | **AVAILABLE_REQUIRES_CONFIG**（实测） | — |
+| turn/start environments=[] | **AVAILABLE**（实测，空数组禁用本 turn 环境） | — |
 
 schema 全量枚举（p0-8/no-agent-rpc.txt）：ClientRequest 110 方法；**agent/* = 0、graph/store = 0**。
 queue 方法不在生成的 v2 schema JSON（#[experimental]，common.rs:666-701）。
@@ -41,12 +42,14 @@ queue 方法不在生成的 v2 schema JSON（#[experimental]，common.rs:666-701
   探针用 `[]` 验证禁用语义。
 - 编排器含义：permissions profile 与 SandboxPolicy 二选一；P0-7 已证明 command/exec 显式
   SandboxPolicy 路径，permissions profile 路径待本探针定稿后裁决取舍。
-- 未知 profile 预期报错路径（静态推定，运行时探针确认）：
-  codex-rs/app-server/src/request_processors/turn_processor.rs:711/1039 透传 params.permissions →
-  codex-rs/core/src/config/mod.rs:5066 → codex-rs/core/src/config/permissions.rs:226 →
-  codex-rs/config/src/permissions_toml.rs:40-75 resolve_profile →
-  UndefinedProfile（:123）文案 "default_permissions refers to undefined profile `<name>`"，
-  含 permissions+profile 关键词，探针 classify() 映射 AVAILABLE_REQUIRES_CONFIG。
+- 未知 profile **实测报错**（运行时探针确认，probe-summary.json id=6）：
+  JSON-RPC error code=-32600，message="failed to load configuration: default_permissions requires a `[permissions]` table"。
+  即 permissions 字段被服务端处理，但当前 codex-home 配置缺少 `[permissions]` 表，先在配置加载层 fail-closed，
+  未到达静态推定的 UndefinedProfile（permissions_toml.rs:123）分支。探针 classify() 据 permissions+config 关键词
+  映射 **AVAILABLE_REQUIRES_CONFIG**：接口可用，但需先提供 `[permissions]` 配置表才能选 profile。
+  编排器含义：走 permissions profile 路径前必须注入 `[permissions]` 表；否则用 P0-7 已实证的显式 SandboxPolicy 路径。
+- environments=[] **实测**（probe-summary.json id=7）：turn/start 返回 result.turn.status=inProgress，
+  空数组被接受（本 turn 禁用环境访问语义成立），状态 AVAILABLE。
 
 ## 3. 各 P0 裁决汇总
 
@@ -84,9 +87,10 @@ queue 方法不在生成的 v2 schema JSON（#[experimental]，common.rs:666-701
 
 ## 6. 待办（定稿前）
 
-- [ ] #65 重跑 p0_2b/c/d（配额恢复后）→ 角色层/昵称/V1 close/TUI 证据定稿
-- [ ] #67 p0_4c 模型工具往返证据
-- [ ] #69 p0_6 重跑 A/B/B2/B3/B4/C/D
-- [ ] turn/start permissions/environments 探针（去 --no-model）
-- [ ] 四条可复现 trace 汇总评审（真实团队任务/失败 gate/确认取消/断连对账）
-- [ ] 依赖全部关闭后移除 DRAFT 标记，提交评审
+- [x] turn/start permissions/environments 探针（完整模式实测：AVAILABLE_REQUIRES_CONFIG / AVAILABLE）
+- [ ] #65 重跑 p0_2b/c/d → **本次未通过**：p0_2b 角色/昵称全 effective 但 closeAgentDisposition=unknown；
+      p0_2c_v1 spawnCallFound=false（V1 spawn/wait/close/resume 往返未发生）；p0_2d_tui pty OSError Errno 5。需整改重跑。
+- [ ] #67 p0_4c 模型工具往返证据（配额链因脏证据 checkout 失败未跑，待补跑）
+- [ ] #69 p0_6 重跑 A/B/B2/B3/B4/C/D（同上，待补跑）
+- [ ] 四条可复现 trace 汇总评审（真实团队任务=#65 未通过/失败 gate=#70 已实证/确认取消=#67/#69 待补/断连对账=#69 待补）
+- [ ] 依赖 #64–#71 全部关闭后移除 DRAFT 标记，提交评审
