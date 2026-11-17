@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """P0-7 (issue #70): command/exec verification gates with real exit codes.
 
-Cases: success / failure / timeout / cancel(+cleanup) / out-of-workspace write blocked /
-network blocked. Explicit workspaceWrite sandbox policy on every call; no host-shell fallback.
+Cases: success / failure / timeout / cancel(+cleanup) / cancel process-TREE cleanup /
+out-of-workspace write blocked / network blocked / malformed policy fail-closed /
+well-formed-but-inexpressible policy semantic rejection / default-permission inheritance.
+Explicit workspaceWrite sandbox policy on most calls; no host-shell fallback.
 """
 import json
 import os
@@ -29,7 +31,20 @@ if os.path.exists(ESCAPE_TARGET):
 
 def save(name, obj):
     with open(f"{EV}/{name}", "w") as fh:
-        json.dump(obj, fh, ensure_ascii=False, indent=2, default=str)
+        json.dump(scrub(obj), fh, ensure_ascii=False, indent=2, default=str)
+
+
+PII_KEYS = {"installationId", "serverName", "codexHome", "authMode", "planType"}
+
+
+def scrub(obj):
+    if isinstance(obj, dict):
+        return {k: ("<scrubbed>" if k in PII_KEYS else scrub(v)) for k, v in obj.items()}
+    if isinstance(obj, list):
+        return [scrub(v) for v in obj]
+    if isinstance(obj, str):
+        return obj.replace("fanjiadeMacBook-Pro.local", "<host>").replace("fanjia", "<user>")
+    return obj
 
 
 def pgrep(pattern):
@@ -107,6 +122,74 @@ try:
         "params": {"sandboxPolicy": bad_policy}, "response": r,
         "markerExists": os.path.exists(marker),
         "pass": "error" in r and not os.path.exists(marker),
+    }
+
+    # 8. cancel process TREE: parent python spawns a descendant sleep; both must die
+    tree_script = ("import subprocess,time; subprocess.Popen(['sleep','47']); "
+                   "print('TREE-PARENT-READY',flush=True); time.sleep(47) # p07-tree-parent")
+    params = {"command": ["python3", "-c", tree_script], "cwd": WORK, "sandboxPolicy": POLICY,
+              "processId": "p07-cancel-tree"}
+    rid = client.send_request("command/exec", params)
+    deadline = time.time() + 20
+    parent_before = child_before = ""
+    while time.time() < deadline:
+        parent_before = pgrep("p07-tree-parent")
+        child_before = pgrep("sleep 47")
+        if parent_before and child_before:
+            break
+        time.sleep(0.5)
+    term = client.request("command/exec/terminate", {"processId": "p07-cancel-tree"}, timeout=30)
+    try:
+        r = client.wait_response(rid, timeout=60)
+    except TimeoutError:
+        r = {"error": {"message": "exec response missing after terminate"}}
+    time.sleep(3)
+    parent_after = pgrep("p07-tree-parent")
+    child_after = pgrep("sleep 47")
+    cases["cancelTree"] = {
+        "params": params, "terminateResponse": term, "execResponse": r,
+        "parentBefore": parent_before, "descendantBefore": child_before,
+        "parentAfter": parent_after, "descendantAfter": child_after,
+        "pass": bool(parent_before) and bool(child_before)
+                and not parent_after and not child_after and "error" not in term,
+    }
+
+    # 9. well-formed but semantically inexpressible policy: readOnly.access=restricted
+    # is a recognized legacy field rejected by SandboxPolicy Deserialize
+    # (app-server-protocol/src/protocol/v2/permissions.rs:618-620), not a malformed path.
+    marker2 = os.path.join(WORK, "p07-semantic-policy-marker.txt")
+    legacy_policy = {"type": "readOnly", "networkAccess": False, "access": {"type": "restricted"}}
+    r = client.request("command/exec", {"command": ["python3", "-c",
+                      f"open({marker2!r}, 'w').write('ran')"],
+                      "cwd": WORK, "sandboxPolicy": legacy_policy}, timeout=60)
+    err_msg = json.dumps(r.get("error", {}))
+    cases["semanticPolicyBlocked"] = {
+        "params": {"sandboxPolicy": legacy_policy}, "response": r,
+        "markerExists": os.path.exists(marker2),
+        "rejectionIsSemantic": "readOnly.access is no longer supported" in err_msg,
+        "pass": "error" in r and not os.path.exists(marker2)
+                and "readOnly.access is no longer supported" in err_msg,
+    }
+
+    # 10. no sandboxPolicy/permissionProfile: falls back to session config.permissions
+    # (command_exec_processor.rs else-branch). Must NOT grant host-level write.
+    r = client.request("command/exec", {"command": ["python3", "-c",
+                      f"open({ESCAPE_TARGET!r}, 'w').write('escaped-default')"],
+                      "cwd": WORK}, timeout=60)
+    cases["defaultPolicyNoHostWrite"] = {
+        "params": {"cwd": WORK, "note": "no sandboxPolicy, no permissionProfile"},
+        "response": r,
+        "escapeFileExists": os.path.exists(ESCAPE_TARGET),
+        "pass": not os.path.exists(ESCAPE_TARGET),
+    }
+    if os.path.exists(ESCAPE_TARGET):
+        os.remove(ESCAPE_TARGET)
+    r = client.request("command/exec", {"command": ["python3", "-c", "print('default-ok')"],
+                      "cwd": WORK}, timeout=60)
+    cases["defaultPolicyInWorkspace"] = {
+        "response": r,
+        "pass": r.get("result", {}).get("exitCode") == 0
+                and "default-ok" in (r.get("result", {}).get("stdout") or ""),
     }
 
     deltas = [n for n in client.notifications if n.get("method") == "command/exec/outputDelta"]

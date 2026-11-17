@@ -1,0 +1,67 @@
+{
+  "verdict": "CHANGES_REQUESTED",
+  "summary": "Four exec states, unauthorized write/network denial, and single-process cancel cleanup are evidenced with real command output. However, two explicit acceptance points are not proven: (1) the cancel evidence covers only a leaf `sleep 30` process, so child-process-TREE cleanup is untested; (2) the 'inexpressible policy → blocked' case uses malformed input (relative writableRoot) rejected at deserialization, not the semantic policy-rejection path. Additionally, the background claim that command/exec does not auto-inherit session approval has no evidence, and transcript.json persists device PII.",
+  "criteria_verified": [
+    {
+      "criterion": "command/exec success/failure/timeout/cancel four states",
+      "status": "PROVEN",
+      "evidence": "cases.json ids 2-5: exitCode 0 (stdout 'gate-ok'), 3, 124, 137 respectively; ids sequential after initialize id=1; summary.json allPass=true."
+    },
+    {
+      "criterion": "unauthorized write and network restrictions blocked by sandbox",
+      "status": "PROVEN",
+      "evidence": "escapeWrite exitCode 1, 'PermissionError: [Errno 1] Operation not permitted', escapeFileExists=false; networkBlocked exitCode 1 with socket-connect PermissionError and empty stdout (no 'NET-OK')."
+    },
+    {
+      "criterion": "explicit sandboxPolicy; inexpressible policy → blocked, no host-shell fallback",
+      "status": "PARTIALLY PROVEN",
+      "evidence": "Explicit sandboxPolicy on every request (PROVEN). No-fallback fail-closed is PROVEN (invalidPolicyBlocked markerExists=false). 'blocked' semantics NOT PROVEN: the case is a relative-writableRoot deserialization error (-32600 'Invalid request: AbsolutePathBuf deserialized without a base path'), not a well-formed-policy rejection via set_legacy_sandbox_policy."
+    },
+    {
+      "criterion": "cancel then confirm child process tree cleanup",
+      "status": "PARTIALLY PROVEN",
+      "evidence": "sleepBeforeTerminate '68056 sleep 30' → sleepAfterTerminate '' proves the single target process was reaped; exitCode 137 (128+SIGKILL) is consistent with escalation. No descendant processes are spawned, so tree (ancestor→child) cleanup is unproven."
+    },
+    {
+      "criterion": "exit code reliable for gate / unauthorized blocked / cancel cleanup evidence",
+      "status": "PROVEN (single-process scope for cancel)",
+      "evidence": "Distinct reliable codes 0/3/124/137; escapeWrite+networkBlocked denied without side effects; pgrep before/after for cancel."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "blocker",
+      "criterion": "取消后确认子进程树清理",
+      "finding": "NOT PROVEN. The cancel case runs `sleep 30` (a leaf process with no children). pgrep before/after only proves the single target process disappeared; it does not demonstrate that descendants/grandchildren spawned by the terminated command are also killed. The committed code references core process-group escalation (core/src/exec.rs terminate_process_group → grace → kill_process_group), but the evidence never exercises that escalation.",
+      "evidence": "cases.json 'cancel': sleepBeforeTerminate='68056 sleep 30', sleepAfterTerminate=''. p0_7.py lines 66-80.",
+      "required_fix": "Add a cancel case whose command spawns a detached descendant, e.g. `python3 -c \"import subprocess,time; subprocess.Popen(['sleep','30']); time.sleep(30)\"` with a distinct descendant marker, record `pgrep -fl` of both parent and descendant before terminate, then assert both are gone after terminate. Re-run and commit updated cases.json/summary.json showing the descendant PID disappeared."
+    },
+    {
+      "severity": "major",
+      "criterion": "无法表达当前策略时返回 blocked，不退回宿主 shell",
+      "finding": "PARTIALLY PROVEN. The fail-closed, no-host-shell-fallback requirement is proven (invalid policy → structured error, marker file never created). However, the 'blocked' outcome for an inexpressible policy is not exercised: the test uses a relative writableRoot, which is rejected at JSON deserialization as malformed input ('-32600 Invalid request: AbsolutePathBuf deserialized without a base path'). This is input validation, not the semantic path where a well-formed policy cannot be expressed/enforced (set_legacy_sandbox_policy / can_set_permission_profile rejection).",
+      "evidence": "cases.json 'invalidPolicyBlocked' response; codex-rs/core/src/config/mod.rs:526-531 (set_legacy_sandbox_policy error propagation); codex-rs/app-server-protocol/src/protocol/v2/permissions.rs:616-622 (legacy readOnly.access rejection).",
+      "required_fix": "Add a case with a well-formed but inexpressible policy, e.g. `{\"type\":\"readOnly\",\"networkAccess\":false,\"access\":\"restricted\"}` (returns 'readOnly.access is no longer supported'), and assert the request is rejected fail-closed with no command execution, documenting the rejection as the 'blocked' result."
+    },
+    {
+      "severity": "minor",
+      "criterion": "权限不自动继承会话审批 (background constraint)",
+      "finding": "NOT PROVEN. Every committed case supplies an explicit sandboxPolicy, so there is no evidence that command/exec without an explicit policy fails closed or otherwise does not inherit approvals. The processor's else-branch falls back to self.config.permissions when neither sandboxPolicy nor permissionProfile is provided, making this an untested risk surface.",
+      "evidence": "p0_7.py exec_call always injects POLICY; codex-rs/app-server/src/request_processors/command_exec_processor.rs:242-260.",
+      "required_fix": "Add a case sending command/exec with neither sandboxPolicy nor permissionProfile and assert the effective permissions do not grant host-level write/network access (or that the request is rejected), documenting the default-inheritance behavior."
+    },
+    {
+      "severity": "minor",
+      "criterion": "no secrets committed",
+      "finding": "transcript.json persists device/user identifiers and account metadata: installationId '<installation-id>', serverName '<host>', absolute codexHome path, authMode 'chatgpt', planType 'plus'. Not credentials, but PII that should not live in repo evidence.",
+      "evidence": "transcript.json 'initialize' and 'notifications' blocks.",
+      "required_fix": "Scrub installationId, serverName, codexHome, authMode, and planType from the committed transcript.json before merge."
+    }
+  ],
+  "positive_checks": {
+    "no_core_changes": "true",
+    "no_weakened_acceptance": "networkBlocked stdout-only check is a legitimate fix (stderr traceback echoes the source line containing 'NET-OK'); it tightens rather than weakens the assertion",
+    "allPass_consistency": "true",
+    "no_secrets_non_pii": "partial — see minor finding"
+  }
+}
