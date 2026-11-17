@@ -1,0 +1,8 @@
+{
+  "catalogStillListsSkill": true,
+  "modelReply": [
+    "NO_SKILLS"
+  ],
+  "budgetWarningInStderr": [],
+  "skillExcludedFromModel": true
+}

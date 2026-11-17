@@ -1,0 +1,6 @@
+{
+  "visible_after_set": true,
+  "visible_after_restart": false,
+  "persistence": "NOT_PERSISTENT",
+  "fork_trigger_F2": "TRIGGERED: extraRoots lost across restart; evaluate config path or minimal fork fix (#102)"
+}
