@@ -1,0 +1,43 @@
+{
+  "caps": {
+    "fragment": 900,
+    "per_round": 2000,
+    "handoff_summary": 800,
+    "human_review_threshold": 1000
+  },
+  "fragments": {
+    "skill_injected_fragment": {
+      "o200k_base": 493,
+      "cl100k_base": 492
+    },
+    "workflow_on_demand": {
+      "o200k_base": 500,
+      "cl100k_base": 498
+    },
+    "handoff_on_demand": {
+      "o200k_base": 367,
+      "cl100k_base": 366
+    },
+    "acceptance_on_demand": {
+      "o200k_base": 848,
+      "cl100k_base": 845
+    }
+  },
+  "handoff_summary_example": {
+    "o200k_base": 103,
+    "cl100k_base": 102
+  },
+  "per_round_skill_plus_each": {
+    "team-delivery.md": 993,
+    "handoff-contract.md": 860,
+    "acceptance-criteria.json": 1341
+  },
+  "all_fragments_within_cap": true,
+  "handoff_within_cap": true,
+  "per_round_within_cap": true,
+  "encodings": [
+    "o200k_base",
+    "cl100k_base"
+  ],
+  "allPass": true
+}
