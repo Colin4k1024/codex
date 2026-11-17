@@ -1,0 +1,18 @@
+[package]
+name = "superagent-contracts"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+description = "SuperAgent Swarm Flow data contracts: workflow/node/gate/artifact schemas + deterministic dry-run validation (P2-1 / #78). No engine DTOs, no process execution."
+
+[workspace]
+
+[dependencies]
+schemars = "0.8.22"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+ts-rs = { version = "11", features = ["serde-json-impl"] }
+
+[[bin]]
+name = "export-schemas"
+path = "src/bin/export_schemas.rs"
