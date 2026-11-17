@@ -1,0 +1,60 @@
+{
+  "verdict": "APPROVE",
+  "summary": "All four prior findings are remediated and all issue #71 acceptance criteria are met with real, source-traced evidence. The verdict SUFFICIENT_NO_FORK is now self-consistent and supported.",
+  "acceptance_criteria": [
+    {
+      "criterion": "External client observes subagent lifecycle (spawn/activity/terminal) via thread events/items (SubAgentActivityItem etc.)",
+      "status": "PROVEN",
+      "evidence": "event-samples.json contains 24 real subagent items from the committed P0-2 team-turn transcript: SubAgentActivity kind started x6 / interacted x4 / completed x6, CollabAgentToolCall wait x8; verdict.json lifecycle {spawnObserved, activityObserved, terminalObserved} all true. Four agentThreadIds recovered and each child thread read back via thread/read (readable=true)."
+    },
+    {
+      "criterion": "SubagentStart/SubagentStop hooks as supplementary observation surface",
+      "status": "PROVEN",
+      "evidence": "hooks-events.txt lists SubagentStart/SubagentStop with per-line source paths (protocol/src/hooks.rs:30-32,132-133; protocol/src/protocol.rs:1841-1842; core/src/hook_runtime.rs:139-149,384-414), explicitly labeled 'STATIC protocol existence only' and 'runtime hook firing not traced'. Appendix matches these line ranges."
+    },
+    {
+      "criterion": "Evaluate need for list/read/interrupt/resume control plane; whether agent-graph-store topology is readable via public interface",
+      "status": "PROVEN",
+      "evidence": "no-agent-rpc.txt full ClientRequest enumeration (110 methods): agent/* = 0, graph/store = 0, turn/* = {turn/interrupt, turn/start, turn/steer}, thread/* includes thread/resume. store-negative-evidence.txt shows app-server only internal wiring (mcp_refresh.rs:575, message_processor.rs:414, models_refresh_worker_tests.rs:58) plus store.rs/registry.rs excerpts; matches appendix. thread/list probe agentThreadsListed=[] confirms subagent threads are not enumerated. childHistoryReadableViaPublicRpc=true."
+    },
+    {
+      "criterion": "Written verdict + event samples; minimal RPC proposal if gap",
+      "status": "PROVEN",
+      "evidence": "subagent-observability-conclusion.md and verdict.json deliver SUFFICIENT_NO_FORK with empty minimalRpcProposalIfGap, plus event-samples.json."
+    }
+  ],
+  "remediation_verification": [
+    {
+      "prior_finding": "blocker: interrupt/resume 评估不自洽",
+      "status": "RESOLVED",
+      "evidence": "turn/* namespace is now fully enumerated in no-agent-rpc.txt (turn/interrupt, turn/start, turn/steer). interrupt-cross-evidence.json inlines P0-6 runtime trace C with an explicit sourcePointer (feat/p0-6-stdio-contract:superagent/evidence/p0-6/summary.json, PR #108) and shows sleep child present before interrupt, pgrep-empty after, turn status 'interrupted'. Resume is now evaluated in both conclusion.md and verdict.json.controlPlaneNotes: thread/resume (thread_processor.rs:640 -> thread_resume_inner:3925) cold-resumes a child as an independent top-level session without re-attaching it to the running leader tree; in-tree single-agent resume is the leader's resume_agent tool (MAv1 only, MAv2 has none), so external in-tree per-agent resume is correctly classified as F-1-shaped and not required for MVP."
+    },
+    {
+      "prior_finding": "major: agent-graph-store 无公开读取 RPC 的否定结论缺 store/registry 级证据；拓扑归因错误",
+      "status": "RESOLVED",
+      "evidence": "store-negative-evidence.txt adds full ClientRequest enum (0 graph/store methods) plus git grep over app-server/src (3 hits, all internal wiring) plus agent-graph-store/src/lib.rs, store.rs:1-40 trait surface, and core/src/agent/registry.rs:1-40; all match the appendix. Topology attribution corrected in both conclusion.md and verdict.json to 'SubAgentActivity items + CollabAgentToolCall.agentsStates + child thread/read'; the incorrect thread/list claim is removed and replaced with the measured fact that probes['thread/list'].agentThreadsListed is empty."
+    },
+    {
+      "prior_finding": "minor: hooks 证据无来源路径、无运行时样本",
+      "status": "RESOLVED",
+      "evidence": "hooks-events.txt now carries per-line source file paths and a header marking it static-only; conclusion.md states the runtime firing was not traced and the surface is '静态协议存在性' evidence."
+    },
+    {
+      "prior_finding": "minor: 本地用户名与绝对路径",
+      "status": "RESOLVED",
+      "evidence": "p0_8.py adds scrub() replacing 'fanjia' -> '<user>' and 'fanjiadeMacBook-Pro.local' -> '<host>'; event-samples.json now shows /Users/<user>/Library/... and PII keys (installationId/serverName/codexHome/authMode/planType) -> <scrubbed>. No credentials or tokens present."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "minor",
+      "title": "macOS TMPDIR paths remain unscrubbed",
+      "description": "event-samples.json retains absolute /var/folders/3v/.../T/... temp paths. These are ephemeral, non-identifying, and contain no username, so they do not affect the verdict; the identifying username and hostname were correctly scrubbed."
+    },
+    {
+      "severity": "minor",
+      "title": "resume behavioral claim not fully corroborated in appendix",
+      "description": "The claim that thread_resume_inner:3925 cold-resumes a child as an independent top-level session is labeled 'static code assessment, not a runtime trace' and is directly responsive to the required_fix; only the thread_resume signature (lines 638-642) is in the appendix, so the inner-function behavior is asserted rather than independently verified. Acceptable for a spike and does not undermine the verdict."
+    }
+  ]
+}
