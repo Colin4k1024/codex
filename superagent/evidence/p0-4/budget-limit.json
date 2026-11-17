@@ -1,0 +1,21 @@
+{
+  "threadId": "01a1e880-5087-7f03-aff9-60e61f4d024f",
+  "turnStatus": "completed",
+  "goal": {
+    "threadId": "01a1e880-5087-7f03-aff9-60e61f4d024f",
+    "objective": "Budget-limit probe: write a long essay.",
+    "status": "budgetLimited",
+    "tokenBudget": 500,
+    "tokensUsed": 21927,
+    "timeUsedSeconds": 29,
+    "createdAt": 1794902086,
+    "updatedAt": 1794902115
+  },
+  "goalNotifications": [
+    "thread/goal/updated",
+    "thread/goal/updated"
+  ],
+  "stderrTail": [],
+  "budgetLimitedObserved": true,
+  "accountingObserved": true
+}
