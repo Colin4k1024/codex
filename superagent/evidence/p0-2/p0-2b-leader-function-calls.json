@@ -1,0 +1,141 @@
+{
+  "leaderThreadId": "01a1e994-e05a-7a32-b123-1763b4b4e3ce",
+  "rolloutFiles": [
+    "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-57-37-01a1e995-95ea-75f2-9e37-b835c8930792.jsonl",
+    "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-56-50-01a1e994-e05a-7a32-b123-1763b4b4e3ce.jsonl",
+    "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-57-42-01a1e995-aa65-7e01-b408-2f4c2951eb19.jsonl",
+    "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-57-48-01a1e995-c374-7e72-b82c-baf05f432643.jsonl"
+  ],
+  "calls": [
+    {
+      "call": {
+        "file": "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-57-48-01a1e995-c374-7e72-b82c-baf05f432643.jsonl",
+        "line": 15,
+        "name": "spawn_agent",
+        "arguments": "{\"agent_type\":\"planner\",\"task_name\":\"athena\",\"message\":\"gAAAAABq_E9AH2X0l9fnkNOolWxcnbDLsGys54l0ahPCt_joDdgWJtvjnWsLQE90kuvLPvY7ZCNn69a6kCg1kX9_LyJc4CE52NESKEXYHbgXITfHqNLCzQXnUpGQTXEF8H01fnSt70rUS6t_MUyizTwBzY3kzOMBRDSqyno10zfhi-2S4oAs-VPq6QgXNyP7IPTNg62uRPHFNhRSEpGNTOymPqZMMmwPS4DTzf99Biqx987o2Lb0FEFeEd6-jH-3R9t3BhDCIi8xRwEY7zdiQ7K9fvpvdmafcjhy9F9FyENMpisDCBUi9u1ZU1NHPnXZJ8hlPEisfMVJd9CYhPqQ7V41i17xMIqCaMlkgFBAMVNnZNBelyetqkgPbA4tNDDydnXcdSQ1DkcIwWxG9Y4KTlU8Fu_UEnjgNw==\"}"
+      },
+      "output": {
+        "file": "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-57-48-01a1e995-c374-7e72-b82c-baf05f432643.jsonl",
+        "line": 16,
+        "output": "{\"task_name\":\"/root/athena\"}"
+      }
+    },
+    {
+      "call": {
+        "file": "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-57-48-01a1e995-c374-7e72-b82c-baf05f432643.jsonl",
+        "line": 18,
+        "name": "spawn_agent",
+        "arguments": "{\"agent_type\":\"implementer\",\"task_name\":\"hephaestus\",\"message\":\"gAAAAABq_E9GPyozIisQG-FSTHwi9i4NaeFd_K8Pnzr69OHoXGNZ4peb7VkifikY0ATKhd22t5wwXn2D21TlQyPpcG50e4-RvFsCtmeRbP2XYRIlVF-MgviekwNYQbWgWpvgk5DXHdQlZhTqoKEFeA8NvU3SBaepVgUwblDffrVq8NIHsyIxvHFRa5qe4_kv7vYiSLvHnvnxSipbfTvi7Gk3sw6ybCoYaQEt8glSuvk8718CwFdnoIXi7gz6QqFfh3_vxrYsBiHbqputjYhKhKHbUd6oveS3Mg==\"}"
+      },
+      "output": {
+        "file": "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-57-48-01a1e995-c374-7e72-b82c-baf05f432643.jsonl",
+        "line": 19,
+        "output": "{\"task_name\":\"/root/hephaestus\"}"
+      }
+    },
+    {
+      "call": {
+        "file": "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-57-48-01a1e995-c374-7e72-b82c-baf05f432643.jsonl",
+        "line": 21,
+        "name": "spawn_agent",
+        "arguments": "{\"agent_type\":\"verifier\",\"task_name\":\"verify_gates\",\"message\":\"gAAAAABq_E9MEjPTTKetNTLrnhrs-CNvZ0-xiadKqvaY1gD3W1bLHl7ir4SmXQOzhvQ1J5_cDbCwxAIoax9IXaxsumsJTwYPPSlM3XIjqtjdjKRu1idZ-W0NyIdN8jpHC-0ZgQ4pncTHm-KX4G78u0phY4uasqC9jvMWxbHe7YHdn84FjFTihICFYjIMVcnh0BA2CQaPDsI66se4o7UnaZ9Rp8HYNh7cF_KtLyre1P1r9wcqD78eBCM=\"}"
+      },
+      "output": {
+        "file": "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-56-50-01a1e994-e05a-7a32-b123-1763b4b4e3ce.jsonl",
+        "line": 32,
+        "output": "{\"task_name\":\"/root/verify_gates\"}"
+      }
+    },
+    {
+      "call": {
+        "file": "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-56-50-01a1e994-e05a-7a32-b123-1763b4b4e3ce.jsonl",
+        "line": 35,
+        "name": "list_agents",
+        "arguments": "{}"
+      },
+      "output": {
+        "file": "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-56-50-01a1e994-e05a-7a32-b123-1763b4b4e3ce.jsonl",
+        "line": 37,
+        "output": "{\"agents\":[{\"agent_name\":\"/root\",\"agent_status\":\"running\"},{\"agent_name\":\"/root/athena\",\"agent_status\":\"running\"},{\"agent_name\":\"/root/hephaestus\",\"agent_status\":\"running\"},{\"agent_name\":\"/root/verify_gates\",\"agent_status\":\"running\"}]}"
+      }
+    },
+    {
+      "call": {
+        "file": "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-56-50-01a1e994-e05a-7a32-b123-1763b4b4e3ce.jsonl",
+        "line": 39,
+        "name": "send_message",
+        "arguments": "{\"target\":\"/root/hephaestus\",\"message\":\"gAAAAABq_E9Yoz6Ar44GUqxdwup6-Bxp2eBbbvHnlOz1LJpPggtwPH_EHcx2JH_QTdiClrMfZXhUXgj9U8jfyoXlys2gnCTMyh5PA36ciXPl2tFZdjZYTiqna3gk_4z7TD4xuAPhaatsYewvdll2Qj6zIjGIpNWc6G5s4uu0wy6iFz8vexNoWdEHJOxvrjAhnZRowypLrb9K\"}"
+      },
+      "output": {
+        "file": "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-56-50-01a1e994-e05a-7a32-b123-1763b4b4e3ce.jsonl",
+        "line": 42,
+        "output": "Message accepted. If the recipient is idle and should act now, use followup_task to ask it to act on the message."
+      }
+    },
+    {
+      "call": {
+        "file": "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-56-50-01a1e994-e05a-7a32-b123-1763b4b4e3ce.jsonl",
+        "line": 44,
+        "name": "interrupt_agent",
+        "arguments": "{\"target\":\"/root/hephaestus\"}"
+      },
+      "output": {
+        "file": "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-56-50-01a1e994-e05a-7a32-b123-1763b4b4e3ce.jsonl",
+        "line": 47,
+        "output": "{\"previous_status\":\"running\"}"
+      }
+    },
+    {
+      "call": {
+        "file": "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-56-50-01a1e994-e05a-7a32-b123-1763b4b4e3ce.jsonl",
+        "line": 49,
+        "name": "wait_agent",
+        "arguments": "{\"timeout_ms\":10000}"
+      },
+      "output": {
+        "file": "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-56-50-01a1e994-e05a-7a32-b123-1763b4b4e3ce.jsonl",
+        "line": 52,
+        "output": "{\"message\":\"Wait timed out.\",\"timed_out\":true}"
+      }
+    },
+    {
+      "call": {
+        "file": "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-56-50-01a1e994-e05a-7a32-b123-1763b4b4e3ce.jsonl",
+        "line": 56,
+        "name": "wait_agent",
+        "arguments": "{\"timeout_ms\":10000}"
+      },
+      "output": {
+        "file": "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-56-50-01a1e994-e05a-7a32-b123-1763b4b4e3ce.jsonl",
+        "line": 60,
+        "output": "{\"message\":\"Wait completed.\",\"timed_out\":false}"
+      }
+    },
+    {
+      "call": {
+        "file": "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-56-50-01a1e994-e05a-7a32-b123-1763b4b4e3ce.jsonl",
+        "line": 65,
+        "name": "wait_agent",
+        "arguments": "{\"timeout_ms\":10000}"
+      },
+      "output": {
+        "file": "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-56-50-01a1e994-e05a-7a32-b123-1763b4b4e3ce.jsonl",
+        "line": 68,
+        "output": "{\"message\":\"Wait completed.\",\"timed_out\":false}"
+      }
+    },
+    {
+      "call": {
+        "file": "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-56-50-01a1e994-e05a-7a32-b123-1763b4b4e3ce.jsonl",
+        "line": 72,
+        "name": "list_agents",
+        "arguments": "{}"
+      },
+      "output": {
+        "file": "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-56-50-01a1e994-e05a-7a32-b123-1763b4b4e3ce.jsonl",
+        "line": 74,
+        "output": "{\"agents\":[{\"agent_name\":\"/root\",\"agent_status\":\"running\"},{\"agent_name\":\"/root/athena\",\"agent_status\":{\"completed\":\"Sandbox probe succeeded (`exit_code: 0`), creating [sandbox-probe.txt](/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p02b-r1lj42qp/sandbox-probe.txt).\\n\\nOne-step plan:\\n\\n1. Create `hello.txt` with the required exact content, then accept it with `test \\\"$(cat hello.txt)\\\" = \\\"HELLO-MAV2\\\"`.\\n\\nGoal: produce `hello.txt` with exact content.  \\nNon-goal: I did not create or modify `hello.txt`.  \\nExpected change: one new file, `hello.txt`.\"}},{\"agent_name\":\"/root/hephaestus\",\"agent_status\":\"interrupted\"},{\"agent_name\":\"/root/verify_gates\",\"agent_status\":{\"completed\":\"Acceptance: `hello.txt` exists and its exact contents are `HELLO-MAV2` (including the expected trailing newl"
+      }
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "id": 5,
+  "result": {
+    "thread": {
+      "id": "01a1e995-c374-7e72-b82c-baf05f432643",
+      "environments": null,
+      "extra": null,
+      "sessionId": "01a1e995-c374-7e72-b82c-baf05f432643",
+      "forkedFromId": "01a1e994-e05a-7a32-b123-1763b4b4e3ce",
+      "attachedToThreadId": null,
+      "parentThreadId": "01a1e994-e05a-7a32-b123-1763b4b4e3ce",
+      "preview": "",
+      "ephemeral": false,
+      "section": null,
+      "sectionEnteredAt": null,
+      "projectId": null,
+      "historyMode": "paginated",
+      "modelProvider": "openai",
+      "model": "gpt-5.6-terra",
+      "reasoningEffort": "medium",
+      "createdAt": 1794920268,
+      "updatedAt": 1794920309,
+      "recencyAt": 1794920268,
+      "status": {
+        "type": "notLoaded"
+      },
+      "path": "/private/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-57-48-01a1e995-c374-7e72-b82c-baf05f432643.jsonl",
+      "cwd": "/private/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p02b-r1lj42qp",
+      "cliVersion": "0.0.0",
+      "originator": "superagent-spike",
+      "source": {
+        "subAgent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a1e994-e05a-7a32-b123-1763b4b4e3ce",
+            "depth": 1,
+            "agent_path": "/root/verify_gates",
+            "agent_nickname": "Themis",
+            "agent_role": "verifier"
+          }
+        }
+      },
+      "canAcceptDirectInput": null,
+      "threadSource": "subagent",
+      "agentNickname": "Themis",
+      "agentRole": "verifier",
+      "gitInfo": null,
+      "name": null,
+      "daybreakEnabled": null,
+      "turns": [
+        {
+          "id": "01a1e995-c38b-7c62-a496-85b3a8cf3b4d",
+          "rootTurnId": "01a1e994-e0b4-7601-8b55-b9efa4012bf0",
+          "items": [
+            {
+              "type": "agentMessage",
+              "moderation": null,
+              "id": "msg_0355866c8b0ba99b016afc4f74fab087d0957ea1d9a6af9ab9",
+              "text": "Acceptance: `hello.txt` exists and its exact contents are `HELLO-MAV2` (including the expected trailing newline).",
+              "phase": "final_answer",
+              "memoryCitation": null,
+              "delivery": null,
+              "questions": null,
+              "startedAtMs": 1794920308912,
+              "completedAtMs": 1794920309746
+            }
+          ],
+          "itemsView": "full",
+          "status": "completed",
+          "error": null,
+          "startedAt": 1794920268,
+          "completedAt": 1794920309,
+          "durationMs": 41096
+        }
+      ]
+    },
+    "readState": null
+  }
+}

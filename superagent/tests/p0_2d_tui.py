@@ -45,7 +45,10 @@ PROMPT = (
 )
 
 started_at = time.time()
-argv = [ENGINE, PROMPT]
+# --no-daemon: the bare CLI has no complete local package for the background
+# server; without this flag the TUI exits at startup ("no complete local
+# package ... rerun with --no-daemon"). Matches the P1-4 launcher default.
+argv = [ENGINE, "--no-daemon", PROMPT]
 env = dict(os.environ, CODEX_HOME=HOME_B, TERM="xterm-256color")
 pid, fd = pty.fork()
 if pid == 0:

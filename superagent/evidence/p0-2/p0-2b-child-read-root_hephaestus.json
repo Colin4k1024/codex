@@ -2,13 +2,13 @@
   "id": 4,
   "result": {
     "thread": {
-      "id": "01a1e977-9d3c-7132-bb35-6693fc0b8b03",
+      "id": "01a1e995-aa65-7e01-b408-2f4c2951eb19",
       "environments": null,
       "extra": null,
-      "sessionId": "01a1e977-9d3c-7132-bb35-6693fc0b8b03",
-      "forkedFromId": "01a1e976-dee1-7ec3-9008-7a93961ff7e2",
+      "sessionId": "01a1e995-aa65-7e01-b408-2f4c2951eb19",
+      "forkedFromId": "01a1e994-e05a-7a32-b123-1763b4b4e3ce",
       "attachedToThreadId": null,
-      "parentThreadId": "01a1e976-dee1-7ec3-9008-7a93961ff7e2",
+      "parentThreadId": "01a1e994-e05a-7a32-b123-1763b4b4e3ce",
       "preview": "",
       "ephemeral": false,
       "section": null,
@@ -18,20 +18,20 @@
       "modelProvider": "openai",
       "model": "gpt-5.6-terra",
       "reasoningEffort": "medium",
-      "createdAt": 1794918292,
-      "updatedAt": 1794918311,
-      "recencyAt": 1794918292,
+      "createdAt": 1794920262,
+      "updatedAt": 1794920286,
+      "recencyAt": 1794920262,
       "status": {
         "type": "notLoaded"
       },
-      "path": "/Users/fanjia/Desktop/code/codex/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-24-52-01a1e977-9d3c-7132-bb35-6693fc0b8b03.jsonl",
-      "cwd": "/private/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p02b-aexjcsgm",
+      "path": "/private/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-57-42-01a1e995-aa65-7e01-b408-2f4c2951eb19.jsonl",
+      "cwd": "/private/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p02b-r1lj42qp",
       "cliVersion": "0.0.0",
       "originator": "superagent-spike",
       "source": {
         "subAgent": {
           "thread_spawn": {
-            "parent_thread_id": "01a1e976-dee1-7ec3-9008-7a93961ff7e2",
+            "parent_thread_id": "01a1e994-e05a-7a32-b123-1763b4b4e3ce",
             "depth": 1,
             "agent_path": "/root/hephaestus",
             "agent_nickname": "Hephaestus",
@@ -48,15 +48,15 @@
       "daybreakEnabled": null,
       "turns": [
         {
-          "id": "01a1e977-9d58-7c51-b3a4-21a4809bc1f4",
-          "rootTurnId": "01a1e976-e2ee-7d43-8214-cf9b2d839783",
+          "id": "01a1e995-aa79-7470-87d7-1ff30590bf9a",
+          "rootTurnId": "01a1e994-e0b4-7601-8b55-b9efa4012bf0",
           "items": [],
           "itemsView": "full",
           "status": "interrupted",
           "error": null,
-          "startedAt": 1794918292,
-          "completedAt": 1794918311,
-          "durationMs": 19020
+          "startedAt": 1794920262,
+          "completedAt": 1794920286,
+          "durationMs": 24342
         }
       ]
     },

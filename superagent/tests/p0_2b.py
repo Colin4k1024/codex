@@ -17,6 +17,7 @@ from spike_client import Client, rollout_function_calls
 
 ROOT = "/Users/fanjia/Desktop/code/codex"
 ENGINE = f"{ROOT}/superagent/packaging/superagent-engine"
+TESTS_DIR = os.path.dirname(os.path.abspath(__file__))
 HOME_A = os.path.expanduser("~/Library/Application Support/SuperAgent/codex-home")
 EV = sys.argv[1] if len(sys.argv) > 1 else f"{ROOT}/superagent/evidence/p0-2"
 os.makedirs(EV, exist_ok=True)
@@ -28,9 +29,9 @@ PLANNER_ROLE_MODEL = "gpt-5.6-sol"
 
 with open(f"{HOME_B}/config.toml", "w") as fh:
     fh.write("# P0-2b dedicated home: MAv2 + roles overlay\n")
-    fh.write(open(f"{ROOT}/superagent/tests/p0-2/config-overlay.toml").read())
+    fh.write(open(f"{TESTS_DIR}/p0-2/config-overlay.toml").read())
 for role in ("planner", "implementer", "verifier"):
-    shutil.copyfile(f"{ROOT}/superagent/tests/p0-2/agents/{role}.toml",
+    shutil.copyfile(f"{TESTS_DIR}/p0-2/agents/{role}.toml",
                     f"{HOME_B}/agents/{role}.toml")
 if os.path.exists(f"{HOME_A}/auth.json"):
     shutil.copyfile(f"{HOME_A}/auth.json", f"{HOME_B}/auth.json")
@@ -65,7 +66,7 @@ PROMPT = (
     "Then reply with a one-step plan to create hello.txt. Do not create hello.txt yourself.'\n"
     "2) spawn_agent with agent_type=implementer, task_name=hephaestus, task: 'Use your command execution tool "
     "to run `sleep 30` and wait for it to finish. Then create hello.txt containing exactly HELLO-MAV2.'\n"
-    "3) spawn_agent with agent_type=verifier and WITHOUT any task_name parameter, task: 'Reply with a one-line "
+    "3) spawn_agent with agent_type=verifier, task_name=verify_gates, task: 'Reply with a one-line "
     "acceptance checklist for creating hello.txt. Do not create or modify any file.'\n"
     "4) list_agents; note the agent paths, nicknames and statuses returned.\n"
     "5) send_message to the implementer agent: 'After the sleep finishes, also create extra.txt containing EXTRA.'\n"
@@ -173,7 +174,11 @@ instr_ok = any(v["plannerInstructionsInRollout"] for v in by_role.get("planner",
            any(v["implementerInstructionsInRollout"] for v in by_role.get("implementer", [])) and \
            any(v["verifierInstructionsInRollout"] for v in by_role.get("verifier", []))
 
-# nickname auto-assignment: verifier spawned WITHOUT task_name must carry a candidate nickname
+# nickname auto-assignment: V2 spawn_agent REQUIRES task_name
+# (core/src/tools/handlers/multi_agents_spec_tests.rs:8). Verifier is spawned with
+# task_name=verify_gates; its nickname must still be "Themis" from the role's
+# nickname_candidates pool (control.rs:603), proving auto-assignment independent
+# of task_name (a task_name-derived nickname would be "Verify_gates", not Themis).
 verifier_proof = next(iter(by_role.get("verifier", [])), {})
 nickname_auto_ok = verifier_proof.get("agentNickname") == "Themis"
 nickname_ok = nickname_auto_ok and any(v.get("agentNickname") for v in by_role.get("planner", []))
@@ -200,13 +205,23 @@ elif "close_agent" in leader_summary and ("not available" in leader_summary or "
                                          or "unsupported" in leader_summary or "unknown tool" in leader_summary.lower()):
     close_disposition = "unavailable-in-v2-narrated"
 else:
-    close_disposition = "unknown"
+    # V2 schema definitively excludes close_agent (spec_plan.rs:794 lists it for
+    # V1 only). The close/resume round-trip acceptance is proven by the V1 sibling
+    # probe p0_2c_v1; classify from that runtime evidence, not fragile narration.
+    v1_roundtrip_proven = False
+    try:
+        with open(os.path.join(EV, "p0-2c-v1-summary.json")) as fh:
+            v1_roundtrip_proven = bool(json.load(fh).get("allPass"))
+    except (OSError, ValueError):
+        pass
+    close_disposition = "unavailable-in-v2-schema" if v1_roundtrip_proven else "unknown"
 close_evidence = {
     "disposition": close_disposition,
     "functionCalls": close_calls,
     "leaderRolloutFiles": leader_files,
     "note": "V2 tool schema has no close_agent (core/src/tools/spec_plan.rs:794 lists it for V1 only); "
-            "real close_agent/resume_agent round-trip is proven separately in p0-2c-v1-summary.json.",
+            "real close_agent/resume_agent round-trip is proven separately in p0-2c-v1-summary.json. "
+            "disposition=unavailable-in-v2-schema is asserted only when that sibling probe allPass=true.",
 }
 
 child_paths = [p for p in child_ids if p != "/root"]
@@ -252,6 +267,12 @@ summary = {
     "roleModelOverrideEffective": role_model_ok,
     "defaultSubagentModelEffective": default_model_ok,
     "sandboxFinding": sandbox_finding,
+    "v2SpawnTaskNameRequired": {
+        "required": True,
+        "evidence": "core/src/tools/handlers/multi_agents_spec_tests.rs:8 spawn_agent_tool_v2_requires_task_name; "
+                    "runtime spawn without task_name fails 'missing field task_name'. Nickname auto-assignment "
+                    "is proven with task_name=verify_gates yielding role-pool nickname Themis (control.rs:603).",
+    },
     "roleProof": role_proof,
     "leaderFinalMessage": leader_summary[-4000:],
     "turnCompleted": completed,
