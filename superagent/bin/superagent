@@ -1,0 +1,25 @@
+#!/bin/bash
+# SuperAgent launcher (P1-4 / #76): runs the renamed engine sidecar with the
+# dedicated product CODEX_HOME. Never touches the user's ~/.codex.
+# No arguments -> meta-agent TUI. All arguments pass through to the engine.
+set -euo pipefail
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT="$(dirname "$HERE")"
+ENGINE="${SUPERAGENT_ENGINE:-$ROOT/packaging/superagent-engine}"
+export CODEX_HOME="${SUPERAGENT_CODEX_HOME:-$HOME/Library/Application Support/SuperAgent/codex-home}"
+if [ ! -x "$ENGINE" ]; then
+  echo "FAIL: engine not found/executable: $ENGINE" >&2
+  echo "Build it: cargo build --release -p codex-cli --bin codex, then copy to packaging/superagent-engine (see superagent/README.md)" >&2
+  exit 1
+fi
+mkdir -p "$CODEX_HOME"
+# The renamed sidecar has no packaged daemon layout; default to --no-daemon
+# (override with SUPERAGENT_DAEMON=1). Pass-through args win if flag present.
+DAEMON_ARGS=()
+if [ "${SUPERAGENT_DAEMON:-0}" != "1" ]; then
+  case " $* " in
+    *" --no-daemon "*) ;;
+    *) DAEMON_ARGS+=(--no-daemon) ;;
+  esac
+fi
+exec "$ENGINE" ${DAEMON_ARGS[@]+"${DAEMON_ARGS[@]}"} "$@"
