@@ -32,8 +32,8 @@ SCHEMA='{"type":"object","properties":{"verdict":{"type":"string","enum":["APPRO
   echo "- Verify EVERY acceptance criterion is met by concrete evidence in the diff/files; mark unproven items as blocker findings (NOT PROVEN)."
   echo "- Check: no fabricated success, no weakened acceptance, no secrets committed, no out-of-scope changes to codex-rs core, context-budget rules if prompts/skills changed."
   echo "- For spike/evidence issues: traces must be real command outputs, conclusions must follow from evidence."
-  echo "- Do NOT modify any files. Read-only review. Prefer concluding from the inlined diff and acceptance text; only read local files if strictly necessary, and avoid shell commands unless essential."
-  echo "- Your working directory IS the repo checkout ($ROOT). If you must run git, use plain single 'git diff/show/log ...' commands WITHOUT '-C', without shell variables, without chaining (;, &&, pipes). Everything needed is inlined below; a verdict without any tool calls is expected and acceptable."
+  echo "- Do NOT modify any files. Read-only review. Prefer concluding from the inlined diff and acceptance text; only read local files if strictly necessary."
+  echo "- Do NOT run any Bash/shell commands at all (compound commands are blocked and will abort this review). If part of this prompt was offloaded to a file, use the read_file tool to read it. The inlined diff IS the complete authoritative diff for the reviewed paths; no git history verification is needed."
   echo "- Code citations are pre-extracted in the appendix below; verify claims against it instead of running commands."
   echo "- Output ONLY JSON matching the schema: verdict APPROVE only if all criteria proven and no blocker/major findings; otherwise CHANGES_REQUESTED with actionable required_fix per finding."
 } > "$TMP/prompt.txt"
@@ -50,7 +50,7 @@ for m in re.finditer(r'([A-Za-z0-9_./-]+\.(?:rs|py|toml|md|sh)):(\d+)(?:-(\d+))?
         b = a + 60
     cites.setdefault(path, set()).add((max(1, a - 2), b + 2))
 appendix = ["", "## Code citation appendix (extracted from local HEAD checkout; ranges include 2 context lines)"]
-budget = 60000
+budget = 30000
 used = 0
 for path, ranges in sorted(cites.items()):
     full = None
