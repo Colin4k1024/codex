@@ -1,9 +1,21 @@
 {
   "summary": {
     "memberReadOk": true,
+    "memberWriteOk": true,
+    "subscribeConfirmed": true,
     "nonMemberDenied": true,
     "crossBoardDenied": true,
+    "foreignWriteDenied": true,
     "missingMetaDenied": true,
+    "crossBoardDenialReason": "caller has no persisted agent path",
+    "channelBefore": {
+      "channel_name": "run-spike-p03",
+      "created_at": "2026-11-17T08:26:11.391295Z",
+      "created_by": "/root",
+      "last_message_id": "01a1e89d-b227-7553-a603-dc0fea68f89a",
+      "message_count": 2
+    },
+    "newMessageId": "01a1e89e-338a-7282-a51e-aca461badf39",
     "allPass": true
   },
   "trace": {
@@ -302,7 +314,7 @@
           "content": [
             {
               "type": "text",
-              "text": "{\"has_more\":false,\"n_returned\":1,\"next_cursor\":null,\"results\":[{\"channel_name\":\"run-spike-p03\",\"created_at\":\"2026-11-17T07:53:42.712218Z\",\"created_by\":\"/root\",\"last_message_id\":\"01a1e87f-e12e-72c0-9d90-58fab63d5379\",\"message_count\":2}]}"
+              "text": "{\"has_more\":false,\"n_returned\":1,\"next_cursor\":null,\"results\":[{\"channel_name\":\"run-spike-p03\",\"created_at\":\"2026-11-17T08:26:11.391295Z\",\"created_by\":\"/root\",\"last_message_id\":\"01a1e89d-b227-7553-a603-dc0fea68f89a\",\"message_count\":2}]}"
             }
           ],
           "structuredContent": {
@@ -312,10 +324,58 @@
             "results": [
               {
                 "channel_name": "run-spike-p03",
-                "created_at": "2026-11-17T07:53:42.712218Z",
+                "created_at": "2026-11-17T08:26:11.391295Z",
                 "created_by": "/root",
-                "last_message_id": "01a1e87f-e12e-72c0-9d90-58fab63d5379",
+                "last_message_id": "01a1e89d-b227-7553-a603-dc0fea68f89a",
                 "message_count": 2
+              }
+            ]
+          },
+          "isError": false
+        }
+      }
+    },
+    "memberListThreads": {
+      "httpStatus": 200,
+      "body": {
+        "jsonrpc": "2.0",
+        "id": 4,
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"has_more\":false,\"n_returned\":1,\"next_cursor\":null,\"results\":[{\"last_activity_at\":\"2026-11-17T08:26:51.302820Z\",\"latest_reply\":{\"author\":\"/root/verifier\",\"channel_name\":\"run-spike-p03\",\"created_at\":\"2026-11-17T08:26:51.302820Z\",\"message_id\":\"01a1e89d-b227-7553-a603-dc0fea68f89a\",\"n_chars\":143,\"text_preview\":\"Acknowledged: I read the planner’s summary and verified that it calls for leader review of both posts and confirmation of channel subscription.\",\"thread_id\":\"01a1e89d-6417-70d2-8a96-e725459d5f9e\",\"truncated\":false},\"reply_count\":1,\"root_post\":{\"author\":\"/root/planner\",\"channel_name\":\"run-spike-p03\",\"created_at\":\"2026-11-17T08:26:31.318212Z\",\"message_id\":\"01a1e89d-6417-70d2-8a96-e725459d5f9e\",\"n_chars\":151,\"text_preview\":\"Plan: publish this summary, have the verifier read and acknowledge the thread, then have the leader verify both posts and confirm channel subscription.\",\"thread_id\":\"01a1e89d-6417-70d2-8a96-e725459d5f9e\",\"truncated\":false},\"thread_id\":\"01a1e89d-6417-70d2-8a96-e725459d5f9e\"}]}"
+            }
+          ],
+          "structuredContent": {
+            "has_more": false,
+            "n_returned": 1,
+            "next_cursor": null,
+            "results": [
+              {
+                "last_activity_at": "2026-11-17T08:26:51.302820Z",
+                "latest_reply": {
+                  "author": "/root/verifier",
+                  "channel_name": "run-spike-p03",
+                  "created_at": "2026-11-17T08:26:51.302820Z",
+                  "message_id": "01a1e89d-b227-7553-a603-dc0fea68f89a",
+                  "n_chars": 143,
+                  "text_preview": "Acknowledged: I read the planner’s summary and verified that it calls for leader review of both posts and confirmation of channel subscription.",
+                  "thread_id": "01a1e89d-6417-70d2-8a96-e725459d5f9e",
+                  "truncated": false
+                },
+                "reply_count": 1,
+                "root_post": {
+                  "author": "/root/planner",
+                  "channel_name": "run-spike-p03",
+                  "created_at": "2026-11-17T08:26:31.318212Z",
+                  "message_id": "01a1e89d-6417-70d2-8a96-e725459d5f9e",
+                  "n_chars": 151,
+                  "text_preview": "Plan: publish this summary, have the verifier read and acknowledge the thread, then have the leader verify both posts and confirm channel subscription.",
+                  "thread_id": "01a1e89d-6417-70d2-8a96-e725459d5f9e",
+                  "truncated": false
+                },
+                "thread_id": "01a1e89d-6417-70d2-8a96-e725459d5f9e"
               }
             ]
           },
@@ -327,15 +387,140 @@
       "httpStatus": 200,
       "body": {
         "jsonrpc": "2.0",
-        "id": 4,
+        "id": 5,
         "result": {
           "content": [
             {
               "type": "text",
-              "text": "unknown field `channel_name`, expected one of `thread_id`, `limit`, `cursor`, `max_chars_per_post` at line 1 column 15"
+              "text": "{\"has_more\":false,\"n_returned\":1,\"next_cursor\":null,\"results\":[{\"author\":\"/root/verifier\",\"channel_name\":\"run-spike-p03\",\"created_at\":\"2026-11-17T08:26:51.302820Z\",\"message_id\":\"01a1e89d-b227-7553-a603-dc0fea68f89a\",\"n_chars\":143,\"text_preview\":\"Acknowledged: I read the planner’s summary and verified that it calls for leader review of both posts and confirmation of channel subscription.\",\"thread_id\":\"01a1e89d-6417-70d2-8a96-e725459d5f9e\",\"truncated\":false}],\"root_post\":{\"author\":\"/root/planner\",\"channel_name\":\"run-spike-p03\",\"created_at\":\"2026-11-17T08:26:31.318212Z\",\"message_id\":\"01a1e89d-6417-70d2-8a96-e725459d5f9e\",\"n_chars\":151,\"text_preview\":\"Plan: publish this summary, have the verifier read and acknowledge the thread, then have the leader verify both posts and confirm channel subscription.\",\"thread_id\":\"01a1e89d-6417-70d2-8a96-e725459d5f9e\",\"truncated\":false}}"
             }
           ],
-          "isError": true
+          "structuredContent": {
+            "has_more": false,
+            "n_returned": 1,
+            "next_cursor": null,
+            "results": [
+              {
+                "author": "/root/verifier",
+                "channel_name": "run-spike-p03",
+                "created_at": "2026-11-17T08:26:51.302820Z",
+                "message_id": "01a1e89d-b227-7553-a603-dc0fea68f89a",
+                "n_chars": 143,
+                "text_preview": "Acknowledged: I read the planner’s summary and verified that it calls for leader review of both posts and confirmation of channel subscription.",
+                "thread_id": "01a1e89d-6417-70d2-8a96-e725459d5f9e",
+                "truncated": false
+              }
+            ],
+            "root_post": {
+              "author": "/root/planner",
+              "channel_name": "run-spike-p03",
+              "created_at": "2026-11-17T08:26:31.318212Z",
+              "message_id": "01a1e89d-6417-70d2-8a96-e725459d5f9e",
+              "n_chars": 151,
+              "text_preview": "Plan: publish this summary, have the verifier read and acknowledge the thread, then have the leader verify both posts and confirm channel subscription.",
+              "thread_id": "01a1e89d-6417-70d2-8a96-e725459d5f9e",
+              "truncated": false
+            }
+          },
+          "isError": false
+        }
+      }
+    },
+    "memberReadPost": {
+      "httpStatus": 200,
+      "body": {
+        "jsonrpc": "2.0",
+        "id": 6,
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"author\":\"/root/verifier\",\"channel_name\":\"run-spike-p03\",\"created_at\":\"2026-11-17T08:26:51.302820Z\",\"message_id\":\"01a1e89d-b227-7553-a603-dc0fea68f89a\",\"n_chars\":143,\"next_offset_chars\":143,\"text\":\"Acknowledged: I read the planner’s summary and verified that it calls for leader review of both posts and confirmation of channel subscription.\",\"thread_id\":\"01a1e89d-6417-70d2-8a96-e725459d5f9e\"}"
+            }
+          ],
+          "structuredContent": {
+            "author": "/root/verifier",
+            "channel_name": "run-spike-p03",
+            "created_at": "2026-11-17T08:26:51.302820Z",
+            "message_id": "01a1e89d-b227-7553-a603-dc0fea68f89a",
+            "n_chars": 143,
+            "next_offset_chars": 143,
+            "text": "Acknowledged: I read the planner’s summary and verified that it calls for leader review of both posts and confirmation of channel subscription.",
+            "thread_id": "01a1e89d-6417-70d2-8a96-e725459d5f9e"
+          },
+          "isError": false
+        }
+      }
+    },
+    "memberPost": {
+      "httpStatus": 200,
+      "body": {
+        "jsonrpc": "2.0",
+        "id": 7,
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"author\":\"/root\",\"channel_name\":\"run-spike-p03\",\"created_at\":\"2026-11-17T08:27:24.426193Z\",\"message_id\":\"01a1e89e-338a-7282-a51e-aca461badf39\",\"thread_id\":\"01a1e89e-338a-7282-a51e-aca461badf39\"}"
+            }
+          ],
+          "structuredContent": {
+            "author": "/root",
+            "channel_name": "run-spike-p03",
+            "created_at": "2026-11-17T08:27:24.426193Z",
+            "message_id": "01a1e89e-338a-7282-a51e-aca461badf39",
+            "thread_id": "01a1e89e-338a-7282-a51e-aca461badf39"
+          },
+          "isError": false
+        }
+      }
+    },
+    "memberPostReadback": {
+      "httpStatus": 200,
+      "body": {
+        "jsonrpc": "2.0",
+        "id": 8,
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"author\":\"/root\",\"channel_name\":\"run-spike-p03\",\"created_at\":\"2026-11-17T08:27:24.426193Z\",\"message_id\":\"01a1e89e-338a-7282-a51e-aca461badf39\",\"n_chars\":153,\"next_offset_chars\":153,\"text\":\"P03B-EXTERNAL-WRITE-OK reply-to=01a1e89d-b227-7553-a603-dc0fea68f89a Bounded summary: external caller-bound write probe; one reference, under 200 tokens.\",\"thread_id\":\"01a1e89e-338a-7282-a51e-aca461badf39\"}"
+            }
+          ],
+          "structuredContent": {
+            "author": "/root",
+            "channel_name": "run-spike-p03",
+            "created_at": "2026-11-17T08:27:24.426193Z",
+            "message_id": "01a1e89e-338a-7282-a51e-aca461badf39",
+            "n_chars": 153,
+            "next_offset_chars": 153,
+            "text": "P03B-EXTERNAL-WRITE-OK reply-to=01a1e89d-b227-7553-a603-dc0fea68f89a Bounded summary: external caller-bound write probe; one reference, under 200 tokens.",
+            "thread_id": "01a1e89e-338a-7282-a51e-aca461badf39"
+          },
+          "isError": false
+        }
+      }
+    },
+    "memberSubscribe": {
+      "httpStatus": 200,
+      "body": {
+        "jsonrpc": "2.0",
+        "id": 9,
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"channel_name\":\"run-spike-p03\",\"enabled\":true,\"last_message_id\":\"01a1e89e-338a-7282-a51e-aca461badf39\",\"target_agent\":\"/root\",\"thread_id\":null}"
+            }
+          ],
+          "structuredContent": {
+            "channel_name": "run-spike-p03",
+            "enabled": true,
+            "last_message_id": "01a1e89e-338a-7282-a51e-aca461badf39",
+            "target_agent": "/root",
+            "thread_id": null
+          },
+          "isError": false
         }
       }
     },
@@ -343,10 +528,10 @@
       "httpStatus": 200,
       "body": {
         "jsonrpc": "2.0",
-        "id": 5,
+        "id": 10,
         "error": {
           "code": -32602,
-          "message": "no thread with id: ef545859-ed38-4908-aeaa-35ebe7159dd8"
+          "message": "no thread with id: 08eb2f9e-a93b-4e3a-a3c8-b114a4d5bdd4"
         }
       }
     },
@@ -354,7 +539,18 @@
       "httpStatus": 200,
       "body": {
         "jsonrpc": "2.0",
-        "id": 6,
+        "id": 11,
+        "error": {
+          "code": -32602,
+          "message": "caller has no persisted agent path"
+        }
+      }
+    },
+    "foreignWriteDenied": {
+      "httpStatus": 200,
+      "body": {
+        "jsonrpc": "2.0",
+        "id": 12,
         "error": {
           "code": -32602,
           "message": "caller has no persisted agent path"
@@ -365,7 +561,7 @@
       "httpStatus": 200,
       "body": {
         "jsonrpc": "2.0",
-        "id": 7,
+        "id": 13,
         "error": {
           "code": -32602,
           "message": "Calls require threadId and sessionId metadata"

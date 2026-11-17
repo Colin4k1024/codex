@@ -1,0 +1,41 @@
+{
+  "verdict": "CHANGES_REQUESTED",
+  "summary": "The in-session channel handoff is largely corroborated (external get_channels shows run-spike-p03 with created_by=/root and message_count=2, and last_message_id matches the verifier's reply ID), and three external-MCP denials are real. However, the probe records a failed authorized read as a pass, the external write path is untested, and two top-line claims in board-acl-conclusion.md do not follow from the captured evidence. These require fixes before the issue can be approved.",
+  "findings": [
+    {
+      "severity": "blocker",
+      "criterion": "message-board-mcp external client authorized read (授权可读)",
+      "finding": "memberReadThread is recorded as a successful authorized read (`summary.memberReadOk: true`, `summary.allPass: true`) and the conclusion states 'memberGetChannels / memberReadThread：成员身份读取成功', but the captured response is a tool error: `isError: true` with text `unknown field channel_name, expected one of thread_id, limit, cursor, max_chars_per_post`. The probe's ok() helper (p0_3b_mcp.py) treats any HTTP 200 body containing a `result` key as success and ignores `isError`, so a failed read_thread call is counted as success. This is a fabricated-success case; the authorized read_thread path is therefore NOT PROVEN.",
+      "evidence": "superagent/evidence/p0-3/mcp-caller-bound.json -> trace.memberReadThread.body (isError true, unknown field channel_name); superagent/tests/p0_3b_mcp.py ok() and summary computation; superagent/evidence/p0-3/board-acl-conclusion.md '实测四态' bullet.",
+      "required_fix": "Fix ok() to require `isError == false` (or equivalent: no `error` key and `result.isError` is false). Re-run the probe by first obtaining the channel's first-post thread_id (e.g. via list_threads/read_post) and calling read_thread with `thread_id`, not `channel_name`. Regenerate mcp-caller-bound.json and correct board-acl-conclusion.md so it claims only what the evidence shows. Authorized read is currently proven only by get_channels."
+    },
+    {
+      "severity": "blocker",
+      "criterion": "message-board-mcp external client caller-bound read/write (读写)",
+      "finding": "The external MCP probe exercises only reads (get_channels, read_thread). No post or create_channel tools/call is issued through the HTTP client, so the write half of '按 caller-bound 身份读写' is NOT PROVEN. The acceptance line ('外部 MCP 授权可读、越权拒绝') only demands authorized read, but the checklist item explicitly says read/write, and the current evidence does not cover write.",
+      "evidence": "superagent/tests/p0_3b_mcp.py main() issues only get_channels and read_thread; superagent/evidence/p0-3/mcp-caller-bound.json trace contains no post/create_channel entry.",
+      "required_fix": "Add an authorized post (and ideally a create_channel) via tools/call with `_meta.threadId`/`_meta.sessionId` and assert a successful write recorded under the caller-bound identity, plus optionally assert a foreign-caller write is denied (or get_channels on the new channel). Alternatively, explicitly document and get sign-off that the issue's acceptance is read-only for the external path."
+    },
+    {
+      "severity": "major",
+      "criterion": "Channel ACL denial reasoning (越权拒绝) and the board-acl-conclusion permission-model statement",
+      "finding": "The conclusion attributes crossBoardDenied to '不属于本 board 树' and cites the SQLite threads/thread_spawn_edges recursive membership walk (persisted.rs:22-79), but the captured error is `caller has no persisted agent path`. The probe therefore does not demonstrate the claimed membership-tree rejection of a known caller against a board tree; the stated mechanism does not follow from the evidence. The other two denials (random UUID threadId -> 'no thread with id'; missing _meta -> invalid_params) are genuine.",
+      "evidence": "superagent/evidence/p0-3/mcp-caller-bound.json -> trace.crossBoardDenied.body.error.message == 'caller has no persisted agent path'; board-acl-conclusion.md '外部 MCP 路径' and '权限模型书面结论' sections.",
+      "required_fix": "Rewrite the conclusion to match the actual denial reason, or add a probe case where a known/persisted caller is rejected specifically because the target thread is outside its board tree, then re-derive the ACL statement from that evidence."
+    },
+    {
+      "severity": "major",
+      "criterion": "In-session subscribe (and read_thread) tool usability",
+      "finding": "create_channel and post are independently corroborated (external get_channels shows run-spike-p03 created by /root with message_count=2, and last_message_id matches the verifier's reply ID). read_thread and subscribe are evidenced only by the model's own final_answer narration ('Subscription confirmed: /root is subscribed to run-spike-p03 (enabled: true)'). No raw tool-call result items for create_channel/post/read_thread/subscribe are captured in the transcript, so subscribe success has no independent verification and read_thread evidence is indirect.",
+      "evidence": "superagent/evidence/p0-3/board-turn-transcript.json contains agentMessage narratives but no tool-call result payload for the board tools (collabAgentToolCall entries are only `wait`); superagent/evidence/p0-3/mcp-caller-bound.json get_channels corroborates channel + 2 messages.",
+      "required_fix": "Capture actual tool-call results in the transcript for subscribe (and ideally read_thread), or add an external MCP check that independently confirms the subscription state after the in-session step."
+    },
+    {
+      "severity": "minor",
+      "criterion": "Two-role handoff with reference + bounded summary (引用+有界摘要)",
+      "finding": "The handoff itself is corroborated (planner post + verifier reply = 2 messages with matching message IDs), but the actual post/reply text is never captured. The '引用' (artifact/message reference) and '有界摘要' (bounded summary) content requirements can therefore only be inferred from the models' final answers, not verified directly.",
+      "evidence": "superagent/evidence/p0-3/board-turn-transcript.json final_answer texts report message IDs but no post content; mcp-caller-bound.json get_channels shows message_count=2 and last_message_id only.",
+      "required_fix": "Capture the post and reply content (e.g. read_post on both message IDs via the external MCP client after the in-session turn) so the reference and bounded summary are directly evidenced."
+    }
+  ]
+}
