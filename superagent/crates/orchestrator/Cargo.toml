@@ -1,0 +1,17 @@
+[package]
+name = "superagent-orchestrator"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+description = "SuperAgent deterministic outer orchestrator (P2-4 / #81): serial DAG scheduling, explicit state machine, gate-evidence-only success, finite retry, token/wall budget, dependency invalidation propagation. No natural-language success, no model/process execution (executor is injected)."
+
+[workspace]
+
+[dependencies]
+superagent-contracts = { path = "../contracts" }
+superagent-storage = { path = "../storage" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[dev-dependencies]
+tempfile = "3"

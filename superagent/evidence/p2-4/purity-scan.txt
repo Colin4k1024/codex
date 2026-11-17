@@ -1,0 +1,83 @@
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+0superagent-orchestrator v0.1.0 (/Users/fanjia/Desktop/code/codex/superagent/crates/orchestrator)
+1serde v1.0.229
+2serde_core v1.0.229
+2serde_derive v1.0.229 (proc-macro)
+3proc-macro2 v1.0.107
+4unicode-ident v1.0.27
+3quote v1.0.47
+4proc-macro2 v1.0.107 (*)
+3syn v3.0.10
+4proc-macro2 v1.0.107 (*)
+4quote v1.0.47 (*)
+4unicode-ident v1.0.27
+1serde_json v1.0.154
+2itoa v1.0.19
+2memchr v2.8.3
+2serde_core v1.0.229
+2zmij v1.0.23
+1superagent-contracts v0.1.0 (/Users/fanjia/Desktop/code/codex/superagent/crates/contracts)
+2schemars v0.8.22
+3dyn-clone v1.0.20
+3schemars_derive v0.8.22 (proc-macro)
+4proc-macro2 v1.0.107 (*)
+4quote v1.0.47 (*)
+4serde_derive_internals v0.29.1
+5proc-macro2 v1.0.107 (*)
+5quote v1.0.47 (*)
+5syn v2.0.119
+6proc-macro2 v1.0.107 (*)
+6quote v1.0.47 (*)
+6unicode-ident v1.0.27
+4syn v2.0.119 (*)
+3serde v1.0.229 (*)
+3serde_json v1.0.154 (*)
+2serde v1.0.229 (*)
+2serde_json v1.0.154 (*)
+2ts-rs v11.1.0
+3serde_json v1.0.154 (*)
+3thiserror v2.0.21
+4thiserror-impl v2.0.21 (proc-macro)
+5proc-macro2 v1.0.107 (*)
+5quote v1.0.47 (*)
+5syn v3.0.10 (*)
+3ts-rs-macros v11.1.0 (proc-macro)
+4proc-macro2 v1.0.107 (*)
+4quote v1.0.47 (*)
+4syn v2.0.119 (*)
+4termcolor v1.4.1
+1superagent-storage v0.1.0 (/Users/fanjia/Desktop/code/codex/superagent/crates/storage)
+2rusqlite v0.32.1
+3bitflags v2.13.2
+3fallible-iterator v0.3.0
+3fallible-streaming-iterator v0.1.9
+3hashlink v0.9.1
+4hashbrown v0.14.5
+5ahash v0.8.12
+6cfg-if v1.0.5
+6once_cell v1.21.4
+6zerocopy v0.8.63
+6version_check v0.9.5
+3libsqlite3-sys v0.30.1
+4cc v1.11.2
+5find-msvc-tools v0.1.15
+5shlex v2.0.1
+4pkg-config v0.3.34
+4vcpkg v0.2.15
+3smallvec v1.16.5
+2serde v1.0.229 (*)
+2serde_json v1.0.154 (*)
+2superagent-contracts v0.1.0 (/Users/fanjia/Desktop/code/codex/superagent/crates/contracts) (*)
+1tempfile v3.27.0
+2fastrand v2.5.0
+2getrandom v0.4.3
+3cfg-if v1.0.5
+3libc v0.2.191
+2once_cell v1.21.4
+2rustix v1.1.6
+3bitflags v2.13.2
+3errno v0.3.15
+4libc v0.2.191
+3libc v0.2.191
