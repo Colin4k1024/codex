@@ -1,0 +1,10 @@
+-- no token (expect 401):
+HTTP 401
+-- with token:
+HTTP 200
+data: 
+id: 0
+retry: 3000
+
+data: {"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2025-06-18","capabilities":{"tools":{}},"serverInfo":{"name":"codex-message-board","version":"0.0.0"}}}
+
