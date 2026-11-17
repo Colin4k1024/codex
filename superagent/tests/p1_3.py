@@ -21,6 +21,7 @@ import os
 import re
 import shutil
 import sys
+import tempfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
