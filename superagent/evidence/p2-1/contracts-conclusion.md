@@ -1,7 +1,7 @@
 # P2-1 (#78) contracts — 结论与验收映射
 
 日期：2026-11-17 · 分支 feat/p2-1-contracts（基于 origin/main 697de6498）
-状态：**实现完成，20/20 测试 PASS**；合并顺序遵守依赖（#72 关闭后合并）。
+状态：**实现完成，21/21 测试 PASS（r1 APPROVE 后 minor 整改）**；合并顺序遵守依赖（#72 关闭后合并）。
 
 ## 1. 交付物
 
@@ -12,7 +12,7 @@
 | JSON Schema 导出（schemars） | superagent/crates/contracts/schema/json/{Workflow,Node,Gate,ArtifactSpec}.json |
 | TS 绑定导出（ts-rs，cargo test 时生成） | superagent/crates/contracts/bindings/ts/*.ts（8 个类型） |
 | schema 导出二进制 | superagent/crates/contracts/src/bin/export_schemas.rs |
-| 验收测试（20 个） | superagent/crates/contracts/tests/dry_run.rs |
+| 验收测试（21 个） | superagent/crates/contracts/tests/dry_run.rs |
 | 合法 fixture | superagent/crates/contracts/tests/fixtures/valid-workflow.json |
 
 ## 2. 验收映射
@@ -29,7 +29,7 @@
 
 ## 3. 测试运行
 
-`cargo test`（superagent/crates/contracts/）：**20 passed; 0 failed**（集成）+ 8 passed（ts-rs 生成的导出测试）。完整输出 evidence/p2-1/test-output.log。
+`cargo test`（superagent/crates/contracts/）：**21 passed; 0 failed**（集成）+ 8 passed（ts-rs 生成的导出测试）。完整输出 evidence/p2-1/test-output.log。
 `cargo run --bin export-schemas -- schema/json`：4 个 schema 写出，evidence/p2-1/schema-export.log。
 
 ## 4. 诚实性声明 / 已知限制
@@ -44,7 +44,17 @@
 
 ```bash
 cd superagent/crates/contracts
-cargo test                                   # 20+8 tests, TS bindings regenerated
+cargo test                                   # 21+8 tests, TS bindings regenerated
 cargo run --bin export-schemas -- schema/json  # JSON schemas
 grep -rn "std::process\|Command::new\|codex_" src/  # expect no matches
 ```
+
+## 6. 审查记录（grok 独立审查）
+
+- r1（head 6e65cf90e）：**APPROVE**，无阻断项；4 个 minor（grok-review.json）。
+- minor 整改（r2 提交）：
+  1. **已修复**：loop_missing_required_fields_fails_deserialization 原用字符串删除，删 gate 字段会留下尾逗号导致 JSON 语法错误而非缺字段错误。改为 serde_json::Value 逐字段 remove + from_value，断言错误信息为 `missing field \`<name>\``。
+  2. **已修复**：Node.json loop 分支 max_attempts/wall_timeout_secs 的 schema minimum 原为 0.0；加 `#[schemars(range(min = 1))]`，schema 层即拒绝 0 值；新增测试 node_schema_loop_bounds_at_schema_level 断言 minimum=1.0。
+  3. **保留并披露**（§4.1）：Node/Gate 顶层 additionalProperties:false 受 serde flatten+tagged enum 限制无法生成；未知 type/kind 仍由 oneOf enum 在 schema 层失败。
+  4. **保留并披露**：purity 守卫为静态源码断言 + 独立 grep；dry_run 纯函数签名（仅数据入参出参、无运行时句柄）是结构性保证，行为性沙箱证明属执行层（#77/#81）职责。
+- 整改后测试：**21 passed; 0 failed**（集成）+ 8 passed（ts-rs 导出）。test-output.log 已更新。

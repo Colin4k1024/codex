@@ -85,7 +85,9 @@ pub enum NodeKind {
     /// Retry loop: must carry max_attempts, wall_timeout and an explicit gate.
     Loop {
         body: String,
+        #[schemars(range(min = 1))]
         max_attempts: u32,
+        #[schemars(range(min = 1))]
         wall_timeout_secs: u64,
         gate: String,
     },
