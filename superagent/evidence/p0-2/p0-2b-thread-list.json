@@ -1,0 +1,184 @@
+{
+  "id": 2,
+  "result": {
+    "data": [
+      {
+        "id": "01a1e8a0-c7d5-7642-8ddb-958d1aab3a98",
+        "environments": null,
+        "extra": null,
+        "sessionId": "01a1e8a0-c7d5-7642-8ddb-958d1aab3a98",
+        "forkedFromId": null,
+        "attachedToThreadId": null,
+        "parentThreadId": null,
+        "preview": "You are the SuperAgent leader. Use the multi-agent tools EXACTLY in this order, one call at a time:\n1) spawn_agent with agent_type=planner, task_name=athena, task: 'Use your command execution tool to run `touch sandbox-probe.txt`. Report whether the command succeeded or was blocked by the sandbox. Then reply with a one-step plan to create hello.txt. Do not create hello.txt yourself.'\n2) spawn_agent with agent_type=implementer, task_name=hephaestus, task: 'Use your command execution tool to run `sleep 30` and wait for it to finish. Then create hello.txt containing exactly HELLO-MAV2.'\n3) list_agents; note the nicknames and statuses returned.\n4) send_message to the implementer agent: 'After the sleep finishes, also create extra.txt containing EXTRA.'\n5) interrupt_agent the implementer agent.\n6) wait_agent for both agents and report their final statuses.\n7) Attempt close_agent on the implementer agent. If that tool does not exist or errors, quote the exact error.\nFinally reply with a numbered summary of the results of steps 1-7, including the nicknames you observed.",
+        "ephemeral": false,
+        "section": null,
+        "sectionEnteredAt": null,
+        "projectId": null,
+        "historyMode": "paginated",
+        "modelProvider": "openai",
+        "model": "gpt-6-astra",
+        "reasoningEffort": null,
+        "createdAt": 1794904213,
+        "updatedAt": 1794904281,
+        "recencyAt": 1794904213,
+        "status": {
+          "type": "notLoaded"
+        },
+        "path": "/Users/fanjia/Desktop/code/codex/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T16-30-13-01a1e8a0-c7d5-7642-8ddb-958d1aab3a98.jsonl",
+        "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p02b-__pzvucm",
+        "cliVersion": "0.0.0",
+        "originator": "superagent-spike",
+        "source": "vscode",
+        "canAcceptDirectInput": null,
+        "threadSource": null,
+        "agentNickname": null,
+        "agentRole": null,
+        "gitInfo": null,
+        "name": null,
+        "daybreakEnabled": null,
+        "turns": []
+      },
+      {
+        "id": "01a1e89e-9873-70f2-a48f-9bd38fb6a36a",
+        "environments": null,
+        "extra": null,
+        "sessionId": "01a1e89e-9873-70f2-a48f-9bd38fb6a36a",
+        "forkedFromId": null,
+        "attachedToThreadId": null,
+        "parentThreadId": null,
+        "preview": "You are the SuperAgent leader. Use the multi-agent tools EXACTLY in this order, one call at a time:\n1) spawn_agent with agent_type=planner, task_name=athena, task: 'Use your command execution tool to run `touch sandbox-probe.txt`. Report whether the command succeeded or was blocked by the sandbox. Then reply with a one-step plan to create hello.txt. Do not create hello.txt yourself.'\n2) spawn_agent with agent_type=implementer, task_name=hephaestus, task: 'Use your command execution tool to run `sleep 30` and wait for it to finish. Then create hello.txt containing exactly HELLO-MAV2.'\n3) list_agents; note the nicknames and statuses returned.\n4) send_message to the implementer agent: 'After the sleep finishes, also create extra.txt containing EXTRA.'\n5) interrupt_agent the implementer agent.\n6) wait_agent for both agents and report their final statuses.\n7) Attempt close_agent on the implementer agent. If that tool does not exist or errors, quote the exact error.\nFinally reply with a numbered summary of the results of steps 1-7, including the nicknames you observed.",
+        "ephemeral": false,
+        "section": null,
+        "sectionEnteredAt": null,
+        "projectId": null,
+        "historyMode": "paginated",
+        "modelProvider": "openai",
+        "model": "gpt-6-astra",
+        "reasoningEffort": null,
+        "createdAt": 1794904071,
+        "updatedAt": 1794904125,
+        "recencyAt": 1794904071,
+        "status": {
+          "type": "notLoaded"
+        },
+        "path": "/Users/fanjia/Desktop/code/codex/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T16-27-51-01a1e89e-9873-70f2-a48f-9bd38fb6a36a.jsonl",
+        "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p02b-lei1b0uo",
+        "cliVersion": "0.0.0",
+        "originator": "superagent-spike",
+        "source": "vscode",
+        "canAcceptDirectInput": null,
+        "threadSource": null,
+        "agentNickname": null,
+        "agentRole": null,
+        "gitInfo": null,
+        "name": null,
+        "daybreakEnabled": null,
+        "turns": []
+      },
+      {
+        "id": "01a1e899-9367-70e1-b73c-d6c247508c8b",
+        "environments": null,
+        "extra": null,
+        "sessionId": "01a1e899-9367-70e1-b73c-d6c247508c8b",
+        "forkedFromId": null,
+        "attachedToThreadId": null,
+        "parentThreadId": null,
+        "preview": "You are the SuperAgent leader. Use the multi-agent tools EXACTLY in this order, one call at a time:\n1) spawn_agent with agent_type=planner, task_name=athena, task: 'Use your command execution tool to run `touch sandbox-probe.txt`. Report whether the command succeeded or was blocked by the sandbox. Then reply with a one-step plan to create hello.txt. Do not create hello.txt yourself.'\n2) spawn_agent with agent_type=implementer, task_name=hephaestus, task: 'Use your command execution tool to run `sleep 30` and wait for it to finish. Then create hello.txt containing exactly HELLO-MAV2.'\n3) list_agents; note the nicknames and statuses returned.\n4) send_message to the implementer agent: 'After the sleep finishes, also create extra.txt containing EXTRA.'\n5) interrupt_agent the implementer agent.\n6) wait_agent for both agents and report their final statuses.\n7) Attempt close_agent on the implementer agent. If that tool does not exist or errors, quote the exact error.\nFinally reply with a numbered summary of the results of steps 1-7, including the nicknames you observed.",
+        "ephemeral": false,
+        "section": null,
+        "sectionEnteredAt": null,
+        "projectId": null,
+        "historyMode": "paginated",
+        "modelProvider": "openai",
+        "model": "gpt-6-astra",
+        "reasoningEffort": null,
+        "createdAt": 1794903741,
+        "updatedAt": 1794903786,
+        "recencyAt": 1794903741,
+        "status": {
+          "type": "notLoaded"
+        },
+        "path": "/Users/fanjia/Desktop/code/codex/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T16-22-21-01a1e899-9367-70e1-b73c-d6c247508c8b.jsonl",
+        "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p02b-uon2p27t",
+        "cliVersion": "0.0.0",
+        "originator": "superagent-spike",
+        "source": "vscode",
+        "canAcceptDirectInput": null,
+        "threadSource": null,
+        "agentNickname": null,
+        "agentRole": null,
+        "gitInfo": null,
+        "name": null,
+        "daybreakEnabled": null,
+        "turns": []
+      },
+      {
+        "id": "01a1e897-461d-70a1-b248-723768bcce20",
+        "environments": null,
+        "extra": null,
+        "sessionId": "01a1e897-461d-70a1-b248-723768bcce20",
+        "forkedFromId": null,
+        "attachedToThreadId": null,
+        "parentThreadId": null,
+        "preview": "You are the SuperAgent leader. Use the multi-agent tools EXACTLY in this order, one call at a time:\n1) spawn_agent with agent_type=planner, nickname=Athena, task: 'Use your command execution tool to run `touch sandbox-probe.txt`. Report whether the command succeeded or was blocked by the sandbox. Then reply with a one-step plan to create hello.txt. Do not create hello.txt yourself.'\n2) spawn_agent with agent_type=implementer, nickname=Hephaestus, task: 'Use your command execution tool to run `sleep 30` and wait for it to finish. Then create hello.txt containing exactly HELLO-MAV2.'\n3) list_agents; note the nicknames and statuses returned.\n4) send_message to the implementer agent: 'After the sleep finishes, also create extra.txt containing EXTRA.'\n5) interrupt_agent the implementer agent.\n6) wait_agent for both agents and report their final statuses.\n7) Attempt close_agent on the implementer agent. If that tool does not exist or errors, quote the exact error.\nFinally reply with a numbered summary of the results of steps 1-7, including the nicknames you observed.",
+        "ephemeral": false,
+        "section": null,
+        "sectionEnteredAt": null,
+        "projectId": null,
+        "historyMode": "paginated",
+        "modelProvider": "openai",
+        "model": "gpt-6-astra",
+        "reasoningEffort": null,
+        "createdAt": 1794903591,
+        "updatedAt": 1794903615,
+        "recencyAt": 1794903592,
+        "status": {
+          "type": "notLoaded"
+        },
+        "path": "/Users/fanjia/Desktop/code/codex/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T16-19-51-01a1e897-461d-70a1-b248-723768bcce20.jsonl",
+        "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p02b-6y0ci164",
+        "cliVersion": "0.0.0",
+        "originator": "superagent-spike",
+        "source": "vscode",
+        "canAcceptDirectInput": null,
+        "threadSource": null,
+        "agentNickname": null,
+        "agentRole": null,
+        "gitInfo": null,
+        "name": null,
+        "daybreakEnabled": null,
+        "turns": []
+      }
+    ],
+    "readStates": {
+      "01a1e8a0-c7d5-7642-8ddb-958d1aab3a98": {
+        "firstUnread": {
+          "type": "turn",
+          "turnId": "01a1e8a0-c940-70a1-bcfc-de5fa9bda45e"
+        },
+        "revision": "176c49a5-2713-40f5-8a3e-a76300f46d53"
+      },
+      "01a1e89e-9873-70f2-a48f-9bd38fb6a36a": {
+        "firstUnread": {
+          "type": "turn",
+          "turnId": "01a1e89e-9dce-7a03-9b8d-5d6d544e3dd6"
+        },
+        "revision": "a787c569-d8e6-4631-bad6-e6e7c3ef6887"
+      },
+      "01a1e897-461d-70a1-b248-723768bcce20": {
+        "firstUnread": null,
+        "revision": "initial:01a1e897-461d-70a1-b248-723768bcce20"
+      },
+      "01a1e899-9367-70e1-b73c-d6c247508c8b": {
+        "firstUnread": {
+          "type": "turn",
+          "turnId": "01a1e899-94a0-7cc2-966b-eac892a08f78"
+        },
+        "revision": "64843a72-3312-4bd0-b276-0c3194388ec9"
+      }
+    },
+    "nextCursor": null,
+    "backwardsCursor": "2026-11-17T08:30:13.486Z"
+  }
+}
