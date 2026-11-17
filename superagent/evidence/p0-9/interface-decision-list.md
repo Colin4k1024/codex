@@ -41,6 +41,12 @@ queue 方法不在生成的 v2 schema JSON（#[experimental]，common.rs:666-701
   探针用 `[]` 验证禁用语义。
 - 编排器含义：permissions profile 与 SandboxPolicy 二选一；P0-7 已证明 command/exec 显式
   SandboxPolicy 路径，permissions profile 路径待本探针定稿后裁决取舍。
+- 未知 profile 预期报错路径（静态推定，运行时探针确认）：
+  codex-rs/app-server/src/request_processors/turn_processor.rs:711/1039 透传 params.permissions →
+  codex-rs/core/src/config/mod.rs:5066 → codex-rs/core/src/config/permissions.rs:226 →
+  codex-rs/config/src/permissions_toml.rs:40-75 resolve_profile →
+  UndefinedProfile（:123）文案 "default_permissions refers to undefined profile `<name>`"，
+  含 permissions+profile 关键词，探针 classify() 映射 AVAILABLE_REQUIRES_CONFIG。
 
 ## 3. 各 P0 裁决汇总
 
