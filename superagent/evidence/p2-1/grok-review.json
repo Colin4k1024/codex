@@ -1,48 +1,27 @@
 {
   "verdict": "APPROVE",
-  "summary": "所有验收标准均有具体证据支撑，无阻断项。契约 crate 独立于 codex-rs（零 codex-* 依赖、零 codex_ 符号），未知 node/gate 类型在类型系统与 JSON Schema 双层失败，DAG 循环检测与 dry-run 纯函数校验均已实现并有 20 个集成测试覆盖。发现的 4 个问题均为次要（minor），且其中 schema 相关缺口已在结论中诚实披露，不削弱'未知类型失败'这一核心验收。",
+  "summary": "All five #78 acceptance criteria are proven by concrete evidence in the reviewed diff (origin/main..ba98c800a). Criterion-by-criterion: (1) JSON schemas exist — src/lib.rs defines Workflow/Node/Gate/ArtifactSpec/VariableSpec/VarType with schemars, src/bin/export_schemas.rs emits them, and schema/json/{Workflow,Node,Gate,ArtifactSpec}.json are committed. (2) Node kind distinguishes capability (command_ref against catalog), verification (argv against programs + required gates), and loop (max_attempts/wall_timeout_secs/gate all required, no serde defaults; schema-level minimum=1.0). (3) Product Rust types export TS via ts-rs (8 bindings/ts types + JsonValue dependency type); the crate has zero codex-* dependencies (Cargo.toml) and the purity test asserts no codex_ symbol. Engine DTO isolation in the adapter is correctly out of scope (#77). (4) dry_run validates schema_version, node id uniqueness, depends_on referential integrity/self-dependency, model/catalog/program availability, variable declaration/required/type checks, gate definitions (command argv, artifact_schema registry, approval prompt), artifact schema_refs, and DAG cycles via Kahn. (5) tests/dry_run.rs contains 21 tests covering unknown type/gate/field failures, DAG cycle/self-dependency, loop constraints, capability/verification distinction, variable/tool/model/gate checks, and a structural purity guard; dry_run is a pure function returning Vec<ValidationError> with no std::process/Command::new/codex_ in src/lib.rs. Scope holds: only superagent/crates/contracts/ is touched, zero codex-rs engine changes, no secrets, no prompt/skill changes. r2 changes (loop missing-field via serde_json::Value remove, schemars range(min=1), Node.json minimum=1.0, node_schema_loop_bounds_at_schema_level test) are all present and correct in the diff.",
   "findings": [
     {
       "severity": "minor",
-      "criterion": "A1: schema 校验测试 / loop 必填字段",
-      "finding": "loop_missing_required_fields_fails_deserialization 中删除 \"\\\"gate\\\": \\\"tests-pass\\\"\" 子串后，loop 对象末行留下尾逗号（\"wall_timeout_secs\": 1800, 后紧跟 }），serde_json 会因 JSON 语法错误（trailing comma）而失败，而非因缺少 gate 字段。该子用例测试通过原因与断言意图不符。",
-      "evidence": "tests/dry_run.rs 中 for field in [\"\\\"max_attempts\\\": 2,\", \"\\\"wall_timeout_secs\\\": 1800,\", \"\\\"gate\\\": \\\"tests-pass\\\"\"] 使用 VALID.replace(field, \"\")；fixtures/valid-workflow.json 里 gate 是 loop 节点最后一个字段（无尾逗号）。",
-      "required_fix": "非阻断：gate 的必填性已由 src/lib.rs 的 Loop 变体（gate: String 无 #[serde(default)]）与 Node.json 的 loop 分支 required:[\"...\",\"gate\",...] 独立保证，验收仍成立。建议后续将该子用例改为 JSON 感知的字段删除（删除整行含前导逗号），或直接构造缺失 gate 的合法 JSON，使测试真正验证缺少 gate 导致反序列化失败。"
+      "location": "superagent/crates/contracts/src/lib.rs (Node/Gate #[serde(flatten)] + NodeKind/GateKind deny_unknown_fields)",
+      "detail": "Serde does not enforce deny_unknown_fields through #[serde(flatten)]; unknown non-tag fields inside a Node or Gate object are silently ignored by the Rust serde path. The unknown type tag still fails (internally tagged enum locates the tag first), and the committed JSON Schema rejects such fields via additionalProperties=false per variant. This is explicitly disclosed in the module docs and contracts-conclusion.md §4, and it does not weaken the issue's stated requirement (unknown node/gate type must compile-fail, never become a success stub).",
+      "evidence": "src/lib.rs NodeKind/GateKind `#[serde(tag = ..., deny_unknown_fields)]`; Node.json/Gate.json variants `additionalProperties: false`; tests unknown_node_type_fails_deserialization / unknown_gate_kind_fails_deserialization / unknown_field_rejected.",
+      "required_fix": null
     },
     {
       "severity": "minor",
-      "criterion": "A2: dry-run 不启动模型/命令",
-      "finding": "dry_run_is_pure_no_execution_surface 是静态源码字符串守卫（断言不含 std::process / Command::new / codex_），不是行为性证明。它无法捕获通过其他 API（如 tokio::process、std::fs 执行位文件）启动进程的路径。",
-      "evidence": "tests/dry_run.rs dry_run_is_pure_no_execution_surface 使用 include_str! 对 src/lib.rs 做 contains 断言；purity-scan.txt 仅为 grep 的 exit=1 记录。",
-      "required_fix": "非阻断：真正的纯度由 dry_run 函数签名（&Workflow + &DryRunContext -> Vec<ValidationError>，函数体无 IO / spawn / model 调用）保证，足以满足验收。此守卫仅作后盾。建议在 dry_run 的 doc 注释中明确'本函数从不触发任何进程或模型执行'以强化语义契约，若未来追求更强保证可增加行为性验证。"
+      "location": "superagent/crates/contracts/src/lib.rs (ts-rs derives)",
+      "detail": "ts-rs emits a parse warning that deny_unknown_fields is ignored in TS export. Cosmetic only; the generated bindings/ts/*.ts types are committed and correct (internally tagged unions, u64->bigint, u32->number, VarType snake_case union).",
+      "evidence": "bindings/ts/{Workflow,Node,NodeKind,Gate,GateKind,ArtifactSpec,VariableSpec,VarType}.ts in diff.",
+      "required_fix": null
     },
     {
       "severity": "minor",
-      "criterion": "C1: JSON Schema 导出",
-      "finding": "Node.json 与 Gate.json 顶层缺少 additionalProperties: false，因此仅使用 JSON Schema 的消费方不会拒绝 node/gate 对象内部的未知字段（未知 type/kind 值仍会因 oneOf 的 enum 约束失败）。根因是 #[serde(flatten)] + 内部 tagged enum 的限制。",
-      "evidence": "schema/json/Node.json 与 Gate.json 顶层对象为 oneOf + required + properties，无 additionalProperties；各 oneOf 分支有 additionalProperties:false。contracts-conclusion.md §4.1 已披露该 serde 限制（flatten 与 deny_unknown_fields 不兼容）。",
-      "required_fix": "非阻断：核心验收'未知类型失败'在 Schema 层仍成立（type=magic_stub 不匹配任何 oneOf 分支）。建议在 conclusion 文档的 schema 段落补充说明'Node/Gate 顶层 schema 不拒绝未知字段，以 Rust 反序列化 + dry_run 为确定性校验事实源'，避免下游误以为 Schema 全量等价。"
-    },
-    {
-      "severity": "minor",
-      "criterion": "C2/C4: loop 下界约束",
-      "finding": "Node.json 中 loop 的 max_attempts 与 wall_timeout_secs 的 JSON Schema minimum 为 0.0（u32/u64 的原生下界），因此纯 Schema 校验会放行 max_attempts=0 / wall_timeout_secs=0；下界由 dry_run 在运行时强制（>=1、>0）。",
-      "evidence": "schema/json/Node.json loop 分支 max_attempts={format:uint32,minimum:0.0}、wall_timeout_secs={format:uint64,minimum:0.0}；src/lib.rs dry_run 对 *max_attempts == 0 与 *wall_timeout_secs == 0 报错；tests/dry_run.rs loop_zero_bounds_fail_dry_run 覆盖。",
-      "required_fix": "非阻断：issue 要求的是'必须携带'三个字段，下界属于附加校验且 dry_run 已覆盖并有测试。建议为该两处 schema 显式设置 minimum:1（schemars 可通过 #[schemars(range(min = 1))]）以消除 Schema 层与 dry_run 之间的语义差距，或在文档中注明下界仅由 dry_run 保证。"
+      "location": "superagent/evidence/p2-1/test-output.log (r2 updated log not in inlined diff)",
+      "detail": "The r2 note asserts 21 passed + 8 export passed with an updated test-output.log, but the inlined authoritative diff contains only the 20 contracts files; the evidence directory files are not part of the diff. Test pass status was instead verified by static analysis: all 21 #[test] functions in tests/dry_run.rs are in the diff and their assertions provably match the implementation (e.g. node_schema_loop_bounds_at_schema_level asserts \"minimum\":1.0, which is present in the committed Node.json), and the inline r1 log shows the shared 20 tests passing at head 6e65cf90e. Read-only review prohibited re-execution, so no independent 21/21 run was possible. This is an evidence-completeness caveat, not a functional gap: the acceptance criteria are established by the in-diff test code and schema artifacts.",
+      "evidence": "tests/dry_run.rs (21 tests) plus inline r1 test-output.log (20 passed); diff stat lists 20 contracts files with no superagent/evidence/p2-1/ entries.",
+      "required_fix": null
     }
-  ],
-  "checks_passed": {
-    "unknown_node_type_fails": "PASS：NodeKind #[serde(tag=\"type\", deny_unknown_fields)] + unknown_node_type_fails_deserialization（type=magic_stub -> unknown variant）。",
-    "unknown_gate_kind_fails": "PASS：GateKind #[serde(tag=\"kind\", deny_unknown_fields)] + unknown_gate_kind_fails_deserialization（kind=vibes 失败）。",
-    "dag_cycle_detection": "PASS：dry_run 内 Kahn 拓扑排序；dag_cycle_detected 与 self_dependency_detected 覆盖。",
-    "loop_required_fields": "PASS：Loop{max_attempts,wall_timeout_secs,gate} 均无默认值；dry_run 校验 >=1 / >0 / gate 存在。",
-    "capability_vs_verification": "PASS：NodeKind::Capability 校验 command_ref ∈ catalog；Verification 校验 argv[0] ∈ programs 且 gates 非空（unavailable_command_ref_fails / unavailable_program_fails / verification_requires_gates）。",
-    "dry_run_variable_tool_model_gate_validation": "PASS：undeclared_variable_reference / required_variable_without_value / variable_type_mismatch / unavailable_model / unknown_artifact_and_schema_ref / 三类 gate / duplicate_node_ids 均有测试。",
-    "dry_run_no_execution_surface": "PASS：dry_run 纯函数签名，函数体无进程/模型调用；grep 确认 contracts crate 源码无 std::process / Command::new / codex_。",
-    "ts_export_and_engine_dto_isolation": "PASS：bindings/ts/ 8 个产品类型；Cargo.toml 仅 schemars/serde/serde_json/ts-rs，零 codex-* 依赖，零 codex_ 符号。",
-    "no_out_of_scope_codex_rs_changes": "PASS：diff 仅新增 superagent/crates/contracts/ 与 superagent/evidence/p2-1/，无 codex-rs 核心改动。",
-    "no_secrets": "PASS：diff 中无可疑密钥或凭据。",
-    "context_budget_rule": "N/A：本 PR 未修改 prompts/skills。",
-    "dependency_72_order": "PASS：审查范围说明明确 #72 关闭后合并，不构成实现缺口；DryRunContext 目录注入与 #72 解耦。"
-  }
+  ]
 }
