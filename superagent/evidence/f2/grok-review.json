@@ -1,0 +1,13 @@
+{
+  "verdict": "APPROVE",
+  "summary": "f2-decision.md 完全满足 r1 CHANGES_REQUESTED 的三项 required_fix，且与本 PR 的裁决型定位一致。(1) §4 将「能力包技能重启后仍生效」明示为 NOT_PROVEN，§5 明确「机制级证明 + 义务转移不计入该验收的达成」，已消除把机制证明当作验收达成的表述。(2) §6 提供显式关闭门禁：#102 保持 open/blocked-on-#76，只有 #76 交付真实 install→restart→skills/list+模型 turn 生效 trace 且经 grok 独立审查 APPROVE 后才可关闭，并保留规避不可行时回退 fork 的路径。(3) 触发条件评估（NOT_PERSISTENT、SkillsConfig 无 extra roots 字段）与规避优先路径仍由已合并 #68 证据支撑，代码引用与附录（catalog_processor.rs:632-648、host_service.rs:178-187、skills_config.rs:39-58）一致，diff 仅新增一个证据 md 文件、零引擎改动。核心验收「重启后仍生效」按 r2 审查范围属于已显式 defer 到 #76 的未达成项，不构成本证据 PR 的 blocker；记录对 schema 更新标为「不适用」的推导路径（未实施 fork 即无配置键新增）亦与 issue 形态条款及 r1 checked_ok 一致。未发现 fabricated success、验收被弱化、密钥提交、越界改动或结论与证据不符的情况。",
+  "findings": [],
+  "checked_ok": [
+    "r1 F1整改(1)：§4 明示 NOT_PROVEN，「机制级证明 + 义务转移」在 §3/§5 均不再计入验收达成",
+    "r1 F1整改(2)：§6 显式关闭门禁（真实 end-to-end trace + 独立审查 APPROVE + 规避不可行时回退 fork）；#102 保持 open/blocked-on-#76，禁止以机制已证/义务已转移为由关闭",
+    "触发条件评估由已合并 #68 证据支撑：NOT_PERSISTENT（persistence-conclusion.json、skills-session2.json）与「无配置键承载」（SkillsConfig 无 extra_roots 字段、set_extra_roots 仅更新运行时 RwLock）与附录代码逐行对应",
+    "规避优先路径由已合并 #68 证据实证：skills-session1.json 新进程 set→list 立即生效，与安装器每会话注入路径同构，满足 issue「确认规避不可行才改 fork」的前置评估",
+    "零引擎改动：diff 仅新增 superagent/evidence/f2/f2-decision.md（+67 行），无 codex-rs 核心、schema、prompts/skills 变更，无密钥提交",
+    "上游合并友好与 schema N/A 的结论可追溯到规避路径选定（未实施 fork 即不要求 schema 重导出），与 issue 形态条款一致"
+  ]
+}
