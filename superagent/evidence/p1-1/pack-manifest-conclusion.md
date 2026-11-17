@@ -47,3 +47,9 @@ bash superagent/tests/pack-ci.sh          # CI 门禁：重导出比对 + 11 测
 python3 superagent/tools/pack.py verify --pack superagent/pack
 python3 superagent/tools/pack.py verify --pack superagent/pack --pinned <digest>
 ```
+## 审查记录
+
+grok r1 APPROVE（grok-review.json），2 项非阻塞 minor 如实记录：
+①manifest.source_commit 为导出基线（697de6498），属溯源元数据、不参与 digest；
+②manifest.json 自身不在许可覆盖检查内（生成元数据，LICENSES.json 的 ** 模式已声明其许可）。
+合并按依赖顺序：#72 关闭后执行。
