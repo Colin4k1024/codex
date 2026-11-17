@@ -1,0 +1,21 @@
+{
+  "verdict": "CHANGES_REQUESTED",
+  "summary": "The PR is an evidence/decision record that correctly follows the issue's mitigation-first ordering and adds zero engine changes, but it does not prove the core acceptance criterion '能力包技能重启后仍生效'. That criterion is explicitly deferred to #76, which is not implemented, so per review rules the unproven criterion is a blocker.",
+  "findings": [
+    {
+      "id": "F1",
+      "severity": "blocker",
+      "criterion": "验收 - 能力包技能重启后仍生效",
+      "status": "NOT_PROVEN",
+      "summary": "The only changed file proves the injection mechanism works in a fresh process (skills-session1.json: set -> skills/list immediately lists spike-greet). It does NOT prove 'restart -> skills still effective', because the restart path depends on the installer re-injecting roots each session, and that installer (#76) is not implemented.",
+      "evidence": "Decision file §4 marks the criterion as '机制级已证...端到端承载=#76'. §5 (诚实性声明) concedes '安装器端到端演示尚未发生（#76 未实现）'. persistence-conclusion.json confirms plain restart is NOT_PERSISTENT, so without the #76 re-injection there is no end-to-end restart trace satisfying the acceptance.",
+      "required_fix": "Do not present #102 as satisfying its acceptance. (1) Restate '重启后仍生效' in §4 as NOT_PROVEN by this PR and add an explicit closure gate: #102 must stay open or blocked-on-#76 until #76 delivers a real install -> restart -> skills-still-effective trace that is committed and independently reviewed. (2) Remove the conflation where '机制级已证 + 义务转移 #76' is counted toward the acceptance; that only de-risks the chosen mitigation path, it does not meet '重启后仍生效'."
+    }
+  ],
+  "checked_ok": [
+    "触发条件评估：NOT_PERSISTENT and 'no config key' are supported by persistence-conclusion.json, skills-session2.json, and the cited code (set_extra_roots updates runtime RwLock only; SkillsConfig has no extra_roots field).",
+    "产品侧规避优先路径：the issue mandates mitigation-first; skills-session1.json evidences the injection mechanism; schema 更新 N/A is traceable to the elected mitigation path.",
+    "上游合并友好：zero codex-rs engine changes; single additive evidence markdown.",
+    "无越界改动、无密钥提交、无 prompts/skills 变更；cited traces are real outputs from already-merged #68 evidence; honesty statement present."
+  ]
+}
