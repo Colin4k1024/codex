@@ -1,7 +1,7 @@
 # P1-4 (#76) 安装器 + 启动器 + doctor — 结论与验收映射
 
 日期：2026-11-17 · 分支 feat/p1-4-installer（堆叠于 feat/p1-1-pack-manifest / PR #113）
-状态：**实现完成；14/14 单元测试 PASS；运行时全链路 PASS**（install → restart → skills 仍生效 → doctor 全绿 → TUI 渲染 → 用户配置零改动）。
+状态：**实现完成；17/17 单元测试 PASS；运行时全链路 PASS**（install → restart → skills 仍生效 → doctor 全绿 → TUI 渲染 → 用户配置零改动）。
 合并顺序：#72 → #73（PR #113）→ #76。并行开发符合 goal 规则。
 
 ## 1. 交付物
@@ -12,8 +12,9 @@
 | 启动器（专属 CODEX_HOME + sidecar，默认 --no-daemon） | superagent/bin/superagent |
 | doctor（版本/摘要/认证/pack/平台，凭据零读取） | superagent/tools/doctor.py |
 | 一条命令安装 | superagent/install.sh |
-| 单元/故障注入测试（14） | superagent/tests/test_installer.py |
-| 运行时验收脚本 | superagent/tests/p1-4-run.sh |
+| 单元/故障注入测试（17） | superagent/tests/test_installer.py |
+| 运行时验收脚本（可移植，ROOT 自 BASH_SOURCE，proxy opt-in） | superagent/tests/p1-4-run.sh |
+| 冷启动复现脚本（pinned commit 构建引擎 + fresh HOME + doctor 全绿） | superagent/tests/p1-4-coldstart.sh |
 | TUI pty 探针（终端能力应答） | superagent/tests/p1_4_tui.py |
 | 用户配置快照工具 | superagent/tests/p1_4_snapshot.py |
 | fixture pack（真实 SKILL.md，digest 2d35a5a1…） | superagent/tests/p1-4/pack/ |
@@ -23,7 +24,7 @@
 | 验收项 | 证据 |
 |---|---|
 | 干净 macOS 一条命令安装 | install.sh = install_pack.py + doctor；运行 install exit=0（evidence/p1-4/install.log）。隔离性以 fake user home 测试等价覆盖（test_user_config_untouched / test_user_codex_guard）；引擎二进制按既有决策不入库，缺失时 doctor FAIL 并给出构建指引。 |
-| 安装器原子解包、拒绝路径穿越 | staging 全量校验后逐项 rename 交换（失败回滚）；tar 绝对路径/`..`/symlink/hardlink/非常规成员 fail-closed；test_tar_traversal_rejected 等 6 个故障注入测试断言目标零写入。 |
+| 安装器原子解包、拒绝路径穿越 | staging 全量校验后**整包 all-or-nothing** 交换：保留所有 backup 直到每项成功，任一项失败则回滚所有已交换项（test_mid_swap_failure_rolls_back_whole_pack 断言整包恢复原状）。tar 绝对路径/`..`/symlink/hardlink/非常规成员 fail-closed；6 个故障注入测试断言目标零写入。tar 解包在 Python≥3.12 用 `filter="data"`，旧版本回退到已预校验的 plain extractall（test_tar_extract_fallback_pre_3_12 / test_tar_traversal_rejected_pre_3_12）。 |
 | superagent 进入元智能体 TUI | bin/superagent 以专属 CODEX_HOME 拉起 superagent-engine；tui-probe.log：`tui_rendered=True error_screen=False bytes=10956`；tui-screen.log 含完整渲染帧（OpenAI Codex / Ask Codex to do anything / GPT-6-Astra default / /init /status /permissions）。sidecar 无 packaged daemon → 启动器默认 --no-daemon（SUPERAGENT_DAEMON=1 覆盖）。 |
 | doctor 全绿 | doctor.log：8 项全 OK → ALL GREEN, exit 0（platform/engine-version/engine-digest/auth/pack/installed-pack/codex-home-writable/user-config-isolation）。 |
 | doctor 输出排除凭据 | auth.json 只 stat 不 read；test_doctor_all_green_and_credential_free 注入 SECRET_TOKEN 断言文本+JSON 输出零泄漏。 |
@@ -45,7 +46,7 @@ issue_102_closure_gate = SATISFIED
 
 ## 4. 诚实性声明
 
-1. TUI 品牌为引擎原生 "OpenAI Codex"（重命名仅进程名）；元智能体人格指令属 #74。
+1. TUI 品牌为引擎原生 "OpenAI Codex"（重命名仅进程名）；元智能体人格指令与 UI 品牌验收归 **#74（PR #116）**，本 PR 仅证明启动器以专属 CODEX_HOME 拉起可渲染 TUI。
 2. fixture 技能为演示技能；真实 team-delivery 技能属 #75。机制证明不依赖技能内容。
 3. doctor 分别报告源 pack 与 installed-pack；run-record 版本绑定的执行接入属 #77/#81。
 4. 全新机器冷启动（含引擎构建）未演示；引擎缺失路径有明确 FAIL + 指引。
@@ -55,6 +56,7 @@ issue_102_closure_gate = SATISFIED
 ## 5. 复现
 
 ```bash
-python3 superagent/tests/test_installer.py   # 14 tests OK
-bash superagent/tests/p1-4-run.sh            # 运行时全链路（model-free）
+python3 superagent/tests/test_installer.py   # 17 tests OK
+bash superagent/tests/p1-4-run.sh            # 运行时全链路（model-free，可移植）
+bash superagent/tests/p1-4-coldstart.sh      # 冷启动：pinned commit 构建引擎 + fresh HOME + doctor 全绿
 ```
