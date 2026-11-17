@@ -1,0 +1,34 @@
+{
+  "cases": {
+    "logRotation": {
+      "testLimitBytes": 1048576,
+      "productionDefaultBytes": 104857600,
+      "rotations": 1,
+      "retainedBytes": 900936,
+      "pass": true,
+      "note": "Rotation drops the oldest segment so retained run log never exceeds the limit; mechanism proven at 1 MiB scaled threshold, production initial value 100 MiB is the Client default (spike_client.py max_log_bytes)."
+    },
+    "requestTimeout": {
+      "explicitTimeoutSeconds": 2,
+      "timeoutRaised": true,
+      "elapsedSeconds": 2.0,
+      "sleepBeforeTerminate": "24829 sleep 20",
+      "sleepAfterTerminate": "",
+      "terminateResponse": {
+        "id": 3,
+        "result": {}
+      },
+      "pass": true,
+      "note": "Per-type defaults live in Client.DEFAULT_TIMEOUTS and are applied by Client.request when timeout=None (spike_client.py); explicit timeout overrides. Recovery = command/exec/terminate kills the process group."
+    }
+  },
+  "summary": {
+    "logRotation": {
+      "pass": true
+    },
+    "requestTimeout": {
+      "pass": true
+    },
+    "allPass": true
+  }
+}
