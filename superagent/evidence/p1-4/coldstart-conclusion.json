@@ -1,0 +1,15 @@
+{
+  "criterion": "\u5e72\u51c0 macOS \u4e00\u6761\u547d\u4ee4\u5b89\u88c5",
+  "pinned_source_commit": "ac8b6852223f48cb4dd9a6d5021b609b6df1433d",
+  "worktree_commit": "ac8b6852223f48cb4dd9a6d5021b609b6df1433d",
+  "engine_built_from_source": true,
+  "engine_sha256": "a33d8f19ae91a83790fa7c36b503d0438da841584855c2ce7af66caaf1e89f3a",
+  "fresh_home_no_preexisting_product_state": true,
+  "auth_bootstrap": "simulated post-login (auth.json provisioned); real first run requires `superagent login` (user action)",
+  "auth_provisioned": true,
+  "one_command_install_exit": 0,
+  "doctor_exit": 0,
+  "doctor_all_green": true,
+  "install_plus_doctor_green": true,
+  "note": "Engine built from pinned commit in isolated worktree (no prebuilt binary); install.sh ran in a fresh HOME; doctor ALL GREEN. Auth is a documented user login prerequisite, not an installer step."
+}
