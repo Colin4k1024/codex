@@ -1,0 +1,7 @@
+Usage: codex-code-mode-host [OPTIONS]
+
+Options:
+      --listen <URL>               Transport endpoint: `stdio`, `stdio://`, `grpc+stdio://`, or `grpc://IP:PORT` [default: stdio]
+      --otel-trace-listen <URL>    Optional WebSocket endpoint that streams only raw OTLP trace batches
+      --otel-trace-exporter <URL>  Optional OTLP/HTTP JSON trace exporter endpoint, analogous to `otel.trace_exporter` in app-server configuration
+  -h, --help                       Print help

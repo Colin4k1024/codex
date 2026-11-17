@@ -1,0 +1,28 @@
+# P0-2 spike 配置_overlay：安装到产品 CODEX_HOME 的 config.toml（追加）
+# 验证 MAv2 + 角色团队。multiAgentMode 已废弃，用 features 开关 + 角色提示。
+# spike 专用：免审批 + 工作区可写（仅限产品专属 HOME 的 fixture 验证）
+approval_policy = "never"
+sandbox_mode = "workspace-write"
+
+[features.multi_agent_v2]
+enabled = true
+subagent_usage_hint_text = "You are the SuperAgent leader. Delegate substantial subtasks to role agents via spawn_agent; coordinate handoffs on the message board; verify results before reporting completion."
+
+[agents]
+enabled = true
+max_concurrent_threads_per_session = 4
+
+[agents.planner]
+description = "Planning role: breaks requirements into scoped steps with acceptance commands."
+config_file = "./agents/planner.toml"
+nickname_candidates = ["Athena"]
+
+[agents.implementer]
+description = "Implementation role: makes focused code changes per plan step."
+config_file = "./agents/implementer.toml"
+nickname_candidates = ["Hephaestus"]
+
+[agents.verifier]
+description = "Verification role: runs declared gates and reports real exit codes and evidence."
+config_file = "./agents/verifier.toml"
+nickname_candidates = ["Themis"]

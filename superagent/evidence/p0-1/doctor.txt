@@ -1,0 +1,182 @@
+Codex Doctor v0.0.0 · macos-aarch64
+
+Notes
+   ↑ updates      0.169.0 available (current 0.0.0)
+   ⚠ app          the security assessment was unavailable - check access to macos gatekeeper diagnostics
+─────────────────────────────────────────────────────────────
+
+Environment
+  ✓ system       zh-Hans-CN
+      os                       Mac OS 26.6.2 [64-bit]
+      OS language              zh-Hans-CN
+      VISUAL                   not set
+      EDITOR                   not set
+      PAGER                    cat
+      GIT_PAGER                cat
+  ✓ disk         sufficient free disk space (535.5 GiB)
+      warning threshold        5.0 GiB
+      failure threshold        1.0 GiB
+      CODEX_HOME available     535.5 GiB
+      worktree available       535.5 GiB
+  ✓ security     no supported endpoint protection detected
+      endpoint products        none detected
+  ✓ runtime      other
+      version                  0.0.0
+      install method           other
+      commit                   unknown
+      executable               ~/Desktop/code/codex/sup…aging/superagent-engine
+  ✓ install      consistent
+      context                  other
+      managed by               npm: no · bun: no · pnpm: no · Vite+: no · package root —
+      PATH entries (1)         ~/.local/bin/codex
+  ✓ search       found; execution not verified (system, `rg`)
+      search command           rg
+      search provider          system
+      search command path      ~/.qoder-cn/plugins/cach…1.0.102.7c750f24/bin/rg
+      search command readiness found; execution not verified
+  ✓ git          git executable found; execution not verified
+      selected git             /usr/bin/git
+      repo detected            true
+      repo root                ~/Desktop/code/codex
+      .git entry               directory
+      PATH entries (1)         /usr/bin/git
+      git execution            not inspected (PATH helpers are not executed)
+  ✓ terminal     unknown · TERM=xterm-256color
+      terminal                 unknown
+      TERM                     xterm-256color
+      stdin is terminal        false
+      stdout is terminal       false
+      stderr is terminal       false
+      terminal size            80x24
+      color output             disabled (stdout is not a terminal)
+  ✓ title        default · project codex
+      title source             default
+      title items              activity, project-name
+      activity item            true
+      project source           git repo root
+      project value            codex
+  ✓ state        databases healthy
+      CODEX_HOME               ~/Library/Application Su…t/SuperAgent/codex-home (dir)
+      log dir                  ~/Library/Application Su…perAgent/codex-home/log (missing)
+      sqlite home              ~/Library/Application Su…t/SuperAgent/codex-home (dir)
+      state DB                 ~/Library/Application Su…dex-home/state_5.sqlite (file) · integrity ok
+      log DB                   ~/Library/Application Su…odex-home/logs_2.sqlite (file) · integrity ok
+      goals DB                 ~/Library/Application Su…dex-home/goals_1.sqlite (file) · integrity ok
+      memories DB              ~/Library/Application Su…-home/memories_1.sqlite (file) · integrity ok
+      active rollouts          13 files · 2.39 MB (avg 188.35 KB)
+      archived rollouts        0 files · 0 B (avg 0 B)
+      memories v2 DB           ~/Library/Application Su…me/memories_v2_1.sqlite (missing)
+      memories v2 DB integrity skipped (missing)
+      queue DB                 ~/Library/Application Su…dex-home/queue_1.sqlite (file)
+      queue DB integrity       ok
+      thread history DB        ~/Library/Application Su…thread_history_1.sqlite (file)
+      thread history DB integrity ok
+  ✓ threads      rollout files and state DB thread inventory agree
+      default model provider   openai
+      rollout DB active files  13
+      rollout DB archived files 0
+      rollout DB scan errors   0
+      rollout DB malformed file names 0
+      rollout DB scan cap reached false
+      rollout DB rows          13
+      rollout DB active rows   13
+      rollout DB archived rows 0
+      rollout DB missing active rows 0
+      rollout DB missing archived rows 0
+      rollout DB stale rows    0
+      rollout DB archive mismatches 0
+      rollout DB duplicate rollout thread ids 0
+      rollout DB duplicate DB paths 0
+      rollout DB model providers openai=13
+      rollout DB sources       subagent:thread_spawn=8, vscode=5
+
+Configuration
+  ✓ config       loaded
+      model                    <default> · openai
+      cwd                      ~/Desktop/code/codex
+      config.toml              ~/Library/Application Su…/codex-home/config.toml
+      config.toml parse        ok
+      MCP servers              0
+      feature flags            76 enabled · 1 overridden (full list with --all)
+      overrides                <redacted>
+      configuration scope      invocation config, including cloud-managed policy
+      active thread overrides  not inspected
+      configured TUI mode      fullscreen
+      configuration load ms    6
+  ✓ auth         auth is configured
+      auth storage mode        File
+      auth.json path (file backend/fallback) ~/Library/Application Su…nt/codex-home/auth.json
+      stored auth mode         chatgpt
+      stored API key           false
+      stored ChatGPT tokens    true
+      stored agent identity    false
+  ✓ mcp          no MCP servers configured
+  ✓ sandbox      restricted fs + restricted network · approval Never
+      approval policy          Never
+      filesystem sandbox       restricted
+      denied-read rules        0
+      denied-read glob rules   0
+      glob scan max depth      unbounded
+      managed filesystem source none
+      network sandbox          restricted
+      linux helper             none
+  ✓ sandbox      no explicit filesystem paths to probe
+
+App
+  ✓ app          the Codex application is installed
+      version                  26.1111.21308
+      running                  true
+      log directory            $HOME/Library/Logs/com.openai.codex
+  ✓ app          no app-server handshake was recorded
+  ⚠ app          the security assessment was unavailable — check access to macos gatekeeper diagnostics
+
+Updates
+  ✓ updates      update configuration is locally consistent
+      startup update check     true
+      update action            manual or unknown
+      version cache            ~/Library/Application Su…codex-home/version.json
+      version cache            missing
+      latest version           0.169.0
+      latest version status    newer version is available
+
+Connectivity
+  ✓ network      network-related environment looks readable
+      proxy env vars present   NO_PROXY, http_proxy, https_proxy, no_proxy
+      system proxy             manual
+      respect system proxy     disabled
+      managed proxy            not configured
+  ✓ websocket    connected (HTTP 101 Switching Protocols) · 15s timeout
+      model provider           openai
+      provider name            OpenAI
+      wire API                 responses
+      supports websockets      true
+      proxy env vars present   NO_PROXY, http_proxy, https_proxy, no_proxy
+      connect timeout          15000 ms
+      auth mode                chatgpt
+      endpoint                 wss://chatgpt.com/backend-api/<redacted>
+      DNS                      1 IPv4, 0 IPv6, first IPv4
+      handshake result         HTTP 101 Switching Protocols
+      reasoning header         false
+      server model present     false
+  ✓ reachability active provider endpoints are reachable over HTTP
+      reachability mode        ChatGPT auth
+      ChatGPT inference URL    https://chatgpt.com/backend-api/<redacted> reachable (HTTP 405)
+      app assets CDN           https://chatgpt.com/backend-api/<redacted> reachable (HTTP 200)
+
+Background Server
+  ○ app-server   not running (ephemeral mode)
+      daemon state dir         ~/Library/Application Su…-home/app-server-daemon
+      settings                 ~/Library/Application Su…er-daemon/settings.json (missing)
+      pid file                 ~/Library/Application Su…r-daemon/app-server.pid (missing)
+      update-loop pid file     ~/Library/Application Su…/app-server-updater.pid (missing)
+      dedicated pid file       ~/Library/Application Su…erver-daemon/daemon.pid (missing)
+      dedicated update-loop pid file ~/Library/Application Su…emon/daemon-updater.pid (missing)
+      control socket           ~/Library/Application Su…app-server-control.sock
+      status                   not running
+      mode                     ephemeral
+
+─────────────────────────────────────────────────────────────
+22 ok · 1 idle · 2 notes · 1 warn · 0 fail degraded
+
+--summary compact output           --all expand truncated lists
+--json redacted report
