@@ -13,3 +13,5 @@ evidence/p0-1/schema-engine-experimental/
 # Python cache
 __pycache__/
 *.pyc
+# P1-2 runtime probe live home (auth + rollouts) — never commit
+evidence/p1-2/home-p1-2/
