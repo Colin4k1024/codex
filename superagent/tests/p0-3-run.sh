@@ -24,7 +24,8 @@ prompt = (
     "1) use the message-board create_channel tool to create channel 'run-spike-p03'. "
     "2) spawn_agent agent_type=planner asking it to post a one-line plan summary to channel 'run-spike-p03' via the board post tool; wait_agent. "
     "3) spawn_agent agent_type=verifier asking it to read_thread on 'run-spike-p03' and post an acknowledgment reply; wait_agent. "
-    "4) read_thread yourself and report the posts you see. Keep summaries under 100 tokens."
+    "4) read_thread yourself and report the posts you see. "
+    "5) use the subscribe tool on channel 'run-spike-p03' and confirm the subscription. Keep summaries under 100 tokens."
 )
 calls = [
     {"method": "thread/start", "params": {"cwd": work}, "timeout": 120},

@@ -1,0 +1,572 @@
+{
+  "summary": {
+    "memberReadOk": true,
+    "memberWriteOk": true,
+    "subscribeConfirmed": true,
+    "nonMemberDenied": true,
+    "crossBoardDenied": true,
+    "foreignWriteDenied": true,
+    "missingMetaDenied": true,
+    "crossBoardDenialReason": "caller has no persisted agent path",
+    "channelBefore": {
+      "channel_name": "run-spike-p03",
+      "created_at": "2026-11-17T08:26:11.391295Z",
+      "created_by": "/root",
+      "last_message_id": "01a1e89d-b227-7553-a603-dc0fea68f89a",
+      "message_count": 2
+    },
+    "newMessageId": "01a1e89e-338a-7282-a51e-aca461badf39",
+    "allPass": true
+  },
+  "trace": {
+    "initialize": {
+      "httpStatus": 200,
+      "body": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "result": {
+          "protocolVersion": "2025-06-18",
+          "capabilities": {
+            "tools": {}
+          },
+          "serverInfo": {
+            "name": "codex-message-board",
+            "version": "0.0.0"
+          }
+        }
+      }
+    },
+    "initialized": {
+      "httpStatus": 202,
+      "body": {
+        "_raw": ""
+      }
+    },
+    "toolsList": {
+      "httpStatus": 200,
+      "body": {
+        "jsonrpc": "2.0",
+        "id": 2,
+        "result": {
+          "tools": [
+            {
+              "name": "create_channel",
+              "description": "Create a channel where all agents in this collaboration can read and post messages. You are subscribed to new top-level posts by default.",
+              "inputSchema": {
+                "additionalProperties": false,
+                "properties": {
+                  "channel_name": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "description": "Optional channel purpose, at most 512 UTF-8 bytes.",
+                    "type": "string"
+                  },
+                  "subscribe": {
+                    "description": "Subscribe to new top-level posts. Default true.",
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "channel_name"
+                ],
+                "type": "object"
+              }
+            },
+            {
+              "name": "get_channels",
+              "description": "List channels, most recently active first, or search by a case-insensitive part of the name. Creating a channel or posting in it counts as activity.",
+              "inputSchema": {
+                "additionalProperties": false,
+                "properties": {
+                  "cursor": {
+                    "description": "Opaque next_cursor from the same query. Keep filters and sorting unchanged. Concurrent posts may shift pages; omit the cursor to refresh.",
+                    "type": "string"
+                  },
+                  "limit": {
+                    "description": "Maximum results, default 20; output budgets may return fewer. Continue with next_cursor.",
+                    "type": "integer"
+                  },
+                  "query": {
+                    "type": "string"
+                  },
+                  "recent_first": {
+                    "description": "Newest first by default.",
+                    "type": "boolean"
+                  }
+                },
+                "required": [],
+                "type": "object"
+              }
+            },
+            {
+              "name": "list_threads",
+              "description": "List a channel's threads with previews of the first post and latest reply. New threads come first by default; sorting by activity brings threads with recent replies to the top.",
+              "inputSchema": {
+                "additionalProperties": false,
+                "properties": {
+                  "channel_name": {
+                    "type": "string"
+                  },
+                  "cursor": {
+                    "description": "Opaque next_cursor from the same query. Keep filters and sorting unchanged. Concurrent posts may shift pages; omit the cursor to refresh.",
+                    "type": "string"
+                  },
+                  "limit": {
+                    "description": "Maximum results, default 20; output budgets may return fewer. Continue with next_cursor.",
+                    "type": "integer"
+                  },
+                  "max_chars_per_post": {
+                    "description": "Maximum characters; further capped by output budget. Defaults: limit_chars 20000, max_chars_per_post 1000.",
+                    "type": "integer"
+                  },
+                  "recent_first": {
+                    "description": "Newest first by default.",
+                    "type": "boolean"
+                  },
+                  "sort": {
+                    "enum": [
+                      "created",
+                      "activity"
+                    ],
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "channel_name"
+                ],
+                "type": "object"
+              }
+            },
+            {
+              "name": "search_posts",
+              "description": "Search top-level posts and replies, newest first. Text matches are case-insensitive substrings; omit the query to see recent activity. You can narrow by channel, author, or posts after a message ID. Results are previews; read_post can retrieve the full text.",
+              "inputSchema": {
+                "additionalProperties": false,
+                "properties": {
+                  "after_message_id": {
+                    "type": "string"
+                  },
+                  "author": {
+                    "description": "An absolute agent path or a reference relative to you.",
+                    "type": "string"
+                  },
+                  "channel_name": {
+                    "type": "string"
+                  },
+                  "cursor": {
+                    "description": "Opaque next_cursor from the same query. Keep filters and sorting unchanged. Concurrent posts may shift pages; omit the cursor to refresh.",
+                    "type": "string"
+                  },
+                  "limit": {
+                    "description": "Maximum results, default 20; output budgets may return fewer. Continue with next_cursor.",
+                    "type": "integer"
+                  },
+                  "max_chars_per_post": {
+                    "description": "Maximum characters; further capped by output budget. Defaults: limit_chars 20000, max_chars_per_post 1000.",
+                    "type": "integer"
+                  },
+                  "query": {
+                    "type": "string"
+                  }
+                },
+                "required": [],
+                "type": "object"
+              }
+            },
+            {
+              "name": "read_thread",
+              "description": "Read a thread using its first post's message ID. Every page includes previews of the first post and the newest replies; the cursor advances through replies.",
+              "inputSchema": {
+                "additionalProperties": false,
+                "properties": {
+                  "cursor": {
+                    "description": "Opaque next_cursor from the same query. Keep filters and sorting unchanged. Concurrent posts may shift pages; omit the cursor to refresh.",
+                    "type": "string"
+                  },
+                  "limit": {
+                    "description": "Maximum results, default 20; output budgets may return fewer. Continue with next_cursor.",
+                    "type": "integer"
+                  },
+                  "max_chars_per_post": {
+                    "description": "Maximum characters; further capped by output budget. Defaults: limit_chars 20000, max_chars_per_post 1000.",
+                    "type": "integer"
+                  },
+                  "thread_id": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "thread_id"
+                ],
+                "type": "object"
+              }
+            },
+            {
+              "name": "read_post",
+              "description": "Read a post or reply by message ID, without needing its channel. Offsets count Unicode characters; continue at next_offset_chars while it is less than n_chars.",
+              "inputSchema": {
+                "additionalProperties": false,
+                "properties": {
+                  "limit_chars": {
+                    "description": "Maximum characters; further capped by output budget. Defaults: limit_chars 20000, max_chars_per_post 1000.",
+                    "type": "integer"
+                  },
+                  "message_id": {
+                    "type": "string"
+                  },
+                  "offset_chars": {
+                    "description": "Default 0.",
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "message_id"
+                ],
+                "type": "object"
+              }
+            },
+            {
+              "name": "subscribe",
+              "description": "Subscribe yourself or another agent to a channel for new top-level posts, or to a thread for replies. Provide exactly one of channel_name or thread_id. Notification delivery, queueing, and wake behavior follow the host's agent-message policy.",
+              "inputSchema": {
+                "additionalProperties": false,
+                "properties": {
+                  "channel_name": {
+                    "type": "string"
+                  },
+                  "target_agent": {
+                    "description": "An absolute agent path or a reference relative to you.",
+                    "type": "string"
+                  },
+                  "thread_id": {
+                    "type": "string"
+                  }
+                },
+                "required": [],
+                "type": "object"
+              }
+            },
+            {
+              "name": "unsubscribe",
+              "description": "Unsubscribe yourself or another agent from a channel or thread. Provide exactly one of channel_name or thread_id. Posting again does not undo a thread unsubscribe. Agents explicitly named on a post can still receive that notification.",
+              "inputSchema": {
+                "additionalProperties": false,
+                "properties": {
+                  "channel_name": {
+                    "type": "string"
+                  },
+                  "target_agent": {
+                    "description": "An absolute agent path or a reference relative to you.",
+                    "type": "string"
+                  },
+                  "thread_id": {
+                    "type": "string"
+                  }
+                },
+                "required": [],
+                "type": "object"
+              }
+            },
+            {
+              "name": "post",
+              "description": "Start a thread in an existing or new channel, or reply using the first post's message ID as thread_id. Exactly one destination is required. Posting subscribes you to the thread unless you previously unsubscribed. agents_to_notify requests a one-time notification without subscribing recipients; delivery, queueing, and wake behavior follow the host's agent-message policy. Returns metadata, not the post text.",
+              "inputSchema": {
+                "additionalProperties": false,
+                "properties": {
+                  "agents_to_notify": {
+                    "description": "Absolute agent paths or references relative to you; maximum 256.",
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  },
+                  "channel_name": {
+                    "type": "string"
+                  },
+                  "new_channel_name": {
+                    "description": "Create and subscribe to this channel.",
+                    "type": "string"
+                  },
+                  "text": {
+                    "type": "string"
+                  },
+                  "thread_id": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "text"
+                ],
+                "type": "object"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "memberGetChannels": {
+      "httpStatus": 200,
+      "body": {
+        "jsonrpc": "2.0",
+        "id": 3,
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"has_more\":false,\"n_returned\":1,\"next_cursor\":null,\"results\":[{\"channel_name\":\"run-spike-p03\",\"created_at\":\"2026-11-17T08:26:11.391295Z\",\"created_by\":\"/root\",\"last_message_id\":\"01a1e89d-b227-7553-a603-dc0fea68f89a\",\"message_count\":2}]}"
+            }
+          ],
+          "structuredContent": {
+            "has_more": false,
+            "n_returned": 1,
+            "next_cursor": null,
+            "results": [
+              {
+                "channel_name": "run-spike-p03",
+                "created_at": "2026-11-17T08:26:11.391295Z",
+                "created_by": "/root",
+                "last_message_id": "01a1e89d-b227-7553-a603-dc0fea68f89a",
+                "message_count": 2
+              }
+            ]
+          },
+          "isError": false
+        }
+      }
+    },
+    "memberListThreads": {
+      "httpStatus": 200,
+      "body": {
+        "jsonrpc": "2.0",
+        "id": 4,
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"has_more\":false,\"n_returned\":1,\"next_cursor\":null,\"results\":[{\"last_activity_at\":\"2026-11-17T08:26:51.302820Z\",\"latest_reply\":{\"author\":\"/root/verifier\",\"channel_name\":\"run-spike-p03\",\"created_at\":\"2026-11-17T08:26:51.302820Z\",\"message_id\":\"01a1e89d-b227-7553-a603-dc0fea68f89a\",\"n_chars\":143,\"text_preview\":\"Acknowledged: I read the planner’s summary and verified that it calls for leader review of both posts and confirmation of channel subscription.\",\"thread_id\":\"01a1e89d-6417-70d2-8a96-e725459d5f9e\",\"truncated\":false},\"reply_count\":1,\"root_post\":{\"author\":\"/root/planner\",\"channel_name\":\"run-spike-p03\",\"created_at\":\"2026-11-17T08:26:31.318212Z\",\"message_id\":\"01a1e89d-6417-70d2-8a96-e725459d5f9e\",\"n_chars\":151,\"text_preview\":\"Plan: publish this summary, have the verifier read and acknowledge the thread, then have the leader verify both posts and confirm channel subscription.\",\"thread_id\":\"01a1e89d-6417-70d2-8a96-e725459d5f9e\",\"truncated\":false},\"thread_id\":\"01a1e89d-6417-70d2-8a96-e725459d5f9e\"}]}"
+            }
+          ],
+          "structuredContent": {
+            "has_more": false,
+            "n_returned": 1,
+            "next_cursor": null,
+            "results": [
+              {
+                "last_activity_at": "2026-11-17T08:26:51.302820Z",
+                "latest_reply": {
+                  "author": "/root/verifier",
+                  "channel_name": "run-spike-p03",
+                  "created_at": "2026-11-17T08:26:51.302820Z",
+                  "message_id": "01a1e89d-b227-7553-a603-dc0fea68f89a",
+                  "n_chars": 143,
+                  "text_preview": "Acknowledged: I read the planner’s summary and verified that it calls for leader review of both posts and confirmation of channel subscription.",
+                  "thread_id": "01a1e89d-6417-70d2-8a96-e725459d5f9e",
+                  "truncated": false
+                },
+                "reply_count": 1,
+                "root_post": {
+                  "author": "/root/planner",
+                  "channel_name": "run-spike-p03",
+                  "created_at": "2026-11-17T08:26:31.318212Z",
+                  "message_id": "01a1e89d-6417-70d2-8a96-e725459d5f9e",
+                  "n_chars": 151,
+                  "text_preview": "Plan: publish this summary, have the verifier read and acknowledge the thread, then have the leader verify both posts and confirm channel subscription.",
+                  "thread_id": "01a1e89d-6417-70d2-8a96-e725459d5f9e",
+                  "truncated": false
+                },
+                "thread_id": "01a1e89d-6417-70d2-8a96-e725459d5f9e"
+              }
+            ]
+          },
+          "isError": false
+        }
+      }
+    },
+    "memberReadThread": {
+      "httpStatus": 200,
+      "body": {
+        "jsonrpc": "2.0",
+        "id": 5,
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"has_more\":false,\"n_returned\":1,\"next_cursor\":null,\"results\":[{\"author\":\"/root/verifier\",\"channel_name\":\"run-spike-p03\",\"created_at\":\"2026-11-17T08:26:51.302820Z\",\"message_id\":\"01a1e89d-b227-7553-a603-dc0fea68f89a\",\"n_chars\":143,\"text_preview\":\"Acknowledged: I read the planner’s summary and verified that it calls for leader review of both posts and confirmation of channel subscription.\",\"thread_id\":\"01a1e89d-6417-70d2-8a96-e725459d5f9e\",\"truncated\":false}],\"root_post\":{\"author\":\"/root/planner\",\"channel_name\":\"run-spike-p03\",\"created_at\":\"2026-11-17T08:26:31.318212Z\",\"message_id\":\"01a1e89d-6417-70d2-8a96-e725459d5f9e\",\"n_chars\":151,\"text_preview\":\"Plan: publish this summary, have the verifier read and acknowledge the thread, then have the leader verify both posts and confirm channel subscription.\",\"thread_id\":\"01a1e89d-6417-70d2-8a96-e725459d5f9e\",\"truncated\":false}}"
+            }
+          ],
+          "structuredContent": {
+            "has_more": false,
+            "n_returned": 1,
+            "next_cursor": null,
+            "results": [
+              {
+                "author": "/root/verifier",
+                "channel_name": "run-spike-p03",
+                "created_at": "2026-11-17T08:26:51.302820Z",
+                "message_id": "01a1e89d-b227-7553-a603-dc0fea68f89a",
+                "n_chars": 143,
+                "text_preview": "Acknowledged: I read the planner’s summary and verified that it calls for leader review of both posts and confirmation of channel subscription.",
+                "thread_id": "01a1e89d-6417-70d2-8a96-e725459d5f9e",
+                "truncated": false
+              }
+            ],
+            "root_post": {
+              "author": "/root/planner",
+              "channel_name": "run-spike-p03",
+              "created_at": "2026-11-17T08:26:31.318212Z",
+              "message_id": "01a1e89d-6417-70d2-8a96-e725459d5f9e",
+              "n_chars": 151,
+              "text_preview": "Plan: publish this summary, have the verifier read and acknowledge the thread, then have the leader verify both posts and confirm channel subscription.",
+              "thread_id": "01a1e89d-6417-70d2-8a96-e725459d5f9e",
+              "truncated": false
+            }
+          },
+          "isError": false
+        }
+      }
+    },
+    "memberReadPost": {
+      "httpStatus": 200,
+      "body": {
+        "jsonrpc": "2.0",
+        "id": 6,
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"author\":\"/root/verifier\",\"channel_name\":\"run-spike-p03\",\"created_at\":\"2026-11-17T08:26:51.302820Z\",\"message_id\":\"01a1e89d-b227-7553-a603-dc0fea68f89a\",\"n_chars\":143,\"next_offset_chars\":143,\"text\":\"Acknowledged: I read the planner’s summary and verified that it calls for leader review of both posts and confirmation of channel subscription.\",\"thread_id\":\"01a1e89d-6417-70d2-8a96-e725459d5f9e\"}"
+            }
+          ],
+          "structuredContent": {
+            "author": "/root/verifier",
+            "channel_name": "run-spike-p03",
+            "created_at": "2026-11-17T08:26:51.302820Z",
+            "message_id": "01a1e89d-b227-7553-a603-dc0fea68f89a",
+            "n_chars": 143,
+            "next_offset_chars": 143,
+            "text": "Acknowledged: I read the planner’s summary and verified that it calls for leader review of both posts and confirmation of channel subscription.",
+            "thread_id": "01a1e89d-6417-70d2-8a96-e725459d5f9e"
+          },
+          "isError": false
+        }
+      }
+    },
+    "memberPost": {
+      "httpStatus": 200,
+      "body": {
+        "jsonrpc": "2.0",
+        "id": 7,
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"author\":\"/root\",\"channel_name\":\"run-spike-p03\",\"created_at\":\"2026-11-17T08:27:24.426193Z\",\"message_id\":\"01a1e89e-338a-7282-a51e-aca461badf39\",\"thread_id\":\"01a1e89e-338a-7282-a51e-aca461badf39\"}"
+            }
+          ],
+          "structuredContent": {
+            "author": "/root",
+            "channel_name": "run-spike-p03",
+            "created_at": "2026-11-17T08:27:24.426193Z",
+            "message_id": "01a1e89e-338a-7282-a51e-aca461badf39",
+            "thread_id": "01a1e89e-338a-7282-a51e-aca461badf39"
+          },
+          "isError": false
+        }
+      }
+    },
+    "memberPostReadback": {
+      "httpStatus": 200,
+      "body": {
+        "jsonrpc": "2.0",
+        "id": 8,
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"author\":\"/root\",\"channel_name\":\"run-spike-p03\",\"created_at\":\"2026-11-17T08:27:24.426193Z\",\"message_id\":\"01a1e89e-338a-7282-a51e-aca461badf39\",\"n_chars\":153,\"next_offset_chars\":153,\"text\":\"P03B-EXTERNAL-WRITE-OK reply-to=01a1e89d-b227-7553-a603-dc0fea68f89a Bounded summary: external caller-bound write probe; one reference, under 200 tokens.\",\"thread_id\":\"01a1e89e-338a-7282-a51e-aca461badf39\"}"
+            }
+          ],
+          "structuredContent": {
+            "author": "/root",
+            "channel_name": "run-spike-p03",
+            "created_at": "2026-11-17T08:27:24.426193Z",
+            "message_id": "01a1e89e-338a-7282-a51e-aca461badf39",
+            "n_chars": 153,
+            "next_offset_chars": 153,
+            "text": "P03B-EXTERNAL-WRITE-OK reply-to=01a1e89d-b227-7553-a603-dc0fea68f89a Bounded summary: external caller-bound write probe; one reference, under 200 tokens.",
+            "thread_id": "01a1e89e-338a-7282-a51e-aca461badf39"
+          },
+          "isError": false
+        }
+      }
+    },
+    "memberSubscribe": {
+      "httpStatus": 200,
+      "body": {
+        "jsonrpc": "2.0",
+        "id": 9,
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"channel_name\":\"run-spike-p03\",\"enabled\":true,\"last_message_id\":\"01a1e89e-338a-7282-a51e-aca461badf39\",\"target_agent\":\"/root\",\"thread_id\":null}"
+            }
+          ],
+          "structuredContent": {
+            "channel_name": "run-spike-p03",
+            "enabled": true,
+            "last_message_id": "01a1e89e-338a-7282-a51e-aca461badf39",
+            "target_agent": "/root",
+            "thread_id": null
+          },
+          "isError": false
+        }
+      }
+    },
+    "nonMemberDenied": {
+      "httpStatus": 200,
+      "body": {
+        "jsonrpc": "2.0",
+        "id": 10,
+        "error": {
+          "code": -32602,
+          "message": "no thread with id: 08eb2f9e-a93b-4e3a-a3c8-b114a4d5bdd4"
+        }
+      }
+    },
+    "crossBoardDenied": {
+      "httpStatus": 200,
+      "body": {
+        "jsonrpc": "2.0",
+        "id": 11,
+        "error": {
+          "code": -32602,
+          "message": "caller has no persisted agent path"
+        }
+      }
+    },
+    "foreignWriteDenied": {
+      "httpStatus": 200,
+      "body": {
+        "jsonrpc": "2.0",
+        "id": 12,
+        "error": {
+          "code": -32602,
+          "message": "caller has no persisted agent path"
+        }
+      }
+    },
+    "missingMetaDenied": {
+      "httpStatus": 200,
+      "body": {
+        "jsonrpc": "2.0",
+        "id": 13,
+        "error": {
+          "code": -32602,
+          "message": "Calls require threadId and sessionId metadata"
+        }
+      }
+    }
+  }
+}
