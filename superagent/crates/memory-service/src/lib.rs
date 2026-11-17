@@ -220,8 +220,10 @@ impl MemoryService {
         Ok(true)
     }
 
-    /// Bounded hybrid search via FTS5 MATCH + bm25 ranking. Results cite their
-    /// source (kind + source_id) and a snippet. `limit` is clamped to MAX_RESULTS.
+    /// Bounded lexical search (FTS5 MATCH + bm25 ranking). The vector branch of
+    /// hybrid retrieval is reserved (see [`VectorIndex`]); this method is
+    /// lexical-only. Results cite their source (kind + source_id) and a snippet.
+    /// `limit` is clamped to MAX_RESULTS.
     pub fn search(&self, query: &str, limit: usize) -> Result<Vec<Hit>> {
         if query.trim().is_empty() {
             return Err(MemoryError::EmptyQuery);
