@@ -1,0 +1,6 @@
+40:    "SubagentStart",
+41:    "SubagentStop",
+59:    "SubagentStart",
+60:    "SubagentStop",
+117:        HookEventName::SubagentStart => "subagent_start",
+118:        HookEventName::SubagentStop => "subagent_stop",

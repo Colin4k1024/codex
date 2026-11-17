@@ -1,0 +1,29 @@
+== static evidence: SubagentStart/SubagentStop hook events ==
+40:    "SubagentStart",
+41:    "SubagentStop",
+59:    "SubagentStart",
+60:    "SubagentStop",
+117:        HookEventName::SubagentStart => "subagent_start",
+118:        HookEventName::SubagentStop => "subagent_stop",
+== static evidence: no public agent/* control RPC in generated schema ==
+agent/* methods in ClientRequest schema: []
+thread observation methods: thread/approveGuardianDeniedAction, thread/archive, thread/attachment/add, thread/attachment/list, thread/attachment/remove, thread/attachmentOwner/list, thread/compact/start, thread/delete, thread/fork, thread/goal/clear, thread/goal/get, thread/goal/set, thread/inject_items, thread/items/list, thread/list, thread/loaded/list, thread/metadata/update, thread/name/set, thread/read, thread/resume, thread/revert, thread/section/move, thread/shellCommand, thread/start, thread/turns/list, thread/unarchive, thread/unsubscribe
+
+{
+  "source": "p0-2-transcript",
+  "subAgentItemCount": 24,
+  "itemKinds": {
+    "started": 6,
+    "wait": 8,
+    "interacted": 4,
+    "completed": 6
+  },
+  "lifecycle": {
+    "spawnObserved": true,
+    "activityObserved": true,
+    "terminalObserved": true
+  },
+  "childHistoryReadableViaPublicRpc": true,
+  "verdict": "SUFFICIENT_NO_FORK"
+}
+P0-8 exit=0

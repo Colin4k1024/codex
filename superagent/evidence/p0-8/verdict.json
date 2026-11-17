@@ -1,0 +1,33 @@
+{
+  "issue": 71,
+  "source": "p0-2-transcript",
+  "leaderThreadId": "01a1e86c-e20e-7df1-b8a3-e1c439d7c65e",
+  "subAgentItemCount": 24,
+  "itemKinds": {
+    "started": 6,
+    "wait": 8,
+    "interacted": 4,
+    "completed": 6
+  },
+  "agentThreadIds": [
+    "01a1e86c-e20e-7df1-b8a3-e1c439d7c65e",
+    "01a1e86d-0bbb-7be1-bef5-ad9e5f7791c3",
+    "01a1e86d-9439-76f1-a713-36d4459ab0de",
+    "01a1e86e-4324-7bc1-8aac-5fc8f1adcd8d"
+  ],
+  "lifecycle": {
+    "spawnObserved": true,
+    "activityObserved": true,
+    "terminalObserved": true
+  },
+  "childHistoryReadableViaPublicRpc": true,
+  "publicAgentControlRpcs": [],
+  "verdict": "SUFFICIENT_NO_FORK",
+  "controlPlaneNotes": [
+    "No public agent/* RPC exists in the generated ClientRequest schema (verified 2026-11-17).",
+    "Per-subagent interrupt/resume from an external client is not directly exposed; outer orchestrator cancels the whole leader turn via turn/interrupt (P0-6 trace C) or asks the leader to use interrupt_agent.",
+    "Subagent lifecycle is observable via item/started + item/completed SubAgentActivity items (kind started/interacted/interrupted/completed) and CollabAgentToolCall items with agentsStates.",
+    "Child thread history readable via thread/read when agentThreadId is known (see probes)."
+  ],
+  "minimalRpcProposalIfGap": []
+}
