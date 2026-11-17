@@ -29,6 +29,19 @@
 schema 全量枚举（p0-8/no-agent-rpc.txt）：ClientRequest 110 方法；**agent/* = 0、graph/store = 0**。
 queue 方法不在生成的 v2 schema JSON（#[experimental]，common.rs:666-701）。
 
+### 2.1 turn/start experimental 字段语义（静态源码核验，运行时探针待配额）
+
+两字段均不在默认生成的 v2 TurnStartParams.json（#[experimental] 门控），仅 experimentalApi=true 时可用：
+
+- `permissions: Option<String>`（codex-rs/app-server-protocol/src/protocol/v2/turn.rs:258-262）：
+  选择命名 permissions profile id，作用于本 turn 及后续 turn；**不可与 `sandboxPolicy` 同时传**。
+  探针用不存在 profile（p09-nonexistent-profile）验证服务端校验路径。
+- `environments: Option<Vec<TurnEnvironmentParams>>`（同文件 :231-238）：
+  省略=沿用线程 sticky environments；**空数组=本 turn 禁用环境访问**；非空=选第一个为当前 turn 环境。
+  探针用 `[]` 验证禁用语义。
+- 编排器含义：permissions profile 与 SandboxPolicy 二选一；P0-7 已证明 command/exec 显式
+  SandboxPolicy 路径，permissions profile 路径待本探针定稿后裁决取舍。
+
 ## 3. 各 P0 裁决汇总
 
 | Issue | 主题 | 裁决 | 关键约束 |
