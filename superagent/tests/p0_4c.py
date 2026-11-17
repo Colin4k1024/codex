@@ -14,7 +14,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from spike_client import Client, rollout_function_calls
 
 ROOT = "/Users/fanjia/Desktop/code/codex"
-EV = f"{ROOT}/superagent/evidence/p0-4"
+EV = sys.argv[1] if len(sys.argv) > 1 else f"{ROOT}/superagent/evidence/p0-4"
 HOME = os.path.expanduser("~/Library/Application Support/SuperAgent/codex-home")
 ENGINE = f"{ROOT}/superagent/packaging/superagent-engine"
 WORK = tempfile.mkdtemp(prefix="p04c-work-")
@@ -60,13 +60,49 @@ try:
     resp = client.wait_response(rid, timeout=30)
     files, calls = rollout_function_calls(HOME, thread_id)
     goal_calls = [e for e in calls if e.get("call", {}).get("name") in GOAL_TOOLS]
+    # Code-mode goal invocations: the model calls tools.create_goal / tools.get_goal
+    # / tools.update_goal inside exec custom_tool_call input strings; outputs arrive
+    # as custom_tool_call_output (goal JSON) and, for create_goal, a
+    # function_call_output named goal_objective. Detect these alongside top-level
+    # function_call entries (the engine exposes goal tools via the code-mode bridge).
+    exec_inputs, exec_outputs, goal_objective_outs = {}, {}, []
+    for fp in files:
+        try:
+            fh = open(fp)
+        except OSError:
+            continue
+        with fh:
+            for line in fh:
+                try:
+                    p = json.loads(line).get("payload", {})
+                except ValueError:
+                    continue
+                t = p.get("type")
+                if t == "custom_tool_call" and p.get("name") == "exec":
+                    exec_inputs[p.get("call_id")] = p.get("input", "") or ""
+                elif t == "custom_tool_call_output":
+                    o = p.get("output")
+                    exec_outputs[p.get("call_id")] = o if isinstance(o, str) else json.dumps(o, ensure_ascii=False)
+                elif t == "function_call_output" and p.get("name") == "goal_objective":
+                    goal_objective_outs.append(p.get("output"))
+    code_mode = {tool: [] for tool in GOAL_TOOLS}
+    for cid, inp in exec_inputs.items():
+        for tool in GOAL_TOOLS:
+            if f"tools.{tool}" in inp:
+                code_mode[tool].append({"call_id": cid, "input": inp,
+                                        "output": exec_outputs.get(cid, "")})
     per_tool = {}
     for tool in GOAL_TOOLS:
         matched = [e for e in goal_calls if e["call"]["name"] == tool]
+        cm = code_mode[tool]
+        cm_with_out = [c for c in cm if c["output"]]
+        if tool == "create_goal" and goal_objective_outs:
+            cm_with_out = cm  # goal_objective output confirms the create_goal result
         per_tool[tool] = {
-            "callCount": len(matched),
-            "withOutput": sum(1 for e in matched if e.get("output")),
+            "callCount": len(matched) + len(cm),
+            "withOutput": sum(1 for e in matched if e.get("output")) + len(cm_with_out),
             "samples": matched[:3],
+            "codeModeCalls": cm[:3],
         }
     texts = [n.get("params", {}).get("item", {}).get("text", "")
              for n in client.notifications
