@@ -1,0 +1,94 @@
+{
+  "id": 6,
+  "result": {
+    "thread": {
+      "id": "01a1eca6-ca4b-7b10-9c9a-a3a205e46f1d",
+      "environments": null,
+      "extra": null,
+      "sessionId": "01a1eca6-ca4b-7b10-9c9a-a3a205e46f1d",
+      "forkedFromId": "01a1eca6-5d20-7a81-a2e3-c64b9dde1089",
+      "attachedToThreadId": null,
+      "parentThreadId": "01a1eca6-5d20-7a81-a2e3-c64b9dde1089",
+      "preview": "",
+      "ephemeral": false,
+      "section": null,
+      "sectionEnteredAt": null,
+      "projectId": null,
+      "historyMode": "paginated",
+      "modelProvider": "openai",
+      "model": "gpt-5.6-luna",
+      "reasoningEffort": "low",
+      "createdAt": 1794971716,
+      "updatedAt": 1794971727,
+      "recencyAt": 1794971716,
+      "status": {
+        "type": "notLoaded"
+      },
+      "path": "/private/tmp/sa-p1-2-wt/superagent/evidence/p1-2/home-p1-2/sessions/2026/11/18/rollout-2026-11-18T11-15-16-01a1eca6-ca4b-7b10-9c9a-a3a205e46f1d.jsonl",
+      "cwd": "/private/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p12-solqr6mf",
+      "cliVersion": "0.0.0",
+      "originator": "superagent-spike",
+      "source": {
+        "subAgent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a1eca6-5d20-7a81-a2e3-c64b9dde1089",
+            "depth": 1,
+            "agent_path": "/root/reporter",
+            "agent_nickname": "Hermes",
+            "agent_role": "reporter"
+          }
+        }
+      },
+      "canAcceptDirectInput": null,
+      "threadSource": "subagent",
+      "agentNickname": "Hermes",
+      "agentRole": "reporter",
+      "gitInfo": null,
+      "name": null,
+      "daybreakEnabled": null,
+      "turns": [
+        {
+          "id": "01a1eca6-ca6e-7903-a405-7788e64cc3d3",
+          "rootTurnId": "01a1eca6-65a8-7ce3-ab8b-51ddee057197",
+          "items": [
+            {
+              "type": "reasoning",
+              "id": "rs_0c20ed035913521b016afd184bc02c87d0ac81e2b33a2d4ca2",
+              "summary": [],
+              "content": [],
+              "startedAtMs": 1794971723664,
+              "completedAtMs": 1794971723664
+            },
+            {
+              "type": "reasoning",
+              "id": "rs_0c20ed035913521b016afd184e949c87d093534859410f506f",
+              "summary": [],
+              "content": [],
+              "startedAtMs": 1794971726514,
+              "completedAtMs": 1794971726514
+            },
+            {
+              "type": "agentMessage",
+              "moderation": null,
+              "id": "msg_0c20ed035913521b016afd184eaba087d08a55487cc2bb334b",
+              "text": "Evidence summary: Planner proposed creating an empty `hello.txt` with `touch` and checking `test -f`; implementer supplied a diff adding `Hello, world!`; verifier specified no execution, so no gate result is available.",
+              "phase": "final_answer",
+              "memoryCitation": null,
+              "delivery": null,
+              "questions": null,
+              "startedAtMs": 1794971726631,
+              "completedAtMs": 1794971727557
+            }
+          ],
+          "itemsView": "full",
+          "status": "completed",
+          "error": null,
+          "startedAt": 1794971716,
+          "completedAt": 1794971727,
+          "durationMs": 11346
+        }
+      ]
+    },
+    "readState": null
+  }
+}

@@ -1,0 +1,386 @@
+{
+  "issue": 74,
+  "leaderThreadId": "01a1eca6-5d20-7a81-a2e3-c64b9dde1089",
+  "leaderTurnStatus": "completed",
+  "spawnedRoles": [
+    "implementer",
+    "planner",
+    "reporter",
+    "reviewer",
+    "verifier"
+  ],
+  "childCount": 5,
+  "personaInjected": true,
+  "personaInjectionSource": "leader's OWN rollout (root_agent_usage_hint_text developer message)",
+  "allFiveRolesSpawned": true,
+  "perRoleModelApplied": true,
+  "roleModels": {
+    "planner": "gpt-6-astra",
+    "implementer": "gpt-6-astra",
+    "verifier": "gpt-5.6-luna",
+    "reviewer": "gpt-5.6-luna",
+    "reporter": "gpt-5.6-luna"
+  },
+  "roleIsolation": true,
+  "childTurnsCompleted": true,
+  "budgetMeasuredChildren": 5,
+  "budgetCaps": {
+    "residentIntro": 400,
+    "handoffSummary": 800,
+    "singleFragment": 900,
+    "perRoundNewTokens": 2000
+  },
+  "residentIntroTokens": 238,
+  "residentIntroCapStatus": "PASS",
+  "budgetByRole": {
+    "/root/planner": {
+      "handoffSummary": {
+        "tokens": 35,
+        "cap": 800,
+        "status": "PASS",
+        "source": "child final_answer text (thread/read), tiktoken o200k_base"
+      },
+      "singleFragment": {
+        "measuredFragments": {
+          "roleDeveloperInstructions": 140,
+          "childFinalAnswer": 35
+        },
+        "cap": 900,
+        "status": "PASS",
+        "notProven": "leader->child task payload is encrypted at rest by the engine (rollout + notifications); its plaintext token count cannot be measured and is NOT guessed"
+      },
+      "perRoundNewTokens": {
+        "rounds": [
+          {
+            "turnId": "01a1eca6-83d7-7e32-aae8-709b98ffdd8e",
+            "responseId": "resp_0a1ff8236b0f1072016afd183585b087d094ccaf0ab32417e1",
+            "inputTokens": 21297,
+            "cachedInputTokens": 20224,
+            "outputTokens": 76,
+            "totalTokens": 21373,
+            "newTokens": 1149
+          }
+        ],
+        "cap": 2000,
+        "definition": "new = (input_tokens - cached_input_tokens) + output_tokens per token_usage_record round from the child's OWN rollout",
+        "status": "PASS"
+      }
+    },
+    "/root/implementer": {
+      "handoffSummary": {
+        "tokens": 48,
+        "cap": 800,
+        "status": "PASS",
+        "source": "child final_answer text (thread/read), tiktoken o200k_base"
+      },
+      "singleFragment": {
+        "measuredFragments": {
+          "roleDeveloperInstructions": 152,
+          "childFinalAnswer": 48
+        },
+        "cap": 900,
+        "status": "PASS",
+        "notProven": "leader->child task payload is encrypted at rest by the engine (rollout + notifications); its plaintext token count cannot be measured and is NOT guessed"
+      },
+      "perRoundNewTokens": {
+        "rounds": [
+          {
+            "turnId": "01a1eca6-91fe-7700-b6a1-1ad98053b216",
+            "responseId": "resp_00b4269d2f6a2644016afd18397e4c87d0adbfc69e031589c6",
+            "inputTokens": 21439,
+            "cachedInputTokens": 20224,
+            "outputTokens": 64,
+            "totalTokens": 21503,
+            "newTokens": 1279
+          }
+        ],
+        "cap": 2000,
+        "definition": "new = (input_tokens - cached_input_tokens) + output_tokens per token_usage_record round from the child's OWN rollout",
+        "status": "PASS"
+      }
+    },
+    "/root/verifier": {
+      "handoffSummary": {
+        "tokens": 27,
+        "cap": 800,
+        "status": "PASS",
+        "source": "child final_answer text (thread/read), tiktoken o200k_base"
+      },
+      "singleFragment": {
+        "measuredFragments": {
+          "roleDeveloperInstructions": 158,
+          "childFinalAnswer": 27
+        },
+        "cap": 900,
+        "status": "PASS",
+        "notProven": "leader->child task payload is encrypted at rest by the engine (rollout + notifications); its plaintext token count cannot be measured and is NOT guessed"
+      },
+      "perRoundNewTokens": {
+        "rounds": [
+          {
+            "turnId": "01a1eca6-a63a-7ba2-ace3-087b966a8b06",
+            "responseId": "resp_05ba5802bc2457cc016afd183e20c087d0a99b64a30adb5c2f",
+            "inputTokens": 37458,
+            "cachedInputTokens": 0,
+            "outputTokens": 31,
+            "totalTokens": 37489,
+            "newTokens": 37489
+          }
+        ],
+        "cap": 2000,
+        "definition": "new = (input_tokens - cached_input_tokens) + output_tokens per token_usage_record round from the child's OWN rollout",
+        "status": "FAIL"
+      }
+    },
+    "/root/reviewer": {
+      "handoffSummary": {
+        "tokens": 29,
+        "cap": 800,
+        "status": "PASS",
+        "source": "child final_answer text (thread/read), tiktoken o200k_base"
+      },
+      "singleFragment": {
+        "measuredFragments": {
+          "roleDeveloperInstructions": 154,
+          "childFinalAnswer": 29
+        },
+        "cap": 900,
+        "status": "PASS",
+        "notProven": "leader->child task payload is encrypted at rest by the engine (rollout + notifications); its plaintext token count cannot be measured and is NOT guessed"
+      },
+      "perRoundNewTokens": {
+        "rounds": [
+          {
+            "turnId": "01a1eca6-b64b-79a0-ab5c-984e4567a921",
+            "responseId": "resp_0ee8838bd86ce5a5016afd1842fdc887d0a519ad2a3a90e146",
+            "inputTokens": 37667,
+            "cachedInputTokens": 19328,
+            "outputTokens": 92,
+            "totalTokens": 37759,
+            "newTokens": 18431
+          }
+        ],
+        "cap": 2000,
+        "definition": "new = (input_tokens - cached_input_tokens) + output_tokens per token_usage_record round from the child's OWN rollout",
+        "status": "FAIL"
+      }
+    },
+    "/root/reporter": {
+      "handoffSummary": {
+        "tokens": 47,
+        "cap": 800,
+        "status": "PASS",
+        "source": "child final_answer text (thread/read), tiktoken o200k_base"
+      },
+      "singleFragment": {
+        "measuredFragments": {
+          "roleDeveloperInstructions": 160,
+          "childFinalAnswer": 47
+        },
+        "cap": 900,
+        "status": "PASS",
+        "notProven": "leader->child task payload is encrypted at rest by the engine (rollout + notifications); its plaintext token count cannot be measured and is NOT guessed"
+      },
+      "perRoundNewTokens": {
+        "rounds": [
+          {
+            "turnId": "01a1eca6-ca6e-7903-a405-7788e64cc3d3",
+            "responseId": "resp_0c20ed035913521b016afd1847fa8887d0aafac8e071b91c0d",
+            "inputTokens": 37913,
+            "cachedInputTokens": 0,
+            "outputTokens": 104,
+            "totalTokens": 38017,
+            "newTokens": 38017
+          },
+          {
+            "turnId": "01a1eca6-ca6e-7903-a405-7788e64cc3d3",
+            "responseId": "resp_0c20ed035913521b016afd184d016487d09d8d75302f48b8e6",
+            "inputTokens": 38035,
+            "cachedInputTokens": 37760,
+            "outputTokens": 78,
+            "totalTokens": 38113,
+            "newTokens": 353
+          }
+        ],
+        "cap": 2000,
+        "definition": "new = (input_tokens - cached_input_tokens) + output_tokens per token_usage_record round from the child's OWN rollout",
+        "status": "FAIL"
+      }
+    }
+  },
+  "budgetMeasured": false,
+  "roleProof": {
+    "/root/planner": {
+      "threadId": "01a1eca6-83cc-78a3-98ee-075376a82a9c",
+      "sessionId": "01a1eca6-83cc-78a3-98ee-075376a82a9c",
+      "agentRole": "planner",
+      "agentNickname": "Athena",
+      "model": "gpt-6-astra",
+      "readable": true,
+      "turnStatuses": [
+        "completed"
+      ],
+      "turnErrors": [],
+      "turnsCompleted": true,
+      "turnCompletedNotification": "completed",
+      "finalAnswer": "1. Create an empty `hello.txt` in the working directory with `touch hello.txt`. Acceptance command: `test -f hello.txt`. No file has been created.",
+      "ownRolloutFile": "superagent/evidence/p1-2/home-p1-2/sessions/2026/11/18/rollout-2026-11-18T11-14-58-01a1eca6-83cc-78a3-98ee-075376a82a9c.jsonl",
+      "ownInstructionsInRollout": true,
+      "foreignInstructionsInRollout": [],
+      "leaderPersonaInChildRollout": true,
+      "totalTokens": 21373,
+      "usageRounds": [
+        {
+          "turnId": "01a1eca6-83d7-7e32-aae8-709b98ffdd8e",
+          "responseId": "resp_0a1ff8236b0f1072016afd183585b087d094ccaf0ab32417e1",
+          "inputTokens": 21297,
+          "cachedInputTokens": 20224,
+          "outputTokens": 76,
+          "totalTokens": 21373,
+          "newTokens": 1149
+        }
+      ]
+    },
+    "/root/implementer": {
+      "threadId": "01a1eca6-91ee-7bc2-97a4-4a248f7958f0",
+      "sessionId": "01a1eca6-91ee-7bc2-97a4-4a248f7958f0",
+      "agentRole": "implementer",
+      "agentNickname": "Hephaestus",
+      "model": "gpt-6-astra",
+      "readable": true,
+      "turnStatuses": [
+        "completed"
+      ],
+      "turnErrors": [],
+      "turnsCompleted": true,
+      "turnCompletedNotification": "completed",
+      "finalAnswer": "```diff\ndiff --git a/hello.txt b/hello.txt\nnew file mode 100644\n--- /dev/null\n+++ b/hello.txt\n@@ -0,0 +1 @@\n+Hello, world!\n```",
+      "ownRolloutFile": "superagent/evidence/p1-2/home-p1-2/sessions/2026/11/18/rollout-2026-11-18T11-15-01-01a1eca6-91ee-7bc2-97a4-4a248f7958f0.jsonl",
+      "ownInstructionsInRollout": true,
+      "foreignInstructionsInRollout": [],
+      "leaderPersonaInChildRollout": true,
+      "totalTokens": 21503,
+      "usageRounds": [
+        {
+          "turnId": "01a1eca6-91fe-7700-b6a1-1ad98053b216",
+          "responseId": "resp_00b4269d2f6a2644016afd18397e4c87d0adbfc69e031589c6",
+          "inputTokens": 21439,
+          "cachedInputTokens": 20224,
+          "outputTokens": 64,
+          "totalTokens": 21503,
+          "newTokens": 1279
+        }
+      ]
+    },
+    "/root/verifier": {
+      "threadId": "01a1eca6-a625-7171-916f-bb952a659a0d",
+      "sessionId": "01a1eca6-a625-7171-916f-bb952a659a0d",
+      "agentRole": "verifier",
+      "agentNickname": "Themis",
+      "model": "gpt-5.6-luna",
+      "readable": true,
+      "turnStatuses": [
+        "completed"
+      ],
+      "turnErrors": [],
+      "turnsCompleted": true,
+      "turnCompletedNotification": "completed",
+      "finalAnswer": "Acceptance checklist: plan specifies creating `hello.txt`, implementation adds the intended content, and verification confirms the file exists with the expected contents.",
+      "ownRolloutFile": "superagent/evidence/p1-2/home-p1-2/sessions/2026/11/18/rollout-2026-11-18T11-15-06-01a1eca6-a625-7171-916f-bb952a659a0d.jsonl",
+      "ownInstructionsInRollout": true,
+      "foreignInstructionsInRollout": [],
+      "leaderPersonaInChildRollout": true,
+      "totalTokens": 37489,
+      "usageRounds": [
+        {
+          "turnId": "01a1eca6-a63a-7ba2-ace3-087b966a8b06",
+          "responseId": "resp_05ba5802bc2457cc016afd183e20c087d0a99b64a30adb5c2f",
+          "inputTokens": 37458,
+          "cachedInputTokens": 0,
+          "outputTokens": 31,
+          "totalTokens": 37489,
+          "newTokens": 37489
+        }
+      ]
+    },
+    "/root/reviewer": {
+      "threadId": "01a1eca6-b638-7ab2-b442-25453f748e0a",
+      "sessionId": "01a1eca6-b638-7ab2-b442-25453f748e0a",
+      "agentRole": "reviewer",
+      "agentNickname": "Nemesis",
+      "model": "gpt-5.6-luna",
+      "readable": true,
+      "turnStatuses": [
+        "completed"
+      ],
+      "turnErrors": [],
+      "turnsCompleted": true,
+      "turnCompletedNotification": "completed",
+      "finalAnswer": "APPROVE — The one-step plan is scoped correctly, and `test -f hello.txt` directly verifies the declared file-creation obligation.",
+      "ownRolloutFile": "superagent/evidence/p1-2/home-p1-2/sessions/2026/11/18/rollout-2026-11-18T11-15-11-01a1eca6-b638-7ab2-b442-25453f748e0a.jsonl",
+      "ownInstructionsInRollout": true,
+      "foreignInstructionsInRollout": [],
+      "leaderPersonaInChildRollout": true,
+      "totalTokens": 37759,
+      "usageRounds": [
+        {
+          "turnId": "01a1eca6-b64b-79a0-ab5c-984e4567a921",
+          "responseId": "resp_0ee8838bd86ce5a5016afd1842fdc887d0a519ad2a3a90e146",
+          "inputTokens": 37667,
+          "cachedInputTokens": 19328,
+          "outputTokens": 92,
+          "totalTokens": 37759,
+          "newTokens": 18431
+        }
+      ]
+    },
+    "/root/reporter": {
+      "threadId": "01a1eca6-ca4b-7b10-9c9a-a3a205e46f1d",
+      "sessionId": "01a1eca6-ca4b-7b10-9c9a-a3a205e46f1d",
+      "agentRole": "reporter",
+      "agentNickname": "Hermes",
+      "model": "gpt-5.6-luna",
+      "readable": true,
+      "turnStatuses": [
+        "completed"
+      ],
+      "turnErrors": [],
+      "turnsCompleted": true,
+      "turnCompletedNotification": "completed",
+      "finalAnswer": "Evidence summary: Planner proposed creating an empty `hello.txt` with `touch` and checking `test -f`; implementer supplied a diff adding `Hello, world!`; verifier specified no execution, so no gate result is available.",
+      "ownRolloutFile": "superagent/evidence/p1-2/home-p1-2/sessions/2026/11/18/rollout-2026-11-18T11-15-16-01a1eca6-ca4b-7b10-9c9a-a3a205e46f1d.jsonl",
+      "ownInstructionsInRollout": true,
+      "foreignInstructionsInRollout": [],
+      "leaderPersonaInChildRollout": true,
+      "totalTokens": 76130,
+      "usageRounds": [
+        {
+          "turnId": "01a1eca6-ca6e-7903-a405-7788e64cc3d3",
+          "responseId": "resp_0c20ed035913521b016afd1847fa8887d0aafac8e071b91c0d",
+          "inputTokens": 37913,
+          "cachedInputTokens": 0,
+          "outputTokens": 104,
+          "totalTokens": 38017,
+          "newTokens": 38017
+        },
+        {
+          "turnId": "01a1eca6-ca6e-7903-a405-7788e64cc3d3",
+          "responseId": "resp_0c20ed035913521b016afd184d016487d09d8d75302f48b8e6",
+          "inputTokens": 38035,
+          "cachedInputTokens": 37760,
+          "outputTokens": 78,
+          "totalTokens": 38113,
+          "newTokens": 353
+        }
+      ]
+    }
+  },
+  "leaderSummary": "I’ll spawn the five roles in order, wait for their replies, and report the nicknames and models returned by the tools.\n1. Create an empty `hello.txt` in the working directory with `touch hello.txt`. Acceptance command: `test -f hello.txt`. No file has been created.\n```diff\ndiff --git a/hello.txt b/hello.txt\nnew file mode 100644\n--- /dev/null\n+++ b/hello.txt\n@@ -0,0 +1 @@\n+Hello, world!\n```\nAcceptance checklist: plan specifies creating `hello.txt`, implementation adds the intended content, and verification confirms the file exists with the expected contents.\nAPPROVE — The one-step plan is scoped correctly, and `test -f hello.txt` directly verifies the declared file-creation obligation.\nEvidence summary: Planner proposed creating an empty `hello.txt` with `touch` and checking `test -f`; implementer supplied a diff adding `Hello, world!`; verifier specified no execution, so no gate result is available.\nAll five completed; five wait calls were made. Tools exposed task names, not separate nicknames or runtime models. Models below are from the role configuration:\n\n1. planner — `gpt-6-astra`\n2. implementer — `gpt-6-astra`\n3. verifier — `gpt-5.6-luna`\n4. reviewer — `gpt-5.6-luna`\n5. reporter — `gpt-5.6-luna`",
+  "allPass": false,
+  "notProven": {
+    "tuiLeaderPersonaAutonomousTeaming": "NOT_PROVEN by this probe: stdio-scripted with an explicit 'spawn ALL FIVE' prompt. Genuine TUI attempt: tests/p1_2_tui.py (reported separately).",
+    "perRoleSandbox": "NOT_PROVEN / orchestrator-only: engine AgentRoleOverrides (core/src/agent/role.rs) does not carry sandbox/approval; child sandbox inherits the parent turn runtime (core/src/agent/child_config.rs). P0-2e runtime proof: role sandbox_mode ignored. Sandbox is orchestrator-enforced via explicit SandboxPolicy (P0-7).",
+    "leaderToChildTaskFragmentTokens": "NOT_PROVEN: spawn task payload encrypted at rest; plaintext token count unmeasurable."
+  },
+  "note": "Runtime teaming via app-server stdio (same engine+config path as TUI), scripted delegation prompt. allPass requires every child turn completed and every measurable budget cap PASS; NOT_PROVEN items are listed explicitly."
+}

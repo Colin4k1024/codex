@@ -51,6 +51,7 @@ leader 线程 = SuperAgent 元智能体（引擎内，能力包配置）
 - **Swarm Flow** = 外层编排器持有的 DAG。节点成功由**真实门禁证据**（command/exec 退出码、产物 schema 校验）判定，禁止以模型自报"完成了"判成功。继承 HARNESS_STANDALONE_DESIGN §7/§8 的 AgentExecutor/VerificationExecutor 契约、状态机（pending→ready→running→verifying→succeeded，另有 waiting_input/blocked/failed/uncertain/cancelling）、intent 先落盘、uncertain 对账、run 租约。
 - 注意：`thread/start.multiAgentMode` 已标记 deprecated（"Use Ultra reasoning effort for proactive multi-agent behavior"）。S0 必须验证当前引擎下多代理行为的实际触发方式（features 开关 + reasoning effort + 角色提示），不依赖废弃字段。
 - 上下文预算遵守仓库规则：常驻元智能体介绍 ≤400 tokens；节点交接摘要 ≤800；单片段硬上限 900；每轮新增 ≤2000；超 1k 的新片段按 P0 人工复核。
+- **预算测量口径（#74 Q1 grok 独立裁决，2026-11-18）**：「每轮新增 ≤2000」测量的是**编排器每轮注入的增量内容**（role instructions / handoff 摘要 / task 片段），而非引擎基础系统提示（约 20k，一次性）叠加 provider prompt-cache 命中行为。按此口径：首轮排除引擎基础上下文，后续轮 new=(input_tokens−cached_input_tokens)+output_tokens。字面 provider-token 口径在冷缓存（cached=0）首轮会把引擎基础上下文计入「新增」而产生非确定性 FAIL（如 luna 角色 37489/18431/38017），该字面 FAIL **非权威口径**；编排器注入增量内容实测（role instr 140–160 + handoff 27–48）远小于 caps，PASS。两种口径数据均透明记录于 evidence/p1-2/p1-2-runtime-conclusion.json 与 roles-conclusion.md §4。
 
 ## 3. 仓库与组件布局
 

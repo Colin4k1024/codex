@@ -1,0 +1,101 @@
+{
+  "issue": 74,
+  "criterion": "TUI leader persona-driven autonomous teaming (F2)",
+  "mode": "interactive TUI (bare CLI, pty, prompt prefill); post-run reconciliation",
+  "launch": {
+    "argv": [
+      "/Users/fanjia/Desktop/code/codex/superagent/packaging/superagent-engine",
+      "--no-daemon",
+      "<task-only prompt>"
+    ],
+    "prompt": "Use your team to prepare everything needed to create hello.txt containing exactly HELLO-P12: a one-step plan, the exact diff to apply, a one-line acceptance checklist, a one-line review verdict, and a one-line evidence summary. Do not create or modify any files. When the team deliverables are in, list what each teammate produced.",
+    "envCODEX_HOME": "/tmp/sa-p1-2-wt/superagent/evidence/p1-2/home-p1-2-tui",
+    "capturedHome": "/tmp/sa-p1-2-wt/superagent/evidence/p1-2/home-p1-2-tui"
+  },
+  "promptIsTaskOnly": true,
+  "leaderSessionFile": "/tmp/sa-p1-2-wt/superagent/evidence/p1-2/home-p1-2-tui/sessions/2026/11/18/rollout-2026-11-18T11-50-59-01a1ecc7-7f80-7651-a0f3-839f682c5675.jsonl",
+  "leaderOriginator": "codex-tui",
+  "leaderSessionSource": "cli",
+  "leaderTurnStatuses": [
+    "completed"
+  ],
+  "personaInLeaderRollout": true,
+  "spawnedRoles": [
+    "implementer",
+    "planner",
+    "reporter",
+    "reviewer",
+    "verifier"
+  ],
+  "allFiveRolesSpawned": true,
+  "childProof": {
+    "01a1ecc7-f656-79e1-9207-3ea7cbcd82f0": {
+      "role": "reporter",
+      "threadId": "01a1ecc7-f656-79e1-9207-3ea7cbcd82f0",
+      "model": "gpt-5.6-luna",
+      "agentNickname": "Hermes",
+      "turnStatuses": [
+        "completed",
+        "completed",
+        "completed"
+      ],
+      "turnErrors": [],
+      "turnsCompleted": true,
+      "rolloutFile": "/tmp/sa-p1-2-wt/superagent/evidence/p1-2/home-p1-2-tui/sessions/2026/11/18/rollout-2026-11-18T11-51-30-01a1ecc7-f656-79e1-9207-3ea7cbcd82f0.jsonl"
+    },
+    "01a1ecc7-b662-7c72-adea-bed815b3f60b": {
+      "role": "implementer",
+      "threadId": "01a1ecc7-b662-7c72-adea-bed815b3f60b",
+      "model": "gpt-6-astra",
+      "agentNickname": "Hephaestus",
+      "turnStatuses": [
+        "completed"
+      ],
+      "turnErrors": [],
+      "turnsCompleted": true,
+      "rolloutFile": "/tmp/sa-p1-2-wt/superagent/evidence/p1-2/home-p1-2-tui/sessions/2026/11/18/rollout-2026-11-18T11-51-13-01a1ecc7-b662-7c72-adea-bed815b3f60b.jsonl"
+    },
+    "01a1ecc7-c95e-7de0-a70f-05bc6d3bcf65": {
+      "role": "verifier",
+      "threadId": "01a1ecc7-c95e-7de0-a70f-05bc6d3bcf65",
+      "model": "gpt-5.6-luna",
+      "agentNickname": "Argus",
+      "turnStatuses": [
+        "completed"
+      ],
+      "turnErrors": [],
+      "turnsCompleted": true,
+      "rolloutFile": "/tmp/sa-p1-2-wt/superagent/evidence/p1-2/home-p1-2-tui/sessions/2026/11/18/rollout-2026-11-18T11-51-18-01a1ecc7-c95e-7de0-a70f-05bc6d3bcf65.jsonl"
+    },
+    "01a1ecc7-a5ef-76d3-a327-990ab5a0abe7": {
+      "role": "planner",
+      "threadId": "01a1ecc7-a5ef-76d3-a327-990ab5a0abe7",
+      "model": "gpt-6-astra",
+      "agentNickname": "Prometheus",
+      "turnStatuses": [
+        "completed"
+      ],
+      "turnErrors": [],
+      "turnsCompleted": true,
+      "rolloutFile": "/tmp/sa-p1-2-wt/superagent/evidence/p1-2/home-p1-2-tui/sessions/2026/11/18/rollout-2026-11-18T11-51-09-01a1ecc7-a5ef-76d3-a327-990ab5a0abe7.jsonl"
+    },
+    "01a1ecc7-dc25-7283-9dc6-6e8624431bb2": {
+      "role": "reviewer",
+      "threadId": "01a1ecc7-dc25-7283-9dc6-6e8624431bb2",
+      "model": "gpt-5.6-luna",
+      "agentNickname": "Momus",
+      "turnStatuses": [
+        "completed",
+        "completed"
+      ],
+      "turnErrors": [],
+      "turnsCompleted": true,
+      "rolloutFile": "/tmp/sa-p1-2-wt/superagent/evidence/p1-2/home-p1-2-tui/sessions/2026/11/18/rollout-2026-11-18T11-51-23-01a1ecc7-dc25-7283-9dc6-6e8624431bb2.jsonl"
+    }
+  },
+  "allChildTurnsCompleted": true,
+  "tuiAutonomousTeaming": "PROVEN",
+  "allPass": true,
+  "screenLog": "/tmp/sa-p1-2-wt/superagent/evidence/p1-2/p1-2-tui-screen.log",
+  "honestyNote": "PROVEN only if a genuine TUI leader (originator codex-tui), given a task-only prompt with no spawn/role instructions, autonomously spawned all five persona roles and every child turn completed. Otherwise NOT_PROVEN with observed facts; never fabricated."
+}

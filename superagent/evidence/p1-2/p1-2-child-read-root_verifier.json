@@ -1,0 +1,78 @@
+{
+  "id": 4,
+  "result": {
+    "thread": {
+      "id": "01a1eca6-a625-7171-916f-bb952a659a0d",
+      "environments": null,
+      "extra": null,
+      "sessionId": "01a1eca6-a625-7171-916f-bb952a659a0d",
+      "forkedFromId": "01a1eca6-5d20-7a81-a2e3-c64b9dde1089",
+      "attachedToThreadId": null,
+      "parentThreadId": "01a1eca6-5d20-7a81-a2e3-c64b9dde1089",
+      "preview": "",
+      "ephemeral": false,
+      "section": null,
+      "sectionEnteredAt": null,
+      "projectId": null,
+      "historyMode": "paginated",
+      "modelProvider": "openai",
+      "model": "gpt-5.6-luna",
+      "reasoningEffort": "low",
+      "createdAt": 1794971706,
+      "updatedAt": 1794971711,
+      "recencyAt": 1794971706,
+      "status": {
+        "type": "notLoaded"
+      },
+      "path": "/private/tmp/sa-p1-2-wt/superagent/evidence/p1-2/home-p1-2/sessions/2026/11/18/rollout-2026-11-18T11-15-06-01a1eca6-a625-7171-916f-bb952a659a0d.jsonl",
+      "cwd": "/private/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p12-solqr6mf",
+      "cliVersion": "0.0.0",
+      "originator": "superagent-spike",
+      "source": {
+        "subAgent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a1eca6-5d20-7a81-a2e3-c64b9dde1089",
+            "depth": 1,
+            "agent_path": "/root/verifier",
+            "agent_nickname": "Themis",
+            "agent_role": "verifier"
+          }
+        }
+      },
+      "canAcceptDirectInput": null,
+      "threadSource": "subagent",
+      "agentNickname": "Themis",
+      "agentRole": "verifier",
+      "gitInfo": null,
+      "name": null,
+      "daybreakEnabled": null,
+      "turns": [
+        {
+          "id": "01a1eca6-a63a-7ba2-ace3-087b966a8b06",
+          "rootTurnId": "01a1eca6-65a8-7ce3-ab8b-51ddee057197",
+          "items": [
+            {
+              "type": "agentMessage",
+              "moderation": null,
+              "id": "msg_05ba5802bc2457cc016afd183f177487d0b0ea08f00d7d3e63",
+              "text": "Acceptance checklist: plan specifies creating `hello.txt`, implementation adds the intended content, and verification confirms the file exists with the expected contents.",
+              "phase": "final_answer",
+              "memoryCitation": null,
+              "delivery": null,
+              "questions": null,
+              "startedAtMs": 1794971711000,
+              "completedAtMs": 1794971711525
+            }
+          ],
+          "itemsView": "full",
+          "status": "completed",
+          "error": null,
+          "startedAt": 1794971706,
+          "completedAt": 1794971711,
+          "durationMs": 4616
+        }
+      ]
+    },
+    "readState": null
+  }
+}

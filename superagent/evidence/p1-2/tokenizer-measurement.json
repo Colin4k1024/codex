@@ -1,0 +1,16 @@
+{
+  "encoding": "o200k_base",
+  "cap_tokens": 400,
+  "resident_intro_tokens": 238,
+  "overlay_hint_tokens": 238,
+  "intro_equals_overlay_hint": true,
+  "within_cap": true,
+  "role_models": {
+    "planner": "gpt-6-astra",
+    "implementer": "gpt-6-astra",
+    "verifier": "gpt-5.6-luna",
+    "reviewer": "gpt-5.6-luna",
+    "reporter": "gpt-5.6-luna"
+  },
+  "note": "Content-layer measurement only; runtime acceptance is proven separately by tests/p1_2.py (stdio) and tests/p1_2_tui.py (TUI)."
+}

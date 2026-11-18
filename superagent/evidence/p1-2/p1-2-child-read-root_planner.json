@@ -1,0 +1,86 @@
+{
+  "id": 2,
+  "result": {
+    "thread": {
+      "id": "01a1eca6-83cc-78a3-98ee-075376a82a9c",
+      "environments": null,
+      "extra": null,
+      "sessionId": "01a1eca6-83cc-78a3-98ee-075376a82a9c",
+      "forkedFromId": "01a1eca6-5d20-7a81-a2e3-c64b9dde1089",
+      "attachedToThreadId": null,
+      "parentThreadId": "01a1eca6-5d20-7a81-a2e3-c64b9dde1089",
+      "preview": "",
+      "ephemeral": false,
+      "section": null,
+      "sectionEnteredAt": null,
+      "projectId": null,
+      "historyMode": "paginated",
+      "modelProvider": "openai",
+      "model": "gpt-6-astra",
+      "reasoningEffort": "low",
+      "createdAt": 1794971698,
+      "updatedAt": 1794971706,
+      "recencyAt": 1794971698,
+      "status": {
+        "type": "notLoaded"
+      },
+      "path": "/private/tmp/sa-p1-2-wt/superagent/evidence/p1-2/home-p1-2/sessions/2026/11/18/rollout-2026-11-18T11-14-58-01a1eca6-83cc-78a3-98ee-075376a82a9c.jsonl",
+      "cwd": "/private/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p12-solqr6mf",
+      "cliVersion": "0.0.0",
+      "originator": "superagent-spike",
+      "source": {
+        "subAgent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a1eca6-5d20-7a81-a2e3-c64b9dde1089",
+            "depth": 1,
+            "agent_path": "/root/planner",
+            "agent_nickname": "Athena",
+            "agent_role": "planner"
+          }
+        }
+      },
+      "canAcceptDirectInput": null,
+      "threadSource": "subagent",
+      "agentNickname": "Athena",
+      "agentRole": "planner",
+      "gitInfo": null,
+      "name": null,
+      "daybreakEnabled": null,
+      "turns": [
+        {
+          "id": "01a1eca6-83d7-7e32-aae8-709b98ffdd8e",
+          "rootTurnId": "01a1eca6-65a8-7ce3-ab8b-51ddee057197",
+          "items": [
+            {
+              "type": "reasoning",
+              "id": "rs_0a1ff8236b0f1072016afd1839cc1087d0a1388beb4c89ee76",
+              "summary": [],
+              "content": [],
+              "startedAtMs": 1794971705729,
+              "completedAtMs": 1794971705729
+            },
+            {
+              "type": "agentMessage",
+              "moderation": null,
+              "id": "msg_0a1ff8236b0f1072016afd1839cbf887d083cafc32d1e93adf",
+              "text": "1. Create an empty `hello.txt` in the working directory with `touch hello.txt`. Acceptance command: `test -f hello.txt`. No file has been created.",
+              "phase": "final_answer",
+              "memoryCitation": null,
+              "delivery": null,
+              "questions": null,
+              "startedAtMs": 1794971705735,
+              "completedAtMs": 1794971706488
+            }
+          ],
+          "itemsView": "full",
+          "status": "completed",
+          "error": null,
+          "startedAt": 1794971698,
+          "completedAt": 1794971706,
+          "durationMs": 8361
+        }
+      ]
+    },
+    "readState": null
+  }
+}
