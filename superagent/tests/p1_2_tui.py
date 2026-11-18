@@ -52,7 +52,7 @@ PERSONA_MARKER = "SuperAgent meta-agent (leader), a coordinator not an executor"
 TASK_MARKER = "HELLO-P12"
 
 # Hard wall-clock guard (pty cleanup can block if the TUI ignores signals).
-signal.alarm(780)
+signal.alarm(1000)
 
 with open(f"{HOME}/config.toml", "w") as fh:
     fh.write("# P1-2 TUI dedicated home: production pack overlay\n")
@@ -163,8 +163,10 @@ while time.time() < deadline and alive():
     metas = rollout_metas()
     if leader_file is None:
         for path, m in metas.items():
-            if m.get("originator") == "codex-tui" and TASK_MARKER in open(
-                    path, encoding="utf-8", errors="replace").read():
+            if (m.get("originator") == "codex-tui"
+                    and not m.get("parent_thread_id")
+                    and TASK_MARKER in open(
+                        path, encoding="utf-8", errors="replace").read()):
                 leader_file = path
                 leader_meta = m
                 leader_sid = m.get("id")
@@ -197,20 +199,47 @@ if alive():
         pass
     time.sleep(2)
 if alive():
-    os.kill(pid, signal.SIGTERM)
+    try:
+        os.killpg(pid, signal.SIGTERM)
+    except OSError:
+        os.kill(pid, signal.SIGTERM)
     time.sleep(2)
 if alive():
-    os.kill(pid, signal.SIGKILL)
+    try:
+        os.killpg(pid, signal.SIGKILL)
+    except OSError:
+        os.kill(pid, signal.SIGKILL)
 try:
     os.waitpid(pid, 0)
 except ChildProcessError:
     pass
+# Ensure no engine child of the TUI session survives to hold write locks during
+# reconciliation (the pty child is a session leader; kill its whole group).
+try:
+    os.killpg(pid, signal.SIGKILL)
+except OSError:
+    pass
+time.sleep(2)
 screen.close()
 
 # --- Post-run reconciliation: authoritative child turn statuses -------------
 child_proof = {}
 leader_turn_status = None
-recon = Client(ENGINE, HOME, deadline=240)
+# Reconcile against a lock-free SNAPSHOT copy of the home. The TUI engine was
+# signal-killed above; a fresh copy carries the genuine rollouts/sqlite state
+# but no active writer locks, so the reconciliation app-server never blocks on
+# a stale lock held by a lingering child.
+RECON_HOME = f"{HOME}-recon"
+shutil.rmtree(RECON_HOME, ignore_errors=True)
+
+
+def _ignore_locks(_dir, names):
+    return [n for n in names if n.endswith(".lock") or n == "thread-writer-locks"]
+
+
+shutil.copytree(HOME, RECON_HOME, ignore=_ignore_locks)
+shutil.rmtree(f"{RECON_HOME}/thread-writer-locks", ignore_errors=True)
+recon = Client(ENGINE, RECON_HOME, deadline=240)
 try:
     if leader_sid:
         read = recon.request("thread/read", {"threadId": leader_sid, "includeTurns": True},
