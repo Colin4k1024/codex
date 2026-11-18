@@ -1,8 +1,9 @@
 # P1-3 (#75) team-delivery swarm skill + 交接/验收契约 + 预算合规 — 结论与验收映射
 
 日期：2026-11-17 · 分支 feat/p1-3-team-delivery（堆叠于 feat/p1-1-pack-manifest / PR #113）
-状态：**内容层完成；13/13 结构/预算测试 PASS；预算实测 allPass=true；技能发现（model-free）PROVEN**。
-运行时触发验收（turn 注入片段 role/budget）经 p1_3.py 在配额恢复后取证（12:23Z chain）。
+状态：**内容层 + 运行时验收均完成；13/13 结构/预算测试 PASS；预算实测 allPass=true；技能发现 PROVEN；运行时触发 PROVEN**。
+p1_3.py 全模式实测 allPass=true（p1-3-runtime-conclusion.json）：skill_discoverable=true、skill_triggered=true、
+fragment_role_user_not_developer=true、skill_span_tokens_o200k=589≤900、no_developer_elevation=true。
 合并顺序：#72 → #73（PR #113）→ #75。依赖 #68（已关闭）+ #73。
 
 ## 1. 交付物
@@ -34,7 +35,7 @@
 
 ## 4. 诚实性声明
 
-1. 运行时 turn 触发验收（片段 role/budget 实测）依赖模型配额，12:23Z chain 经 p1_3.py 取证；本结论先交付内容层 + 静态预算实测 + model-free 发现证明。issue 保持 OPEN 直至运行时 allPass。
+1. 运行时 turn 触发验收已实测（p1_3.py 全模式 allPass=true）：skill_triggered=true、注入片段 role=user（非 developer）、span 589 tokens≤900、no_developer_elevation=true。内容层 + 静态预算 + model-free 发现 + 运行时触发四层均证。
 2. 预算"实测"含静态 tiktoken 测量（已完成，allPass）与运行时注入片段测量（quota-gated）两层。
 3. acceptance-criteria.json 的 schema 为示意；权威 wire schema 以 P2-1 #78 contracts 为准（已 APPROVE）。
 4. 技能发现以 pack/skills 直接复制到 CODEX_HOME/skills 复现安装器放置（安装器本体属 #76，已 APPROVE）；机制与 #76 重启持久证明一致。

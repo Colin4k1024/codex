@@ -3,7 +3,7 @@
   "result": {
     "data": [
       {
-        "cwd": "/Users/fanjia/Desktop/code/codex",
+        "cwd": "/private/tmp/sa-p1-3-wt",
         "skills": [
           {
             "name": "archify",
@@ -312,7 +312,7 @@
           {
             "name": "team-delivery",
             "description": "Run a fixture task as a leader-coordinated team (intake, plan, implement, verify, review, report) with bounded handoffs and evidence-gated acceptance. Use when the user asks to deliver a task through the SuperAgent team.",
-            "path": "/Users/fanjia/Desktop/code/codex/superagent/evidence/p1-3/home-p1-3/skills/team-delivery/SKILL.md",
+            "path": "/private/tmp/sa-p1-3-wt/superagent/evidence/p1-3/home-p1-3/skills/team-delivery/SKILL.md",
             "scope": "user",
             "enabled": true,
             "pluginId": null
@@ -331,14 +331,14 @@
             "interface": {
               "displayName": "Image Gen",
               "shortDescription": "Generate or edit images for websites, games, and more",
-              "iconSmall": "/Users/fanjia/Desktop/code/codex/superagent/evidence/p1-3/home-p1-3/skills/.system/imagegen/assets/imagegen-small.svg",
-              "iconLarge": "/Users/fanjia/Desktop/code/codex/superagent/evidence/p1-3/home-p1-3/skills/.system/imagegen/assets/imagegen.png",
+              "iconSmall": "/private/tmp/sa-p1-3-wt/superagent/evidence/p1-3/home-p1-3/skills/.system/imagegen/assets/imagegen-small.svg",
+              "iconLarge": "/private/tmp/sa-p1-3-wt/superagent/evidence/p1-3/home-p1-3/skills/.system/imagegen/assets/imagegen.png",
               "iconSmallUrl": null,
               "iconLargeUrl": null,
               "brandColor": null,
               "defaultPrompt": "Use $imagegen to make or edit an image for this project."
             },
-            "path": "/Users/fanjia/Desktop/code/codex/superagent/evidence/p1-3/home-p1-3/skills/.system/imagegen/SKILL.md",
+            "path": "/private/tmp/sa-p1-3-wt/superagent/evidence/p1-3/home-p1-3/skills/.system/imagegen/SKILL.md",
             "scope": "system",
             "enabled": true,
             "pluginId": null
@@ -349,14 +349,14 @@
             "interface": {
               "displayName": "OpenAI Docs",
               "shortDescription": "Codex and ChatGPT Work Q&A, plus first-time API setup",
-              "iconSmall": "/Users/fanjia/Desktop/code/codex/superagent/evidence/p1-3/home-p1-3/skills/.system/openai-docs/assets/openai-small.svg",
-              "iconLarge": "/Users/fanjia/Desktop/code/codex/superagent/evidence/p1-3/home-p1-3/skills/.system/openai-docs/assets/openai.png",
+              "iconSmall": "/private/tmp/sa-p1-3-wt/superagent/evidence/p1-3/home-p1-3/skills/.system/openai-docs/assets/openai-small.svg",
+              "iconLarge": "/private/tmp/sa-p1-3-wt/superagent/evidence/p1-3/home-p1-3/skills/.system/openai-docs/assets/openai.png",
               "iconSmallUrl": null,
               "iconLargeUrl": null,
               "brandColor": null,
               "defaultPrompt": "Use $openai-docs to explain a Codex or ChatGPT Work feature, help with my first OpenAI API integration, or migrate a request to my chosen model."
             },
-            "path": "/Users/fanjia/Desktop/code/codex/superagent/evidence/p1-3/home-p1-3/skills/.system/openai-docs/SKILL.md",
+            "path": "/private/tmp/sa-p1-3-wt/superagent/evidence/p1-3/home-p1-3/skills/.system/openai-docs/SKILL.md",
             "scope": "system",
             "enabled": true,
             "pluginId": null
@@ -374,7 +374,7 @@
               "brandColor": null,
               "defaultPrompt": "Use $review-agent to review the requested code changes and return actionable findings."
             },
-            "path": "/Users/fanjia/Desktop/code/codex/superagent/evidence/p1-3/home-p1-3/skills/.system/review-agent/SKILL.md",
+            "path": "/private/tmp/sa-p1-3-wt/superagent/evidence/p1-3/home-p1-3/skills/.system/review-agent/SKILL.md",
             "scope": "system",
             "enabled": true,
             "pluginId": null
@@ -386,14 +386,14 @@
             "interface": {
               "displayName": "Skill Creator",
               "shortDescription": "Create or update a skill",
-              "iconSmall": "/Users/fanjia/Desktop/code/codex/superagent/evidence/p1-3/home-p1-3/skills/.system/skill-creator/assets/skill-creator-small.svg",
-              "iconLarge": "/Users/fanjia/Desktop/code/codex/superagent/evidence/p1-3/home-p1-3/skills/.system/skill-creator/assets/skill-creator.png",
+              "iconSmall": "/private/tmp/sa-p1-3-wt/superagent/evidence/p1-3/home-p1-3/skills/.system/skill-creator/assets/skill-creator-small.svg",
+              "iconLarge": "/private/tmp/sa-p1-3-wt/superagent/evidence/p1-3/home-p1-3/skills/.system/skill-creator/assets/skill-creator.png",
               "iconSmallUrl": null,
               "iconLargeUrl": null,
               "brandColor": null,
               "defaultPrompt": null
             },
-            "path": "/Users/fanjia/Desktop/code/codex/superagent/evidence/p1-3/home-p1-3/skills/.system/skill-creator/SKILL.md",
+            "path": "/private/tmp/sa-p1-3-wt/superagent/evidence/p1-3/home-p1-3/skills/.system/skill-creator/SKILL.md",
             "scope": "system",
             "enabled": true,
             "pluginId": null
@@ -405,14 +405,14 @@
             "interface": {
               "displayName": "Skill Installer",
               "shortDescription": "Install curated skills from openai/skills or other repos",
-              "iconSmall": "/Users/fanjia/Desktop/code/codex/superagent/evidence/p1-3/home-p1-3/skills/.system/skill-installer/assets/skill-installer-small.svg",
-              "iconLarge": "/Users/fanjia/Desktop/code/codex/superagent/evidence/p1-3/home-p1-3/skills/.system/skill-installer/assets/skill-installer.png",
+              "iconSmall": "/private/tmp/sa-p1-3-wt/superagent/evidence/p1-3/home-p1-3/skills/.system/skill-installer/assets/skill-installer-small.svg",
+              "iconLarge": "/private/tmp/sa-p1-3-wt/superagent/evidence/p1-3/home-p1-3/skills/.system/skill-installer/assets/skill-installer.png",
               "iconSmallUrl": null,
               "iconLargeUrl": null,
               "brandColor": null,
               "defaultPrompt": null
             },
-            "path": "/Users/fanjia/Desktop/code/codex/superagent/evidence/p1-3/home-p1-3/skills/.system/skill-installer/SKILL.md",
+            "path": "/private/tmp/sa-p1-3-wt/superagent/evidence/p1-3/home-p1-3/skills/.system/skill-installer/SKILL.md",
             "scope": "system",
             "enabled": true,
             "pluginId": null
