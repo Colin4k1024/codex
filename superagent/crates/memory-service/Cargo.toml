@@ -1,0 +1,16 @@
+[package]
+name = "superagent-memory-service"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+description = "SuperAgent memory-service: SQLite FTS5 trigram hybrid index over rollout/memories/board posts with incremental sync and reserved embeddings interface (P3-1 / #87). No engine DTOs, no process/model execution."
+
+[workspace]
+
+[dependencies]
+rusqlite = { version = "0.32", features = ["bundled"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[dev-dependencies]
+tempfile = "3"
