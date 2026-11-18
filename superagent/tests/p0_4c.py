@@ -7,6 +7,7 @@ Pass requires >=1 call of each tool with a recorded output. No fabricated succes
 """
 import json
 import os
+import re
 import sys
 import tempfile
 
@@ -41,11 +42,13 @@ def save(name, obj):
 
 PROMPT = (
     "You have goal tools available: create_goal, get_goal, update_goal. "
-    "Call them in this exact order, actually invoking the tools (do not just describe them): "
+    "Invoke each tool in its OWN separate exec call (one tool per exec), actually calling them "
+    "(do not just describe them), in this exact order: "
     "1) create_goal with objective 'P04C-TOOL-PROBE'; "
     "2) get_goal and note the returned status; "
-    "3) update_goal to record progress 'halfway done'; "
-    "4) get_goal again. "
+    "3) update_goal with status 'complete' (update_goal's only parameter is 'status', one of "
+    "complete/blocked/paused; there is NO 'progress' field); "
+    "4) get_goal again to show the new status. "
     "Then reply with exactly GOAL-TOOLS-OK."
 )
 
@@ -62,9 +65,10 @@ try:
     goal_calls = [e for e in calls if e.get("call", {}).get("name") in GOAL_TOOLS]
     # Code-mode goal invocations: the model calls tools.create_goal / tools.get_goal
     # / tools.update_goal inside exec custom_tool_call input strings; outputs arrive
-    # as custom_tool_call_output (goal JSON) and, for create_goal, a
-    # function_call_output named goal_objective. Detect these alongside top-level
-    # function_call entries (the engine exposes goal tools via the code-mode bridge).
+    # as custom_tool_call_output. The model may batch several tools into one exec, so
+    # a single output can contain multiple goal-JSON snapshots. We extract every goal
+    # snapshot and require the real active->complete transition, never counting an
+    # error string (e.g. "missing field `status`") as a successful round-trip.
     exec_inputs, exec_outputs, goal_objective_outs = {}, {}, []
     for fp in files:
         try:
@@ -85,25 +89,87 @@ try:
                     exec_outputs[p.get("call_id")] = o if isinstance(o, str) else json.dumps(o, ensure_ascii=False)
                 elif t == "function_call_output" and p.get("name") == "goal_objective":
                     goal_objective_outs.append(p.get("output"))
+
+    def output_texts(out):
+        try:
+            parsed = json.loads(out)
+        except (ValueError, TypeError):
+            return [out] if isinstance(out, str) else []
+        if isinstance(parsed, list):
+            return [s.get("text", "") for s in parsed if isinstance(s, dict) and isinstance(s.get("text"), str)]
+        if isinstance(parsed, dict):
+            return [json.dumps(parsed, ensure_ascii=False)]
+        return [str(parsed)]
+
+    def goal_snapshots(out):
+        snaps = []
+        for txt in output_texts(out):
+            for m in re.finditer(r'"goal"\s*:\s*\{', txt):
+                start = m.end() - 1
+                depth = 0
+                for i in range(start, len(txt)):
+                    if txt[i] == "{":
+                        depth += 1
+                    elif txt[i] == "}":
+                        depth -= 1
+                        if depth == 0:
+                            try:
+                                snaps.append(json.loads(txt[start:i + 1]))
+                            except ValueError:
+                                pass
+                            break
+        return snaps
+
+    def is_error(out):
+        low = out.lower()
+        return ("missing field" in low) or ("error=" in low) or ('"error"' in low)
+
     code_mode = {tool: [] for tool in GOAL_TOOLS}
+    all_snapshots, error_outputs = [], []
     for cid, inp in exec_inputs.items():
+        out = exec_outputs.get(cid, "")
+        snaps = goal_snapshots(out)
+        all_snapshots.extend(snaps)
+        if is_error(out):
+            error_outputs.append({"call_id": cid, "output": out[:500]})
         for tool in GOAL_TOOLS:
             if f"tools.{tool}" in inp:
-                code_mode[tool].append({"call_id": cid, "input": inp,
-                                        "output": exec_outputs.get(cid, "")})
+                code_mode[tool].append({"call_id": cid, "input": inp, "output": out,
+                                        "goalSnapshots": snaps, "hasError": is_error(out)})
+
+    # update_goal must be called with its real 'status' parameter (not 'progress').
+    update_inputs = [c["input"] for c in code_mode["update_goal"]]
+    update_uses_status = any(("status" in s) and ("progress" not in s) for s in update_inputs)
+    statuses = [s.get("status") for s in all_snapshots if isinstance(s, dict)]
+    # Corroborating server notifications: thread/goal/updated carrying the new status.
+    goal_updated_notifs = [n.get("params", {}) for n in client.notifications
+                           if n.get("method") == "thread/goal/updated"]
+    notif_statuses = []
+    for p in goal_updated_notifs:
+        g = p.get("goal") or p
+        if isinstance(g, dict) and g.get("status"):
+            notif_statuses.append(g["status"])
+    complete_observed = ("complete" in statuses) or ("complete" in notif_statuses)
+    created_observed = any(isinstance(s, dict) and s.get("objective") == "P04C-TOOL-PROBE" for s in all_snapshots)
+
     per_tool = {}
     for tool in GOAL_TOOLS:
         matched = [e for e in goal_calls if e["call"]["name"] == tool]
         cm = code_mode[tool]
-        cm_with_out = [c for c in cm if c["output"]]
-        if tool == "create_goal" and goal_objective_outs:
-            cm_with_out = cm  # goal_objective output confirms the create_goal result
+        cm_valid = [c for c in cm if c["goalSnapshots"] and not c["hasError"]]
+        if tool == "create_goal" and goal_objective_outs and not cm_valid:
+            cm_valid = cm
         per_tool[tool] = {
-            "callCount": len(matched) + len(cm),
-            "withOutput": sum(1 for e in matched if e.get("output")) + len(cm_with_out),
+            "nativeCallCount": len(matched),
+            "codeModeCallCount": len(cm),
+            "validOutputCount": len(cm_valid),
             "samples": matched[:3],
-            "codeModeCalls": cm[:3],
+            "codeModeCalls": [{k: c[k] for k in ("call_id", "input", "goalSnapshots", "hasError")} for c in cm[:3]],
         }
+    create_ok = (per_tool["create_goal"]["nativeCallCount"] + per_tool["create_goal"]["codeModeCallCount"] >= 1) and created_observed
+    get_ok = (per_tool["get_goal"]["nativeCallCount"] + per_tool["get_goal"]["codeModeCallCount"] >= 1) and bool(all_snapshots)
+    update_ok = (per_tool["update_goal"]["codeModeCallCount"] + per_tool["update_goal"]["nativeCallCount"] >= 1) \
+        and update_uses_status and complete_observed and not error_outputs
     texts = [n.get("params", {}).get("item", {}).get("text", "")
              for n in client.notifications
              if n.get("method") == "item/completed"
@@ -112,17 +178,26 @@ try:
         "threadId": thread_id,
         "rolloutFiles": files,
         "perTool": per_tool,
-        "goalToolsRoundTrip": all(v["callCount"] >= 1 and v["withOutput"] >= 1
-                                  for v in per_tool.values()),
+        "goalStatusesObserved": statuses,
+        "notificationStatuses": notif_statuses,
+        "updateGoalUsesStatusParam": update_uses_status,
+        "createGoalProven": create_ok,
+        "getGoalProven": get_ok,
+        "updateGoalProven": update_ok,
+        "errorOutputs": error_outputs,
+        "goalToolsRoundTrip": create_ok and get_ok and update_ok,
         "replyOk": any("GOAL-TOOLS-OK" in t for t in texts),
         "turnStartResponse": resp,
     }
     summary["allPass"] = summary["goalToolsRoundTrip"] and summary["replyOk"]
     save("goal-tool-calls.json", {"prompt": PROMPT, "goalCalls": goal_calls,
-                                  "allFunctionCallCount": len(calls)})
+                                  "allFunctionCallCount": len(calls),
+                                  "goalSnapshots": all_snapshots,
+                                  "goalUpdatedNotifications": goal_updated_notifs})
     save("p0-4c-summary.json", summary)
     save("p0-4c-transcript.json", {"results": [ts, resp], **client.transcript()})
-    print(json.dumps({k: summary[k] for k in ("goalToolsRoundTrip", "replyOk", "allPass")}, indent=2))
+    print(json.dumps({k: summary[k] for k in ("createGoalProven", "getGoalProven", "updateGoalProven",
+                                              "goalToolsRoundTrip", "replyOk", "allPass")}, indent=2))
 finally:
     client.close()
 sys.exit(0 if summary["allPass"] else 1)

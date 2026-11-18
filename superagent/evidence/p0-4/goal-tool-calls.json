@@ -1,5 +1,101 @@
 {
-  "prompt": "You have goal tools available: create_goal, get_goal, update_goal. Call them in this exact order, actually invoking the tools (do not just describe them): 1) create_goal with objective 'P04C-TOOL-PROBE'; 2) get_goal and note the returned status; 3) update_goal to record progress 'halfway done'; 4) get_goal again. Then reply with exactly GOAL-TOOLS-OK.",
+  "prompt": "You have goal tools available: create_goal, get_goal, update_goal. Invoke each tool in its OWN separate exec call (one tool per exec), actually calling them (do not just describe them), in this exact order: 1) create_goal with objective 'P04C-TOOL-PROBE'; 2) get_goal and note the returned status; 3) update_goal with status 'complete' (update_goal's only parameter is 'status', one of complete/blocked/paused; there is NO 'progress' field); 4) get_goal again to show the new status. Then reply with exactly GOAL-TOOLS-OK.",
   "goalCalls": [],
-  "allFunctionCallCount": 1
+  "allFunctionCallCount": 1,
+  "goalSnapshots": [
+    {
+      "createdAt": 1794960024,
+      "objective": "P04C-TOOL-PROBE",
+      "status": "active",
+      "threadId": "01a1ebf3-b7ec-7792-bf88-134bc9ba9f47",
+      "timeUsedSeconds": 0,
+      "tokensUsed": 0,
+      "updatedAt": 1794960024
+    },
+    {
+      "createdAt": 1794960024,
+      "objective": "P04C-TOOL-PROBE",
+      "status": "active",
+      "threadId": "01a1ebf3-b7ec-7792-bf88-134bc9ba9f47",
+      "timeUsedSeconds": 0,
+      "tokensUsed": 0,
+      "updatedAt": 1794960024
+    },
+    {
+      "createdAt": 1794960024,
+      "objective": "P04C-TOOL-PROBE",
+      "status": "complete",
+      "threadId": "01a1ebf3-b7ec-7792-bf88-134bc9ba9f47",
+      "timeUsedSeconds": 9,
+      "tokensUsed": 304,
+      "updatedAt": 1794960033
+    },
+    {
+      "createdAt": 1794960024,
+      "objective": "P04C-TOOL-PROBE",
+      "status": "complete",
+      "threadId": "01a1ebf3-b7ec-7792-bf88-134bc9ba9f47",
+      "timeUsedSeconds": 9,
+      "tokensUsed": 304,
+      "updatedAt": 1794960033
+    }
+  ],
+  "goalUpdatedNotifications": [
+    {
+      "threadId": "01a1ebf3-b7ec-7792-bf88-134bc9ba9f47",
+      "turnId": "01a1ebf3-c029-7482-b645-5cb444c1ced0",
+      "goal": {
+        "threadId": "01a1ebf3-b7ec-7792-bf88-134bc9ba9f47",
+        "objective": "P04C-TOOL-PROBE",
+        "status": "active",
+        "tokenBudget": null,
+        "tokensUsed": 0,
+        "timeUsedSeconds": 0,
+        "createdAt": 1794960024,
+        "updatedAt": 1794960024
+      }
+    },
+    {
+      "threadId": "01a1ebf3-b7ec-7792-bf88-134bc9ba9f47",
+      "turnId": "01a1ebf3-c029-7482-b645-5cb444c1ced0",
+      "goal": {
+        "threadId": "01a1ebf3-b7ec-7792-bf88-134bc9ba9f47",
+        "objective": "P04C-TOOL-PROBE",
+        "status": "active",
+        "tokenBudget": null,
+        "tokensUsed": 0,
+        "timeUsedSeconds": 5,
+        "createdAt": 1794960024,
+        "updatedAt": 1794960029
+      }
+    },
+    {
+      "threadId": "01a1ebf3-b7ec-7792-bf88-134bc9ba9f47",
+      "turnId": "01a1ebf3-c029-7482-b645-5cb444c1ced0",
+      "goal": {
+        "threadId": "01a1ebf3-b7ec-7792-bf88-134bc9ba9f47",
+        "objective": "P04C-TOOL-PROBE",
+        "status": "active",
+        "tokenBudget": null,
+        "tokensUsed": 304,
+        "timeUsedSeconds": 9,
+        "createdAt": 1794960024,
+        "updatedAt": 1794960033
+      }
+    },
+    {
+      "threadId": "01a1ebf3-b7ec-7792-bf88-134bc9ba9f47",
+      "turnId": "01a1ebf3-c029-7482-b645-5cb444c1ced0",
+      "goal": {
+        "threadId": "01a1ebf3-b7ec-7792-bf88-134bc9ba9f47",
+        "objective": "P04C-TOOL-PROBE",
+        "status": "complete",
+        "tokenBudget": null,
+        "tokensUsed": 304,
+        "timeUsedSeconds": 9,
+        "createdAt": 1794960024,
+        "updatedAt": 1794960033
+      }
+    }
+  ]
 }
