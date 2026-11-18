@@ -1,0 +1,18 @@
+# fmt/clippy gate (toolchain 1.99.1) — superagent-marketplace (raw transcript)
+cwd: superagent/crates/marketplace
+
+$ cargo +1.99.1 fmt --check
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+fmt-exit=0
+
+$ cargo +1.99.1 clippy --all-targets -- -D warnings
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.19s
+clippy-exit=0
