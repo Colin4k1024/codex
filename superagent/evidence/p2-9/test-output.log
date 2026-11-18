@@ -1,0 +1,26 @@
+# P2-9 / #86 superagent-worktree gate (toolchain 1.99.1, REAL git worktrees, model-free)
+
+## cargo fmt --check
+fmt-exit=0
+
+## cargo clippy --all-targets -- -D warnings
+clippy-exit=0
+error-lines=0
+
+## cargo test (6 real-git integration tests)
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test concurrency_cap_enforced ... ok
+test dependency_artifact_propagates_via_explicit_merge ... ok
+test no_auto_git_ops_protects_user_uncommitted_content ... ok
+test isolation_separate_worktrees_primary_untouched ... ok
+test post_merge_gate_reverify_real_exit_code ... ok
+test merge_conflict_blocks_downstream_target_unchanged ... ok
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.03s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+## parallel stability — 5 consecutive full-suite runs
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.12s
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.88s
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.11s
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.06s
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.67s
