@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Model-free fake stdio engine for P2-2 (#79) adapter acceptance tests.
 
-Speaks the app-server JSONL stdio contract (initialize / thread/* / turn/* /
-command/exec / server requests) with deterministic, controlled behavior.
-NO model, NO network. Deliberately NOT named "codex" (macOS endpoint security
-SIGKILLs processes named codex).
+Speaks the app-server JSONL stdio contract (initialize / environment/* /
+thread/* / turn/* / command/exec / server requests) with deterministic,
+controlled behavior. NO model, NO network. Deliberately NOT named "codex"
+(macOS endpoint security SIGKILLs processes named codex).
 
 Scenarios:
   echo         normal flow: turn/start -> started + 3 deltas + completed
@@ -15,6 +15,13 @@ Scenarios:
   reconcile    thread/read returns --turn-status (fresh-connection recovery)
   ignore_eof   does not exit on stdin EOF (exercises the close/kill path)
   stderr_flood writes 3000 stderr lines at startup (ring-buffer bound test)
+  environment_fail       environment/add returns JSON-RPC error
+  environment_info_fail  environment/add succeeds, environment/info errors
+
+Environment observation: state.json records initializeCapabilities,
+environmentAdds, environmentInfos (ids only) and threadStarts (full params,
+including the `environments` entry). environment/info returns fixed fake
+capabilities: shell zsh=/bin/zsh, cwd=file:///tmp/fake-exec-env.
 
 Test hooks (requests): test/env, test/ping, test/hang, test/triggerUnknown,
 test/triggerBigLog, test/triggerOversize, test/emitServerRequest.
@@ -61,6 +68,15 @@ if args.state_file and os.path.exists(args.state_file):
             state.update(json.load(fh))
     except Exception:
         pass
+# P5-1 (#95) observation surface: environment registration / discovery and the
+# environments echoed in thread/start are recorded for test assertions.
+state.setdefault("threads", {})
+state.setdefault("environments", {})
+state.setdefault("environmentAdds", [])
+state.setdefault("environmentInfos", [])
+state.setdefault("threadStarts", [])
+# Ordered call log for wiring-order assertions (registration before thread).
+state.setdefault("callLog", [])
 state["argv"] = sys.argv
 state["codexHome"] = os.environ.get("CODEX_HOME")
 state["pid"] = os.getpid()
@@ -128,14 +144,59 @@ def handle(msg):
     rid = msg.get("id")
     params = msg.get("params") or {}
     if method == "initialize":
+        state["initializeCapabilities"] = params.get("capabilities")
+        state["callLog"].append("initialize")
+        save_state()
         respond(rid, {"userAgent": "fake-engine/0.1", "codexHome": os.environ.get("CODEX_HOME")})
         return
     if method == "initialized":
         return
+    if method == "environment/add":
+        env_id = params.get("environmentId")
+        url = params.get("execServerUrl")
+        state["callLog"].append("environment/add")
+        save_state()
+        if args.scenario == "environment_fail":
+            rpc_error(rid, -32600, "environment/add failed: exec-server unreachable")
+            return
+        if not env_id or not url:
+            rpc_error(rid, -32602, "environment/add requires environmentId and execServerUrl")
+            return
+        # Never persist the token itself; only its presence is observable.
+        record = {
+            "environmentId": env_id,
+            "execServerUrl": url,
+            "hasBearerToken": params.get("authBearerToken") is not None,
+        }
+        state["environments"][env_id] = dict(record)
+        state["environmentAdds"].append(record)
+        save_state()
+        respond(rid, {})
+        return
+    if method == "environment/info":
+        env_id = params.get("environmentId")
+        state["callLog"].append("environment/info")
+        save_state()
+        if args.scenario == "environment_info_fail":
+            rpc_error(rid, -32600, "environment/info failed: exec-server did not answer")
+            return
+        if env_id not in state["environments"]:
+            rpc_error(rid, -32602, f"unknown environment: {env_id}")
+            return
+        state["environmentInfos"].append(env_id)
+        save_state()
+        # Deterministic fake capabilities (shell + default cwd URI).
+        respond(rid, {
+            "shell": {"name": "zsh", "path": "/bin/zsh"},
+            "cwd": "file:///tmp/fake-exec-env",
+        })
+        return
     if method == "thread/start":
         counter += 1
         tid = params.get("threadId") or f"thr-{counter}"
-        state.setdefault("threads", {})[tid] = {"turns": []}
+        state["threads"][tid] = {"turns": [], "environments": params.get("environments")}
+        state["threadStarts"].append(params)
+        state["callLog"].append("thread/start")
         save_state()
         respond(rid, {"thread": {"id": tid}})
         return
@@ -147,6 +208,7 @@ def handle(msg):
         respond(rid, {"thread": {"id": tid, "turns": turns}})
         return
     if method == "turn/start":
+        state["callLog"].append("turn/start")
         tid = params.get("threadId")
         state.setdefault("threads", {}).setdefault(tid, {})["turns"] = [
             {"id": "turn-1", "status": "inProgress"}

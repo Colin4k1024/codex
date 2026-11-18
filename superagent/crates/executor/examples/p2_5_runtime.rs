@@ -70,6 +70,7 @@ fn main() {
         ],
         codex_home: Some(PathBuf::from(&home)),
         cwd: Some(work.path().to_path_buf()),
+        environment: None,
         run_deadline: Duration::from_secs(240),
         max_artifact_bytes: 20 * 1024 * 1024,
     };

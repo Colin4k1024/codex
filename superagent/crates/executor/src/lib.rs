@@ -43,6 +43,7 @@ pub use agent::AgentExecutor;
 pub use evidence::{sha256_hex, EvidenceRecorder};
 pub use permissions::{Blocked, PermissionsConfig, SandboxRequest};
 pub use program::{log_program_run, run_program, ProgramRun, ProgramSpec};
+pub use superagent_adapter::EnvironmentConfig;
 pub use verification::VerificationExecutor;
 
 /// How to spawn the engine app-server for an agent turn / command gate.
@@ -52,6 +53,10 @@ pub struct EngineSpec {
     pub argv: Vec<String>,
     pub codex_home: Option<PathBuf>,
     pub cwd: Option<PathBuf>,
+    /// Optional remote execution environment (P5-1 / #95). `None` keeps the
+    /// pre-P5-1 local behavior exactly; `Some` makes the agent path register
+    /// the environment and address the turn to it, with no local fallback.
+    pub environment: Option<EnvironmentConfig>,
     pub run_deadline: Duration,
     pub max_artifact_bytes: usize,
 }
@@ -70,6 +75,7 @@ impl EngineSpec {
             argv: self.argv.clone(),
             codex_home: self.codex_home.clone(),
             cwd: self.cwd.clone(),
+            environment: self.environment.clone(),
             run_deadline: self.run_deadline,
             max_artifact_bytes: self.max_artifact_bytes,
             run_log_path: run_log,

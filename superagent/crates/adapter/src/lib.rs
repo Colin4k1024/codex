@@ -17,7 +17,13 @@
 //! - Typed approval handler: default-deny on every known approval type;
 //!   unknown server requests get JSON-RPC error -32601. SECURITY INVARIANT:
 //!   the adapter NEVER auto-approves.
-//! - Per-type timeouts (initialize 30s, thread/* 60s, turn/start 30s,
+//! - Optional remote environment (P5-1 / #95): `environment/add` registration
+//!   with an optional bearer token (redacted from the transcript log),
+//!   `environment/info` capability discovery (cached), and the
+//!   `thread/start.environments` entry. No local fallback: registration
+//!   failure is an explicit error to the caller.
+//! - Per-type timeouts (initialize 30s, environment/add 60s,
+//!   environment/info 60s, thread/* 60s, turn/start 30s,
 //!   turn/interrupt 30s, command/exec 90s, terminate 30s, fallback 60s),
 //!   all clamped by a global run deadline. Model-task terminal waits and
 //!   approval `waiting_input` waits use the run deadline; command/exec waits
@@ -47,9 +53,9 @@ pub use approval::{
     ApprovalHandler, Decision, DecisionRecord, DecliningApprovalHandler, ServerRequest,
 };
 pub use config::{
-    AdapterConfig, TimeoutPolicy, COALESCE_INTERVAL_RANGE_MS, DEFAULT_COALESCE_INTERVAL_MS,
-    DEFAULT_MAX_ARTIFACT_BYTES, DEFAULT_MAX_FRAME_BYTES, DEFAULT_MAX_LOG_BYTES,
-    DEFAULT_STDERR_RING_LINES,
+    AdapterConfig, EnvironmentConfig, TimeoutPolicy, COALESCE_INTERVAL_RANGE_MS,
+    DEFAULT_COALESCE_INTERVAL_MS, DEFAULT_MAX_ARTIFACT_BYTES, DEFAULT_MAX_FRAME_BYTES,
+    DEFAULT_MAX_LOG_BYTES, DEFAULT_STDERR_RING_LINES,
 };
 pub use error::AdapterError;
 pub use reconcile::{classify, is_terminal_status, reconcile_thread, Disposition, ReconcileReport};

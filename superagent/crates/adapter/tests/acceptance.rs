@@ -23,9 +23,9 @@ use std::time::{Duration, Instant};
 use serde_json::{json, Value};
 use superagent_adapter::{
     classify, reconcile_thread, Adapter, AdapterConfig, AdapterError, AdapterEvent,
-    ApprovalHandler, Decision, DecliningApprovalHandler, Disposition, ServerRequest, TimeoutPolicy,
-    UiCoalescer, UiEvent, DEFAULT_MAX_ARTIFACT_BYTES, DEFAULT_MAX_FRAME_BYTES,
-    DEFAULT_MAX_LOG_BYTES, DEFAULT_STDERR_RING_LINES,
+    ApprovalHandler, Decision, DecliningApprovalHandler, Disposition, EnvironmentConfig,
+    ServerRequest, TimeoutPolicy, UiCoalescer, UiEvent, DEFAULT_MAX_ARTIFACT_BYTES,
+    DEFAULT_MAX_FRAME_BYTES, DEFAULT_MAX_LOG_BYTES, DEFAULT_STDERR_RING_LINES,
 };
 
 static SEQ: AtomicU64 = AtomicU64::new(0);
@@ -157,6 +157,202 @@ fn request_correlation_three_way_pump() {
         Err(AdapterError::Rpc { code, .. }) => assert_eq!(code, -32601),
         other => panic!("expected Rpc -32601, got {other:?}"),
     }
+    a.close();
+}
+
+// ------------------------------------- P5-1 (#95): environment wiring
+
+#[test]
+fn environment_add_registers_and_info_is_cached_without_leaking_token() {
+    let dir = tmp("environment");
+    let state_file = dir.join("state.json");
+    let log_path = dir.join("engine.jsonl");
+    let remote_cwd = dir.join("remote-ws");
+    let remote_root = dir.join("remote-extra");
+    let secret = "p5-1-super-secret-bearer-token";
+    let mut c = cfg("echo");
+    c.run_log_path = Some(log_path.clone());
+    c.environment = Some(EnvironmentConfig {
+        id: "env-1".into(),
+        exec_server_url: "ws://127.0.0.1:6553".into(),
+        auth_bearer_token: Some(secret.into()),
+        cwd: Some(remote_cwd.clone()),
+        workspace_roots: vec![remote_root.clone()],
+    });
+    // The config Debug view must redact the token.
+    let debug = format!("{c:?}");
+    assert!(
+        !debug.contains(secret),
+        "Debug leaked bearer token: {debug}"
+    );
+    assert!(debug.contains("<redacted>"));
+    c.argv.push("--state-file".into());
+    c.argv.push(state_file.to_string_lossy().into_owned());
+    let a = Adapter::spawn_default(c).unwrap();
+    a.handshake().unwrap();
+    // Registration precedes any thread; info discovers deterministic caps.
+    a.prepare_environment().unwrap();
+    let info = a.environment_info().unwrap();
+    assert_eq!(info["shell"]["name"], "zsh");
+    assert_eq!(info["shell"]["path"], "/bin/zsh");
+    assert_eq!(info["cwd"], "file:///tmp/fake-exec-env");
+    // Cached read-only access: a second call emits no additional request.
+    assert_eq!(a.cached_environment_info(), Some(info.clone()));
+    assert_eq!(a.environment_info().unwrap(), info);
+    // thread/start.environments entry comes from the protocol layer.
+    let env_params = a.environment_thread_params(&dir).unwrap();
+    assert_eq!(env_params["environmentId"], "env-1");
+    assert_eq!(env_params["cwd"], remote_cwd.to_string_lossy().as_ref());
+    assert_eq!(
+        env_params["runtimeWorkspaceRoots"],
+        json!([remote_root.to_string_lossy()])
+    );
+    a.request(
+        "thread/start",
+        json!({"cwd": dir, "environments": [env_params]}),
+        None,
+    )
+    .unwrap();
+    a.close();
+
+    // The bearer token must never be persisted in the transcript log.
+    let log = std::fs::read_to_string(&log_path).unwrap();
+    assert!(!log.contains(secret), "bearer token persisted in run log");
+    assert!(log.contains("\"authBearerToken\":\"<redacted>\""));
+    // Exactly one add and one info request (the repeat read was cached).
+    let state: Value = serde_json::from_slice(&std::fs::read(&state_file).unwrap()).unwrap();
+    // Wire order: handshake -> register -> discover -> thread/start.
+    assert_eq!(
+        state["callLog"],
+        json!([
+            "initialize",
+            "environment/add",
+            "environment/info",
+            "thread/start"
+        ])
+    );
+    assert_eq!(state["environmentAdds"].as_array().unwrap().len(), 1);
+    assert_eq!(state["environmentAdds"][0]["environmentId"], "env-1");
+    assert_eq!(state["environmentAdds"][0]["hasBearerToken"], true);
+    assert_eq!(state["environmentInfos"].as_array().unwrap().len(), 1);
+    // Experimental API is opted into for environment methods.
+    assert_eq!(state["initializeCapabilities"]["experimentalApi"], true);
+    // The engine observed the environments entry on thread/start.
+    assert_eq!(
+        state["threadStarts"][0]["environments"][0]["environmentId"],
+        "env-1"
+    );
+    assert_eq!(
+        state["threadStarts"][0]["environments"][0]["runtimeWorkspaceRoots"],
+        json!([remote_root.to_string_lossy()])
+    );
+}
+
+#[test]
+fn no_environment_keeps_existing_wire_shape() {
+    let dir = tmp("no-environment");
+    let state_file = dir.join("state.json");
+    let log_path = dir.join("engine.jsonl");
+    let mut c = cfg("echo");
+    c.run_log_path = Some(log_path.clone());
+    c.argv.push("--state-file".into());
+    c.argv.push(state_file.to_string_lossy().into_owned());
+    let a = Adapter::spawn_default(c).unwrap();
+    a.handshake().unwrap();
+    // No-op: no environment/add is emitted and no info can be discovered.
+    a.prepare_environment().unwrap();
+    assert_eq!(a.cached_environment_info(), None);
+    assert!(a.environment_thread_params(&dir).is_none());
+    match a.environment_info() {
+        Err(AdapterError::InvalidConfig(_)) => {}
+        other => panic!("environment_info without config must fail explicitly: {other:?}"),
+    }
+    a.request("thread/start", json!({"cwd": dir}), None)
+        .unwrap();
+    a.close();
+
+    let state: Value = serde_json::from_slice(&std::fs::read(&state_file).unwrap()).unwrap();
+    // Only the pre-existing calls happened; prepare_environment emitted nothing.
+    assert_eq!(state["callLog"], json!(["initialize", "thread/start"]));
+    assert!(state["environmentAdds"].as_array().unwrap().is_empty());
+    assert!(state["environmentInfos"].as_array().unwrap().is_empty());
+    // thread/start carried exactly the pre-P5-1 params: no `environments` key.
+    assert_eq!(
+        state["threadStarts"][0],
+        json!({"cwd": dir.to_string_lossy()})
+    );
+    assert!(state["threadStarts"][0].get("environments").is_none());
+    // initialize capabilities unchanged (no experimental opt-in).
+    assert_eq!(state["initializeCapabilities"], json!({}));
+    let log = std::fs::read_to_string(&log_path).unwrap();
+    assert!(!log.contains("environment/add"));
+    assert!(!log.contains("environment/info"));
+    assert!(!log.contains("experimentalApi"));
+}
+
+#[test]
+fn environment_config_validation_only_rejects_empty_fields() {
+    assert!(AdapterConfig::default().environment.is_none());
+    let valid_env = EnvironmentConfig {
+        id: "env-1".into(),
+        exec_server_url: "ws://127.0.0.1:6553".into(),
+        auth_bearer_token: Some("token".into()),
+        cwd: Some("/remote".into()),
+        workspace_roots: vec!["/remote/extra".into()],
+    };
+    // Non-emptiness is the only client-side check (transport security is the
+    // app-server's responsibility), so this config must pass validation.
+    let mut ok = cfg("echo");
+    ok.environment = Some(valid_env.clone());
+    assert!(ok.validate().is_ok());
+
+    for bad in [
+        EnvironmentConfig {
+            id: "  ".into(),
+            ..valid_env.clone()
+        },
+        EnvironmentConfig {
+            exec_server_url: "".into(),
+            ..valid_env.clone()
+        },
+        EnvironmentConfig {
+            auth_bearer_token: Some("".into()),
+            ..valid_env.clone()
+        },
+    ] {
+        let mut c = cfg("echo");
+        c.environment = Some(bad);
+        assert!(
+            matches!(c.validate(), Err(AdapterError::InvalidConfig(_))),
+            "empty environment field must be rejected"
+        );
+    }
+}
+
+#[test]
+fn environment_add_failure_is_an_explicit_error() {
+    let dir = tmp("environment-fail");
+    let state_file = dir.join("state.json");
+    let mut c = cfg("environment_fail");
+    c.environment = Some(EnvironmentConfig {
+        id: "env-down".into(),
+        exec_server_url: "ws://127.0.0.1:1".into(),
+        auth_bearer_token: None,
+        cwd: None,
+        workspace_roots: vec![],
+    });
+    c.argv.push("--state-file".into());
+    c.argv.push(state_file.to_string_lossy().into_owned());
+    let a = Adapter::spawn_default(c).unwrap();
+    a.handshake().unwrap();
+    match a.prepare_environment() {
+        Err(AdapterError::Rpc { code, .. }) => assert_eq!(code, -32600),
+        other => panic!("expected explicit RPC error, got {other:?}"),
+    }
+    // No thread was ever started (no silent local continuation).
+    let state: Value = serde_json::from_slice(&std::fs::read(&state_file).unwrap()).unwrap();
+    assert_eq!(state["callLog"], json!(["initialize", "environment/add"]));
+    assert!(state["threads"].as_object().map_or(true, |m| m.is_empty()));
     a.close();
 }
 
@@ -293,6 +489,8 @@ fn per_type_timeout_defaults_match_p0_6_contract() {
     let p = TimeoutPolicy::default();
     let expect = [
         ("initialize", 30),
+        ("environment/add", 60),
+        ("environment/info", 60),
         ("thread/start", 60),
         ("thread/read", 60),
         ("thread/list", 60),

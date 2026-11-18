@@ -1,0 +1,25 @@
+{
+  "issue": "#95",
+  "kind": "live exec-server + app-server remote turn",
+  "engine": "superagent-engine (renamed codex fork)",
+  "transport": "loopback ws://127.0.0.1:18766",
+  "auth": "capability-token; SHA-256 matched by exec-server; token not recorded",
+  "experimental_api": true,
+  "environment_add": "ok",
+  "environment_info": {
+    "shell": {"name": "zsh", "path": "/bin/zsh"},
+    "cwd": "file:///Users/fanjia/Desktop/code/dsh-superagent-prototype"
+  },
+  "thread_start": {
+    "environments": [
+      {"environmentId": "p5-1-probe", "cwd": "/tmp/p5-1-work", "runtimeWorkspaceRoots": ["/tmp/p5-1-work"]}
+    ]
+  },
+  "turn": {
+    "status": "completed",
+    "model": "gpt-6-astra",
+    "sentinel_path": "/tmp/p5-1-work/p5-1-remote.txt",
+    "sentinel_content": "REMOTE-P51"
+  },
+  "note": "The model's shell tool wrote the sentinel in the exec-server environment. This is a live model turn, not a fake engine."
+}

@@ -83,6 +83,8 @@ pub struct Adapter {
     shared: Arc<Shared>,
     handles: Mutex<Vec<JoinHandle<()>>>,
     closed: AtomicBool,
+    /// Last successful `environment/info` result (P5-1 capability discovery).
+    environment_cache: Mutex<Option<Value>>,
 }
 
 fn exit_info(status: std::process::ExitStatus) -> ExitInfo {
@@ -117,6 +119,24 @@ fn log_frame(shared: &Shared, direction: &str, line: &str) {
     }
 }
 
+/// `environment/add` may carry a bearer token. The engine receives the real
+/// value on the wire, but the transcript log must never persist it. Returns a
+/// redacted copy for logging (or `None` when the frame holds no secret).
+fn redact_for_log(msg: &Value) -> Option<Value> {
+    if msg.get("method").and_then(Value::as_str) != Some("environment/add") {
+        return None;
+    }
+    let mut redacted = msg.clone();
+    if let Some(params) = redacted.get_mut("params").and_then(Value::as_object_mut) {
+        if let Some(token) = params.get_mut("authBearerToken") {
+            if !token.is_null() {
+                *token = json!("<redacted>");
+            }
+        }
+    }
+    Some(redacted)
+}
+
 fn send_value(shared: &Shared, msg: &Value) -> Result<(), AdapterError> {
     let data = serde_json::to_string(msg).map_err(|e| AdapterError::Protocol(e.to_string()))?;
     let mut guard = shared.stdin.lock().unwrap();
@@ -127,7 +147,13 @@ fn send_value(shared: &Shared, msg: &Value) -> Result<(), AdapterError> {
         .and_then(|_| stdin.flush())
         .map_err(|e| AdapterError::Io(format!("stdin write: {e}")))?;
     drop(guard);
-    log_frame(shared, "send", &data);
+    match redact_for_log(msg) {
+        Some(redacted) => match serde_json::to_string(&redacted) {
+            Ok(safe) => log_frame(shared, "send", &safe),
+            Err(_) => log_frame(shared, "send", "<environment/add: unloggable frame>"),
+        },
+        None => log_frame(shared, "send", &data),
+    }
     Ok(())
 }
 
@@ -436,21 +462,100 @@ impl Adapter {
             shared,
             handles: Mutex::new(handles),
             closed: AtomicBool::new(false),
+            environment_cache: Mutex::new(None),
         })
     }
 
     /// initialize + initialized handshake (reference client parity).
+    ///
+    /// The `environment/*` RPCs and `thread/start.environments` are gated as
+    /// experimental API surface, so an environment-configured adapter opts in
+    /// with `experimentalApi: true`. Without an environment the initialize
+    /// params are byte-for-byte the pre-P5-1 frame (`capabilities: {}`).
     pub fn handshake(&self) -> Result<Value, AdapterError> {
+        let capabilities = if self.shared.config.environment.is_some() {
+            json!({"experimentalApi": true})
+        } else {
+            json!({})
+        };
         let result = self.request(
             "initialize",
             json!({
                 "clientInfo": {"name": "superagent-adapter", "title": "SuperAgent Adapter", "version": "0.1.0"},
-                "capabilities": {}
+                "capabilities": capabilities
             }),
             None,
         )?;
         self.notify("initialized", json!({}))?;
         Ok(result)
+    }
+
+    /// Register the configured remote environment (`environment/add`) before
+    /// any `thread/start` (P5-1 / #95).
+    ///
+    /// With no environment configured this is an explicit no-op and emits no
+    /// frame. A registration error is returned to the caller: this method never
+    /// substitutes a local execution path.
+    pub fn prepare_environment(&self) -> Result<(), AdapterError> {
+        let Some(env) = &self.shared.config.environment else {
+            return Ok(());
+        };
+        let mut params = json!({
+            "environmentId": env.id,
+            "execServerUrl": env.exec_server_url,
+        });
+        if let Some(token) = &env.auth_bearer_token {
+            // Logged redacted only (`redact_for_log`); the engine still gets it.
+            params["authBearerToken"] = json!(token);
+        }
+        self.request("environment/add", params, None)?;
+        Ok(())
+    }
+
+    /// Read `environment/info` for the configured environment and cache the
+    /// result. `environment_info` is a `/info` discovery call; the cached value
+    /// is exposed read-only via [`Self::cached_environment_info`].
+    ///
+    /// Returns `InvalidConfig` when no environment is configured (never invents
+    /// capability data for a local run).
+    pub fn environment_info(&self) -> Result<Value, AdapterError> {
+        let env = self.shared.config.environment.as_ref().ok_or_else(|| {
+            AdapterError::InvalidConfig("environment/info requires a configured environment".into())
+        })?;
+        if let Some(cached) = self.cached_environment_info() {
+            return Ok(cached);
+        }
+        let info = self.request("environment/info", json!({"environmentId": env.id}), None)?;
+        *self.environment_cache.lock().unwrap() = Some(info.clone());
+        Ok(info)
+    }
+
+    /// Read-only access to the last successful `environment/info` result.
+    pub fn cached_environment_info(&self) -> Option<Value> {
+        self.environment_cache.lock().unwrap().clone()
+    }
+
+    /// The `thread/start.environments` entry for the configured environment.
+    ///
+    /// Returns `None` when no environment is configured, so callers omit the
+    /// field entirely and the no-environment wire shape stays unchanged.
+    /// `default_cwd` is used when the environment has no native `cwd`.
+    pub fn environment_thread_params(&self, default_cwd: &Path) -> Option<Value> {
+        let env = self.shared.config.environment.as_ref()?;
+        let cwd = env.cwd.as_deref().unwrap_or(default_cwd);
+        let mut params = json!({
+            "environmentId": env.id,
+            "cwd": cwd.to_string_lossy().into_owned(),
+        });
+        if !env.workspace_roots.is_empty() {
+            let roots: Vec<String> = env
+                .workspace_roots
+                .iter()
+                .map(|p| p.to_string_lossy().into_owned())
+                .collect();
+            params["runtimeWorkspaceRoots"] = json!(roots);
+        }
+        Some(params)
     }
 
     pub fn spawn_argv(&self) -> &[String] {

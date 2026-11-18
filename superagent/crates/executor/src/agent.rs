@@ -90,9 +90,33 @@ impl AgentExecutor {
         adapter
             .handshake()
             .map_err(|e| fatal(format!("handshake failed: {e}")))?;
+
+        // P5-1 / #95: register the remote environment BEFORE any thread exists
+        // and discover its capabilities. Registration failure is terminal: the
+        // turn is never retried against a local engine.
+        let mut environment_evidence = None;
+        if let Some(env) = &self.engine.environment {
+            adapter.prepare_environment().map_err(|e| {
+                fatal(format!(
+                    "environment/add registration failed for '{}': {e}",
+                    env.id
+                ))
+            })?;
+            let info = adapter.environment_info().map_err(|e| {
+                fatal(format!(
+                    "environment/info capability discovery failed for '{}': {e}",
+                    env.id
+                ))
+            })?;
+            environment_evidence = Some((env.id.clone(), info));
+        }
+
         let mut start_params = json!({ "cwd": self.workspace });
         if let Some(model) = &node.model {
             start_params["model"] = json!(model);
+        }
+        if let Some(env_params) = adapter.environment_thread_params(&self.workspace) {
+            start_params["environments"] = json!([env_params]);
         }
         let ts = adapter
             .request("thread/start", start_params, None)
@@ -185,7 +209,7 @@ impl AgentExecutor {
             .unwrap_or(Value::Null);
         let usage = usage_cell.get().max(usage_from_thread_read(&read));
 
-        let turn_result = json!({
+        let mut turn_result = json!({
             "nodeId": node.id,
             "threadId": thread_id,
             "turnId": turn_id,
@@ -194,6 +218,12 @@ impl AgentExecutor {
             "lastAgentMessage": last_message,
             "sandboxPolicy": policy,
         });
+        // Capability discovery evidence (P5-1): durable proof that the turn was
+        // addressed to the registered environment, without touching the
+        // orchestrator trait/outcome contract.
+        if let Some((env_id, info)) = &environment_evidence {
+            turn_result["environment"] = json!({"id": env_id, "info": info});
+        }
         let bytes = serde_json::to_vec_pretty(&turn_result).unwrap_or_default();
         let evidence_ref = self
             .evidence
