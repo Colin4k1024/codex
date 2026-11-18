@@ -1,0 +1,92 @@
+{
+  "threadId": "01a1ec08-c4d1-74f2-b6b5-4958cdea3f1c",
+  "workspace": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p02e-r89qpp25",
+  "leaderSandboxMode": "workspace-write (config-overlay sandbox_mode; WORK writable via trusted project)",
+  "escapeTarget": "/Users/fanjia/p0-2e-escape-probe.txt",
+  "innerTarget": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p02e-r89qpp25/inner-ok.txt",
+  "escapeFileExists": false,
+  "innerFileExists": true,
+  "innerContent": "INNER-OK",
+  "escapeWriteBlocked": true,
+  "innerWriteAllowed": true,
+  "escapeCommandExecutions": [
+    {
+      "call_id": "call_6e70596182ed4a23b43b4c4280b5a896",
+      "input": "const r = await tools.exec_command({\"cmd\":\"echo ESCAPED > /Users/fanjia/p0-2e-escape-probe.txt\",\"workdir\":\"/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p02e-r89qpp25\",\"yield_time_ms\":10000,\"max_output_tokens\":1000});\ntext(JSON.stringify(r));\n",
+      "exitCode": 1,
+      "outputSnippet": "{\"chunk_id\":\"5af6b4\",\"exit_code\":1,\"original_token_count\":18,\"output\":\"zsh:1: operation not permitted: /Users/fanjia/p0-2e-escape-probe.txt\\n\",\"wall_time_seconds\":0}",
+      "source": "code-mode-exec"
+    },
+    {
+      "call_id": "call_e0095c6f99c44425b1eb80f6813fed0a",
+      "input": "const r = await tools.exec_command({\"cmd\":\"echo ESCAPED > /Users/fanjia/p0-2e-escape-probe.txt\",\"workdir\":\"/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p02e-kspilz0_\",\"yield_time_ms\":10000,\"max_output_tokens\":1000});\ntext(JSON.stringify(r));",
+      "exitCode": 1,
+      "outputSnippet": "{\"chunk_id\":\"b4f206\",\"exit_code\":1,\"original_token_count\":18,\"output\":\"zsh:1: operation not permitted: /Users/fanjia/p0-2e-escape-probe.txt\\n\",\"wall_time_seconds\":0}",
+      "source": "code-mode-exec"
+    }
+  ],
+  "innerCommandExecutions": [
+    {
+      "command": [
+        "/bin/zsh",
+        "-lc",
+        "echo INNER-OK > /var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p02e-r89qpp25/inner-ok.txt"
+      ],
+      "exitCode": 0,
+      "status": "completed",
+      "source": "commandExecution"
+    },
+    {
+      "command": [
+        "/bin/zsh",
+        "-lc",
+        "echo INNER-OK > /var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p02e-kspilz0_/inner-ok.txt"
+      ],
+      "exitCode": 0,
+      "status": "completed",
+      "source": "commandExecution"
+    },
+    {
+      "call_id": "call_9d7378153fdc4300962b7007d64ffa95",
+      "input": "const r = await tools.exec_command({\"cmd\":\"echo INNER-OK > /var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p02e-r89qpp25/inner-ok.txt\",\"workdir\":\"/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p02e-r89qpp25\",\"yield_time_ms\":10000,\"max_output_tokens\":1000});\ntext(JSON.stringify(r));\n",
+      "exitCode": 0,
+      "outputSnippet": "",
+      "source": "code-mode-exec"
+    },
+    {
+      "call_id": "call_1202b76d60f9404a805e8daee03ef2aa",
+      "input": "const r = await tools.exec_command({\"cmd\":\"echo INNER-OK > /var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p02e-kspilz0_/inner-ok.txt\",\"workdir\":\"/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p02e-kspilz0_\",\"yield_time_ms\":10000,\"max_output_tokens\":1000});\ntext(JSON.stringify(r));",
+      "exitCode": 0,
+      "outputSnippet": "",
+      "source": "code-mode-exec"
+    }
+  ],
+  "escapeExitNonZero": true,
+  "innerExitZero": true,
+  "childSessionFiles": [
+    "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/18/rollout-2026-11-18T08-03-42-01a1ebf7-6589-7611-a63d-97e421bfe1f8.jsonl",
+    "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/18/rollout-2026-11-18T08-23-32-01a1ec09-913c-74e3-a25e-c3966fd249d9.jsonl",
+    "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/18/rollout-2026-11-18T08-04-26-01a1ebf8-152a-72f2-b8ce-aececd855e83.jsonl",
+    "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-46-41-01a1e98b-96ad-7350-ac60-f9d568ce3d53.jsonl",
+    "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-51-52-01a1e990-5277-7301-9ba8-63fcbcf59849.jsonl",
+    "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-57-37-01a1e995-95ea-75f2-9e37-b835c8930792.jsonl",
+    "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-55-16-01a1e993-7223-7883-af46-8647c32aadf9.jsonl",
+    "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-56-50-01a1e994-e05a-7a32-b123-1763b4b4e3ce.jsonl",
+    "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-57-42-01a1e995-aa65-7e01-b408-2f4c2951eb19.jsonl",
+    "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-57-48-01a1e995-c374-7e72-b82c-baf05f432643.jsonl",
+    "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-51-39-01a1e990-22d9-7802-ba67-f5906967db97.jsonl",
+    "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-55-11-01a1e993-5e6c-72d3-9bb7-ff5ab2045817.jsonl",
+    "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-45-22-01a1e98a-5ff1-7842-9c53-dfff256c0674.jsonl",
+    "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-54-28-01a1e992-b47c-70a0-a56d-3ad5fd381f53.jsonl",
+    "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-48-30-01a1e98d-3d41-7711-b2b5-b7f80bcc8e44.jsonl",
+    "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-44-38-01a1e989-b0b5-7eb3-b638-f1668a3e48ce.jsonl",
+    "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-45-27-01a1e98a-74b2-73b0-bfc5-6a687434be35.jsonl",
+    "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-51-48-01a1e990-45ac-72a2-bf70-aaeac891dba1.jsonl",
+    "/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-47-23-01a1e98c-38d3-7a71-8c16-c1aecb7d4113.jsonl"
+  ],
+  "spawnObserved": true,
+  "replyOk": true,
+  "roleLayerSandboxNote": "role.toml sandbox_mode is a no-op (role.rs:33-46/77-86; child_config.rs:197-220). Enforcement is at the orchestration layer (per-call exec SandboxPolicy, P0-7/#70), demonstrated here on a spawned implementer role agent.",
+  "orchestrationSandboxEnforced": true,
+  "allPass": true
+}

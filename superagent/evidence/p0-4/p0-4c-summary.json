@@ -1,0 +1,132 @@
+{
+  "threadId": "01a1ebf3-b7ec-7792-bf88-134bc9ba9f47",
+  "rolloutFiles": [
+    "/Users/<user>/Library/Application Support/SuperAgent/codex-home/sessions/2026/11/18/rollout-2026-11-18T07-59-42-01a1ebf3-b7ec-7792-bf88-134bc9ba9f47.jsonl"
+  ],
+  "perTool": {
+    "create_goal": {
+      "nativeCallCount": 0,
+      "codeModeCallCount": 1,
+      "validOutputCount": 1,
+      "samples": [],
+      "codeModeCalls": [
+        {
+          "call_id": "call_8bc3eb5faed04328b11d2cd034d34c58",
+          "input": "text(await tools.create_goal({objective:\"P04C-TOOL-PROBE\"}));\n",
+          "goalSnapshots": [
+            {
+              "createdAt": 1794960024,
+              "objective": "P04C-TOOL-PROBE",
+              "status": "active",
+              "threadId": "01a1ebf3-b7ec-7792-bf88-134bc9ba9f47",
+              "timeUsedSeconds": 0,
+              "tokensUsed": 0,
+              "updatedAt": 1794960024
+            }
+          ],
+          "hasError": false
+        }
+      ]
+    },
+    "get_goal": {
+      "nativeCallCount": 0,
+      "codeModeCallCount": 2,
+      "validOutputCount": 2,
+      "samples": [],
+      "codeModeCalls": [
+        {
+          "call_id": "call_23556cd249e446648c837cf48e3046fe",
+          "input": "text(await tools.get_goal({}));\n",
+          "goalSnapshots": [
+            {
+              "createdAt": 1794960024,
+              "objective": "P04C-TOOL-PROBE",
+              "status": "active",
+              "threadId": "01a1ebf3-b7ec-7792-bf88-134bc9ba9f47",
+              "timeUsedSeconds": 0,
+              "tokensUsed": 0,
+              "updatedAt": 1794960024
+            }
+          ],
+          "hasError": false
+        },
+        {
+          "call_id": "call_ee50d0d598f9496c88b46f79a1dcb62f",
+          "input": "text(await tools.get_goal({}));\n",
+          "goalSnapshots": [
+            {
+              "createdAt": 1794960024,
+              "objective": "P04C-TOOL-PROBE",
+              "status": "complete",
+              "threadId": "01a1ebf3-b7ec-7792-bf88-134bc9ba9f47",
+              "timeUsedSeconds": 9,
+              "tokensUsed": 304,
+              "updatedAt": 1794960033
+            }
+          ],
+          "hasError": false
+        }
+      ]
+    },
+    "update_goal": {
+      "nativeCallCount": 0,
+      "codeModeCallCount": 1,
+      "validOutputCount": 1,
+      "samples": [],
+      "codeModeCalls": [
+        {
+          "call_id": "call_2d9d2e7df87e4e1fb40a07e3a917cce2",
+          "input": "text(await tools.update_goal({status:\"complete\"}));\n",
+          "goalSnapshots": [
+            {
+              "createdAt": 1794960024,
+              "objective": "P04C-TOOL-PROBE",
+              "status": "complete",
+              "threadId": "01a1ebf3-b7ec-7792-bf88-134bc9ba9f47",
+              "timeUsedSeconds": 9,
+              "tokensUsed": 304,
+              "updatedAt": 1794960033
+            }
+          ],
+          "hasError": false
+        }
+      ]
+    }
+  },
+  "goalStatusesObserved": [
+    "active",
+    "active",
+    "complete",
+    "complete"
+  ],
+  "notificationStatuses": [
+    "active",
+    "active",
+    "active",
+    "complete"
+  ],
+  "updateGoalUsesStatusParam": true,
+  "createGoalProven": true,
+  "getGoalProven": true,
+  "updateGoalProven": true,
+  "errorOutputs": [],
+  "goalToolsRoundTrip": true,
+  "replyOk": true,
+  "turnStartResponse": {
+    "id": 3,
+    "result": {
+      "turn": {
+        "id": "01a1ebf3-c029-7482-b645-5cb444c1ced0",
+        "rootTurnId": "01a1ebf3-c029-7482-b645-5cb444c1ced0",
+        "items": [],
+        "itemsView": "notLoaded",
+        "status": "inProgress",
+        "error": null,
+        "startedAt": null,
+        "completedAt": null,
+        "durationMs": null
+      }
+    }
+  },
+  "allPass": true
+}

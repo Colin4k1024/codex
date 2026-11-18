@@ -1,0 +1,12 @@
+{
+  "experimental:environment/info": "AVAILABLE",
+  "experimental:memory/status": "AVAILABLE",
+  "experimental:collaborationMode/list": "AVAILABLE",
+  "experimental:thread/start.historyMode=paginated": "AVAILABLE",
+  "experimental:turn/start.permissions=unknown-profile": "AVAILABLE_REQUIRES_CONFIG",
+  "experimental:turn/start.environments=[]": "AVAILABLE",
+  "experimental:thread/items/list": "UNSUPPORTED_SERVER_SIDE",
+  "plain:environment/info": "GATED_REQUIRES_EXPERIMENTAL",
+  "plain:memory/status": "GATED_REQUIRES_EXPERIMENTAL",
+  "plain:thread/start.historyMode=paginated": "GATED_REQUIRES_EXPERIMENTAL"
+}

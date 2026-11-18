@@ -1,0 +1,37 @@
+{
+  "issue": 71,
+  "source": "p0-2-transcript",
+  "leaderThreadId": "01a1e86c-e20e-7df1-b8a3-e1c439d7c65e",
+  "subAgentItemCount": 24,
+  "itemKinds": {
+    "started": 6,
+    "wait": 8,
+    "interacted": 4,
+    "completed": 6
+  },
+  "agentThreadIds": [
+    "01a1e86c-e20e-7df1-b8a3-e1c439d7c65e",
+    "01a1e86d-0bbb-7be1-bef5-ad9e5f7791c3",
+    "01a1e86d-9439-76f1-a713-36d4459ab0de",
+    "01a1e86e-4324-7bc1-8aac-5fc8f1adcd8d"
+  ],
+  "lifecycle": {
+    "spawnObserved": true,
+    "activityObserved": true,
+    "terminalObserved": true
+  },
+  "childHistoryReadableViaPublicRpc": true,
+  "publicAgentControlRpcs": [],
+  "publicGraphStoreRpcs": [],
+  "rpcMethodCount": 110,
+  "verdict": "SUFFICIENT_NO_FORK",
+  "controlPlaneNotes": [
+    "No public agent/* RPC and no graph/store RPC exists in the generated ClientRequest schema (full enumeration in no-agent-rpc.txt; store wiring negative evidence in store-negative-evidence.txt).",
+    "Per-subagent interrupt from an external client is not directly exposed; outer orchestrator cancels the whole leader turn via turn/interrupt (runtime proof: interrupt-cross-evidence.json, P0-6 trace C, PR #108: sleep child present before interrupt, absent after) or asks the leader to use interrupt_agent.",
+    "Resume evaluation (static code assessment, not a runtime trace): thread/resume (app-server/src/request_processors/thread_processor.rs:640 -> thread_resume_inner:3925) cold-resumes any persisted thread, including a child agent thread, as an INDEPENDENT top-level session; it does not re-attach the child to a running leader's agent tree. In-tree single-agent resume is the leader's resume_agent tool (MAv1 only; MAv2 exposes no resume tool). External in-tree per-agent resume would be an F-1-shaped addition; not required for the orchestrator MVP (leader-mediated resume suffices).",
+    "Topology is reconstructed from SubAgentActivity items (kind started/interacted/interrupted/completed) + CollabAgentToolCall.agentsStates (per-agent threadId) + child-thread thread/read. thread/list does NOT enumerate agent threads: probes['thread/list'].agentThreadsListed is empty.",
+    "Child thread history readable via thread/read when agentThreadId is known (see probes). thread/items/list is UNSUPPORTED_SERVER_SIDE (P0-9 probe); leader history comes from rollout files.",
+    "Hook events SubagentStart/SubagentStop exist in the protocol (hooks-events.txt, static existence only; runtime hook firing not traced in this spike)."
+  ],
+  "minimalRpcProposalIfGap": []
+}

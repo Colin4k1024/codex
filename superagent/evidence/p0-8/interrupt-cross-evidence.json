@@ -1,0 +1,50 @@
+{
+  "sourcePointer": "feat/p0-6-stdio-contract:superagent/evidence/p0-6/summary.json (PR #108)",
+  "traceC": {
+    "pass": true,
+    "turnId": "01a1e88d-6e39-7f13-b346-9a56a361d766",
+    "sleepBeforeInterrupt": "84022 sleep 60",
+    "sleepAfterInterrupt": "",
+    "cleanupSeconds": 3,
+    "interruptResponse": {
+      "id": 4,
+      "result": {}
+    },
+    "turnCompleted": {
+      "method": "turn/completed",
+      "params": {
+        "threadId": "01a1e88d-6d9a-7ba1-9eb6-d0ae52d7f72a",
+        "turn": {
+          "id": "01a1e88d-6e39-7f13-b346-9a56a361d766",
+          "rootTurnId": "01a1e88d-6e39-7f13-b346-9a56a361d766",
+          "items": [],
+          "itemsView": "notLoaded",
+          "status": "interrupted",
+          "error": null,
+          "startedAt": 1794902945,
+          "completedAt": 1794902953,
+          "durationMs": 8371
+        }
+      },
+      "emittedAtMs": 1794902953712
+    },
+    "turnStatus": "interrupted",
+    "turnStartResponse": {
+      "id": 3,
+      "result": {
+        "turn": {
+          "id": "01a1e88d-6e39-7f13-b346-9a56a361d766",
+          "rootTurnId": "01a1e88d-6e39-7f13-b346-9a56a361d766",
+          "items": [],
+          "itemsView": "notLoaded",
+          "status": "inProgress",
+          "error": null,
+          "startedAt": null,
+          "completedAt": null,
+          "durationMs": null
+        }
+      }
+    }
+  },
+  "error": null
+}

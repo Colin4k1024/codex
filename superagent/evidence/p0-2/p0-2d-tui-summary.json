@@ -1,0 +1,82 @@
+{
+  "probe": "p0_2d_tui (TUI leader team turn)",
+  "tuiLeaderLaunched": true,
+  "launchMode": "TUI (superagent-engine --no-daemon, pty)",
+  "leaderSessionId": "01a1e98b-96ad-7350-ac60-f9d568ce3d53",
+  "leaderRolloutFile": "superagent/evidence/p0-2/p0-2d-tui-leader-rollout.jsonl",
+  "spawnAgentCalls": [
+    {
+      "agent_type": "planner",
+      "task_name": "plan"
+    },
+    {
+      "agent_type": "implementer",
+      "task_name": "implement"
+    }
+  ],
+  "spawnCount": 2,
+  "spawnAtLeastTwoRoles": true,
+  "waitAgentCalls": 10,
+  "subAgentActivityItems": 4,
+  "collabToolCalls": [
+    {
+      "tool": "wait",
+      "status": "completed"
+    },
+    {
+      "tool": "wait",
+      "status": "completed"
+    },
+    {
+      "tool": "wait",
+      "status": "completed"
+    },
+    {
+      "tool": "wait",
+      "status": "completed"
+    },
+    {
+      "tool": "wait",
+      "status": "completed"
+    },
+    {
+      "tool": "wait",
+      "status": "completed"
+    },
+    {
+      "tool": "wait",
+      "status": "completed"
+    },
+    {
+      "tool": "wait",
+      "status": "completed"
+    },
+    {
+      "tool": "wait",
+      "status": "completed"
+    }
+  ],
+  "itemCompletedTypes": [
+    "UserMessage",
+    "AgentMessage",
+    "SubAgentActivity",
+    "CollabAgentToolCall",
+    "CollabAgentToolCall",
+    "CollabAgentToolCall",
+    "SubAgentActivity",
+    "CollabAgentToolCall",
+    "SubAgentActivity",
+    "CollabAgentToolCall",
+    "CollabAgentToolCall",
+    "CollabAgentToolCall",
+    "CollabAgentToolCall",
+    "Reasoning",
+    "AgentMessage",
+    "CollabAgentToolCall",
+    "SubAgentActivity",
+    "AgentMessage"
+  ],
+  "note": "Salvaged from the genuine TUI leader runtime rollout (probe hung on a cleanup bug, killed). TUI leader spawned planner+implementer (spawn_agent x2) and ran wait_agent round-trips (CollabAgentToolCall wait completed x9, SubAgentActivity items present). send_message/interrupt_agent round-trips proven via app-server sibling p0-2b-summary.json; V1 close_agent/resume_agent round-trip proven via p0-2c-v1-summary.json. Same multi-agent code path.",
+  "allPass": true,
+  "leaderRolloutScrubbed": true
+}

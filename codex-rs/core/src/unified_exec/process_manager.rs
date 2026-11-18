@@ -453,6 +453,27 @@ fn terminate_process_on_network_denial(
     })
 }
 
+/// Reaps a yielded exec process when its owning turn is interrupted.
+///
+/// The one-shot completion path already terminates on cancellation; yielded
+/// processes are stored in the manager and outlive the dropped turn future, so
+/// without this watcher an interrupted turn leaves the child group running.
+fn terminate_process_on_turn_cancellation(
+    process: Arc<UnifiedExecProcess>,
+    turn_cancellation: CancellationToken,
+) -> tokio::task::JoinHandle<()> {
+    let process_exited = process.cancellation_token();
+    tokio::spawn(async move {
+        let interrupted = tokio::select! {
+            _ = turn_cancellation.cancelled() => true,
+            _ = process_exited.cancelled() => false,
+        };
+        if interrupted {
+            process.fail_and_terminate("interrupted".to_string());
+        }
+    })
+}
+
 impl UnifiedExecProcessManager {
     pub(crate) async fn allocate_process_id(&self) -> i32 {
         loop {
@@ -571,6 +592,12 @@ impl UnifiedExecProcessManager {
                 Arc::clone(&process),
                 Arc::downgrade(&context.session),
                 deferred.clone(),
+            )
+        });
+        let _turn_cancellation_monitor = completion.is_none().then(|| {
+            terminate_process_on_turn_cancellation(
+                Arc::clone(&process),
+                context.cancellation_token.clone(),
             )
         });
 

@@ -1,0 +1,49 @@
+
+running 8 tests
+test export_bindings_artifactspec ... ok
+test export_bindings_gate ... ok
+test export_bindings_vartype ... ok
+test export_bindings_node ... ok
+test export_bindings_nodekind ... ok
+test export_bindings_gatekind ... ok
+test export_bindings_variablespec ... ok
+test export_bindings_workflow ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 21 tests
+test dry_run_is_pure_no_execution_surface ... ok
+test unavailable_command_ref_fails ... ok
+test loop_zero_bounds_fail_dry_run ... ok
+test self_dependency_detected ... ok
+test dag_cycle_detected ... ok
+test loop_unknown_gate_fails ... ok
+test unavailable_program_fails ... ok
+test unavailable_model_fails ... ok
+test duplicate_node_ids_fail ... ok
+test required_variable_without_value_fails ... ok
+test loop_missing_required_fields_fails_deserialization ... ok
+test node_schema_enumerates_known_types_only ... ok
+test unknown_field_rejected ... ok
+test node_schema_loop_bounds_at_schema_level ... ok
+test undeclared_variable_reference_fails ... ok
+test unknown_node_type_fails_deserialization ... ok
+test unknown_gate_kind_fails_deserialization ... ok
+test unknown_artifact_and_schema_ref_fail ... ok
+test valid_fixture_passes_dry_run ... ok
+test variable_type_mismatch_fails ... ok
+test verification_requires_gates ... ok
+
+test result: ok. 21 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

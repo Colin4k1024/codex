@@ -1,0 +1,138 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Node",
+  "type": "object",
+  "oneOf": [
+    {
+      "description": "Team command reference (resolved against the pack command catalog).",
+      "type": "object",
+      "required": [
+        "command_ref",
+        "type"
+      ],
+      "properties": {
+        "command_ref": {
+          "type": "string"
+        },
+        "inputs": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "outputs": {
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "capability"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "description": "Executable program; success requires every listed gate to pass.",
+      "type": "object",
+      "required": [
+        "argv",
+        "gates",
+        "type"
+      ],
+      "properties": {
+        "argv": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "gates": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "verification"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "description": "Retry loop: must carry max_attempts, wall_timeout and an explicit gate.",
+      "type": "object",
+      "required": [
+        "body",
+        "gate",
+        "max_attempts",
+        "type",
+        "wall_timeout_secs"
+      ],
+      "properties": {
+        "body": {
+          "type": "string"
+        },
+        "gate": {
+          "type": "string"
+        },
+        "max_attempts": {
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 1.0
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "loop"
+          ]
+        },
+        "wall_timeout_secs": {
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 1.0
+        }
+      },
+      "additionalProperties": false
+    }
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "budget_tokens": {
+      "default": null,
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "uint64",
+      "minimum": 0.0
+    },
+    "depends_on": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "id": {
+      "type": "string"
+    },
+    "model": {
+      "default": null,
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}
