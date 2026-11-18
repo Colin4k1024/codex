@@ -1,0 +1,34 @@
+# P4-4 (#93) test output — superagent-cron (toolchain 1.99.1)
+$ cargo +1.99.1 test
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s
+     Running unittests src/lib.rs (target/debug/deps/superagent_cron-928d6a7c4a89e06f)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/cron.rs (target/debug/deps/cron-c3c480f9a55974a3)
+
+running 6 tests
+test schedules_fire_on_time_audited ... ok
+test misfire_skip_vs_catchup ... ok
+test crud_and_tenant_isolation ... ok
+test no_duplicate_on_concurrent_tick ... ok
+test no_duplicate_on_restart ... ok
+test tokio_driver_triggers_and_dedups ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+   Doc-tests superagent_cron
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+# parallel stability (5 consecutive full-suite runs)
+run 1: test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+run 2: test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+run 3: test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+run 4: test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+run 5: test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
