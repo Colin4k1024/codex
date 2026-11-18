@@ -1,0 +1,38 @@
+# P4-2 (#91) test output — superagent-iam (toolchain 1.99.1, raw transcript)
+$ cargo +1.99.1 test
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.14s
+     Running unittests src/lib.rs (target/debug/deps/superagent_iam-415c9eccf07e1f9a)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/iam.rs (target/debug/deps/iam-5dba4ef1a11c0fc1)
+
+running 6 tests
+test role_policy_and_unknown_role ... ok
+test resource_level_tenant_isolation ... ok
+test channel_identity_mapping ... ok
+test credential_redaction_scan ... ok
+test jwt_auth_roundtrip_and_reject ... ok
+test authz_matrix_full_pass ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests superagent_iam
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+test-exit=0
+
+# parallel stability (5 consecutive full-suite runs)
+run 1: test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+run 2: test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+run 3: test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+run 4: test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+run 5: test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
