@@ -1,10 +1,9 @@
 name: superagent-ci
 
 on:
+  # Always run on PRs so the required check is reported even for codex-only PRs.
+  # The job below no-ops when there is no superagent Rust crate.
   pull_request:
-    paths:
-      - "superagent/**"
-      - ".github/workflows/superagent-ci.yml"
   push:
     branches:
       - main
