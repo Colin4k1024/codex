@@ -1,0 +1,31 @@
+{
+  "initialize": {
+    "id": 1,
+    "result": {
+      "userAgent": "superagent-spike/0.0.0 (Mac OS 26.6.2; arm64) xterm-256color (superagent-spike; 0.1.0)",
+      "codexHome": "<scrubbed>",
+      "platformFamily": "unix",
+      "platformOs": "macos"
+    }
+  },
+  "notifications": [
+    {
+      "method": "remoteControl/status/changed",
+      "params": {
+        "status": "disabled",
+        "serverName": "<scrubbed>",
+        "installationId": "<scrubbed>",
+        "environmentId": null
+      },
+      "emittedAtMs": 1794918605652
+    }
+  ],
+  "notificationCount": 1,
+  "serverRequests": [],
+  "serverRequestDecisions": [],
+  "maxFrameBytesSeen": 243,
+  "frameLimitBytes": 16777216,
+  "frameViolations": [],
+  "stderrTail": [],
+  "exitCode": null
+}
