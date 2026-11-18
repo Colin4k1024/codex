@@ -1,0 +1,13 @@
+[package]
+name = "superagent-worktree"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+description = "SuperAgent controlled parallel isolation (P2-9 / #86): per-task git worktrees, bounded concurrency, explicit scoped commits, conflict-blocking merges, post-merge gate re-verification. Never auto git add -A/commit/reset; never touches the user's uncommitted content. Model-free."
+
+[workspace]
+
+[dependencies]
+
+[dev-dependencies]
+tempfile = "3"
