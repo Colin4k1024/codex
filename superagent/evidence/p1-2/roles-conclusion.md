@@ -2,7 +2,9 @@
 
 分支 feat/p1-2-roles。本 PR 交付**内容层 + 运行时验收**。诚实状态：**内容层 PROVEN；
 F2 TUI 自主组队 PROVEN（独立证据）；Q1 预算按设计本意口径 PASS（grok 裁决）；
-F4 每角色 sandbox NOT_PROVEN / HUMAN_BLOCKED（需产品决策）**。stdio 运行时探针
+F4 每角色 sandbox 经用户产品决策（Option A）正式 ADR 裁决——接受编排层 SandboxPolicy（#70）
+为唯一强制机制，引擎角色层 per-role sandbox 显式 NOT_PROVEN / out-of-scope（见
+f4-sandbox-decision.md）**。stdio 运行时探针
 `tests/p1_2.py` 的字面 provider-token 预算口径 allPass=false（冷缓存非确定性，见 §4），
 不冒充全过。
 
@@ -31,11 +33,11 @@ F4 每角色 sandbox NOT_PROVEN / HUMAN_BLOCKED（需产品决策）**。stdio �
 | 五角色 planner/implementer/verifier/reviewer/reporter | PROVEN（内容+运行时） | test_roles.py 10/10；p1_2.py spawnedRoles 全 5 |
 | 每角色 description/config_file/nickname_candidates | PROVEN（内容） | overlay↔文件一致性测试 |
 | 每角色 config 层（model/developer_instructions/交付契约） | PROVEN（内容+运行时） | model∈models.json；perRoleModelApplied=true |
-| 每角色 config 层（**sandbox**） | **NOT_PROVEN / HUMAN_BLOCKED** | 引擎 role 层无 sandbox 字段（见 §4 F4） |
+| 每角色 config 层（**sandbox**） | 编排层 SandboxPolicy 满足（#70 PROVEN）；引擎角色层 per-role sandbox **out-of-scope**（ADR Option A） | f4-sandbox-decision.md §3；evidence/p0-7 |
 | 常驻介绍 ≤400 tokens（tokenizer 实测） | PROVEN | tiktoken o200k_base = **238 tokens** |
 | leader 按人格组队（F2 TUI 自主） | **PROVEN（真实 TUI）** | p1-2-tui-conclusion.json allPass=true（见 §3） |
 | 角色隔离生效（developer_instructions） | PROVEN（运行时） | p1_2.py roleIsolation=true（每 child rollout 仅含自身角色指令） |
-| 角色隔离生效（**sandbox**） | **NOT_PROVEN** | 同 F4：sandbox 仅编排层强制，非角色层 |
+| 角色隔离生效（**sandbox**） | PROVEN（编排层 SandboxPolicy，ADR 口径）；引擎角色层 per-role sandbox out-of-scope | f4-sandbox-decision.md §3；#70 |
 | 预算实测达标（Q1 设计本意口径） | **PASS（grok 裁决口径 b）** | 见 §4 Q1；编排器注入增量内容 << caps |
 | 每角色 model 应用 | PROVEN（运行时） | perRoleModelApplied=true（child thread/read model 匹配 overlay） |
 | 子 turn 真实完成（F1） | PROVEN | childTurnsCompleted=true（每 child thread/read status=completed） |
@@ -70,16 +72,19 @@ p1-2-tui-child-read-{role}.json + p1-2-tui-screen.log。stdio 脚本化 p1_2.py 
   实测全部 PASS。字面 provider-token FAIL 由冷缓存非确定性导致，**非权威口径**，特此记录。
   两种口径数据均透明上报于 p1-2-runtime-conclusion.json（budgetByRole / budgetCaps）。
 
-### F4 每角色 sandbox（NOT_PROVEN / HUMAN_BLOCKED，需产品决策）
+### F4 每角色 sandbox（经用户产品决策 Option A 正式 ADR 裁决）
 - 引擎 AgentRoleOverrides（core/src/agent/role.rs）仅承载 model/reasoning/verbosity/
   developer_instructions，**不含 sandbox/approval**；子 agent sandbox 继承父 turn runtime
   （core/src/agent/child_config.rs）。P0-2e（#65）运行时已证明 role sandbox_mode 被引擎忽略。
 - 混合路线默认零 core 改动；沙箱由编排层显式 SandboxPolicy 强制（P0-7 #70 已关闭并有证据）。
-- **grok 本轮判 blocker**：验收「每角色独立 config 层（模型/沙箱/...）/角色隔离生效」中的
-  sandbox 维度无法由当前引擎表达。关闭 #74 需产品/tech-lead 决策：
-  (a) 经 ADR 修订验收，接受编排层 sandbox（P0-7）为唯一机制并显式记录「每角色 sandbox 隔离」
-  NOT_PROVEN/out-of-scope；或 (b) S0 最小 core fork 在引擎 role 层增加 sandbox/approval。
-  实现者**不自行收窄验收**（禁止删验收标准凑数），故 #74 保持 OPEN 并标 HUMAN_BLOCKED。
+- **grok 前轮判 blocker**：验收「每角色独立 config 层（模型/沙箱/...）/角色隔离生效」中的
+  sandbox 维度无法由当前引擎角色层表达，需产品/tech-lead 决策（(a) ADR 修订接受编排层 sandbox
+  为唯一机制并显式记录引擎角色层 per-role sandbox NOT_PROVEN/out-of-scope；或 (b) S0 最小 core fork）。
+- **用户产品决策（2026-11-18，Option A）**：选择 (a)。正式 ADR 见 **f4-sandbox-decision.md**：
+  接受编排层 SandboxPolicy（#70 PROVEN）为 #74 唯一沙箱强制机制；「角色隔离生效」按内容/配置层
+  隔离 + 编排层沙箱口径判 PASS；引擎角色层 per-role sandbox 显式 NOT_PROVEN / out-of-scope
+  （混合路线零 core 改动），并记录重开 fork 条件。原验收文字保留，不删标准凑数；这是产品决策
+  正式修订判定口径，非实现者自行收窄。据此 #74 不再 HUMAN_BLOCKED，可进入 grok 复审→关闭。
 
 ### 其他诚实限制
 1. stdio 探针 p1_2.py 字面预算口径 allPass=false（Q1 冷缓存 FAIL）；不得冒充全过。
