@@ -52,10 +52,38 @@ Stable exit codes: OK=0 FAILED=1 USAGE=2 BLOCKED=3 CANCELLED=4 UNCERTAIN=5.
    a proven (evidence-backed) gate, not a model self-report.
 
 ## Test results
-`cargo +1.99.1 test` (crate cli): **9 passed; 0 failed** (model-free; genuine
+`cargo +1.99.1 test` (crate cli): **11 passed; 0 failed** (model-free; genuine
 stdio JSON-RPC transport via fake_engine subprocess for cancel/run/approval).
 `cargo +1.99.1 fmt --check` clean; `cargo +1.99.1 clippy --all-targets -- -D
-warnings` clean. Full multi-crate gate: see test-output.log.
+warnings` clean. Full multi-crate gate (7 crates, all GATE_PASS): see
+test-output.log.
+
+## grok independent review remediation (round 2)
+The first grok review of head 736cefdc0 returned CHANGES_REQUESTED (1 major +
+2 minor). All three are remediated and re-proven:
+- **MAJOR — resume identity tautology.** `cmd_resume` previously built the
+  expected identity from the stored spec (`RunIdentity::from_spec`), so
+  `exclusive_resume` compared stored-vs-itself and always matched. Fixed:
+  `resume::expected_identity` now derives the expected `RunIdentity` from the
+  CALLER's current inputs (loaded `--workflow` digest + `--bundle-digest` /
+  `--repo-identity` / `--start-head` / `--config-summary` / task), and
+  `cmd_resume` uses it. New test
+  `resume_cli_expected_from_caller_inputs_refuses_changed_workflow_or_bundle`
+  proves a changed workflow OR changed bundle is refused (RecoveryError) and the
+  lease is released so a fresh owner can acquire it.
+- **MINOR — report usage / proven-gate evidence empty.** `execute_run` now
+  persists a durable `run_report` event carrying the live orchestrator report
+  (state, tokensUsed, wallSecs, per-node provenGates/reason).
+  `report::report_input_from_store` prefers that event and falls back to
+  `node_final` states + `attempt_finished` token sum + event-log wall span, so
+  `cmd_report` emits real usage/evidence rather than zeros.
+- **MINOR — turn cancel unconfirmed.** fake_engine now implements
+  `turn/interrupt` (marks the turn aborted, emits a terminal `turn/aborted`,
+  responds `interrupted:true`). `cancel_turn_session` no longer silently marks a
+  run cancelled when the interrupt is unconfirmed: it leaves the run `uncertain`
+  with a distinct `run_cancel_unconfirmed` event. New test
+  `cancel_turn_session_interrupts_and_marks_cancelled` proves the confirmed path
+  (interrupted:true, engine closed, state cancelled, durable run_cancelled).
 
 ## Purity
 `cargo tree -e normal`: only superagent-* crates (contracts/storage/orchestrator/

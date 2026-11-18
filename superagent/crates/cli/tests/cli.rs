@@ -19,10 +19,10 @@ use std::time::Duration;
 
 use serde_json::{json, Value};
 use superagent_adapter::{Adapter, AdapterConfig};
-use superagent_cli::cancel::{cancel_exec_session, CancelGuard};
+use superagent_cli::cancel::{cancel_exec_session, cancel_turn_session, CancelGuard};
 use superagent_cli::plan::{ctx_from_workflow, dry_run_plan, to_json};
 use superagent_cli::report::{build_report, Change, NodeOutcome, ReportInput};
-use superagent_cli::resume::{resume_run, ResumeLease};
+use superagent_cli::resume::{expected_identity, resume_run, ResumeLease};
 use superagent_cli::run::{execute_run, RunOptions};
 use superagent_cli::status::status_json;
 use superagent_cli::{exit, CancelToken, CliError};
@@ -277,6 +277,97 @@ fn resume_identity_match_reuse_and_mismatch_refused() {
     assert!(matches!(err, CliError::Recovery(_)), "got: {err:?}");
 }
 
+// 5b. CLI resume path: expected identity is built from the CALLER's current
+// inputs (expected_identity, as cmd_resume uses), NOT from the stored spec — so
+// a changed workflow or bundle is refused and the lease released.
+#[test]
+fn resume_cli_expected_from_caller_inputs_refuses_changed_workflow_or_bundle() {
+    let store = Store::open_in_memory().unwrap();
+    let wf = workflow(vec![cap_node("n")], vec![]);
+    let id = expected_identity(&wf, Some("task-A"), "bundle-A", "repo", "head", "cfg").unwrap();
+    let original = RunSpec {
+        id: "r-cli".into(),
+        workflow_digest: id.workflow_digest.clone(),
+        bundle_digest: id.bundle_digest.clone(),
+        input_summary: id.input_summary.clone(),
+        repo_identity: id.repo_identity.clone(),
+        start_head: id.start_head.clone(),
+        config_summary: id.config_summary.clone(),
+    };
+    store.create_run(&original, 0).unwrap();
+    let ctx = ResumeContext {
+        prior: BTreeMap::new(),
+        current_artifacts: BTreeMap::new(),
+        non_idempotent: BTreeSet::new(),
+    };
+
+    // Same caller inputs -> matches the stored identity -> resume accepted.
+    let same = expected_identity(&wf, Some("task-A"), "bundle-A", "repo", "head", "cfg").unwrap();
+    let v = resume_run(
+        &store,
+        "r-cli",
+        &ResumeLease {
+            owner: "o1",
+            now: 0,
+            ttl_secs: 3600,
+        },
+        &same,
+        &wf,
+        &ctx,
+    )
+    .unwrap();
+    assert_eq!(v["identityMatched"], json!(true));
+    store.release_lease("r-cli", "o1").unwrap();
+
+    // Changed workflow -> different workflow_digest -> refused; lease released.
+    let wf2 = workflow(vec![cap_node("n"), cap_node("m")], vec![]);
+    let changed_wf =
+        expected_identity(&wf2, Some("task-A"), "bundle-A", "repo", "head", "cfg").unwrap();
+    assert_ne!(changed_wf.workflow_digest, id.workflow_digest);
+    let err = resume_run(
+        &store,
+        "r-cli",
+        &ResumeLease {
+            owner: "o2",
+            now: 0,
+            ttl_secs: 3600,
+        },
+        &changed_wf,
+        &wf2,
+        &ctx,
+    )
+    .unwrap_err();
+    assert!(matches!(err, CliError::Recovery(_)), "got: {err:?}");
+    // Core released the lease on mismatch: a fresh owner can acquire it.
+    store.acquire_lease("r-cli", "o3", 0, 3600).unwrap();
+    store.release_lease("r-cli", "o3").unwrap();
+
+    // Changed bundle -> refused on bundle_digest.
+    let changed_bundle = expected_identity(
+        &wf,
+        Some("task-A"),
+        "bundle-DIFFERENT",
+        "repo",
+        "head",
+        "cfg",
+    )
+    .unwrap();
+    let err2 = resume_run(
+        &store,
+        "r-cli",
+        &ResumeLease {
+            owner: "o4",
+            now: 0,
+            ttl_secs: 3600,
+        },
+        &changed_bundle,
+        &wf,
+        &ctx,
+    )
+    .unwrap_err();
+    assert!(matches!(err2, CliError::Recovery(_)), "got: {err2:?}");
+}
+
 // 6. once cancelled, the guard schedules NO new node (inner never invoked).
 struct PanicExecutor;
 impl NodeExecutor for PanicExecutor {
@@ -353,6 +444,43 @@ fn cancel_exec_session_cleanup_evidence_and_cancelled_mark() {
     assert!(
         events.iter().any(|e| e.kind == "run_cancelled"),
         "cleanup evidence must be durable"
+    );
+}
+
+// 7b. cancel an active turn over a fake engine that implements turn/interrupt:
+// the interrupt is confirmed, the engine is closed, and the run is marked
+// cancelled with durable cleanup evidence.
+#[test]
+fn cancel_turn_session_interrupts_and_marks_cancelled() {
+    let dir = tempfile::tempdir().unwrap();
+    let cfg = AdapterConfig {
+        argv: vec![
+            "python3".into(),
+            fake_engine().to_string_lossy().into_owned(),
+            "--scenario".into(),
+            "echo".into(),
+            "--state-file".into(),
+            dir.path().join("state.json").to_string_lossy().into_owned(),
+        ],
+        cwd: Some(dir.path().to_path_buf()),
+        run_deadline: Duration::from_secs(30),
+        ..Default::default()
+    };
+    let adapter = Adapter::spawn_default(cfg).unwrap();
+    adapter.handshake().unwrap();
+    let store = Store::open_in_memory().unwrap();
+    store.create_run(&spec("r-turn"), 0).unwrap();
+    let started = adapter.request("thread/start", json!({}), None).unwrap();
+    let tid = started["thread"]["id"].as_str().unwrap().to_string();
+    let ev = cancel_turn_session(&adapter, &tid, &store, "r-turn", 1).unwrap();
+    assert!(ev.interrupted, "turn interrupt must be confirmed");
+    assert!(ev.engine_closed, "engine must be closed");
+    let (_, state) = store.get_run("r-turn").unwrap();
+    assert_eq!(state, "cancelled");
+    let events = store.events_after("r-turn", 0).unwrap();
+    assert!(
+        events.iter().any(|e| e.kind == "run_cancelled"),
+        "turn-cancel cleanup evidence must be durable"
     );
 }
 

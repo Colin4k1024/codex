@@ -127,3 +127,104 @@ pub fn outcomes_from_events(store: &Store, run_id: &str) -> Result<Vec<NodeOutco
     }
     Ok(out)
 }
+
+/// Build complete report input from the durable store. Prefers the `run_report`
+/// event persisted by `execute_run` (full usage + proven-gate evidence from the
+/// live orchestrator report). For runs without it, falls back to `node_final`
+/// states plus usage derived from `attempt_finished` events (token sum) and the
+/// event-log wall span — so the report command still emits real usage/evidence.
+pub fn report_input_from_store(
+    store: &Store,
+    run_id: &str,
+    version: &str,
+    baseline_changes: Vec<Change>,
+    run_changes: Vec<Change>,
+    evidence: Vec<String>,
+) -> Result<ReportInput> {
+    let events = store.events_after(run_id, 0)?;
+    let (_, run_state) = store.get_run(run_id)?;
+
+    if let Some(rr) = events.iter().rev().find(|e| e.kind == "run_report") {
+        if let Ok(v) = serde_json::from_str::<Value>(&rr.summary) {
+            let nodes = v
+                .get("nodes")
+                .and_then(Value::as_array)
+                .map(|arr| {
+                    arr.iter()
+                        .map(|n| NodeOutcome {
+                            id: n
+                                .get("id")
+                                .and_then(Value::as_str)
+                                .unwrap_or("")
+                                .to_string(),
+                            state: n
+                                .get("state")
+                                .and_then(Value::as_str)
+                                .unwrap_or("")
+                                .to_string(),
+                            proven_gates: n
+                                .get("provenGates")
+                                .and_then(Value::as_array)
+                                .map(|g| {
+                                    g.iter()
+                                        .filter_map(Value::as_str)
+                                        .map(String::from)
+                                        .collect()
+                                })
+                                .unwrap_or_default(),
+                            reason: n
+                                .get("reason")
+                                .and_then(Value::as_str)
+                                .unwrap_or("")
+                                .to_string(),
+                        })
+                        .collect()
+                })
+                .unwrap_or_default();
+            return Ok(ReportInput {
+                run_id: run_id.to_string(),
+                version: version.to_string(),
+                run_state: v
+                    .get("state")
+                    .and_then(Value::as_str)
+                    .unwrap_or(&run_state)
+                    .to_string(),
+                nodes,
+                tokens_used: v.get("tokensUsed").and_then(Value::as_u64).unwrap_or(0),
+                wall_secs: v.get("wallSecs").and_then(Value::as_u64).unwrap_or(0),
+                baseline_changes,
+                run_changes,
+                evidence,
+            });
+        }
+    }
+
+    // Fallback: node_final states + usage derived from attempt_finished events.
+    let nodes = outcomes_from_events(store, run_id)?;
+    let mut tokens_used = 0u64;
+    for e in &events {
+        if e.kind == "attempt_finished" {
+            if let Some(t) = e.summary.rsplit("tokens=").next() {
+                tokens_used += t.trim().parse::<u64>().unwrap_or(0);
+            }
+        }
+    }
+    let wall_secs = events
+        .iter()
+        .map(|e| e.created_at)
+        .max()
+        .unwrap_or(0)
+        .saturating_sub(events.iter().map(|e| e.created_at).min().unwrap_or(0))
+        .max(0) as u64;
+    Ok(ReportInput {
+        run_id: run_id.to_string(),
+        version: version.to_string(),
+        run_state,
+        nodes,
+        tokens_used,
+        wall_secs,
+        baseline_changes,
+        run_changes,
+        evidence,
+    })
+}

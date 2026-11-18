@@ -123,7 +123,16 @@ pub fn cancel_turn_session(
         terminals_drained,
         engine_closed: true,
     };
-    mark_cancelled(store, run_id, now, &ev, thread_id)?;
+    // An unconfirmed interrupt is NOT silently treated as cancelled: the turn
+    // may still be executing server-side, so leave the run uncertain and record
+    // distinct evidence rather than claiming a confirmed cancellation.
+    let (state, kind) = if interrupted {
+        ("cancelled", "run_cancelled")
+    } else {
+        ("uncertain", "run_cancel_unconfirmed")
+    };
+    store.set_run_state(run_id, state)?;
+    store.append_event(run_id, kind, &ev.to_json(thread_id).to_string(), now)?;
     Ok(ev)
 }
 

@@ -11,15 +11,15 @@ use serde_json::{json, Value};
 use superagent_adapter::{Adapter, AdapterConfig};
 use superagent_cli::cancel::{cancel_exec_session, cancel_turn_session};
 use superagent_cli::plan::{ctx_from_workflow, dry_run_plan, to_json};
-use superagent_cli::report::{build_report, outcomes_from_events, Change, ReportInput};
-use superagent_cli::resume::{resume_run, ResumeLease};
+use superagent_cli::report::{build_report, report_input_from_store, Change};
+use superagent_cli::resume::{expected_identity, resume_run, ResumeLease};
 use superagent_cli::run::{execute_run, exit_code_for_report, RunOptions};
 use superagent_cli::status::status_json;
 use superagent_cli::{exit, CliError, Result, CLI_VERSION};
 use superagent_contracts::{Workflow, SCHEMA_VERSION};
 use superagent_executor::{sha256_hex, EngineSpec};
 use superagent_orchestrator::{NodeState, Policy};
-use superagent_recovery::{PriorNode, ResumeContext, RunIdentity};
+use superagent_recovery::{PriorNode, ResumeContext};
 use superagent_storage::{RunSpec, Store};
 
 fn flag(args: &[String], name: &str) -> Option<String> {
@@ -154,8 +154,17 @@ fn cmd_resume(args: &[String]) -> Result<i32> {
     let store = open_store(args)?;
     let wf_path = flag(args, "--workflow").ok_or_else(|| CliError::Usage("--workflow".into()))?;
     let wf = load_workflow(&wf_path)?;
-    let (spec, _) = store.get_run(&run_id)?;
-    let expected = RunIdentity::from_spec(&spec);
+    let task = flag(args, "--task").or_else(|| {
+        flag(args, "--task-file").map(|p| std::fs::read_to_string(p).unwrap_or_default())
+    });
+    let expected = expected_identity(
+        &wf,
+        task.as_deref(),
+        &flag(args, "--bundle-digest").unwrap_or_default(),
+        &flag(args, "--repo-identity").unwrap_or_default(),
+        &flag(args, "--start-head").unwrap_or_default(),
+        &flag(args, "--config-summary").unwrap_or_default(),
+    )?;
     let prior_map: BTreeMap<String, String> = flag(args, "--prior")
         .map(|p| {
             serde_json::from_str(&std::fs::read_to_string(p).unwrap_or_default())
@@ -286,24 +295,19 @@ fn changes_from_file(path: Option<String>) -> Vec<Change> {
 fn cmd_report(args: &[String]) -> Result<i32> {
     let run_id = positional(args).ok_or_else(|| CliError::Usage("report <run-id>".into()))?;
     let store = open_store(args)?;
-    let (_, state) = store.get_run(&run_id)?;
-    let nodes = outcomes_from_events(&store, &run_id)?;
     let events = store.events_after(&run_id, 0)?;
     let evidence: Vec<String> = events
         .iter()
         .map(|e| format!("event:{}:{}", e.seq, e.kind))
         .collect();
-    let inp = ReportInput {
-        run_id: run_id.clone(),
-        version: CLI_VERSION.to_string(),
-        run_state: state,
-        nodes,
-        tokens_used: 0,
-        wall_secs: 0,
-        baseline_changes: changes_from_file(flag(args, "--baseline-changes")),
-        run_changes: changes_from_file(flag(args, "--run-changes")),
+    let inp = report_input_from_store(
+        &store,
+        &run_id,
+        CLI_VERSION,
+        changes_from_file(flag(args, "--baseline-changes")),
+        changes_from_file(flag(args, "--run-changes")),
         evidence,
-    };
+    )?;
     println!("{}", serde_json::to_string_pretty(&build_report(&inp))?);
     Ok(exit::OK)
 }

@@ -8,7 +8,7 @@ use std::path::PathBuf;
 use std::rc::Rc;
 use std::time::Duration;
 
-use serde_json::Value;
+use serde_json::{json, Value};
 use superagent_contracts::{DryRunContext, Workflow};
 use superagent_executor::{
     AgentExecutor, EngineSpec, EvidenceRecorder, PermissionsConfig, SwarmExecutor,
@@ -77,6 +77,33 @@ pub fn execute_run(store: Rc<Store>, opts: RunOptions) -> Result<RunReport> {
     };
     let orch = Orchestrator::new(opts.workflow.clone(), opts.ctx.clone(), opts.policy.clone());
     let report = orch.run(&mut guard, &store, &opts.run_id, &opts.spec, opts.now)?;
+
+    // Persist the complete live report durably so `superagent report` can emit
+    // full usage / proven-gate evidence (not just node_final state strings).
+    let nodes_json: Vec<Value> = report
+        .nodes
+        .iter()
+        .map(|(id, nr)| {
+            json!({
+                "id": id,
+                "state": format!("{:?}", nr.state),
+                "provenGates": nr.proven_gates,
+                "reason": nr.reason,
+            })
+        })
+        .collect();
+    let report_json = json!({
+        "state": format!("{:?}", report.state),
+        "tokensUsed": report.tokens_used,
+        "wallSecs": report.wall_secs,
+        "nodes": nodes_json,
+    });
+    let _ = store.append_event(
+        &opts.run_id,
+        "run_report",
+        &report_json.to_string(),
+        opts.now,
+    );
 
     if opts.cancel.is_cancelled() {
         return Err(CliError::Cancelled(
