@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "id": "smoke",
+  "version": "1",
+  "variables": {},
+  "nodes": [
+    {"id": "cap", "depends_on": [], "type": "capability", "command_ref": "team.modify", "inputs": [], "outputs": []},
+    {"id": "ver", "depends_on": ["cap"], "type": "verification", "argv": ["python3", "-c", "pass"], "gates": ["g1"]}
+  ],
+  "gates": {"g1": {"id": "g1", "kind": "command", "argv": ["python3", "-c", "pass"], "expect_exit_code": 0}},
+  "artifacts": {}
+}

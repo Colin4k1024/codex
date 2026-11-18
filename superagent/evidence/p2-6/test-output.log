@@ -1,0 +1,568 @@
+===== crate: contracts =====
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+warning: failed to parse serde attribute
+  | 
+  | deny_unknown_fields 
+  | 
+  = note: ts-rs failed to parse this attribute. It will be ignored.
+warning: failed to parse serde attribute
+  | 
+  | deny_unknown_fields 
+  | 
+  = note: ts-rs failed to parse this attribute. It will be ignored.
+warning: failed to parse serde attribute
+  | 
+  | deny_unknown_fields 
+  | 
+  = note: ts-rs failed to parse this attribute. It will be ignored.
+warning: failed to parse serde attribute
+  | 
+  | deny_unknown_fields 
+  | 
+  = note: ts-rs failed to parse this attribute. It will be ignored.
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.12s
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+warning: failed to parse serde attribute
+  | 
+  | deny_unknown_fields 
+  | 
+  = note: ts-rs failed to parse this attribute. It will be ignored.
+warning: failed to parse serde attribute
+  | 
+  | deny_unknown_fields 
+  | 
+  = note: ts-rs failed to parse this attribute. It will be ignored.
+warning: failed to parse serde attribute
+  | 
+  | deny_unknown_fields 
+  | 
+  = note: ts-rs failed to parse this attribute. It will be ignored.
+warning: failed to parse serde attribute
+  | 
+  | deny_unknown_fields 
+  | 
+  = note: ts-rs failed to parse this attribute. It will be ignored.
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s
+     Running unittests src/lib.rs (target/debug/deps/superagent_contracts-7d32ef8e1cd0791e)
+
+running 8 tests
+test export_bindings_vartype ... ok
+test export_bindings_artifactspec ... ok
+test export_bindings_node ... ok
+test export_bindings_nodekind ... ok
+test export_bindings_gate ... ok
+test export_bindings_gatekind ... ok
+test export_bindings_variablespec ... ok
+test export_bindings_workflow ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+     Running unittests src/bin/export_schemas.rs (target/debug/deps/export_schemas-c77f9a5a83588fd7)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/dry_run.rs (target/debug/deps/dry_run-9076379169b5e0c9)
+
+running 21 tests
+test dry_run_is_pure_no_execution_surface ... ok
+test dag_cycle_detected ... ok
+test loop_unknown_gate_fails ... ok
+test duplicate_node_ids_fail ... ok
+test loop_zero_bounds_fail_dry_run ... ok
+test unavailable_command_ref_fails ... ok
+test unavailable_model_fails ... ok
+test required_variable_without_value_fails ... ok
+test unavailable_program_fails ... ok
+test self_dependency_detected ... ok
+test loop_missing_required_fields_fails_deserialization ... ok
+test undeclared_variable_reference_fails ... ok
+test unknown_field_rejected ... ok
+test unknown_node_type_fails_deserialization ... ok
+test node_schema_loop_bounds_at_schema_level ... ok
+test unknown_gate_kind_fails_deserialization ... ok
+test variable_type_mismatch_fails ... ok
+test valid_fixture_passes_dry_run ... ok
+test node_schema_enumerates_known_types_only ... ok
+test verification_requires_gates ... ok
+test unknown_artifact_and_schema_ref_fail ... ok
+
+test result: ok. 21 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests superagent_contracts
+[0m[1m[38;5;11mwarning[0m[1m[38;5;15m: failed to parse serde attribute
+[0m[1m[38;5;12m  | 
+  | [0m[38;5;15mdeny_unknown_fields 
+[0m[1m[38;5;12m  | 
+  = [0m[1m[38;5;15mnote: [0m[38;5;15mts-rs failed to parse this attribute. It will be ignored.
+[0m[1m[38;5;11mwarning[0m[1m[38;5;15m: failed to parse serde attribute
+[0m[1m[38;5;12m  | 
+  | [0m[38;5;15mdeny_unknown_fields 
+[0m[1m[38;5;12m  | 
+  = [0m[1m[38;5;15mnote: [0m[38;5;15mts-rs failed to parse this attribute. It will be ignored.
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+GATE_PASS contracts
+===== crate: storage =====
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+warning: failed to parse serde attribute
+  | 
+  | deny_unknown_fields 
+  | 
+  = note: ts-rs failed to parse this attribute. It will be ignored.
+warning: failed to parse serde attribute
+  | 
+  | deny_unknown_fields 
+  | 
+  = note: ts-rs failed to parse this attribute. It will be ignored.
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.19s
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+warning: failed to parse serde attribute
+  | 
+  | deny_unknown_fields 
+  | 
+  = note: ts-rs failed to parse this attribute. It will be ignored.
+warning: failed to parse serde attribute
+  | 
+  | deny_unknown_fields 
+  | 
+  = note: ts-rs failed to parse this attribute. It will be ignored.
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.21s
+     Running unittests src/lib.rs (target/debug/deps/superagent_storage-4c0bf8ccae64831e)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/storage.rs (target/debug/deps/storage-9e969787f995a23b)
+
+running 16 tests
+test lease_on_missing_run_is_not_found ... ok
+test fault_after_persist_breakpoint_is_injectable ... ok
+test artifact_reference_stored_without_blob ... ok
+test intent_persists_then_binds_in_separate_transactions ... ok
+test event_append_breakpoint_injectable ... ok
+test fault_between_persist_and_bind_leaves_recoverable_intent ... ok
+test event_sequence_is_monotonic_and_replayable ... ok
+test attempt_state_transitions_explicit ... ok
+test duplicate_attempt_no_rejected ... ok
+test duplicate_run_id_rejected ... ok
+test run_fixed_identity_round_trips ... ok
+test seed_nodes_from_contracts_workflow ... ok
+test oversize_summaries_rejected_explicitly ... ok
+test expired_lease_can_be_taken_over ... ok
+test exclusive_lease_contention_rejected ... ok
+test migration_is_idempotent_and_versions ... ok
+
+test result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+   Doc-tests superagent_storage
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+GATE_PASS storage
+===== crate: orchestrator =====
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+warning: failed to parse serde attribute
+  | 
+  | deny_unknown_fields 
+  | 
+  = note: ts-rs failed to parse this attribute. It will be ignored.
+warning: failed to parse serde attribute
+  | 
+  | deny_unknown_fields 
+  | 
+  = note: ts-rs failed to parse this attribute. It will be ignored.
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.16s
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+warning: failed to parse serde attribute
+  | 
+  | deny_unknown_fields 
+  | 
+  = note: ts-rs failed to parse this attribute. It will be ignored.
+warning: failed to parse serde attribute
+  | 
+  | deny_unknown_fields 
+  | 
+  = note: ts-rs failed to parse this attribute. It will be ignored.
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.12s
+     Running unittests src/lib.rs (target/debug/deps/superagent_orchestrator-61836aa19a6883fe)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/orchestrator.rs (target/debug/deps/orchestrator-4a3aa51f3078649a)
+
+running 18 tests
+test downstream_invalidation_is_transitive ... ok
+test dag_cycle_rejected_at_plan ... ok
+test topo_order_serial_and_deterministic ... ok
+test failure_propagates_to_downstream ... ok
+test run_persists_events_and_intents_to_store ... ok
+test unknown_dependency_rejected ... ok
+test non_idempotent_node_never_blindly_retried ... ok
+test token_budget_exhaustion_blocks ... ok
+test gate_pass_without_evidence_is_not_success ... ok
+test fatal_failure_not_retried ... ok
+test uncertain_kind_yields_uncertain ... ok
+test failed_gate_blocks_succeeded ... ok
+test all_gates_proven_succeeds ... ok
+test needs_input_yields_waiting_input ... ok
+test max_attempts_exhausted_is_failed ... ok
+test wall_budget_exhaustion_cancels_remaining ... ok
+test capability_requires_evidence_not_nl ... ok
+test verification_failure_repaired_then_succeeds ... ok
+
+test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+   Doc-tests superagent_orchestrator
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+GATE_PASS orchestrator
+===== crate: adapter =====
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.11s
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.09s
+     Running unittests src/lib.rs (target/debug/deps/superagent_adapter-a1df37d7c365b295)
+
+running 15 tests
+test reconcile::tests::terminal_and_orphan_free_is_reconciled ... ok
+test reconcile::tests::terminal_with_orphan_is_uncertain ... ok
+test approval::tests::typed_approvals_all_declined ... ok
+test ui::tests::approval_immediate_and_flushes_pending_deltas ... ok
+test frame::tests::partial_line_at_eof_is_a_frame ... ok
+test frame::tests::small_line_returned_verbatim ... ok
+test frame::tests::oversize_line_metered_and_drained ... ok
+test approval::tests::unknown_server_request_is_32601_never_approved ... ok
+test reconcile::tests::non_terminal_or_missing_is_uncertain ... ok
+test frame::tests::exact_cap_is_allowed ... ok
+test ui::tests::interval_bounds_enforced ... ok
+test ui::tests::deltas_coalesce_on_interval_terminal_immediate ... ok
+test runlog::tests::entry_larger_than_limit_is_truncated_notice ... ok
+test runlog::tests::rotation_drops_oldest_and_bounds_retained ... ok
+test ui::tests::overload_never_drops_terminal_or_deltas ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+     Running tests/acceptance.rs (target/debug/deps/acceptance-6cfb7eedc9db68bd)
+
+running 19 tests
+test per_type_timeout_defaults_match_p0_6_contract ... ok
+test purity_no_core_or_model_dependencies ... ok
+test deferred_approval_pump_keeps_consuming ... ok
+test oversize_frame_faults_with_explicit_error ... ok
+test artifact_limit_explicit_error ... ok
+test request_correlation_three_way_pump ... ok
+test big_log_rotation_scaled_threshold ... ok
+test exit_cleanup_reaps_child ... ok
+test spawn_argv_env_and_pipe_wiring ... ok
+test unknown_event_and_malformed_frame_keep_pump_alive ... ok
+test typed_approval_never_auto_approves ... ok
+test stderr_ring_bounded ... ok
+test engine_crash_mid_turn_explicit_terminal_and_reconcile ... ok
+test close_kills_unresponsive_engine ... ok
+test notification_wait_clamped_by_run_deadline ... ok
+test approval_waiting_input_bounded_by_deadline ... ok
+test slow_consumer_retains_all_events_and_terminal ... ok
+test command_exec_timeout_then_terminate_reaps_child ... ok
+test global_deadline_clamps_long_request ... ok
+
+test result: ok. 19 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.42s
+
+   Doc-tests superagent_adapter
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+GATE_PASS adapter
+===== crate: executor =====
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+warning: failed to parse serde attribute
+  | 
+  | deny_unknown_fields 
+  | 
+  = note: ts-rs failed to parse this attribute. It will be ignored.
+warning: failed to parse serde attribute
+  | 
+  | deny_unknown_fields 
+  | 
+  = note: ts-rs failed to parse this attribute. It will be ignored.
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.32s
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+warning: failed to parse serde attribute
+  | 
+  | deny_unknown_fields 
+  | 
+  = note: ts-rs failed to parse this attribute. It will be ignored.
+warning: failed to parse serde attribute
+  | 
+  | deny_unknown_fields 
+  | 
+  = note: ts-rs failed to parse this attribute. It will be ignored.
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.29s
+     Running unittests src/lib.rs (target/debug/deps/superagent_executor-78220d973fdbf184)
+
+running 14 tests
+test permissions::tests::kernel_enforcement_intents_block_direct_gate_exec ... ok
+test permissions::tests::local_process_never_becomes_danger_full_access ... ok
+test permissions::tests::read_only_maps_to_engine_policy ... ok
+test permissions::tests::workspace_write_maps_to_engine_camel_case_policy ... ok
+test program::tests::empty_argv_is_explicit_error ... ok
+test permissions::tests::inexpressible_requests_block_both_paths ... ok
+test permissions::tests::relative_writable_root_is_blocked ... ok
+test evidence::tests::digest_is_stable_and_hex ... ok
+test program::tests::spawn_failure_is_explicit_not_exit_zero ... ok
+test evidence::tests::record_writes_file_and_registers_artifact ... ok
+test program::tests::captures_real_nonzero_exit_code ... ok
+test program::tests::output_cap_bounds_capture_but_meters_totals ... ok
+test program::tests::captures_real_zero_exit_code_and_output ... ok
+test program::tests::timeout_kills_and_reports_no_fabricated_code ... ok
+
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.31s
+
+     Running tests/executors.rs (target/debug/deps/executors-2efcaa188c8a4282)
+
+running 13 tests
+test agent_inexpressible_sandbox_is_blocked_no_engine_spawn ... ok
+test agent_local_process_intent_is_blocked_for_turns ... ok
+test inexpressible_sandbox_blocks_gate_no_host_fallback ... ok
+test orchestrator_blocked_executor_yields_blocked_node ... ok
+test approval_gate_returns_needs_input_never_auto_approves ... ok
+test agent_turn_completion_yields_durable_artifact_evidence ... ok
+test agent_crash_mid_turn_is_uncertain_not_success ... ok
+test orchestrator_capability_succeeds_only_with_artifact_evidence ... ok
+test local_process_gate_runs_direct_child_real_exit_code ... ok
+test artifact_schema_gate_validates_real_json ... ok
+test command_gate_real_nonzero_exit_is_unproven ... ok
+test kernel_sandbox_intent_blocks_direct_gate_but_engine_path_runs ... ok
+test command_gate_via_engine_exec_captures_real_exit_code_pass ... ok
+
+test result: ok. 13 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.27s
+
+   Doc-tests superagent_executor
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+GATE_PASS executor
+===== crate: recovery =====
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+warning: failed to parse serde attribute
+  | 
+  | deny_unknown_fields 
+  | 
+  = note: ts-rs failed to parse this attribute. It will be ignored.
+warning: failed to parse serde attribute
+  | 
+  | deny_unknown_fields 
+  | 
+  = note: ts-rs failed to parse this attribute. It will be ignored.
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.19s
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+warning: failed to parse serde attribute
+  | 
+  | deny_unknown_fields 
+  | 
+  = note: ts-rs failed to parse this attribute. It will be ignored.
+warning: failed to parse serde attribute
+  | 
+  | deny_unknown_fields 
+  | 
+  = note: ts-rs failed to parse this attribute. It will be ignored.
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.18s
+     Running unittests src/lib.rs (target/debug/deps/superagent_recovery-298ebcf6c2e93116)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/adapter_faults.rs (target/debug/deps/adapter_faults-75e7c8656d5e8c09)
+
+running 5 tests
+test oversize_frame_surfaces_violation_terminal_not_silently_lost ... ok
+test crash_then_proven_completed_binds_success_without_replay ... ok
+test crash_mid_turn_reconciles_unproven_and_never_blind_replays ... ok
+test pending_approval_never_auto_answered_and_old_id_not_replayed ... ok
+test session_end_alone_never_marks_run_succeeded ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 10.09s
+
+     Running tests/recovery.rs (target/debug/deps/recovery-ef735d1f35a7932d)
+
+running 22 tests
+test reconcile_confirmed_executed_binds_no_replay ... ok
+test reconcile_confirmed_not_executed_idempotent_retry ... ok
+test reconcile_non_idempotent_never_blind_retry ... ok
+test reconcile_unproven_waits ... ok
+test recovery_breakpoints_map_to_storage_hooks ... ok
+test resume_invalidates_downstream_transitively ... ok
+test resume_missing_prior_yields_rerun ... ok
+test resume_reruns_when_artifact_digest_changed ... ok
+test resume_reruns_when_dependency_failed ... ok
+test resume_reuses_succeeded_with_matching_digest ... ok
+test resume_succeeded_without_artifact_digest_not_reused ... ok
+test resume_uncertain_yields_wait ... ok
+test exclusive_resume_lease_contention_rejected ... ok
+test crash_recovery_does_not_repeat_confirmed_success ... ok
+test exclusive_resume_missing_run_not_found ... ok
+test exclusive_resume_matching_identity_succeeds ... ok
+test exclusive_resume_mismatch_refused_and_lease_released ... ok
+test fault_after_send_before_response_leaves_recoverable_intent ... ok
+test before_send_fault_aborts_clean_no_durable_intent ... ok
+test fault_after_response_before_bind_recoverable ... ok
+test all_four_breakpoints_have_fault_coverage ... ok
+test after_gate_before_commit_fault_recoverable_not_lost ... ok
+
+test result: ok. 22 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+   Doc-tests superagent_recovery
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+GATE_PASS recovery
+===== crate: cli =====
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+warning: failed to parse serde attribute
+  | 
+  | deny_unknown_fields 
+  | 
+  = note: ts-rs failed to parse this attribute. It will be ignored.
+warning: failed to parse serde attribute
+  | 
+  | deny_unknown_fields 
+  | 
+  = note: ts-rs failed to parse this attribute. It will be ignored.
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.22s
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+warning: failed to parse serde attribute
+  | 
+  | deny_unknown_fields 
+  | 
+  = note: ts-rs failed to parse this attribute. It will be ignored.
+warning: failed to parse serde attribute
+  | 
+  | deny_unknown_fields 
+  | 
+  = note: ts-rs failed to parse this attribute. It will be ignored.
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.22s
+     Running unittests src/lib.rs (target/debug/deps/superagent_cli-f2b6d4e4d3abbc3a)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/debug/deps/superagent-8e03bb82cac7d22c)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/cli.rs (target/debug/deps/cli-82d80cd53db6faef)
+
+running 11 tests
+test cancel_guard_stops_new_nodes ... ok
+test dry_run_rejects_cycle_before_execution ... ok
+test report_separates_verified_unverified_and_changes ... ok
+test dry_run_starts_no_model_or_command ... ok
+test status_json_reads_durable_state ... ok
+test resume_identity_match_reuse_and_mismatch_refused ... ok
+test resume_cli_expected_from_caller_inputs_refuses_changed_workflow_or_bundle ... ok
+test cancel_turn_session_interrupts_and_marks_cancelled ... ok
+test non_interactive_approval_returns_blocked_stable_exit ... ok
+test run_succeeds_via_real_gate_evidence ... ok
+test cancel_exec_session_cleanup_evidence_and_cancelled_mark ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.41s
+
+   Doc-tests superagent_cli
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+GATE_PASS cli

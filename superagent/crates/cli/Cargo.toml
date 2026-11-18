@@ -1,0 +1,25 @@
+[package]
+name = "superagent-cli"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+description = "SuperAgent product CLI (P2-6 / #83): run/status/resume/cancel/report/dry-run over the proven orchestrator/storage/executor/recovery crates. Deterministic outer loop; success only by gate evidence."
+
+[workspace]
+
+[dependencies]
+superagent-contracts = { path = "../contracts" }
+superagent-storage = { path = "../storage" }
+superagent-orchestrator = { path = "../orchestrator" }
+superagent-executor = { path = "../executor" }
+superagent-adapter = { path = "../adapter" }
+superagent-recovery = { path = "../recovery" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[dev-dependencies]
+tempfile = "3"
+
+[[bin]]
+name = "superagent"
+path = "src/main.rs"

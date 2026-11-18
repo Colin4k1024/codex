@@ -1,0 +1,26 @@
+== cargo tree -e normal (cli) ==
+superagent-cli v0.1.0 (/private/tmp/sa-p2-6-wt/superagent/crates/cli)
+├── superagent-adapter v0.1.0 (/private/tmp/sa-p2-6-wt/superagent/crates/adapter)
+├── superagent-contracts v0.1.0 (/private/tmp/sa-p2-6-wt/superagent/crates/contracts)
+├── superagent-executor v0.1.0 (/private/tmp/sa-p2-6-wt/superagent/crates/executor)
+│   ├── superagent-adapter v0.1.0 (/private/tmp/sa-p2-6-wt/superagent/crates/adapter) (*)
+│   ├── superagent-contracts v0.1.0 (/private/tmp/sa-p2-6-wt/superagent/crates/contracts) (*)
+│   ├── superagent-orchestrator v0.1.0 (/private/tmp/sa-p2-6-wt/superagent/crates/orchestrator)
+│   │   ├── superagent-contracts v0.1.0 (/private/tmp/sa-p2-6-wt/superagent/crates/contracts) (*)
+│   │   └── superagent-storage v0.1.0 (/private/tmp/sa-p2-6-wt/superagent/crates/storage)
+│   │       └── superagent-contracts v0.1.0 (/private/tmp/sa-p2-6-wt/superagent/crates/contracts) (*)
+│   └── superagent-storage v0.1.0 (/private/tmp/sa-p2-6-wt/superagent/crates/storage) (*)
+├── superagent-orchestrator v0.1.0 (/private/tmp/sa-p2-6-wt/superagent/crates/orchestrator) (*)
+├── superagent-recovery v0.1.0 (/private/tmp/sa-p2-6-wt/superagent/crates/recovery)
+│   ├── superagent-contracts v0.1.0 (/private/tmp/sa-p2-6-wt/superagent/crates/contracts) (*)
+│   ├── superagent-orchestrator v0.1.0 (/private/tmp/sa-p2-6-wt/superagent/crates/orchestrator) (*)
+│   └── superagent-storage v0.1.0 (/private/tmp/sa-p2-6-wt/superagent/crates/storage) (*)
+└── superagent-storage v0.1.0 (/private/tmp/sa-p2-6-wt/superagent/crates/storage) (*)
+
+== grep CLI src for engine coupling / spawn / network ==
+src/main.rs:68:    let codex_home = flag(args, "--codex-home")
+src/main.rs:103:            codex_home,
+
+== codex_home occurrences (config field only) ==
+src/main.rs:68:    let codex_home = flag(args, "--codex-home")
+src/main.rs:103:            codex_home,

@@ -173,6 +173,15 @@ def handle(msg):
             note("item/agentMessage/delta", {"threadId": tid, "delta": f"chunk{i} "})
         complete_turn(rid, tid)
         return
+    if method == "turn/interrupt":
+        tid = params.get("threadId")
+        turns = state.setdefault("threads", {}).setdefault(tid, {}).get("turns", [])
+        for t in turns:
+            t["status"] = "aborted"
+        save_state()
+        note("turn/aborted", {"threadId": tid, "turn": {"id": "turn-1", "status": "aborted"}})
+        respond(rid, {"interrupted": True})
+        return
     if method == "command/exec":
         # Threaded so command/exec/terminate can be processed while the
         # program is still running (waits-program-exit semantics).
