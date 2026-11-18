@@ -55,3 +55,13 @@ leader turn workspace-write（writableRoots=[WORK]）下 spawn implementer 角�
 
 - P0-9（#72）缺口清单：角色层 sandbox/approval override（若产品要求角色级独立沙箱再评估最小 fork）。
 - 编排器实现（P2-5 AgentExecutor）按角色任务以 command/exec SandboxPolicy 逐调用强制沙箱（复用 P0-7 机制）。
+
+## 7. TUI 跨探针证据接受（r5 minor 签核）
+
+r5 minor 指出 TUI leader trace（p0-2d）证明启动（originator=codex-tui、source=cli、multi_agent_version=v2）+
+spawn_agent×2 + wait_agent 往返，但 send_message/interrupt_agent/close_agent 往返由同引擎多代理路径的兄弟探针证明：
+app-server p0-2b（send_message "Message accepted"、interrupt_agent previous_status=running）、V1 p0-2c
+（closeAgent/resumeAgent）。**Tech Lead 接受此跨探针证据组合**：c4 的工具往返在同一 superagent-engine 多代理
+实现上由 p0-2b/p0-2c/p0-2d 共同覆盖，TUI 启动本身已由 p0-2d rollout 实证。`p0-2d-tui-summary.json` 已显式标注
+"Salvaged"（TUI 探针清理阶段挂起被 kill 后从真实 rollout 抢救的策展摘要，schema 与 p0_2d_tui.py 原始输出不同；
+底层 p0-2d-tui-leader-rollout.jsonl 为真实 TUI 会话）。此为证据呈现方式说明，非削弱 c4 验收。
