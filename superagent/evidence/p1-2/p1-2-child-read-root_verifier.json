@@ -1,0 +1,86 @@
+{
+  "id": 4,
+  "result": {
+    "thread": {
+      "id": "01a1ec6b-e1a1-70e2-9914-d1a62220e83e",
+      "environments": null,
+      "extra": null,
+      "sessionId": "01a1ec6b-e1a1-70e2-9914-d1a62220e83e",
+      "forkedFromId": "01a1ec6b-a0ee-7380-9604-1344c33b409a",
+      "attachedToThreadId": null,
+      "parentThreadId": "01a1ec6b-a0ee-7380-9604-1344c33b409a",
+      "preview": "",
+      "ephemeral": false,
+      "section": null,
+      "sectionEnteredAt": null,
+      "projectId": null,
+      "historyMode": "paginated",
+      "modelProvider": "openai",
+      "model": "gpt-5.6-luna",
+      "reasoningEffort": "low",
+      "createdAt": 1794967855,
+      "updatedAt": 1794967862,
+      "recencyAt": 1794967855,
+      "status": {
+        "type": "notLoaded"
+      },
+      "path": "/private/tmp/sa-p1-2-wt/superagent/evidence/p1-2/home-p1-2/sessions/2026/11/18/rollout-2026-11-18T10-10-55-01a1ec6b-e1a1-70e2-9914-d1a62220e83e.jsonl",
+      "cwd": "/private/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p12-m535dmld",
+      "cliVersion": "0.0.0",
+      "originator": "superagent-spike",
+      "source": {
+        "subAgent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a1ec6b-a0ee-7380-9604-1344c33b409a",
+            "depth": 1,
+            "agent_path": "/root/verifier",
+            "agent_nickname": "Themis",
+            "agent_role": "verifier"
+          }
+        }
+      },
+      "canAcceptDirectInput": null,
+      "threadSource": "subagent",
+      "agentNickname": "Themis",
+      "agentRole": "verifier",
+      "gitInfo": null,
+      "name": null,
+      "daybreakEnabled": null,
+      "turns": [
+        {
+          "id": "01a1ec6b-e1b1-7c31-b2bc-a647af5543d3",
+          "rootTurnId": "01a1ec6b-a9fe-7c03-bf84-334822680ba9",
+          "items": [
+            {
+              "type": "reasoning",
+              "id": "rs_0dcf26bdc23a945c016afd09358a7887d0a6150483ac27bb73",
+              "summary": [],
+              "content": [],
+              "startedAtMs": 1794967861580,
+              "completedAtMs": 1794967861580
+            },
+            {
+              "type": "agentMessage",
+              "moderation": null,
+              "id": "msg_0dcf26bdc23a945c016afd0935aa9487d08050e3f54c804521",
+              "text": "Acceptance checklist: verify `hello.txt` exists and contains the expected content, with no unintended file changes.",
+              "phase": "final_answer",
+              "memoryCitation": null,
+              "delivery": null,
+              "questions": null,
+              "startedAtMs": 1794967861660,
+              "completedAtMs": 1794967862105
+            }
+          ],
+          "itemsView": "full",
+          "status": "completed",
+          "error": null,
+          "startedAt": 1794967855,
+          "completedAt": 1794967862,
+          "durationMs": 6566
+        }
+      ]
+    },
+    "readState": null
+  }
+}

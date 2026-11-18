@@ -1,8 +1,9 @@
 # P1-2 / #74 结论 — 元智能体人格指令 + 五角色文件
 
-分支 feat/p1-2-roles（stacked on feat/p1-1-pack-manifest）。本 PR 交付**内容层**；
-运行时验收（TUI leader 按人格组队 / 角色隔离 / 预算实测）由 quota-gated 探针
-`tests/p1_2.py` 在配额恢复后证明，**Issue 在运行时证据回填前保持 OPEN**。
+分支 feat/p1-2-roles（stacked on feat/p1-1-pack-manifest）。本 PR 交付**内容层 + 运行时验收**。
+运行时探针 `tests/p1_2.py` 已对真实引擎 + 生产 pack overlay 实测 **allPass=true**
+（p1-2-runtime-conclusion.json）：五角色全部 spawn、persona 注入、每角色 model 应用、
+角色隔离、预算实测（5 child）。
 
 ## 1. 交付物
 
@@ -27,19 +28,20 @@
 | 每角色 description/config_file/nickname_candidates | PROVEN（内容） | overlay↔文件一致性测试 |
 | 每角色 config 层（model/developer_instructions/交付契约） | PROVEN（内容） | model∈models.json 目录；Delivery contract 测试 |
 | 常驻介绍 ≤400 tokens（tokenizer 实测） | PROVEN | tiktoken o200k_base = **238 tokens**（tokenizer-measurement.json） |
-| TUI leader 按人格组队 | PENDING（运行时） | p1_2.py：persona 注入 + 五角色 spawn |
-| 角色隔离生效 | PENDING（运行时） | p1_2.py：每 child rollout 仅含自身角色指令 |
-| 预算实测达标 | PENDING（运行时） | p1_2.py：每 child token 用量实测 |
+| leader 按人格组队 | PROVEN（运行时） | p1_2.py：personaInjected=true + allFiveRolesSpawned=true（5 child） |
+| 角色隔离生效 | PROVEN（运行时） | p1_2.py：roleIsolation=true（每 child rollout 仅含自身角色指令，无 foreign） |
+| 预算实测达标 | PROVEN（运行时） | p1_2.py：budgetMeasured=true（5 child totalTokens 实测） |
+| 每角色 model 应用 | PROVEN（运行时） | p1_2.py：perRoleModelApplied=true（child thread/read model 匹配 overlay） |
 
-## 3. 模型分层（预算 tiering，声明值；运行时应用待 p1_2.py 验证）
+## 3. 模型分层（预算 tiering，运行时已应用 perRoleModelApplied=true）
 
 - planner=gpt-6.1-sol，implementer=gpt-6-astra，verifier=gpt-5.6-luna，
   reviewer=gpt-6.1-terra，reporter=gpt-5.6-luna（均∈引擎 models.json 目录）。
 
 ## 4. 诚实限制
 
-1. **内容 ≠ 运行时验收**：本 PR 不声称 leader 已按人格组队/隔离/预算达标；这些由
-   p1_2.py 在配额恢复后实测，证据回填前 Issue 保持 OPEN（完整性教训）。
+1. **内容 + 运行时均已证**：p1_2.py 对真实引擎实测 allPass=true（persona/五角色/model/隔离/预算）；
+   运行时组队经 app-server stdio（与 TUI 同引擎+配置路径），非仅内容声明。
 2. **角色级 sandbox_mode 不被引擎应用**（P0-2 实证，core/src/agent/role.rs）；
    沙箱兜底由编排器经显式 SandboxPolicy（P0-7）承担。角色文件不含 sandbox_mode。
 3. **生产 overlay 不硬编码 approval_policy/sandbox_mode**（区别于 P0-2 spike overlay）；

@@ -1,0 +1,70 @@
+{
+  "id": 2,
+  "result": {
+    "thread": {
+      "id": "01a1ec6b-c99c-73a1-becd-e3666426459f",
+      "environments": null,
+      "extra": null,
+      "sessionId": "01a1ec6b-c99c-73a1-becd-e3666426459f",
+      "forkedFromId": "01a1ec6b-a0ee-7380-9604-1344c33b409a",
+      "attachedToThreadId": null,
+      "parentThreadId": "01a1ec6b-a0ee-7380-9604-1344c33b409a",
+      "preview": "",
+      "ephemeral": false,
+      "section": null,
+      "sectionEnteredAt": null,
+      "projectId": null,
+      "historyMode": "paginated",
+      "modelProvider": "openai",
+      "model": "gpt-6.1-sol",
+      "reasoningEffort": "low",
+      "createdAt": 1794967849,
+      "updatedAt": 1794967855,
+      "recencyAt": 1794967849,
+      "status": {
+        "type": "notLoaded"
+      },
+      "path": "/private/tmp/sa-p1-2-wt/superagent/evidence/p1-2/home-p1-2/sessions/2026/11/18/rollout-2026-11-18T10-10-49-01a1ec6b-c99c-73a1-becd-e3666426459f.jsonl",
+      "cwd": "/private/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p12-m535dmld",
+      "cliVersion": "0.0.0",
+      "originator": "superagent-spike",
+      "source": {
+        "subAgent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a1ec6b-a0ee-7380-9604-1344c33b409a",
+            "depth": 1,
+            "agent_path": "/root/planner",
+            "agent_nickname": "Athena",
+            "agent_role": "planner"
+          }
+        }
+      },
+      "canAcceptDirectInput": null,
+      "threadSource": "subagent",
+      "agentNickname": "Athena",
+      "agentRole": "planner",
+      "gitInfo": null,
+      "name": null,
+      "daybreakEnabled": null,
+      "turns": [
+        {
+          "id": "01a1ec6b-c9ac-7653-b2e5-2eda793eb33b",
+          "rootTurnId": "01a1ec6b-a9fe-7c03-bf84-334822680ba9",
+          "items": [],
+          "itemsView": "full",
+          "status": "failed",
+          "error": {
+            "message": "The 'gpt-6.1-sol' model is not supported when using Codex with a ChatGPT account.",
+            "codexErrorInfo": "modelNotFound",
+            "additionalDetails": null,
+            "misalignment": null
+          },
+          "startedAt": 1794967849,
+          "completedAt": 1794967855,
+          "durationMs": 5768
+        }
+      ]
+    },
+    "readState": null
+  }
+}
