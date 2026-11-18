@@ -1,0 +1,14 @@
+{
+  "issue": "#95",
+  "exec_server_config": [
+    "sandbox_mode=workspace-write",
+    "sandbox_workspace_write.writable_roots=[/tmp/p5-1-work]"
+  ],
+  "remote_marker": "REMOTE-ENV-51",
+  "pwd": "/private/tmp/p5-1-work",
+  "outside_path": "/Users/fanjia/p5-1-outside.txt",
+  "outside_exists": false,
+  "tool_exit": 1,
+  "tool_error": "zsh:1: operation not permitted: /Users/fanjia/p5-1-outside.txt",
+  "note": "The marker proves the tool ran in the registered exec-server environment; the outside write was denied by the environment's workspace-write sandbox."
+}

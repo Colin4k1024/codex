@@ -1,0 +1,10 @@
+{
+  "issue": "#95",
+  "method": "environment/info",
+  "result": {
+    "shell": {"name": "zsh", "path": "/bin/zsh"},
+    "cwd": "file:///Users/fanjia/Desktop/code/dsh-superagent-prototype"
+  },
+  "adapter": "Adapter::environment_info() caches this snapshot; AgentExecutor writes it into the turn-result evidence",
+  "limitation": "app-server's environment/info exposes shell/cwd only. Exec-server's full FS/process/sandbox capability_discovery is not exposed through the app-server API used here; that remains a P5-1 follow-up (direct exec-server client or new app-server method)."
+}

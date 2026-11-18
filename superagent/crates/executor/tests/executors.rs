@@ -9,13 +9,13 @@ use std::path::PathBuf;
 use std::rc::Rc;
 use std::time::Duration;
 
-use serde_json::json;
+use serde_json::{json, Value};
 use superagent_contracts::{
     ArtifactSpec, DryRunContext, Gate, GateKind, Node, NodeKind, Workflow, SCHEMA_VERSION,
 };
 use superagent_executor::{
-    AgentExecutor, EngineSpec, EvidenceRecorder, PermissionsConfig, SandboxRequest, SwarmExecutor,
-    VerificationExecutor,
+    AgentExecutor, EngineSpec, EnvironmentConfig, EvidenceRecorder, PermissionsConfig,
+    SandboxRequest, SwarmExecutor, VerificationExecutor,
 };
 use superagent_orchestrator::{ExecKind, NodeExecutor, NodeState, Orchestrator, Policy};
 use superagent_storage::{RunSpec, Store};
@@ -38,9 +38,24 @@ fn engine_spec(scenario: &str) -> EngineSpec {
         argv: fake_engine(scenario),
         codex_home: None,
         cwd: None,
+        environment: None,
         run_deadline: Duration::from_secs(30),
         max_artifact_bytes: 20 * 1024 * 1024,
     }
+}
+
+/// Like [`engine_spec`] but with a state file the fake engine writes its
+/// observed `environment/add`, `environment/info` and `thread/start` calls to.
+fn engine_spec_state(
+    scenario: &str,
+    state_file: &std::path::Path,
+    environment: Option<EnvironmentConfig>,
+) -> EngineSpec {
+    let mut spec = engine_spec(scenario);
+    spec.argv.push("--state-file".into());
+    spec.argv.push(state_file.to_string_lossy().into_owned());
+    spec.environment = environment;
+    spec
 }
 
 fn run_spec(id: &str) -> RunSpec {
@@ -194,6 +209,194 @@ fn agent_local_process_intent_is_blocked_for_turns() {
         ex.execute(&capability_node("n1"), 1).kind,
         ExecKind::Blocked
     );
+}
+
+// --- P5-1 (#95): environment wiring ---------------------------------------
+
+#[test]
+fn agent_with_environment_registers_before_thread_and_records_capabilities() {
+    let tmp = tempfile::tempdir().unwrap();
+    let (_store, rec) = recorder(&tmp, "run-env");
+    let state_file = tmp.path().join("state.json");
+    let remote_cwd = PathBuf::from("/remote/work");
+    let remote_root = PathBuf::from("/remote/extra");
+    let spec = engine_spec_state(
+        "echo",
+        &state_file,
+        Some(EnvironmentConfig {
+            id: "env-p51".into(),
+            exec_server_url: "ws://127.0.0.1:1".into(),
+            auth_bearer_token: Some("executor-secret-token".into()),
+            cwd: Some(remote_cwd.clone()),
+            workspace_roots: vec![remote_root.clone()],
+        }),
+    );
+    let mut ex = AgentExecutor {
+        engine: spec,
+        permissions: workspace_write(&tmp),
+        workspace: tmp.path().to_path_buf(),
+        evidence: rec,
+        task_override: Some("run against the remote environment".into()),
+    };
+    let out = ex.execute(&capability_node("n1"), 1);
+    assert_eq!(out.kind, ExecKind::Completed, "detail={}", out.detail);
+
+    // Capability discovery lands in the durable turn-result evidence.
+    let art = PathBuf::from(&out.artifacts[0]);
+    let v: Value = serde_json::from_slice(&std::fs::read(&art).unwrap()).unwrap();
+    assert_eq!(v["environment"]["id"], "env-p51");
+    assert_eq!(v["environment"]["info"]["shell"]["name"], "zsh");
+    assert_eq!(v["environment"]["info"]["shell"]["path"], "/bin/zsh");
+
+    // The engine observed registration BEFORE thread/start and the
+    // environments entry on thread/start.
+    let st: Value = serde_json::from_slice(&std::fs::read(&state_file).unwrap()).unwrap();
+    assert_eq!(st["environmentAdds"].as_array().unwrap().len(), 1);
+    assert_eq!(st["environmentAdds"][0]["environmentId"], "env-p51");
+    assert_eq!(st["environmentAdds"][0]["hasBearerToken"], true);
+    assert_eq!(st["environmentInfos"].as_array().unwrap().len(), 1);
+    assert_eq!(st["initializeCapabilities"]["experimentalApi"], true);
+    // Strict wire order: initialize -> register -> discover -> thread -> turn.
+    let calls: Vec<&str> = st["callLog"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .filter_map(Value::as_str)
+        .collect();
+    assert_eq!(
+        &calls[..4],
+        &[
+            "initialize",
+            "environment/add",
+            "environment/info",
+            "thread/start"
+        ]
+    );
+    let add = calls.iter().position(|c| *c == "environment/add").unwrap();
+    let info = calls.iter().position(|c| *c == "environment/info").unwrap();
+    let thread = calls.iter().position(|c| *c == "thread/start").unwrap();
+    let turn = calls.iter().position(|c| *c == "turn/start").unwrap();
+    assert!(add < info && info < thread && thread < turn, "{calls:?}");
+    let thread_env = &st["threadStarts"][0]["environments"][0];
+    assert_eq!(thread_env["environmentId"], "env-p51");
+    assert_eq!(thread_env["cwd"], remote_cwd.to_string_lossy().as_ref());
+    assert_eq!(
+        thread_env["runtimeWorkspaceRoots"],
+        json!([remote_root.to_string_lossy()])
+    );
+
+    // The bearer token never reaches the per-attempt transcript log.
+    let log = std::fs::read_to_string(tmp.path().join("evidence/n1-a1-engine.jsonl")).unwrap();
+    assert!(
+        !log.contains("executor-secret-token"),
+        "executor engine log leaked the bearer token"
+    );
+    assert!(log.contains("<redacted>"));
+}
+
+#[test]
+fn agent_environment_registration_failure_is_fatal_no_local_fallback() {
+    let tmp = tempfile::tempdir().unwrap();
+    let (_store, rec) = recorder(&tmp, "run-env-fail");
+    let state_file = tmp.path().join("state.json");
+    let spec = engine_spec_state(
+        "environment_fail",
+        &state_file,
+        Some(EnvironmentConfig {
+            id: "env-down".into(),
+            exec_server_url: "ws://127.0.0.1:1".into(),
+            auth_bearer_token: None,
+            cwd: None,
+            workspace_roots: vec![],
+        }),
+    );
+    let mut ex = AgentExecutor {
+        engine: spec,
+        permissions: workspace_write(&tmp),
+        workspace: tmp.path().to_path_buf(),
+        evidence: rec,
+        // A local fallback would complete on this fake engine; it must not run.
+        task_override: Some("must not execute locally".into()),
+    };
+    let out = ex.execute(&capability_node("n1"), 1);
+    assert_eq!(out.kind, ExecKind::FatalFailure, "detail={}", out.detail);
+    assert!(
+        out.detail.contains("environment/add"),
+        "failure must name the registration call: {}",
+        out.detail
+    );
+    // No thread/turn started and no turn-result evidence written.
+    let st: Value = serde_json::from_slice(&std::fs::read(&state_file).unwrap()).unwrap();
+    assert_eq!(st["callLog"], json!(["initialize", "environment/add"]));
+    assert!(st["threads"].as_object().is_none_or(|m| m.is_empty()));
+    assert!(st["threadStarts"].as_array().unwrap().is_empty());
+    assert!(!tmp.path().join("evidence/n1-turn-result.json").exists());
+}
+
+#[test]
+fn agent_environment_info_failure_is_fatal_before_thread_start() {
+    let tmp = tempfile::tempdir().unwrap();
+    let (_store, rec) = recorder(&tmp, "run-env-info-fail");
+    let state_file = tmp.path().join("state.json");
+    let spec = engine_spec_state(
+        "environment_info_fail",
+        &state_file,
+        Some(EnvironmentConfig {
+            id: "env-no-info".into(),
+            exec_server_url: "ws://127.0.0.1:1".into(),
+            auth_bearer_token: None,
+            cwd: None,
+            workspace_roots: vec![],
+        }),
+    );
+    let mut ex = AgentExecutor {
+        engine: spec,
+        permissions: workspace_write(&tmp),
+        workspace: tmp.path().to_path_buf(),
+        evidence: rec,
+        task_override: Some("must not execute locally".into()),
+    };
+    let out = ex.execute(&capability_node("n1"), 1);
+    assert_eq!(out.kind, ExecKind::FatalFailure, "detail={}", out.detail);
+    assert!(
+        out.detail.contains("environment/info"),
+        "failure must name capability discovery: {}",
+        out.detail
+    );
+    let st: Value = serde_json::from_slice(&std::fs::read(&state_file).unwrap()).unwrap();
+    assert_eq!(st["environmentAdds"].as_array().unwrap().len(), 1);
+    assert_eq!(
+        st["callLog"],
+        json!(["initialize", "environment/add", "environment/info"])
+    );
+    assert!(st["threads"].as_object().is_none_or(|m| m.is_empty()));
+    assert!(st["threadStarts"].as_array().unwrap().is_empty());
+}
+
+#[test]
+fn agent_without_environment_sends_no_environment_rpcs() {
+    let tmp = tempfile::tempdir().unwrap();
+    let (_store, rec) = recorder(&tmp, "run-no-env");
+    let state_file = tmp.path().join("state.json");
+    let spec = engine_spec_state("echo", &state_file, None);
+    let mut ex = AgentExecutor {
+        engine: spec,
+        permissions: workspace_write(&tmp),
+        workspace: tmp.path().to_path_buf(),
+        evidence: rec,
+        task_override: Some("local turn".into()),
+    };
+    let out = ex.execute(&capability_node("n1"), 1);
+    assert_eq!(out.kind, ExecKind::Completed, "detail={}", out.detail);
+    let st: Value = serde_json::from_slice(&std::fs::read(&state_file).unwrap()).unwrap();
+    assert!(st["environmentAdds"].as_array().unwrap().is_empty());
+    assert!(st["environmentInfos"].as_array().unwrap().is_empty());
+    assert_eq!(st["initializeCapabilities"], json!({}));
+    // Existing thread/start params are unchanged (no environments key).
+    assert!(st["threadStarts"][0].get("environments").is_none());
+    // No environment block in the turn-result evidence.
+    let v: Value = serde_json::from_slice(&std::fs::read(&out.artifacts[0]).unwrap()).unwrap();
+    assert!(v.get("environment").is_none());
 }
 
 // --- VerificationExecutor: command gates (real exit codes) -----------------

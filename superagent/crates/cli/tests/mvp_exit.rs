@@ -50,6 +50,7 @@ fn engine_spec(dir: &Path) -> EngineSpec {
         ],
         codex_home: None,
         cwd: Some(dir.to_path_buf()),
+        environment: None,
         run_deadline: Duration::from_secs(120),
         max_artifact_bytes: 1 << 20,
     }
