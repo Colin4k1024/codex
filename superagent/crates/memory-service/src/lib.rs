@@ -13,6 +13,8 @@ use std::hash::{Hash, Hasher};
 use rusqlite::Connection;
 use serde::{Deserialize, Serialize};
 
+pub mod source_adapter;
+
 pub const SCHEMA_VERSION: u32 = 1;
 pub const MAX_RESULTS: usize = 100;
 
@@ -52,6 +54,7 @@ pub enum SyncOutcome {
 #[derive(Debug)]
 pub enum MemoryError {
     Sqlite(rusqlite::Error),
+    Io(std::io::Error),
     EmbeddingsUnsupported,
     EmptyQuery,
 }
@@ -60,6 +63,7 @@ impl std::fmt::Display for MemoryError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             MemoryError::Sqlite(e) => write!(f, "sqlite: {e}"),
+            MemoryError::Io(e) => write!(f, "io: {e}"),
             MemoryError::EmbeddingsUnsupported => {
                 write!(
                     f,
@@ -76,6 +80,12 @@ impl std::error::Error for MemoryError {}
 impl From<rusqlite::Error> for MemoryError {
     fn from(e: rusqlite::Error) -> Self {
         MemoryError::Sqlite(e)
+    }
+}
+
+impl From<std::io::Error> for MemoryError {
+    fn from(e: std::io::Error) -> Self {
+        MemoryError::Io(e)
     }
 }
 
@@ -277,6 +287,20 @@ impl MemoryService {
             |r| r.get(0),
         )?;
         Ok(n as usize)
+    }
+
+    /// All indexed source ids for a kind, ordered. Used by the source adapter
+    /// to detect deletions (indexed ids no longer present on disk).
+    pub fn source_ids(&self, kind: SourceKind) -> Result<Vec<String>> {
+        let mut stmt = self
+            .conn
+            .prepare("SELECT source_id FROM sources WHERE kind=?1 ORDER BY source_id")?;
+        let rows = stmt.query_map(rusqlite::params![kind.as_str()], |r| r.get::<_, String>(0))?;
+        let mut ids = Vec::new();
+        for row in rows {
+            ids.push(row?);
+        }
+        Ok(ids)
     }
 }
 
