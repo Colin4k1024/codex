@@ -21,18 +21,41 @@ import queue
 
 
 class Client:
+    # Per-type request timeouts (seconds); explicit timeout= overrides.
+    DEFAULT_TIMEOUTS = {
+        "initialize": 30,
+        "thread/start": 60,
+        "thread/read": 60,
+        "thread/list": 60,
+        "thread/resume": 60,
+        "turn/start": 30,
+        "turn/interrupt": 30,
+        "command/exec": 90,
+        "command/exec/terminate": 30,
+    }
+    DEFAULT_TIMEOUT_FALLBACK = 60
+
     def __init__(self, engine, home, experimental=False, deadline=120,
-                 server_request_handler=None, max_frame_bytes=16 * 1024 * 1024):
+                 server_request_handler=None, max_frame_bytes=16 * 1024 * 1024,
+                 run_log_path=None, max_log_bytes=100 * 1024 * 1024):
         env = dict(os.environ, CODEX_HOME=home)
+        self.spawn_argv = [engine, "app-server", "--listen", "stdio://"]
         self.proc = subprocess.Popen(
-            [engine, "app-server", "--listen", "stdio://"],
+            self.spawn_argv,
             stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
             env=env, text=True, bufsize=1,
         )
+        self.max_log_bytes = max_log_bytes
+        self.run_log_path = run_log_path
+        self.run_log_rotations = 0
+        self.run_log_bytes = 0
+        self._run_log = open(run_log_path, "a", encoding="utf-8") if run_log_path else None
+        self.log_lock = threading.Lock()
         self.responses = {}
         self.notifications = []
         self.server_requests = []
         self.server_request_decisions = []
+        self.pending_server_requests = {}
         self.server_request_handler = server_request_handler
         self.max_frame_bytes = max_frame_bytes
         self.max_frame_seen = 0
@@ -55,6 +78,23 @@ class Client:
         self.notify("initialized", {})
         self.initialize_result = resp
 
+    def _log_frame(self, direction, line):
+        if self._run_log is None:
+            return
+        with self.log_lock:
+            data = f"{direction} {line}\n"
+            size = len(data.encode("utf-8", "replace"))
+            if self.run_log_bytes + size > self.max_log_bytes:
+                self._run_log.close()
+                os.replace(self.run_log_path, self.run_log_path + ".rotated")
+                os.remove(self.run_log_path + ".rotated")
+                self._run_log = open(self.run_log_path, "w", encoding="utf-8")
+                self.run_log_bytes = 0
+                self.run_log_rotations += 1
+            self._run_log.write(data)
+            self._run_log.flush()
+            self.run_log_bytes += size
+
     def _read_stderr(self):
         for line in self.proc.stderr:
             self.stderr_lines.append(line.rstrip())
@@ -66,6 +106,7 @@ class Client:
             line = line.strip()
             if not line:
                 continue
+            self._log_frame("recv", line)
             with self.cv:
                 self.max_frame_seen = max(self.max_frame_seen, len(line.encode("utf-8", "replace")))
                 if len(line.encode("utf-8", "replace")) > self.max_frame_bytes:
@@ -85,6 +126,14 @@ class Client:
                 else:
                     payload = {"error": {"code": -32601,
                                          "message": "spike client does not implement server requests"}}
+                if isinstance(payload, dict) and payload.get("__defer__"):
+                    with self.cv:
+                        self.server_requests.append(msg)
+                        self.pending_server_requests[msg["id"]] = msg
+                        self.server_request_decisions.append(
+                            {"method": msg.get("method"), "payload": {"deferred": True}})
+                        self.cv.notify_all()
+                    continue
                 with self.cv:
                     self.server_requests.append(msg)
                     self.server_request_decisions.append({"method": msg.get("method"), "payload": payload})
@@ -102,8 +151,10 @@ class Client:
 
     def _send(self, obj):
         with self.send_lock:
-            self.proc.stdin.write(json.dumps(obj) + "\n")
+            data = json.dumps(obj)
+            self.proc.stdin.write(data + "\n")
             self.proc.stdin.flush()
+            self._log_frame("send", data)
 
     def notify(self, method, params):
         self._send({"jsonrpc": "2.0", "method": method, "params": params})
@@ -137,8 +188,23 @@ class Client:
                     raise TimeoutError("notification predicate timed out")
                 self.cv.wait(remaining)
 
+    def respond_server_request(self, request_id, payload):
+        with self.cv:
+            msg = self.pending_server_requests.pop(request_id, None)
+        if msg is None:
+            raise KeyError(f"no deferred server request id={request_id}")
+        reply = {"jsonrpc": "2.0", "id": request_id}
+        reply.update(payload)
+        self._send(reply)
+        with self.cv:
+            self.server_request_decisions.append(
+                {"method": msg.get("method"), "payload": payload, "deferredResponse": True})
+            self.cv.notify_all()
+
     def request(self, method, params, timeout=None):
-        return self.wait_response(self.send_request(method, params), timeout)
+        effective = timeout if timeout is not None else self.DEFAULT_TIMEOUTS.get(
+            method, self.DEFAULT_TIMEOUT_FALLBACK)
+        return self.wait_response(self.send_request(method, params), effective)
 
     def close(self):
         try:
@@ -150,6 +216,11 @@ class Client:
         except subprocess.TimeoutExpired:
             self.proc.kill()
             self.proc.wait(timeout=5)
+        if self._run_log is not None:
+            try:
+                self._run_log.close()
+            except Exception:
+                pass
 
     def transcript(self):
         with self.lock:
@@ -159,9 +230,19 @@ class Client:
                 "notificationCount": len(self.notifications),
                 "serverRequests": list(self.server_requests),
                 "serverRequestDecisions": list(self.server_request_decisions),
+                "pendingServerRequestIds": list(self.pending_server_requests),
                 "maxFrameBytesSeen": self.max_frame_seen,
                 "frameLimitBytes": self.max_frame_bytes,
                 "frameViolations": list(self.frame_violations),
+                "spawnArgv": self.spawn_argv,
+                "spawnWiring": {"stdin": "PIPE (JSONL requests)", "stdout": "PIPE (JSONL frames only)",
+                                "stderr": "PIPE (collected separately, ring buffer 2000 lines)",
+                                "env": {"CODEX_HOME": "<set per run>"}},
+                "runLogPath": self.run_log_path,
+                "runLogLimitBytes": self.max_log_bytes,
+                "runLogRotations": self.run_log_rotations,
+                "runLogBytesRetained": self.run_log_bytes,
+                "defaultTimeoutsByMethod": self.DEFAULT_TIMEOUTS,
                 "stderrTail": self.stderr_lines[-50:],
                 "exitCode": self.proc.returncode,
             }

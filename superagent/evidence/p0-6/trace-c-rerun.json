@@ -1,0 +1,28 @@
+{
+  "pass": true,
+  "turnId": "01a1ec2d-231e-72e0-b538-b01de2a5d15b",
+  "sleepBeforeInterrupt": "5412 sleep 60",
+  "sleepAfterInterrupt": "",
+  "cleanupSeconds": 0,
+  "interruptResponse": {
+    "id": 4,
+    "result": {}
+  },
+  "turnStatus": "interrupted",
+  "turnStartResponse": {
+    "id": 3,
+    "result": {
+      "turn": {
+        "id": "01a1ec2d-231e-72e0-b538-b01de2a5d15b",
+        "rootTurnId": "01a1ec2d-231e-72e0-b538-b01de2a5d15b",
+        "items": [],
+        "itemsView": "notLoaded",
+        "status": "inProgress",
+        "error": null,
+        "startedAt": null,
+        "completedAt": null,
+        "durationMs": null
+      }
+    }
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "results": [
+    {
+      "id": 2,
+      "result": {
+        "thread": {
+          "id": "01a1ec33-7a2c-7b11-b435-9c36132ce9cb",
+          "environments": null,
+          "extra": null,
+          "sessionId": "01a1ec33-7a2c-7b11-b435-9c36132ce9cb",
+          "forkedFromId": null,
+          "attachedToThreadId": null,
+          "parentThreadId": null,
+          "preview": "Use your command execution tool to run `sleep 45` and wait for it to finish. Then create d.txt containing RECONCILED.",
+          "ephemeral": false,
+          "section": null,
+          "sectionEnteredAt": null,
+          "projectId": null,
+          "historyMode": "paginated",
+          "modelProvider": "openai",
+          "model": "gpt-6-astra",
+          "reasoningEffort": null,
+          "createdAt": 1794964159,
+          "updatedAt": 1794964165,
+          "recencyAt": 1794964159,
+          "status": {
+            "type": "notLoaded"
+          },
+          "path": "/Users/<user>/Library/Application Support/SuperAgent/codex-home/sessions/2026/11/18/rollout-2026-11-18T09-09-19-01a1ec33-7a2c-7b11-b435-9c36132ce9cb.jsonl",
+          "cwd": "/private/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-d-j_53qa87",
+          "cliVersion": "0.0.0",
+          "originator": "superagent-spike",
+          "source": "vscode",
+          "canAcceptDirectInput": null,
+          "threadSource": null,
+          "agentNickname": null,
+          "agentRole": null,
+          "gitInfo": null,
+          "name": null,
+          "daybreakEnabled": null,
+          "turns": [
+            {
+              "id": "01a1ec33-7a96-7cb2-b272-8abc0e6839fe",
+              "rootTurnId": "01a1ec33-7a96-7cb2-b272-8abc0e6839fe",
+              "items": [
+                {
+                  "type": "userMessage",
+                  "id": "01a1ec33-87bb-7c60-a79c-0c72db51d750",
+                  "clientId": null,
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Use your command execution tool to run `sleep 45` and wait for it to finish. Then create d.txt containing RECONCILED.",
+                      "text_elements": []
+                    }
+                  ],
+                  "startedAtMs": 1794964162492,
+                  "completedAtMs": 1794964162492
+                },
+                {
+                  "type": "agentMessage",
+                  "moderation": null,
+                  "id": "msg_0ad1e9a4203607fd016afcfac4505887d0b3efb13f1eeb06a4",
+                  "text": "I’ll run `sleep 45`, wait for it to finish, then create `d.txt` containing `RECONCILED`.\n",
+                  "phase": "commentary",
+                  "memoryCitation": null,
+                  "delivery": null,
+                  "questions": null,
+                  "startedAtMs": 1794964164354,
+                  "completedAtMs": 1794964164942
+                }
+              ],
+              "itemsView": "full",
+              "status": "interrupted",
+              "error": null,
+              "startedAt": 1794964159,
+              "completedAt": null,
+              "durationMs": null
+            }
+          ]
+        },
+        "readState": {
+          "firstUnread": null,
+          "revision": "initial:01a1ec33-7a2c-7b11-b435-9c36132ce9cb"
+        }
+      }
+    }
+  ],
+  "initialize": {
+    "id": 1,
+    "result": {
+      "userAgent": "superagent-spike/0.0.0 (Mac OS 26.6.2; arm64) xterm-256color (superagent-spike; 0.1.0)",
+      "codexHome": "<scrubbed>",
+      "platformFamily": "unix",
+      "platformOs": "macos"
+    }
+  },
+  "notifications": [
+    {
+      "method": "remoteControl/status/changed",
+      "params": {
+        "status": "disabled",
+        "serverName": "<scrubbed>",
+        "installationId": "<scrubbed>",
+        "environmentId": null
+      },
+      "emittedAtMs": 1794964166481
+    },
+    {
+      "method": "account/updated",
+      "params": {
+        "authMode": "<scrubbed>",
+        "planType": "<scrubbed>"
+      },
+      "emittedAtMs": 1794964167588
+    },
+    {
+      "method": "deprecationNotice",
+      "params": {
+        "summary": "Full-history hydration is deprecated for paginated threads; omit `includeTurns` or set it to `false`, then page with `thread/turns/list` and `thread/items/list`.",
+        "details": null
+      },
+      "emittedAtMs": 1794964187249
+    }
+  ],
+  "notificationCount": 3,
+  "serverRequests": [],
+  "serverRequestDecisions": [],
+  "pendingServerRequestIds": [],
+  "maxFrameBytesSeen": 2055,
+  "frameLimitBytes": 16777216,
+  "frameViolations": [],
+  "spawnArgv": [
+    "/Users/<user>/Desktop/code/codex/superagent/packaging/superagent-engine",
+    "app-server",
+    "--listen",
+    "stdio://"
+  ],
+  "spawnWiring": {
+    "stdin": "PIPE (JSONL requests)",
+    "stdout": "PIPE (JSONL frames only)",
+    "stderr": "PIPE (collected separately, ring buffer 2000 lines)",
+    "env": {
+      "CODEX_HOME": "<set per run>"
+    }
+  },
+  "runLogPath": null,
+  "runLogLimitBytes": 104857600,
+  "runLogRotations": 0,
+  "runLogBytesRetained": 0,
+  "defaultTimeoutsByMethod": {
+    "initialize": 30,
+    "thread/start": 60,
+    "thread/read": 60,
+    "thread/list": 60,
+    "thread/resume": 60,
+    "turn/start": 30,
+    "turn/interrupt": 30,
+    "command/exec": 90,
+    "command/exec/terminate": 30
+  },
+  "stderrTail": [],
+  "exitCode": null
+}
