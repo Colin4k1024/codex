@@ -1,0 +1,84 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Gate",
+  "type": "object",
+  "oneOf": [
+    {
+      "type": "object",
+      "required": [
+        "argv",
+        "kind"
+      ],
+      "properties": {
+        "argv": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "expect_exit_code": {
+          "default": 0,
+          "type": "integer",
+          "format": "int32"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "command"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "artifact",
+        "kind",
+        "schema_ref"
+      ],
+      "properties": {
+        "artifact": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "artifact_schema"
+          ]
+        },
+        "schema_ref": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "kind",
+        "prompt"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "approval"
+          ]
+        },
+        "prompt": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    }
+  ],
+  "required": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    }
+  }
+}

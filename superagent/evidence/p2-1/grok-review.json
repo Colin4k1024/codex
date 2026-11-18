@@ -1,0 +1,27 @@
+{
+  "verdict": "APPROVE",
+  "summary": "All five #78 acceptance criteria are proven by concrete evidence in the reviewed diff (origin/main..ba98c800a). Criterion-by-criterion: (1) JSON schemas exist — src/lib.rs defines Workflow/Node/Gate/ArtifactSpec/VariableSpec/VarType with schemars, src/bin/export_schemas.rs emits them, and schema/json/{Workflow,Node,Gate,ArtifactSpec}.json are committed. (2) Node kind distinguishes capability (command_ref against catalog), verification (argv against programs + required gates), and loop (max_attempts/wall_timeout_secs/gate all required, no serde defaults; schema-level minimum=1.0). (3) Product Rust types export TS via ts-rs (8 bindings/ts types + JsonValue dependency type); the crate has zero codex-* dependencies (Cargo.toml) and the purity test asserts no codex_ symbol. Engine DTO isolation in the adapter is correctly out of scope (#77). (4) dry_run validates schema_version, node id uniqueness, depends_on referential integrity/self-dependency, model/catalog/program availability, variable declaration/required/type checks, gate definitions (command argv, artifact_schema registry, approval prompt), artifact schema_refs, and DAG cycles via Kahn. (5) tests/dry_run.rs contains 21 tests covering unknown type/gate/field failures, DAG cycle/self-dependency, loop constraints, capability/verification distinction, variable/tool/model/gate checks, and a structural purity guard; dry_run is a pure function returning Vec<ValidationError> with no std::process/Command::new/codex_ in src/lib.rs. Scope holds: only superagent/crates/contracts/ is touched, zero codex-rs engine changes, no secrets, no prompt/skill changes. r2 changes (loop missing-field via serde_json::Value remove, schemars range(min=1), Node.json minimum=1.0, node_schema_loop_bounds_at_schema_level test) are all present and correct in the diff.",
+  "findings": [
+    {
+      "severity": "minor",
+      "location": "superagent/crates/contracts/src/lib.rs (Node/Gate #[serde(flatten)] + NodeKind/GateKind deny_unknown_fields)",
+      "detail": "Serde does not enforce deny_unknown_fields through #[serde(flatten)]; unknown non-tag fields inside a Node or Gate object are silently ignored by the Rust serde path. The unknown type tag still fails (internally tagged enum locates the tag first), and the committed JSON Schema rejects such fields via additionalProperties=false per variant. This is explicitly disclosed in the module docs and contracts-conclusion.md §4, and it does not weaken the issue's stated requirement (unknown node/gate type must compile-fail, never become a success stub).",
+      "evidence": "src/lib.rs NodeKind/GateKind `#[serde(tag = ..., deny_unknown_fields)]`; Node.json/Gate.json variants `additionalProperties: false`; tests unknown_node_type_fails_deserialization / unknown_gate_kind_fails_deserialization / unknown_field_rejected.",
+      "required_fix": null
+    },
+    {
+      "severity": "minor",
+      "location": "superagent/crates/contracts/src/lib.rs (ts-rs derives)",
+      "detail": "ts-rs emits a parse warning that deny_unknown_fields is ignored in TS export. Cosmetic only; the generated bindings/ts/*.ts types are committed and correct (internally tagged unions, u64->bigint, u32->number, VarType snake_case union).",
+      "evidence": "bindings/ts/{Workflow,Node,NodeKind,Gate,GateKind,ArtifactSpec,VariableSpec,VarType}.ts in diff.",
+      "required_fix": null
+    },
+    {
+      "severity": "minor",
+      "location": "superagent/evidence/p2-1/test-output.log (r2 updated log not in inlined diff)",
+      "detail": "The r2 note asserts 21 passed + 8 export passed with an updated test-output.log, but the inlined authoritative diff contains only the 20 contracts files; the evidence directory files are not part of the diff. Test pass status was instead verified by static analysis: all 21 #[test] functions in tests/dry_run.rs are in the diff and their assertions provably match the implementation (e.g. node_schema_loop_bounds_at_schema_level asserts \"minimum\":1.0, which is present in the committed Node.json), and the inline r1 log shows the shared 20 tests passing at head 6e65cf90e. Read-only review prohibited re-execution, so no independent 21/21 run was possible. This is an evidence-completeness caveat, not a functional gap: the acceptance criteria are established by the in-diff test code and schema artifacts.",
+      "evidence": "tests/dry_run.rs (21 tests) plus inline r1 test-output.log (20 passed); diff stat lists 20 contracts files with no superagent/evidence/p2-1/ entries.",
+      "required_fix": null
+    }
+  ]
+}
