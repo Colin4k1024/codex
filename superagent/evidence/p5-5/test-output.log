@@ -1,0 +1,86 @@
+$ cargo +1.99.1 test
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+   Compiling memchr v2.8.3
+   Compiling itoa v1.0.19
+   Compiling serde_core v1.0.229
+   Compiling zmij v1.0.23
+   Compiling zerocopy v0.8.63
+   Compiling once_cell v1.21.4
+   Compiling cfg-if v1.0.5
+   Compiling dyn-clone v1.0.20
+   Compiling thiserror v2.0.21
+   Compiling smallvec v1.16.5
+   Compiling fallible-streaming-iterator v0.1.9
+   Compiling libsqlite3-sys v0.30.1
+   Compiling fallible-iterator v0.3.0
+   Compiling bitflags v2.13.2
+   Compiling serde_json v1.0.154
+   Compiling serde v1.0.229
+   Compiling ts-rs v11.1.0
+   Compiling schemars v0.8.22
+   Compiling ahash v0.8.12
+   Compiling hashbrown v0.14.5
+   Compiling superagent-contracts v0.1.0 (/private/tmp/sa-p5-5-wt/superagent/crates/contracts)
+warning: failed to parse serde attribute
+  | 
+  | deny_unknown_fields 
+  | 
+  = note: ts-rs failed to parse this attribute. It will be ignored.
+warning: failed to parse serde attribute
+  | 
+  | deny_unknown_fields 
+  | 
+  = note: ts-rs failed to parse this attribute. It will be ignored.
+   Compiling hashlink v0.9.1
+   Compiling superagent-workbench v0.1.0 (/private/tmp/sa-p5-5-wt/superagent/crates/workbench)
+   Compiling rusqlite v0.32.1
+   Compiling superagent-storage v0.1.0 (/private/tmp/sa-p5-5-wt/superagent/crates/storage)
+   Compiling superagent-orchestrator v0.1.0 (/private/tmp/sa-p5-5-wt/superagent/crates/orchestrator)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.95s
+     Running unittests src/lib.rs (target/debug/deps/superagent_workbench-4af1a52ae6c70b1d)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/workbench.rs (target/debug/deps/workbench-bd57ddda2c8ef52a)
+
+running 6 tests
+test app_space_tenant_resource_view ... ok
+test canvas_visualization_metadata ... ok
+test invalid_canvas_rejected ... ok
+test canvas_generates_valid_workflow ... ok
+test canvas_json_schema_roundtrip ... ok
+test canvas_workflow_executes_via_orchestrator ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests superagent_workbench
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+test-exit=0
+--- stability run 1 ---
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+--- stability run 2 ---
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+--- stability run 3 ---
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+--- stability run 4 ---
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+--- stability run 5 ---
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
