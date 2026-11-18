@@ -43,7 +43,10 @@ fn unknown_gate_kind_fails_deserialization() {
 
 #[test]
 fn unknown_field_rejected() {
-    let bad = VALID.replace("\"schema_version\": 1,", "\"schema_version\": 1, \"surprise\": true,");
+    let bad = VALID.replace(
+        "\"schema_version\": 1,",
+        "\"schema_version\": 1, \"surprise\": true,",
+    );
     assert!(serde_json::from_str::<Workflow>(&bad).is_err());
 }
 
@@ -51,17 +54,34 @@ fn unknown_field_rejected() {
 fn dag_cycle_detected() {
     let mut w = wf();
     // plan -> implement -> verify -> fix-loop; make plan depend on fix-loop.
-    w.nodes.iter_mut().find(|n| n.id == "plan").unwrap().depends_on.push("fix-loop".into());
+    w.nodes
+        .iter_mut()
+        .find(|n| n.id == "plan")
+        .unwrap()
+        .depends_on
+        .push("fix-loop".into());
     let errs = dry_run(&w, &ctx());
-    assert!(errs.iter().any(|e| e.message.contains("DAG cycle detected")), "{errs:?}");
+    assert!(
+        errs.iter()
+            .any(|e| e.message.contains("DAG cycle detected")),
+        "{errs:?}"
+    );
 }
 
 #[test]
 fn self_dependency_detected() {
     let mut w = wf();
-    w.nodes.iter_mut().find(|n| n.id == "plan").unwrap().depends_on.push("plan".into());
+    w.nodes
+        .iter_mut()
+        .find(|n| n.id == "plan")
+        .unwrap()
+        .depends_on
+        .push("plan".into());
     let errs = dry_run(&w, &ctx());
-    assert!(errs.iter().any(|e| e.message.contains("depends on itself")), "{errs:?}");
+    assert!(
+        errs.iter().any(|e| e.message.contains("depends on itself")),
+        "{errs:?}"
+    );
 }
 
 #[test]
@@ -73,34 +93,56 @@ fn loop_missing_required_fields_fails_deserialization() {
         let loop_node = nodes.iter_mut().find(|n| n["id"] == "fix-loop").unwrap();
         assert!(loop_node.as_object_mut().unwrap().remove(field).is_some());
         let err = serde_json::from_value::<Workflow>(bad).unwrap_err();
-        assert!(err.to_string().contains(&format!("missing field `{field}`")), "{err}");
+        assert!(
+            err.to_string()
+                .contains(&format!("missing field `{field}`")),
+            "{err}"
+        );
     }
 }
 
 #[test]
 fn loop_zero_bounds_fail_dry_run() {
     let mut w = wf();
-    if let NodeKind::Loop { max_attempts, wall_timeout_secs, .. } =
-        &mut w.nodes.iter_mut().find(|n| n.id == "fix-loop").unwrap().kind
+    if let NodeKind::Loop {
+        max_attempts,
+        wall_timeout_secs,
+        ..
+    } = &mut w
+        .nodes
+        .iter_mut()
+        .find(|n| n.id == "fix-loop")
+        .unwrap()
+        .kind
     {
         *max_attempts = 0;
         *wall_timeout_secs = 0;
     }
     let errs = dry_run(&w, &ctx());
-    assert!(errs.iter().any(|e| e.message.contains("max_attempts must be >= 1")));
-    assert!(errs.iter().any(|e| e.message.contains("wall_timeout_secs must be > 0")));
+    assert!(errs
+        .iter()
+        .any(|e| e.message.contains("max_attempts must be >= 1")));
+    assert!(errs
+        .iter()
+        .any(|e| e.message.contains("wall_timeout_secs must be > 0")));
 }
 
 #[test]
 fn loop_unknown_gate_fails() {
     let mut w = wf();
-    if let NodeKind::Loop { gate, .. } =
-        &mut w.nodes.iter_mut().find(|n| n.id == "fix-loop").unwrap().kind
+    if let NodeKind::Loop { gate, .. } = &mut w
+        .nodes
+        .iter_mut()
+        .find(|n| n.id == "fix-loop")
+        .unwrap()
+        .kind
     {
         *gate = "no-such-gate".into();
     }
     let errs = dry_run(&w, &ctx());
-    assert!(errs.iter().any(|e| e.message.contains("unknown gate 'no-such-gate'")));
+    assert!(errs
+        .iter()
+        .any(|e| e.message.contains("unknown gate 'no-such-gate'")));
 }
 
 #[test]
@@ -112,7 +154,9 @@ fn verification_requires_gates() {
         gates.clear();
     }
     let errs = dry_run(&w, &ctx());
-    assert!(errs.iter().any(|e| e.message.contains("requires at least one gate")));
+    assert!(errs
+        .iter()
+        .any(|e| e.message.contains("requires at least one gate")));
 }
 
 #[test]
@@ -120,7 +164,12 @@ fn undeclared_variable_reference_fails() {
     let bad = VALID.replace("${workspace}/tests", "${missing_var}/tests");
     let w: Workflow = serde_json::from_str(&bad).unwrap();
     let errs = dry_run(&w, &ctx());
-    assert!(errs.iter().any(|e| e.message.contains("undeclared variable reference '${missing_var}'")), "{errs:?}");
+    assert!(
+        errs.iter().any(|e| e
+            .message
+            .contains("undeclared variable reference '${missing_var}'")),
+        "{errs:?}"
+    );
 }
 
 #[test]
@@ -135,9 +184,12 @@ fn required_variable_without_value_fails() {
 #[test]
 fn variable_type_mismatch_fails() {
     let mut c = ctx();
-    c.variables.insert("workspace".into(), serde_json::json!(42));
+    c.variables
+        .insert("workspace".into(), serde_json::json!(42));
     let errs = dry_run(&wf(), &c);
-    assert!(errs.iter().any(|e| e.message.contains("does not match type")));
+    assert!(errs
+        .iter()
+        .any(|e| e.message.contains("does not match type")));
 }
 
 #[test]
@@ -145,7 +197,9 @@ fn unavailable_command_ref_fails() {
     let mut c = ctx();
     c.command_catalog.clear();
     let errs = dry_run(&wf(), &c);
-    assert!(errs.iter().any(|e| e.message.contains("not in team command catalog")));
+    assert!(errs
+        .iter()
+        .any(|e| e.message.contains("not in team command catalog")));
 }
 
 #[test]
@@ -153,7 +207,9 @@ fn unavailable_program_fails() {
     let mut c = ctx();
     c.programs.clear();
     let errs = dry_run(&wf(), &c);
-    assert!(errs.iter().any(|e| e.message.contains("not in available programs catalog")));
+    assert!(errs
+        .iter()
+        .any(|e| e.message.contains("not in available programs catalog")));
 }
 
 #[test]
@@ -161,7 +217,9 @@ fn unavailable_model_fails() {
     let mut w = wf();
     w.nodes[0].model = Some("nonexistent-model".into());
     let errs = dry_run(&w, &ctx());
-    assert!(errs.iter().any(|e| e.message.contains("model 'nonexistent-model' not available")));
+    assert!(errs.iter().any(|e| e
+        .message
+        .contains("model 'nonexistent-model' not available")));
 }
 
 #[test]
@@ -171,7 +229,9 @@ fn unknown_artifact_and_schema_ref_fail() {
         outputs.push("ghost-artifact".into());
     }
     let errs = dry_run(&w, &ctx());
-    assert!(errs.iter().any(|e| e.message.contains("unknown artifact 'ghost-artifact'")));
+    assert!(errs
+        .iter()
+        .any(|e| e.message.contains("unknown artifact 'ghost-artifact'")));
 
     let mut c = ctx();
     c.schema_registry.clear();
@@ -192,8 +252,14 @@ fn dry_run_is_pure_no_execution_surface() {
     // Structural guard: the contracts crate must contain no process/command
     // execution surface; dry-run can never start a model or command.
     let src = include_str!("../src/lib.rs");
-    assert!(!src.contains("std::process"), "process execution found in contracts");
-    assert!(!src.contains("Command::new"), "command spawn found in contracts");
+    assert!(
+        !src.contains("std::process"),
+        "process execution found in contracts"
+    );
+    assert!(
+        !src.contains("Command::new"),
+        "command spawn found in contracts"
+    );
     assert!(!src.contains("codex_"), "engine DTO leakage into contracts");
 }
 
@@ -210,5 +276,8 @@ fn node_schema_enumerates_known_types_only() {
 fn node_schema_loop_bounds_at_schema_level() {
     let schema = serde_json::to_value(schemars::schema_for!(superagent_contracts::Node)).unwrap();
     let text = schema.to_string();
-    assert!(text.contains("\"minimum\":1.0"), "loop bounds must be enforced in JSON Schema: {text}");
+    assert!(
+        text.contains("\"minimum\":1.0"),
+        "loop bounds must be enforced in JSON Schema: {text}"
+    );
 }
