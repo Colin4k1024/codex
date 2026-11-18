@@ -1,31 +1,52 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>YourAgent</title>
-    <style>
-      :root { color-scheme: light dark; --accent: #4f7cff; }
-      body { font-family: -apple-system, system-ui, sans-serif; margin: 0; padding: 2rem;
-             background: Canvas; color: CanvasText; }
-      h1 { font-size: 1.4rem; }
-      .badge { display: inline-block; padding: .2rem .6rem; border-radius: .5rem;
-               background: var(--accent); color: #fff; font-size: .8rem; }
-      pre { background: rgba(127,127,127,.12); padding: 1rem; border-radius: .5rem;
-            overflow: auto; font-size: .85rem; }
-      .muted { opacity: .7; font-size: .85rem; }
-    </style>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>CloudCLI UI</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" crossorigin="use-credentials"  />
+    
+    <!-- iOS Safari PWA Meta Tags -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Claude UI" />
+    
+    <!-- iOS Safari Icons -->
+    <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-192x192.png" />
+    
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="msapplication-TileColor" content="#ffffff" />
+    
+    <!-- Prevent zoom on iOS -->
+    <meta name="format-detection" content="telephone=no" />
+    <script type="module" crossorigin src="/assets/index-DLvpo4h1.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/vendor-react-CdSTmIF1.js">
+    <link rel="modulepreload" crossorigin href="/assets/vendor-codemirror-C8f1vU1x.js">
+    <link rel="modulepreload" crossorigin href="/assets/vendor-xterm-CJZjLICi.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-B1XAhG_4.css">
   </head>
   <body>
-    <h1>YourAgent <span class="badge">desktop</span></h1>
-    <p class="muted">Tauri 2 原生宿主 · 系统 WebView · 复用网关 API（非直连引擎）</p>
-    <p>产品状态（bootstrap 命令）：</p>
-    <pre id="status">bootstrapping…</pre>
+    <div id="root"></div>
+    
+    <!-- Service Worker Registration -->
     <script>
-      const invoke = window.__TAURI__.core.invoke;
-      invoke("bootstrap")
-        .then((s) => { document.getElementById("status").textContent = JSON.stringify(s, null, 2); })
-        .catch((e) => { document.getElementById("status").textContent = "error: " + e; });
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+              console.log('SW registered: ', registration);
+            })
+            .catch(registrationError => {
+              console.log('SW registration failed: ', registrationError);
+            });
+        });
+      }
     </script>
   </body>
 </html>
