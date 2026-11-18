@@ -1,0 +1,6 @@
+{
+  "budgetLimitedObserved": true,
+  "budgetAccountingObserved": true,
+  "queueIdleDispatchOk": true,
+  "allPass": true
+}
