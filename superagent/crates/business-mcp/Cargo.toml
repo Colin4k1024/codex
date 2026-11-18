@@ -1,0 +1,13 @@
+[package]
+name = "superagent-business-mcp"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+description = "SuperAgent P4-5 business MCP: server-side identity/param/permission/idempotency validation, read-only-first fixture backend, write authorization+audit+anti-replay, per-app tenant/channel identity"
+
+[workspace]
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+superagent-iam = { path = "../iam" }
