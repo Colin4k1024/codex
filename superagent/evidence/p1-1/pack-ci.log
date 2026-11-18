@@ -1,0 +1,20 @@
+re-export comparison: PASS (5b26dcb803642b472a2d91d44cc0cf745319b30fbc61cd78e6a9cf5f58c204a7)
+OK: superagent-meta-agent v0.1.0 digest=5b26dcb803642b472a2d91d44cc0cf745319b30fbc61cd78e6a9cf5f58c204a7 files=6
+OK: superagent-meta-agent v0.1.0 digest=5b26dcb803642b472a2d91d44cc0cf745319b30fbc61cd78e6a9cf5f58c204a7 files=6
+test_01_committed_manifest_verifies (__main__.PackTests.test_01_committed_manifest_verifies) ... ok
+test_02_export_deterministic (__main__.PackTests.test_02_export_deterministic) ... ok
+test_03_creation_order_independent (__main__.PackTests.test_03_creation_order_independent) ... ok
+test_04_clean_environment_verify (__main__.PackTests.test_04_clean_environment_verify) ... ok
+test_05_tamper_detected (__main__.PackTests.test_05_tamper_detected) ... ok
+test_06_manifest_schema_enforced (__main__.PackTests.test_06_manifest_schema_enforced) ... ok
+test_07_pinned_digest_binding (__main__.PackTests.test_07_pinned_digest_binding) ... ok
+test_08_symlink_rejected (__main__.PackTests.test_08_symlink_rejected) ... ok
+test_09_license_coverage_enforced (__main__.PackTests.test_09_license_coverage_enforced) ... ok
+test_10_missing_licenses_file (__main__.PackTests.test_10_missing_licenses_file) ... ok
+test_11_file_count_mismatch (__main__.PackTests.test_11_file_count_mismatch) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 1.024s
+
+OK
+pack-ci: ALL PASS
