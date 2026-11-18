@@ -1,0 +1,103 @@
+{
+  "verdict": "APPROVE",
+  "commit_range": "eccf1edfb..98c1071c5",
+  "issue": "#80",
+  "paths_reviewed": [
+    "superagent/crates/storage/.gitignore",
+    "superagent/crates/storage/Cargo.toml",
+    "superagent/crates/storage/src/lib.rs",
+    "superagent/crates/storage/tests/storage.rs",
+    "superagent/evidence/p2-3/purity-scan.txt",
+    "superagent/evidence/p2-3/storage-conclusion.md",
+    "superagent/evidence/p2-3/test-output.log"
+  ],
+  "summary": "All issue #80 acceptance criteria are proven by code in the diff plus model-free tests. The diff introduces only the independent superagent-storage crate (5-table SQLite schema, exclusive run lease, transactional intent persist-then-bind, injectable breakpoints, monotonic event sequence, bounded summaries, artifact references) and evidence files. No codex-rs core files are touched, no codex-* dependencies or codex_ symbols are added, no process/model execution is present, and no secrets are committed. The provided test log (16 passed) is internally consistent with the 16 #[test] functions in the diff. Two minor, non-blocking observations are recorded; neither weakens the acceptance criteria.",
+  "criteria": [
+    {
+      "id": "meta",
+      "criterion": "Independent crate superagent/crates/storage, edition 2021, [workspace] root, deps rusqlite(bundled)/serde/serde_json/superagent-contracts(path), zero codex-* deps/symbols/process/model execution",
+      "status": "proven",
+      "evidence": "Cargo.toml: edition 2021, [workspace], only rusqlite/serde/serde_json/superagent-contracts; lib.rs contains no process spawn or model call; purity-scan.txt shows no codex crate in tree"
+    },
+    {
+      "id": "task1",
+      "criterion": "SCHEMA_V1 creates runs/nodes/attempts/events/artifacts + indexes; migrate() via user_version; schema_version() readback; idempotent-reopen test",
+      "status": "proven",
+      "evidence": "SCHEMA_V1 has all five tables plus idx_events_run_seq and idx_attempts_run; migrate()/schema_version() use user_version pragma; migration_is_idempotent_and_versions reopens and re-reads data"
+    },
+    {
+      "id": "task2",
+      "criterion": "RunSpec fixed identity fields; create_run/get_run; field-by-field round trip + duplicate rejection",
+      "status": "proven",
+      "evidence": "RunSpec has workflow_digest/bundle_digest/input_summary/repo_identity/start_head/config_summary; run_fixed_identity_round_trips asserts every field; duplicate_run_id_rejected asserts Sqlite error via PRIMARY KEY"
+    },
+    {
+      "id": "task3",
+      "criterion": "attempts thread_id/turn_id/process_id; persist_intent committed in its own transaction as intent_persisted; bind_external_ids in a separate transaction as bound; send_intent chains both with breakpoint between commits",
+      "status": "proven",
+      "evidence": "attempts table has the three columns; persist_intent uses unchecked_transaction + commit then hits AfterIntentPersist; bind_external_ids opens a separate transaction; send_intent calls persist_intent then bind_external_ids; unbound_intents recovers intent_persisted rows"
+    },
+    {
+      "id": "task4",
+      "criterion": "Exclusive lease (conditional UPDATE, 0 rows -> LeaseHeld/release/expiry takeover); events.seq AUTOINCREMENT monotonic + events_after replay; MAX_SUMMARY_BYTES=4096 with explicit SummaryTooLarge (no silent truncation); artifact stores path/digest/size/schema_ref/bounded summary only",
+      "status": "proven",
+      "evidence": "acquire_lease UPDATE WHERE lease_owner IS NULL OR lease_expires<=now OR lease_owner=self, 0 rows -> LeaseHeld or NotFound; events.seq INTEGER PRIMARY KEY AUTOINCREMENT; bounded() returns SummaryTooLarge when len>4096; record_artifact has path/media_type/digest/size_bytes/schema_ref/summary and no blob column"
+    },
+    {
+      "id": "breakpoints",
+      "criterion": "Breakpoint{AfterIntentPersist,BeforeExternalBind,BeforeEventAppend} + set_fault_hook/clear_fault_hook; hit() at flow boundaries with errors propagated (not swallowed)",
+      "status": "proven",
+      "evidence": "All three variants defined; hit() invokes the hook and propagates its Result; three fault tests assert FaultInjected errors surface"
+    },
+    {
+      "id": "txn_tests",
+      "criterion": "Transaction consistency tests",
+      "status": "proven",
+      "evidence": "intent_persists_then_binds_in_separate_transactions; fault_between_persist_and_bind_leaves_recoverable_intent; fault_after_persist_breakpoint_is_injectable; duplicate_attempt_no_rejected (UNIQUE(run_id,node_id,attempt_no)) all present"
+    },
+    {
+      "id": "lease_tests",
+      "criterion": "Concurrent lease contention rejected across two Store connections",
+      "status": "proven",
+      "evidence": "exclusive_lease_contention_rejected (A holds -> B LeaseHeld; A renews; A releases -> B acquires; A cannot steal B's live lease); expired_lease_can_be_taken_over; lease_on_missing_run_is_not_found; WAL+busy_timeout=5000 set in from_connection"
+    },
+    {
+      "id": "other_tests",
+      "criterion": "event sequence/replay, oversize summaries (input/event/artifact + exact-cap accepted), artifact-without-blob, idempotent seed, explicit attempt state transitions",
+      "status": "proven",
+      "evidence": "event_sequence_is_monotonic_and_replayable; oversize_summaries_rejected_explicitly (input/event/artifact + at-cap accepted); artifact_reference_stored_without_blob; seed_nodes_from_contracts_workflow (idempotent); attempt_state_transitions_explicit all present and match test log"
+    },
+    {
+      "id": "evidence",
+      "criterion": "Evidence is real and consistent; 16/16 tests",
+      "status": "proven",
+      "evidence": "tests/storage.rs contains exactly 16 #[test] functions; test-output.log lists those 16 names and reports 16 passed; no fabricated success detected"
+    },
+    {
+      "id": "scope_secrets",
+      "criterion": "No out-of-scope codex-rs core changes; no secrets; no prompts/skills context-budget impact",
+      "status": "proven",
+      "evidence": "All 7 changed files are new files under superagent/; no credential material in the diff; nothing touches agent prompts/skills"
+    },
+    {
+      "id": "merge",
+      "criterion": "Merge ordering #72 -> #78 -> #80",
+      "status": "informed",
+      "evidence": "Stated consistently in storage-conclusion.md; ordering itself is outside this diff and not independently verifiable from the provided diff"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "minor",
+      "location": "src/lib.rs bind_external_ids / append_event",
+      "detail": "BeforeExternalBind fires before the bind transaction opens and BeforeEventAppend fires before the INSERT is issued, rather than immediately before their commits. The observable post-fault state matches the acceptance (intent left unbound; event not appended) and is covered by tests, so #80 is unaffected; the crate/doc comment wording 'commit boundary' slightly overstates the exact hook position. #84 can still inject the required faults between persist and bind.",
+      "required_fix": null
+    },
+    {
+      "severity": "minor",
+      "location": "tests/storage.rs duplicate_run_id_rejected / duplicate_attempt_no_rejected",
+      "detail": "Duplicate rejection surfaces as a raw StoreError::Sqlite constraint violation rather than a dedicated typed duplicate error. Rejection behavior is correct and the required tests exist, so this is a readability/API-precision note only.",
+      "required_fix": null
+    }
+  ]
+}
