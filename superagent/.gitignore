@@ -13,3 +13,7 @@ evidence/p0-1/schema-engine-experimental/
 # Python cache
 __pycache__/
 *.pyc
+# P1-3 runtime probe home (auth + sessions, never commit)
+evidence/p1-3/home-p1-3/
+# Bulk user-home metadata snapshots (large; config hashes committed separately)
+evidence/p1-4/*.bulk.json

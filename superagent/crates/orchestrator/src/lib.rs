@@ -46,7 +46,7 @@ pub struct GateOutcome {
 impl GateOutcome {
     /// Evidence-backed pass: explicit success plus a durable evidence reference.
     pub fn is_proven(&self) -> bool {
-        self.passed && self.evidence_ref.as_ref().map_or(false, |s| !s.is_empty())
+        self.passed && self.evidence_ref.as_ref().is_some_and(|s| !s.is_empty())
     }
 }
 
@@ -74,8 +74,14 @@ pub struct ExecOutcome {
 
 impl ExecOutcome {
     pub fn completed(gates: Vec<GateOutcome>, tokens: u64, secs: u64) -> Self {
-        ExecOutcome { kind: ExecKind::Completed, tokens_used: tokens, elapsed_secs: secs,
-                      gates, artifacts: vec![], detail: String::new() }
+        ExecOutcome {
+            kind: ExecKind::Completed,
+            tokens_used: tokens,
+            elapsed_secs: secs,
+            gates,
+            artifacts: vec![],
+            detail: String::new(),
+        }
     }
 }
 
@@ -98,8 +104,12 @@ pub struct Policy {
 
 impl Default for Policy {
     fn default() -> Self {
-        Policy { max_attempts: 3, max_tokens: 1_000_000, max_wall_secs: 3600,
-                 non_idempotent: BTreeSet::new() }
+        Policy {
+            max_attempts: 3,
+            max_tokens: 1_000_000,
+            max_wall_secs: 3600,
+            non_idempotent: BTreeSet::new(),
+        }
     }
 }
 
@@ -134,7 +144,10 @@ pub fn topo_order(wf: &Workflow) -> Result<Vec<String>, PlanError> {
     for node in &wf.nodes {
         for dep in &node.depends_on {
             if !ids.contains(dep.as_str()) {
-                return Err(PlanError(format!("node '{}' depends on unknown '{}'", node.id, dep)));
+                return Err(PlanError(format!(
+                    "node '{}' depends on unknown '{}'",
+                    node.id, dep
+                )));
             }
             if dep == &node.id {
                 return Err(PlanError(format!("node '{}' depends on itself", node.id)));
@@ -144,7 +157,11 @@ pub fn topo_order(wf: &Workflow) -> Result<Vec<String>, PlanError> {
         }
     }
     // Deterministic tie-break by node id for reproducible serial scheduling.
-    let mut queue: VecDeque<&str> = indeg.iter().filter(|(_, d)| **d == 0).map(|(id, _)| *id).collect();
+    let mut queue: VecDeque<&str> = indeg
+        .iter()
+        .filter(|(_, d)| **d == 0)
+        .map(|(id, _)| *id)
+        .collect();
     let mut order = Vec::new();
     while let Some(id) = queue.pop_front() {
         order.push(id.to_string());
@@ -153,14 +170,22 @@ pub fn topo_order(wf: &Workflow) -> Result<Vec<String>, PlanError> {
             for n in next {
                 let d = indeg.get_mut(n).unwrap();
                 *d -= 1;
-                if *d == 0 { ready.push(n); }
+                if *d == 0 {
+                    ready.push(n);
+                }
             }
             ready.sort();
-            for n in ready { queue.push_back(n); }
+            for n in ready {
+                queue.push_back(n);
+            }
         }
     }
     if order.len() != ids.len() {
-        let cyclic: Vec<&str> = indeg.iter().filter(|(_, d)| **d > 0).map(|(id, _)| *id).collect();
+        let cyclic: Vec<&str> = indeg
+            .iter()
+            .filter(|(_, d)| **d > 0)
+            .map(|(id, _)| *id)
+            .collect();
         return Err(PlanError(format!("DAG cycle among nodes: {cyclic:?}")));
     }
     Ok(order)
@@ -179,7 +204,9 @@ pub fn downstream(wf: &Workflow, changed: &str) -> BTreeSet<String> {
     while let Some(cur) = stack.pop() {
         if let Some(next) = adj.get(cur) {
             for n in next {
-                if out.insert(n.to_string()) { stack.push(n); }
+                if out.insert(n.to_string()) {
+                    stack.push(n);
+                }
             }
         }
     }
@@ -202,15 +229,22 @@ impl Orchestrator {
     pub fn plan(&self) -> Result<Vec<String>, PlanError> {
         let errs = dry_run(&self.wf, &self.ctx);
         if !errs.is_empty() {
-            let msg = errs.iter().map(|e| format!("{}: {}", e.location, e.message))
-                          .collect::<Vec<_>>().join("; ");
+            let msg = errs
+                .iter()
+                .map(|e| format!("{}: {}", e.location, e.message))
+                .collect::<Vec<_>>()
+                .join("; ");
             return Err(PlanError(msg));
         }
         topo_order(&self.wf)
     }
 
     fn node(&self, id: &str) -> &Node {
-        self.wf.nodes.iter().find(|n| n.id == id).expect("node in topo order")
+        self.wf
+            .nodes
+            .iter()
+            .find(|n| n.id == id)
+            .expect("node in topo order")
     }
 
     /// Gates a node must prove to succeed. Verification nodes list their gates;
@@ -234,11 +268,17 @@ impl Orchestrator {
         now: i64,
     ) -> Result<RunReport, PlanError> {
         let order = self.plan()?;
-        store.create_run(spec, now).map_err(|e| PlanError(e.to_string()))?;
-        store.seed_nodes(run_id, &self.wf).map_err(|e| PlanError(e.to_string()))?;
+        store
+            .create_run(spec, now)
+            .map_err(|e| PlanError(e.to_string()))?;
+        store
+            .seed_nodes(run_id, &self.wf)
+            .map_err(|e| PlanError(e.to_string()))?;
 
-        let mut states: BTreeMap<String, NodeState> =
-            order.iter().map(|id| (id.clone(), NodeState::Pending)).collect();
+        let mut states: BTreeMap<String, NodeState> = order
+            .iter()
+            .map(|id| (id.clone(), NodeState::Pending))
+            .collect();
         let mut reports: BTreeMap<String, NodeReport> = BTreeMap::new();
         let mut tokens_used = 0u64;
         let mut wall_secs = 0u64;
@@ -249,25 +289,50 @@ impl Orchestrator {
 
             // Failure / invalidation propagation: a dependency that did not
             // succeed blocks this node (never silently skipped to success).
-            let blocked_dep = node.depends_on.iter()
+            let blocked_dep = node
+                .depends_on
+                .iter()
                 .find(|d| states.get(*d) != Some(&NodeState::Succeeded));
             if let Some(dep) = blocked_dep {
                 let st = states.get(dep).copied().unwrap_or(NodeState::Pending);
                 let reason = format!("dependency '{dep}' not succeeded ({st:?})");
                 states.insert(id.clone(), NodeState::Blocked);
-                reports.insert(id.clone(), NodeReport {
-                    state: NodeState::Blocked, attempts: 0, reason, proven_gates: vec![] });
-                let _ = store.append_event(run_id, "node_blocked", &format!("{id}: dependency {dep}"), clock);
+                reports.insert(
+                    id.clone(),
+                    NodeReport {
+                        state: NodeState::Blocked,
+                        attempts: 0,
+                        reason,
+                        proven_gates: vec![],
+                    },
+                );
+                let _ = store.append_event(
+                    run_id,
+                    "node_blocked",
+                    &format!("{id}: dependency {dep}"),
+                    clock,
+                );
                 continue;
             }
 
             // Wall budget exhausted -> cancel remaining work explicitly.
             if wall_secs >= self.policy.max_wall_secs {
                 states.insert(id.clone(), NodeState::Cancelling);
-                reports.insert(id.clone(), NodeReport {
-                    state: NodeState::Cancelling, attempts: 0,
-                    reason: "wall budget exhausted".into(), proven_gates: vec![] });
-                let _ = store.append_event(run_id, "node_cancelling", &format!("{id}: wall budget"), clock);
+                reports.insert(
+                    id.clone(),
+                    NodeReport {
+                        state: NodeState::Cancelling,
+                        attempts: 0,
+                        reason: "wall budget exhausted".into(),
+                        proven_gates: vec![],
+                    },
+                );
+                let _ = store.append_event(
+                    run_id,
+                    "node_cancelling",
+                    &format!("{id}: wall budget"),
+                    clock,
+                );
                 continue;
             }
 
@@ -286,7 +351,12 @@ impl Orchestrator {
                 if tokens_used + node_budget > self.policy.max_tokens {
                     final_state = NodeState::Blocked;
                     reason = "token budget exhausted".into();
-                    let _ = store.append_event(run_id, "node_blocked", &format!("{id}: token budget"), clock);
+                    let _ = store.append_event(
+                        run_id,
+                        "node_blocked",
+                        &format!("{id}: token budget"),
+                        clock,
+                    );
                     break;
                 }
 
@@ -296,7 +366,12 @@ impl Orchestrator {
                 let intent = serde_json::json!({ "node": id, "attempt": attempt }).to_string();
                 match store.persist_intent(run_id, id, attempt, &intent, clock) {
                     Ok(aid) => {
-                        let _ = store.bind_external_ids(aid, Some(run_id), Some(&format!("{id}-a{attempt}")), None);
+                        let _ = store.bind_external_ids(
+                            aid,
+                            Some(run_id),
+                            Some(&format!("{id}-a{attempt}")),
+                            None,
+                        );
                         let _ = store.set_attempt_state(aid, AttemptState::Running);
                     }
                     Err(e) => {
@@ -310,24 +385,43 @@ impl Orchestrator {
                 tokens_used += outcome.tokens_used;
                 wall_secs += outcome.elapsed_secs;
                 clock += outcome.elapsed_secs as i64;
-                let _ = store.append_event(run_id, "attempt_finished",
-                    &format!("{id} a{attempt} {:?} tokens={}", outcome.kind, outcome.tokens_used), clock);
+                let _ = store.append_event(
+                    run_id,
+                    "attempt_finished",
+                    &format!(
+                        "{id} a{attempt} {:?} tokens={}",
+                        outcome.kind, outcome.tokens_used
+                    ),
+                    clock,
+                );
 
                 match outcome.kind {
                     ExecKind::Completed => {
                         states.insert(id.clone(), NodeState::Verifying);
                         // Success requires EVERY required gate proven by evidence.
-                        let proven_set: BTreeSet<&str> = outcome.gates.iter()
-                            .filter(|g| g.is_proven()).map(|g| g.gate_id.as_str()).collect();
-                        let missing: Vec<&String> = required.iter()
-                            .filter(|g| !proven_set.contains(g.as_str())).collect();
+                        let proven_set: BTreeSet<&str> = outcome
+                            .gates
+                            .iter()
+                            .filter(|g| g.is_proven())
+                            .map(|g| g.gate_id.as_str())
+                            .collect();
+                        let missing: Vec<&String> = required
+                            .iter()
+                            .filter(|g| !proven_set.contains(g.as_str()))
+                            .collect();
                         if required.is_empty() {
                             // Capability node: success needs at least one proven gate
                             // OR an explicit artifact evidence; never bare NL.
-                            if outcome.gates.iter().any(|g| g.is_proven()) || !outcome.artifacts.is_empty() {
+                            if outcome.gates.iter().any(|g| g.is_proven())
+                                || !outcome.artifacts.is_empty()
+                            {
                                 final_state = NodeState::Succeeded;
-                                proven = outcome.gates.iter().filter(|g| g.is_proven())
-                                    .map(|g| g.gate_id.clone()).collect();
+                                proven = outcome
+                                    .gates
+                                    .iter()
+                                    .filter(|g| g.is_proven())
+                                    .map(|g| g.gate_id.clone())
+                                    .collect();
                                 reason = "capability evidence present".into();
                             } else {
                                 final_state = NodeState::Failed;
@@ -342,7 +436,12 @@ impl Orchestrator {
                             let detail = format!("unproven gates: {missing:?}");
                             if idempotent && attempt < self.policy.max_attempts {
                                 reason = format!("{detail}; repairing (attempt {attempt})");
-                                let _ = store.append_event(run_id, "gate_repair", &format!("{id}: {detail}"), clock);
+                                let _ = store.append_event(
+                                    run_id,
+                                    "gate_repair",
+                                    &format!("{id}: {detail}"),
+                                    clock,
+                                );
                                 continue;
                             }
                             final_state = NodeState::Failed;
@@ -355,11 +454,16 @@ impl Orchestrator {
                     }
                     ExecKind::RetryableFailure => {
                         if idempotent && attempt < self.policy.max_attempts {
-                            reason = format!("retryable failure: {}; attempt {attempt}", outcome.detail);
+                            reason =
+                                format!("retryable failure: {}; attempt {attempt}", outcome.detail);
                             continue;
                         }
                         // Non-idempotent nodes are never blindly retried.
-                        final_state = if idempotent { NodeState::Failed } else { NodeState::Uncertain };
+                        final_state = if idempotent {
+                            NodeState::Failed
+                        } else {
+                            NodeState::Uncertain
+                        };
                         reason = format!("retryable failure (no retry): {}", outcome.detail);
                     }
                     ExecKind::FatalFailure => {
@@ -374,13 +478,28 @@ impl Orchestrator {
                 break;
             }
 
-            if attempt >= self.policy.max_attempts && final_state == NodeState::Failed && reason.is_empty() {
+            if attempt >= self.policy.max_attempts
+                && final_state == NodeState::Failed
+                && reason.is_empty()
+            {
                 reason = "max attempts exhausted".into();
             }
             states.insert(id.clone(), final_state);
-            reports.insert(id.clone(), NodeReport {
-                state: final_state, attempts: attempt, reason, proven_gates: proven });
-            let _ = store.append_event(run_id, "node_final", &format!("{id}: {final_state:?}"), clock);
+            reports.insert(
+                id.clone(),
+                NodeReport {
+                    state: final_state,
+                    attempts: attempt,
+                    reason,
+                    proven_gates: proven,
+                },
+            );
+            let _ = store.append_event(
+                run_id,
+                "node_final",
+                &format!("{id}: {final_state:?}"),
+                clock,
+            );
         }
 
         // Aggregate run state: success only if every node succeeded. A genuine
@@ -403,6 +522,12 @@ impl Orchestrator {
         let _ = store.set_run_state(run_id, &format!("{run_state:?}").to_lowercase());
         let _ = store.append_event(run_id, "run_final", &format!("run: {run_state:?}"), clock);
 
-        Ok(RunReport { state: run_state, nodes: reports, tokens_used, wall_secs, order })
+        Ok(RunReport {
+            state: run_state,
+            nodes: reports,
+            tokens_used,
+            wall_secs,
+            order,
+        })
     }
 }

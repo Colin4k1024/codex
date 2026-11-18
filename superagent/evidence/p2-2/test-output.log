@@ -1,0 +1,134 @@
+# P2-2 (#79) superagent-adapter — cargo test run 1
+# date: 2026-11-18T02:40:17Z
+# cmd: cargo test --offline (crate: superagent/crates/adapter)
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+   Compiling superagent-adapter v0.1.0 (/private/tmp/sa-p2-2-wt/superagent/crates/adapter)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.17s
+     Running unittests src/lib.rs (target/debug/deps/superagent_adapter-5b9c67a8eefc75bf)
+
+running 15 tests
+test reconcile::tests::terminal_and_orphan_free_is_reconciled ... ok
+test frame::tests::exact_cap_is_allowed ... ok
+test reconcile::tests::non_terminal_or_missing_is_uncertain ... ok
+test frame::tests::small_line_returned_verbatim ... ok
+test reconcile::tests::terminal_with_orphan_is_uncertain ... ok
+test frame::tests::partial_line_at_eof_is_a_frame ... ok
+test approval::tests::unknown_server_request_is_32601_never_approved ... ok
+test frame::tests::oversize_line_metered_and_drained ... ok
+test approval::tests::typed_approvals_all_declined ... ok
+test ui::tests::approval_immediate_and_flushes_pending_deltas ... ok
+test ui::tests::interval_bounds_enforced ... ok
+test ui::tests::deltas_coalesce_on_interval_terminal_immediate ... ok
+test runlog::tests::entry_larger_than_limit_is_truncated_notice ... ok
+test runlog::tests::rotation_drops_oldest_and_bounds_retained ... ok
+test ui::tests::overload_never_drops_terminal_or_deltas ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+     Running tests/acceptance.rs (target/debug/deps/acceptance-a1df60e447d0e4e5)
+
+running 19 tests
+test per_type_timeout_defaults_match_p0_6_contract ... ok
+test purity_no_core_or_model_dependencies ... ok
+test artifact_limit_explicit_error ... ok
+test oversize_frame_faults_with_explicit_error ... ok
+test request_correlation_three_way_pump ... ok
+test deferred_approval_pump_keeps_consuming ... ok
+test exit_cleanup_reaps_child ... ok
+test big_log_rotation_scaled_threshold ... ok
+test typed_approval_never_auto_approves ... ok
+test spawn_argv_env_and_pipe_wiring ... ok
+test stderr_ring_bounded ... ok
+test unknown_event_and_malformed_frame_keep_pump_alive ... ok
+test engine_crash_mid_turn_explicit_terminal_and_reconcile ... ok
+test close_kills_unresponsive_engine ... ok
+test approval_waiting_input_bounded_by_deadline ... ok
+test notification_wait_clamped_by_run_deadline ... ok
+test slow_consumer_retains_all_events_and_terminal ... ok
+test command_exec_timeout_then_terminate_reaps_child ... ok
+test global_deadline_clamps_long_request ... ok
+
+test result: ok. 19 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.43s
+
+   Doc-tests superagent_adapter
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+# P2-2 (#79) superagent-adapter — cargo test run 2 (stability re-run)
+# date: 2026-11-18T02:40:22Z
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.02s
+     Running unittests src/lib.rs (target/debug/deps/superagent_adapter-5b9c67a8eefc75bf)
+
+running 15 tests
+test approval::tests::unknown_server_request_is_32601_never_approved ... ok
+test frame::tests::partial_line_at_eof_is_a_frame ... ok
+test frame::tests::exact_cap_is_allowed ... ok
+test approval::tests::typed_approvals_all_declined ... ok
+test frame::tests::oversize_line_metered_and_drained ... ok
+test frame::tests::small_line_returned_verbatim ... ok
+test reconcile::tests::non_terminal_or_missing_is_uncertain ... ok
+test reconcile::tests::terminal_and_orphan_free_is_reconciled ... ok
+test reconcile::tests::terminal_with_orphan_is_uncertain ... ok
+test ui::tests::approval_immediate_and_flushes_pending_deltas ... ok
+test ui::tests::interval_bounds_enforced ... ok
+test ui::tests::deltas_coalesce_on_interval_terminal_immediate ... ok
+test runlog::tests::entry_larger_than_limit_is_truncated_notice ... ok
+test runlog::tests::rotation_drops_oldest_and_bounds_retained ... ok
+test ui::tests::overload_never_drops_terminal_or_deltas ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+
+     Running tests/acceptance.rs (target/debug/deps/acceptance-a1df60e447d0e4e5)
+
+running 19 tests
+test per_type_timeout_defaults_match_p0_6_contract ... ok
+test purity_no_core_or_model_dependencies ... ok
+test artifact_limit_explicit_error ... ok
+test deferred_approval_pump_keeps_consuming ... ok
+test request_correlation_three_way_pump ... ok
+test exit_cleanup_reaps_child ... ok
+test oversize_frame_faults_with_explicit_error ... ok
+test big_log_rotation_scaled_threshold ... ok
+test stderr_ring_bounded ... ok
+test typed_approval_never_auto_approves ... ok
+test spawn_argv_env_and_pipe_wiring ... ok
+test unknown_event_and_malformed_frame_keep_pump_alive ... ok
+test engine_crash_mid_turn_explicit_terminal_and_reconcile ... ok
+test close_kills_unresponsive_engine ... ok
+test notification_wait_clamped_by_run_deadline ... ok
+test approval_waiting_input_bounded_by_deadline ... ok
+test slow_consumer_retains_all_events_and_terminal ... ok
+test command_exec_timeout_then_terminate_reaps_child ... ok
+test global_deadline_clamps_long_request ... ok
+
+test result: ok. 19 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.42s
+
+   Doc-tests superagent_adapter
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+# cargo fmt -- --check
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+fmt: clean
+
+# cargo clippy --offline --all-targets -- -D warnings
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.09s

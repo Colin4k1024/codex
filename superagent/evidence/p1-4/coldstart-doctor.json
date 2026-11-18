@@ -1,0 +1,45 @@
+{
+  "all_ok": true,
+  "checks": [
+    {
+      "check": "platform",
+      "ok": true,
+      "detail": "Darwin arm64"
+    },
+    {
+      "check": "engine-version",
+      "ok": true,
+      "detail": "codex-cli 0.0.0"
+    },
+    {
+      "check": "engine-digest",
+      "ok": true,
+      "detail": "a33d8f19ae91a83790fa7c36b503d0438da841584855c2ce7af66caaf1e89f3a"
+    },
+    {
+      "check": "auth",
+      "ok": true,
+      "detail": "auth.json present (contents never read or printed)"
+    },
+    {
+      "check": "pack",
+      "ok": true,
+      "detail": "superagent-meta-agent v0.1.0 digest=5b26dcb803642b472a2d91d44cc0cf745319b30fbc61cd78e6a9cf5f58c204a7 files=6"
+    },
+    {
+      "check": "installed-pack",
+      "ok": true,
+      "detail": "p1-4-fixture v0.1.0 digest=2d35a5a1839ee8326c17aafe4534096c5fca121a6e1b491d583f23b7024d70ba"
+    },
+    {
+      "check": "codex-home-writable",
+      "ok": true,
+      "detail": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/tmp.zgulKLtC9h/clean-home/Library/Application Support/SuperAgent/codex-home"
+    },
+    {
+      "check": "user-config-isolation",
+      "ok": true,
+      "detail": "product CODEX_HOME is separate from ~/.codex"
+    }
+  ]
+}

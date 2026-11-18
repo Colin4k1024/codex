@@ -1,0 +1,62 @@
+{
+  "verdict": "APPROVE",
+  "summary": "All four #73 task items and the three acceptance items are proven by concrete evidence in the inlined diff. The change is entirely product-side under superagent/ (zero codex-rs engine changes, no secrets). pack/ contains the four required directories with structural specs; manifest.json carries schema_version/version/digest and LICENSES.json carries source-license provenance; tools/pack.py implements deterministic, order-independent digesting with fail-closed symlink/non-regular-file rejection and pinned-digest version binding; tests/pack-ci.sh performs the CI re-export comparison required by the acceptance. Real run outputs in superagent/evidence/p1-1/ consistently show clean-environment verify OK (files=6, digest=5b26dcb8...), re-export comparison PASS, and 11/11 tests including every required negative case (tamper, schema, license coverage, license file missing, symlink, pinned mismatch, file_count mismatch). No blockers or major findings.",
+  "criteria": [
+    {
+      "criterion": "独立产品仓库 pack/ 目录：roles/ skills/ workflows/ templates/",
+      "status": "MET",
+      "evidence": "superagent/pack/roles/README.md, skills/README.md, workflows/README.md, templates/README.md all exist with structural specs; product-side only (no codex-rs paths in diff stat)."
+    },
+    {
+      "criterion": "manifest：schema_version/version/digest/来源许可（LICENSES）",
+      "status": "MET",
+      "evidence": "manifest.json has schema_version=1, version=0.1.0, digest=5b26dcb8... (64 hex), file_count=6; LICENSES.json declares Apache-2.0 with source 'original — SuperAgent initiative' and paths [**]; pack.py validate_manifest enforces required fields/types and 64-hex digest."
+    },
+    {
+      "criterion": "确定性 digest 校验（CI 重导出比对）",
+      "status": "MET",
+      "evidence": "pack-ci.sh performs clean-copy re-export and compares digest to committed manifest; pack-ci.log 're-export comparison: PASS (5b26dcb8...)'. pack.py compute_digest sorts entries by POSIX path and hashes '<path>\\t<filehash>\\n'; test_02/03 prove byte-identical re-export and creation-order independence."
+    },
+    {
+      "criterion": "版本绑定规则：run 固定 bundle digest，升级不静默换规则",
+      "status": "MET",
+      "evidence": "templates/run-record.json pins run_id -> bundle_digest/workflow_digest and documents the no-silent-substitution rule; pack.py verify --pinned fails with 'pinned digest mismatch ... never silently substitute a different pack version'; test_07 covers positive + negative pinned binding."
+    },
+    {
+      "criterion": "验收：干净环境 manifest 校验通过",
+      "status": "MET",
+      "evidence": "pack-ci.sh copies pack via tar into a fresh tmp dir with no git metadata, removes manifest, re-exports, then verifies; pack-ci.log and clean-verify.txt both show 'OK: superagent-meta-agent v0.1.0 digest=... files=6'; test_04 asserts clean-copy digest equals committed digest."
+    },
+    {
+      "criterion": "验收：digest 可复现",
+      "status": "MET",
+      "evidence": "re-export comparison PASS (pack-ci.log); test_02 byte-identical double export; test_03 digest identical regardless of file copy order."
+    },
+    {
+      "criterion": "验收：许可清单完整",
+      "status": "MET",
+      "evidence": "LICENSES.json patterns [**] cover all 6 pack files; pack.py check_licenses rejects any uncovered file and rejects a non-empty malformed licenses list; test_09 (coverage gap) and test_10 (missing LICENSES.json) prove negative enforcement."
+    },
+    {
+      "criterion": "负面测试覆盖：篡改/schema/许可缺失/符号链接/pinned 不符",
+      "status": "MET",
+      "evidence": "test_pack.py: test_05 tamper, test_06 schema (missing digest field), test_09 license coverage, test_10 missing licenses file, test_08 symlink (/etc/hosts symlink rejected), test_07 pinned mismatch, plus test_11 file_count. test-output.log and pack-ci.log show Ran 11 tests ... OK."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "minor",
+      "blocking": false,
+      "title": "source_commit values are advisory and not integrity-checked",
+      "description": "manifest.json pins source_commit=697de6498b2cdfda2bed0b88471290d4fa911cbd (the base of the review range) even though the pack content is new in 697de6498..f425b2403 and the reviewed HEAD is f425b2403. This field is deliberately excluded from the digest computation, so it is provenance metadata only, not integrity-verified, and can drift from the actual content commit without failing verify.",
+      "suggestion": "Document in templates/README.md or manifest schema that source_commit is advisory (not digest-bound), or refresh the committed value to the export HEAD in a follow-up so the stamped provenance is accurate."
+    },
+    {
+      "severity": "minor",
+      "blocking": false,
+      "title": "License coverage check excludes manifest.json",
+      "description": "pack.py iter_files() skips manifest.json, and check_licenses() only iterates the digest entries, so manifest.json itself is never subject to the 'license list complete' coverage check. Practically immaterial (it is generated metadata under the same Apache-2.0/ in-repo authorship and LICENSES.json paths [**] would cover it), but a strict reading of a complete license manifest could include it.",
+      "suggestion": "Optionally assert coverage of manifest.json (or the generated manifest path) as well, so the 'complete license list' invariant holds for every file that ships in pack/, including generated ones."
+    }
+  ]
+}
