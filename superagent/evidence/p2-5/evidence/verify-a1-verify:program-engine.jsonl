@@ -1,0 +1,12 @@
+send {"id":1,"jsonrpc":"2.0","method":"initialize","params":{"capabilities":{},"clientInfo":{"name":"superagent-adapter","title":"SuperAgent Adapter","version":"0.1.0"}}}
+recv {"id":1,"result":{"userAgent":"superagent-adapter/0.0.0 (Mac OS 26.6.2; arm64) xterm-256color (superagent-adapter; 0.1.0)","codexHome":"/Users/fanjia/Library/Application Support/SuperAgent/codex-home","platformFamily":"unix","platformOs":"macos"}}
+recv {"method":"remoteControl/status/changed","params":{"status":"disabled","serverName":"fanjiadeMacBook-Pro.local","installationId":"33846316-8915-4e37-85c1-1cdfd3b9fabe","environmentId":null},"emittedAtMs":1794975074252}
+send {"jsonrpc":"2.0","method":"initialized","params":{}}
+send {"id":2,"jsonrpc":"2.0","method":"command/exec","params":{"command":["python3","-c","pass"],"cwd":"/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/.tmpxTSgaX","outputBytesCap":4096,"sandboxPolicy":{"networkAccess":false,"type":"workspaceWrite","writableRoots":["/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/.tmpxTSgaX"]},"timeoutMs":60000}}
+recv {"id":2,"result":{"exitCode":0,"stdout":"","stderr":""}}
+send {"id":1,"jsonrpc":"2.0","method":"initialize","params":{"capabilities":{},"clientInfo":{"name":"superagent-adapter","title":"SuperAgent Adapter","version":"0.1.0"}}}
+recv {"id":1,"result":{"userAgent":"superagent-adapter/0.0.0 (Mac OS 26.6.2; arm64) xterm-256color (superagent-adapter; 0.1.0)","codexHome":"/Users/fanjia/Library/Application Support/SuperAgent/codex-home","platformFamily":"unix","platformOs":"macos"}}
+recv {"method":"remoteControl/status/changed","params":{"status":"disabled","serverName":"fanjiadeMacBook-Pro.local","installationId":"33846316-8915-4e37-85c1-1cdfd3b9fabe","environmentId":null},"emittedAtMs":1794975256196}
+send {"jsonrpc":"2.0","method":"initialized","params":{}}
+send {"id":2,"jsonrpc":"2.0","method":"command/exec","params":{"command":["python3","-c","pass"],"cwd":"/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/.tmpw1DpUN","outputBytesCap":4096,"sandboxPolicy":{"networkAccess":false,"type":"workspaceWrite","writableRoots":["/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/.tmpw1DpUN"]},"timeoutMs":60000}}
+recv {"id":2,"result":{"exitCode":0,"stdout":"","stderr":""}}

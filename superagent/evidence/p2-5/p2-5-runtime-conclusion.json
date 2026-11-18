@@ -1,0 +1,29 @@
+{
+  "agent": {
+    "artifacts": [
+      "/private/tmp/sa-p2-5-wt/superagent/evidence/p2-5/evidence/modify-turn-result.json"
+    ],
+    "detail": "turn completed thread=01a1ecdc-a853-7050-85b2-2d37983b9b2a turn=01a1ecdc-a979-7823-96fd-60512ef06083 usage=42561",
+    "kind": "Completed",
+    "tokensUsed": 42561,
+    "turnCompleted": true
+  },
+  "allPass": true,
+  "codexHome": "/Users/fanjia/Library/Application Support/SuperAgent/codex-home",
+  "criterion": "real model node modifies fixture; gate captures real exit code",
+  "engine": "/Users/fanjia/Desktop/code/codex/superagent/packaging/superagent-engine",
+  "fixtureAfter": "HELLO-P25\n",
+  "fixtureBefore": "INITIAL",
+  "fixtureModifiedByModel": true,
+  "gate": {
+    "evidenceRef": "/private/tmp/sa-p2-5-wt/superagent/evidence/p2-5/evidence/verify-g1-gate.json",
+    "gateId": "g1",
+    "path": "command/exec (engine-enforced sandbox)",
+    "proven": true,
+    "realExitCode": 0,
+    "usesModelSelfReportedExitCode": false
+  },
+  "honestyNote": "allPass only if a real model turn modified hello.txt to HELLO-P25 AND the verification gate captured the REAL process exit code 0 via command/exec (never a model self-report). Otherwise false with facts.",
+  "issue": 82,
+  "workspace": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/.tmpw1DpUN"
+}

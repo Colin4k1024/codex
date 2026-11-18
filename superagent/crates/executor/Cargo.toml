@@ -1,0 +1,21 @@
+[package]
+name = "superagent-executor"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+description = "SuperAgent node executors (P2-5 / #82): AgentExecutor (model turn via the #79 stdio adapter; turn completion is execution, not success) and VerificationExecutor (gate programs as real child processes with captured actual exit codes). Sandbox-inexpressible policies return Blocked, never a host-shell fallback. Success only via proven gate evidence."
+
+[workspace]
+
+[dependencies]
+superagent-orchestrator = { path = "../orchestrator" }
+superagent-contracts = { path = "../contracts" }
+superagent-adapter = { path = "../adapter" }
+superagent-storage = { path = "../storage" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+jsonschema = { version = "0.26", default-features = false }
+sha2 = "0.10"
+
+[dev-dependencies]
+tempfile = "3"

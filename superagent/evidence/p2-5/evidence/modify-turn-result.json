@@ -1,0 +1,15 @@
+{
+  "lastAgentMessage": "",
+  "nodeId": "modify",
+  "sandboxPolicy": {
+    "networkAccess": false,
+    "type": "workspaceWrite",
+    "writableRoots": [
+      "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/.tmpw1DpUN"
+    ]
+  },
+  "status": "completed",
+  "threadId": "01a1ecdc-a853-7050-85b2-2d37983b9b2a",
+  "turnId": "01a1ecdc-a979-7823-96fd-60512ef06083",
+  "usageTotalTokens": 42561
+}

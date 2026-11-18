@@ -1,0 +1,21 @@
+{
+  "actualExitCode": 0,
+  "argv": [
+    "python3",
+    "-c",
+    "pass"
+  ],
+  "expectExitCode": 0,
+  "gateId": "verify:program",
+  "passed": true,
+  "path": "command/exec",
+  "sandboxPolicy": {
+    "networkAccess": false,
+    "type": "workspaceWrite",
+    "writableRoots": [
+      "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/.tmpw1DpUN"
+    ]
+  },
+  "stderr": "",
+  "stdout": ""
+}

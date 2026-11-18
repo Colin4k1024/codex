@@ -59,6 +59,10 @@ pub enum ExecKind {
     RetryableFailure,
     FatalFailure,
     Uncertain,
+    /// The requested execution policy (e.g. sandbox) cannot be expressed on
+    /// this path. The node is refused — never retried, never run on a host
+    /// shell / externalSandbox fallback (#82).
+    Blocked,
 }
 
 /// Result of one node attempt, carrying resource usage and gate evidence.
@@ -473,6 +477,12 @@ impl Orchestrator {
                     ExecKind::Uncertain => {
                         final_state = NodeState::Uncertain;
                         reason = format!("uncertain: {}", outcome.detail);
+                    }
+                    ExecKind::Blocked => {
+                        // Policy inexpressible: refuse the node. No retry, no
+                        // host-shell / externalSandbox fallback (#82).
+                        final_state = NodeState::Blocked;
+                        reason = format!("blocked: {}", outcome.detail);
                     }
                 }
                 break;
