@@ -1,0 +1,34 @@
+# P5-3 (#97) test output — superagent-model-routing (toolchain 1.99.1)
+$ cargo +1.99.1 test
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s
+     Running unittests src/lib.rs (target/debug/deps/superagent_model_routing-33dc0b0f71f27075)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/routing.rs (target/debug/deps/routing-ad2af6f79c763f2b)
+
+running 6 tests
+test spawn_override_compat_and_ceiling ... ok
+test unknown_task_class_and_empty_config ... ok
+test usage_recorded ... ok
+test configurable_policy_audited ... ok
+test routing_does_not_expand_limits ... ok
+test cost_latency_comparison_report ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests superagent_model_routing
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+# parallel stability (5 consecutive full-suite runs)
+run 1: test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+run 2: test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+run 3: test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+run 4: test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+run 5: test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
