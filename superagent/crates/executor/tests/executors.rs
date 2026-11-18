@@ -328,7 +328,7 @@ fn agent_environment_registration_failure_is_fatal_no_local_fallback() {
     // No thread/turn started and no turn-result evidence written.
     let st: Value = serde_json::from_slice(&std::fs::read(&state_file).unwrap()).unwrap();
     assert_eq!(st["callLog"], json!(["initialize", "environment/add"]));
-    assert!(st["threads"].as_object().map_or(true, |m| m.is_empty()));
+    assert!(st["threads"].as_object().is_none_or(|m| m.is_empty()));
     assert!(st["threadStarts"].as_array().unwrap().is_empty());
     assert!(!tmp.path().join("evidence/n1-turn-result.json").exists());
 }
@@ -369,7 +369,7 @@ fn agent_environment_info_failure_is_fatal_before_thread_start() {
         st["callLog"],
         json!(["initialize", "environment/add", "environment/info"])
     );
-    assert!(st["threads"].as_object().map_or(true, |m| m.is_empty()));
+    assert!(st["threads"].as_object().is_none_or(|m| m.is_empty()));
     assert!(st["threadStarts"].as_array().unwrap().is_empty());
 }
 
