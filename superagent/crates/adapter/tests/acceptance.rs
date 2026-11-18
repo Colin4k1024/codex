@@ -352,7 +352,7 @@ fn environment_add_failure_is_an_explicit_error() {
     // No thread was ever started (no silent local continuation).
     let state: Value = serde_json::from_slice(&std::fs::read(&state_file).unwrap()).unwrap();
     assert_eq!(state["callLog"], json!(["initialize", "environment/add"]));
-    assert!(state["threads"].as_object().map_or(true, |m| m.is_empty()));
+    assert!(state["threads"].as_object().is_none_or(|m| m.is_empty()));
     a.close();
 }
 
