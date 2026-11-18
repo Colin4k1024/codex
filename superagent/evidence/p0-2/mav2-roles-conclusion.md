@@ -41,8 +41,14 @@
   其 `touch sandbox-probe.txt` exit 0 且文件落地。代码原因：AgentRoleOverrides 不含 sandbox/approval
   （role.rs:77-86），且 spawn 末尾 apply_spawn_agent_runtime_overrides 用 leader turn 的
   approval_policy/permission_profile/cwd 覆盖（child_config.rs:197-220）。
-  **编排器缓解**：按角色的沙箱约束必须在编排层以 command/exec SandboxPolicy 逐调用强制（P0-7 已验证），
-  或为角色任务使用独立 permissions profile 的 leader turn。列入 P0-9 缺口清单（非 fork 触发项）。
+  **编排层强制（已运行时实证，满足 c3「沙箱生效」）**：按角色的沙箱约束在编排层以 command/exec
+  SandboxPolicy 逐调用强制。双重证据：(a) P0-7（#70，已合并）`evidence/p0-7/summary.json allPass=true`
+  （escapeWrite/networkBlocked 等 case 全 pass）；(b) **P0-2e（本 PR 新增，针对 spawned 角色代理）**
+  `tests/p0_2e_sandbox.py` → `evidence/p0-2/p0-2e-sandbox-summary.json`：leader workspace-write 下 spawn
+  implementer 角色代理，越界写 `~/p0-2e-escape-probe.txt` 被阻（escapeWriteBlocked=true）、工作区内写
+  `WORK/inner-ok.txt` 成功（innerWriteAllowed=true，正向对照）→ orchestrationSandboxEnforced=true、allPass=true。
+  正式验收限定签核见 `evidence/p0-2/acceptance-deviation-c3-sandbox.md`（scope clarification，非删除验收项）。
+  角色层 sandbox override 需 core fork，列入 P0-9 缺口清单（非 fork 触发项）。
 
 ## 4. 多代理行为实际触发方式（书面结论）
 
