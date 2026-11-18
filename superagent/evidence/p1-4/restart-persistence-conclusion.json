@@ -1,0 +1,17 @@
+{
+  "skill_visible_after_install_session1": true,
+  "skill_visible_after_restart_session2": true,
+  "restart_persistence_via_install": "PERSISTENT",
+  "mechanism": "pack skills installed into product CODEX_HOME/skills (engine default discovery root, codex-rs/exec-server/src/discoverV2/capability_locations.rs:73); loaded from disk every session \u2014 no extraRoots re-injection needed",
+  "user_config_unchanged": true,
+  "user_bulk_state_metadata_changed": [
+    "tmp/arg0-macos/codex-arg0ebid4M/.lock",
+    "tmp/arg0-macos/codex-arg0ebid4M/apply_patch",
+    "tmp/arg0-macos/codex-arg0ebid4M/applypatch",
+    "tmp/arg0-macos/codex-arg0gojMA3/.lock",
+    "tmp/arg0-macos/codex-arg0gojMA3/apply_patch",
+    "tmp/arg0-macos/codex-arg0gojMA3/applypatch"
+  ],
+  "note": "config surface = top-level files + skills/agents/prompts hashed; bulk sessions/history tracked as size+mtime metadata (may change from unrelated user activity)",
+  "issue_102_closure_gate": "SATISFIED"
+}

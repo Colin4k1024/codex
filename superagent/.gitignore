@@ -16,3 +16,7 @@ __pycache__/
 # P1-2 runtime probe live home (auth + rollouts) — never commit
 evidence/p1-2/home-p1-2/
 evidence/p1-2/home-p1-2-tui/
+# P1-3 runtime probe home (auth + sessions, never commit)
+evidence/p1-3/home-p1-3/
+# Bulk user-home metadata snapshots (large; config hashes committed separately)
+evidence/p1-4/*.bulk.json

@@ -1,0 +1,11 @@
+OK: installed p1-4-fixture v0.1.0 digest=2d35a5a1839ee8326c17aafe4534096c5fca121a6e1b491d583f23b7024d70ba -> /var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/tmp.zgulKLtC9h/clean-home/Library/Application Support/SuperAgent/codex-home
+OK   platform: Darwin arm64
+OK   engine-version: codex-cli 0.0.0
+OK   engine-digest: a33d8f19ae91a83790fa7c36b503d0438da841584855c2ce7af66caaf1e89f3a
+OK   auth: auth.json present (contents never read or printed)
+OK   pack: p1-4-fixture v0.1.0 digest=2d35a5a1839ee8326c17aafe4534096c5fca121a6e1b491d583f23b7024d70ba files=3
+OK   installed-pack: p1-4-fixture v0.1.0 digest=2d35a5a1839ee8326c17aafe4534096c5fca121a6e1b491d583f23b7024d70ba
+OK   codex-home-writable: /var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/tmp.zgulKLtC9h/clean-home/Library/Application Support/SuperAgent/codex-home
+OK   user-config-isolation: product CODEX_HOME is separate from ~/.codex
+ALL GREEN
+Install complete. Launch the meta-agent TUI with: /tmp/sa-coldstart-wt/superagent/bin/superagent

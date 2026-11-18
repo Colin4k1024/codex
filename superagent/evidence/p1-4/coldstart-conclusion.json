@@ -1,0 +1,17 @@
+{
+  "criterion": "\u5e72\u51c0 macOS \u4e00\u6761\u547d\u4ee4\u5b89\u88c5",
+  "pinned_source_commit": "92240f13ea22f283037baffb9baa5f6bdf8023d7",
+  "worktree_commit": "92240f13ea22f283037baffb9baa5f6bdf8023d7",
+  "build_start_source_commit": "92240f13ea22f283037baffb9baa5f6bdf8023d7",
+  "pin_consistent": true,
+  "engine_built_from_source": true,
+  "engine_sha256": "a33d8f19ae91a83790fa7c36b503d0438da841584855c2ce7af66caaf1e89f3a",
+  "fresh_home_no_preexisting_product_state": true,
+  "auth_bootstrap": "simulated post-login (auth.json provisioned); real first run requires `superagent login` (user action)",
+  "auth_provisioned": true,
+  "one_command_install_exit": 0,
+  "doctor_exit": 0,
+  "doctor_all_green": true,
+  "install_plus_doctor_green": true,
+  "note": "Engine built from pinned SOURCE_COMMIT in isolated worktree; install.sh ran in a fresh HOME; doctor ALL GREEN. BUILD_START header, worktree commit, and pinned_source_commit all reference SOURCE_COMMIT for the recorded engine_sha256. Auth is a documented user login prerequisite."
+}

@@ -1,0 +1,75 @@
+{
+  "$comment": "Acceptance criteria template (P1-3 #75). Each node gate cites a command source and an artifact schema. A node succeeds ONLY when its gate command exits 0 AND its artifact validates against the schema. Model self-report is never acceptance. Schemas here are illustrative; the authoritative wire schemas are delivered by P2-1 #78 contracts.",
+  "workflow": "team-delivery",
+  "version": "0.1.0",
+  "gates": {
+    "plan": {
+      "command_source": "orchestrator:dag-lint",
+      "command": "superagent dag-lint artifacts/node-dag.json",
+      "artifact": {"id": "node-dag", "path": "artifacts/node-dag.json", "schema": "node-dag"},
+      "success": "exit_code == 0 and schema_valid == true"
+    },
+    "implement": {
+      "command_source": "repo:build+test",
+      "command": "cargo build && cargo test -p fixture",
+      "artifact": {"id": "diff", "path": "artifacts/change.diff", "schema": "diff"},
+      "success": "exit_code == 0"
+    },
+    "verify": {
+      "command_source": "repo:gate",
+      "command": "python -m pytest tests/test_widget.py -q",
+      "artifact": {"id": "gate-result", "path": "artifacts/gate-result.json", "schema": "gate-result"},
+      "success": "exit_code == 0 and schema_valid == true"
+    },
+    "review": {
+      "command_source": "orchestrator:acceptance-check",
+      "command": "superagent acceptance-check artifacts/review.json",
+      "artifact": {"id": "review", "path": "artifacts/review.json", "schema": "review"},
+      "success": "exit_code == 0 and acceptance_met == true and self_approved == false"
+    },
+    "report": {
+      "command_source": "orchestrator:report-lint",
+      "command": "superagent report-lint artifacts/report.md",
+      "artifact": {"id": "report", "path": "artifacts/report.md", "schema": "report"},
+      "success": "exit_code == 0 and verified_unverified_separated == true"
+    }
+  },
+  "schemas": {
+    "gate-result": {
+      "type": "object",
+      "required": ["command", "exit_code", "schema_valid"],
+      "properties": {
+        "command": {"type": "string"},
+        "exit_code": {"type": "integer"},
+        "schema_valid": {"type": "boolean"},
+        "stdout_ref": {"type": "string"},
+        "stderr_ref": {"type": "string"}
+      }
+    },
+    "node-dag": {
+      "type": "object",
+      "required": ["nodes"],
+      "properties": {
+        "nodes": {"type": "array", "items": {"type": "object",
+          "required": ["id", "role", "gate"],
+          "properties": {"id": {"type": "string"}, "role": {"type": "string"},
+                         "gate": {"type": "string"}}}}
+      }
+    },
+    "review": {
+      "type": "object",
+      "required": ["acceptance_met", "self_approved"],
+      "properties": {"acceptance_met": {"type": "boolean"},
+                     "self_approved": {"type": "boolean"},
+                     "findings_ref": {"type": "string"}}
+    },
+    "report": {
+      "type": "object",
+      "required": ["verified", "unverified"],
+      "properties": {"verified": {"type": "array"},
+                     "unverified": {"type": "array"},
+                     "verified_unverified_separated": {"type": "boolean"}}
+    }
+  },
+  "missing_gate_policy": "waiting_input (leader asks user for the acceptance command; never succeed on a model claim)"
+}

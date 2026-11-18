@@ -1,8 +1,8 @@
 {
-  "digest": "7ec4299e95ec702f30040b77ea8e43e93c06f83ab218d0392df0c9cfec963ef4",
-  "file_count": 13,
+  "digest": "4a58b130f9d46d9acd36d412fa056ea5cdd48cd108634572dd5823a2df9896f8",
+  "file_count": 17,
   "name": "superagent-meta-agent",
   "schema_version": 1,
-  "source_commit": "6960c11057c7417c672a9599f98428292ef57814",
+  "source_commit": "3076d0a04dc20502a1aa2824873cff2340e0e4ad",
   "version": "0.1.0"
 }

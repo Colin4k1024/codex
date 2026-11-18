@@ -1,0 +1,36 @@
+{
+  "verdict": "APPROVE",
+  "summary": "Verified all Issue #81 acceptance criteria against the inlined diff (98c1071c5..30928ec7b). The crate is an independent [workspace] root (superagent-orchestrator v0.1.0, edition 2021) depending only on superagent-contracts(path), superagent-storage(path), serde, serde_json (+ tempfile dev-dep); purity-scan.txt shows zero codex-* crates. lib.rs performs no process spawning and no model calls — NodeExecutor is an injected trait, and success is decided only by GateOutcome::is_proven() (passed && non-empty evidence_ref); no natural-language success path exists. All 18 required-by-name tests are present in tests/orchestrator.rs, and test-output.log shows 18 passed / 0 failed, matching the source. Task 1-5 behaviors (Kahn serial topo with deterministic tie-break, dry_run-first plan, cycle/unknown/self-dep -> PlanError, explicit NodeState machine with Store persistence, Policy max_attempts=3(1+2), token->Blocked(attempt=0), wall->Cancelling remaining, RetryableFailure only when idempotent && attempt<max, FatalFailure no retry, non-idempotent->Uncertain, downstream transitive closure + Blocked dependents, evidence-only success for Verification/Capability) are all implemented in code and covered by the enumerated tests. Changes are confined to superagent/ (no codex-rs core changes), no secrets present. Only minor non-blocking observations below.",
+  "findings": [
+    {
+      "severity": "minor",
+      "criterion": "任务1 - self-dependency rejection",
+      "finding": "Self-dependency is rejected in topo_order (`dep == &node.id` -> PlanError), but no dedicated test covers it; the enumerated test list only includes dag_cycle_rejected_at_plan and unknown_dependency_rejected.",
+      "required_fix": null
+    },
+    {
+      "severity": "minor",
+      "criterion": "任务2 - attempt terminal state persistence",
+      "finding": "set_attempt_state is only called with AttemptState::Running; terminal attempt state (Succeeded/Failed/etc.) is not written back to the Store. All five required persistence calls (persist_intent/bind/set_attempt_state/append_event/set_run_state) are present, so this is a non-blocking completeness note.",
+      "required_fix": null
+    },
+    {
+      "severity": "minor",
+      "criterion": "任务2 - run state string format",
+      "finding": "set_run_state derives its string via NodeState Debug + to_lowercase, producing e.g. \"waitinginput\"/\"cancelling\"/\"uncertain\", which is inconsistent with the NodeState serde snake_case representation (\"waiting_input\"). Only \"succeeded\" is asserted by run_persists_events_and_intents_to_store.",
+      "required_fix": null
+    },
+    {
+      "severity": "minor",
+      "criterion": "任务1 - determinism test strength",
+      "finding": "topo_order_serial_and_deterministic does not assert identical ordering across repeated invocations or the complete expected order; the determinism claim rests on the implementation's BTreeMap/BTreeSet usage, which is deterministic.",
+      "required_fix": null
+    },
+    {
+      "severity": "minor",
+      "criterion": "任务3 - gate_repair event assertion",
+      "finding": "The gate_repair event is emitted on each repair but no test asserts its presence in the Store; the retry behavior itself is verified by verification_failure_repaired_then_succeeds (attempts=2).",
+      "required_fix": null
+    }
+  ]
+}

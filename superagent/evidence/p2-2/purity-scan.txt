@@ -1,0 +1,76 @@
+# P2-2 (#79) purity scan — superagent-adapter
+# date: 2026-11-18T02:40:44Z
+
+## 1. Cargo.toml dependencies (only serde + serde_json; no codex-rs path deps, no model/network deps)
+[package]
+name = "superagent-adapter"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+description = "SuperAgent stdio adapter (P2-2 / #79): sole protocol boundary to the app-server engine. argv-array spawn, JSONL frame metering, three-way event pump, typed approvals (never auto-approve), resource limits, per-type timeouts, crash reconciliation. Model-free fault-injection tests."
+
+[workspace]
+
+[dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+## 2. grep for codex-rs core / engine crate references in src+tests (expect: no matches)
+tests/acceptance.rs:772:            "codex_rs",
+tests/acceptance.rs:773:            "codex_core",
+tests/acceptance.rs:774:            "codex_app_server",
+tests/acceptance.rs:775:            "use codex",
+tests/acceptance.rs:776:            "extern crate codex",
+
+## 3. grep for model/network/runtime deps in manifest+sources (expect: no matches)
+tests/acceptance.rs:751:        "tokio",
+tests/acceptance.rs:752:        "reqwest",
+tests/acceptance.rs:753:        "openai",
+tests/acceptance.rs:754:        "hyper",
+
+## 4. grep for path dependencies escaping superagent/ (expect: no matches)
+(no matches)
+
+## 5. dependency tree (cargo tree --offline)
+superagent-adapter v0.1.0 (/private/tmp/sa-p2-2-wt/superagent/crates/adapter)
+├── serde v1.0.229
+│   ├── serde_core v1.0.229
+│   └── serde_derive v1.0.229 (proc-macro)
+│       ├── proc-macro2 v1.0.107
+│       │   └── unicode-ident v1.0.27
+│       ├── quote v1.0.47
+│       │   └── proc-macro2 v1.0.107 (*)
+│       └── syn v3.0.10
+│           ├── proc-macro2 v1.0.107 (*)
+│           ├── quote v1.0.47 (*)
+│           └── unicode-ident v1.0.27
+└── serde_json v1.0.154
+    ├── itoa v1.0.19
+    ├── memchr v2.8.3
+    ├── serde_core v1.0.229
+    └── zmij v1.0.23
+
+## 6. structural purity test in-suite
+tests/acceptance.rs::purity_no_core_or_model_dependencies ... ok (see test-output.log)
+
+## 7. fake engine is model-free: no network/model imports
+22:import argparse
+23:import json
+24:import os
+25:import subprocess
+26:import sys
+27:import threading
+28:import time
+
+## 8. no credentials/secrets patterns (expect: no matches)
+(no matches)
+
+## 9. annotation on sections 2-3 matches
+The only grep hits are the forbidden-marker STRING LITERALS inside the purity
+guard test itself (tests/acceptance.rs::purity_no_core_or_model_dependencies),
+i.e. the test's own detection patterns — not imports or dependencies.
+Proof of actual dependency purity: section 5 (cargo tree) shows the complete
+transitive dependency set is serde / serde_json and their proc-macro stack
+only. No codex-rs crate, no async runtime, no HTTP/model client anywhere.
+The crate is a standalone cargo workspace ([workspace] in Cargo.toml), same
+convention as superagent-contracts (P2-1); it is NOT a member of the codex-rs
+workspace and shares no target/ with it.
