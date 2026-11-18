@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>YourAgent</title>
+    <style>
+      :root { color-scheme: light dark; --accent: #4f7cff; }
+      body { font-family: -apple-system, system-ui, sans-serif; margin: 0; padding: 2rem;
+             background: Canvas; color: CanvasText; }
+      h1 { font-size: 1.4rem; }
+      .badge { display: inline-block; padding: .2rem .6rem; border-radius: .5rem;
+               background: var(--accent); color: #fff; font-size: .8rem; }
+      pre { background: rgba(127,127,127,.12); padding: 1rem; border-radius: .5rem;
+            overflow: auto; font-size: .85rem; }
+      .muted { opacity: .7; font-size: .85rem; }
+    </style>
+  </head>
+  <body>
+    <h1>YourAgent <span class="badge">desktop</span></h1>
+    <p class="muted">Tauri 2 原生宿主 · 系统 WebView · 复用网关 API（非直连引擎）</p>
+    <p>产品状态（bootstrap 命令）：</p>
+    <pre id="status">bootstrapping…</pre>
+    <script>
+      const invoke = window.__TAURI__.core.invoke;
+      invoke("bootstrap")
+        .then((s) => { document.getElementById("status").textContent = JSON.stringify(s, null, 2); })
+        .catch((e) => { document.getElementById("status").textContent = "error: " + e; });
+    </script>
+  </body>
+</html>
