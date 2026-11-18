@@ -16,30 +16,64 @@ imported, and the modifications made, as required by the upstream license
   modification marking, no endorsement, no trademark grant). `LICENSE` and `NOTICE`
   are reproduced verbatim in this directory.
 
-## What was imported
+## What was imported (source derivation)
 
-- `dist/` — the production frontend bundle produced by running `vite build` on the
-  upstream source at the locked commit (React 18 / Vite / Tailwind / CodeMirror /
-  xterm / i18next / KaTeX). Regenerate with:
-  `cd <claudecodeui> && npm install --ignore-scripts && node_modules/.bin/vite build`.
+- `src/`, `shared/`, `plugins/`, `public/`, `index.html` — upstream frontend source
+  copied verbatim at the locked commit.
+- `vite.config.js`, `tailwind.config.js`, `postcss.config.js`, `tsconfig.json` —
+  upstream build configuration.
+- `package.json` — REWRITTEN as a frontend-only closure (`youragent-desktop-frontend`).
+  Server dependencies are excluded: express, ws, node-pty, better-sqlite3, sqlite3,
+  sqlite, bcrypt, jsonwebtoken, multer, web-push, cors, chokidar, cross-spawn,
+  node-fetch, @anthropic-ai/claude-agent-sdk, @openai/codex-sdk, and the
+  postinstall/prepare scripts. Pure-JS libraries the frontend imports are retained.
+- `dist/` — production bundle produced by `vite build` on the derived source.
 - `LICENSE`, `NOTICE` — verbatim upstream license and attribution notices.
 
-The upstream Express/JWT/WebSocket backend (`server/`) is NOT imported into the
-product build. In dev mode it runs from the reference checkout (see `run-dev.sh`);
-the production migration replaces it with a typed DesktopClient over Tauri commands
-(`HARNESS_CLAUDECODEUI_MIGRATION.md`, steps U02–U06).
+The upstream Express/JWT/WebSocket backend (`server/`) is NOT imported. The
+self-contained desktop build talks to product Rust commands via the DesktopClient.
 
-## Modifications made for the desktop wrap
+## Modifications made for the desktop product
 
-- `src-tauri/tauri.conf.json`: Tauri 2 host config; `frontendDist` points at the
-  imported `dist/`; `devUrl` points at the upstream Vite dev server for dev mode;
-  CSP widened to load the real frontend (fonts/images/workers/backend connect);
-  window branding set to YourAgent; Developer ID signing identity for macOS.
-- `dist/index.html` and bundled assets are the upstream build output, unmodified.
-  Upstream branding ("CloudCLI UI" / "Claude Code UI") is retained in the imported
-  bundle pending the product rebrand; attribution is preserved here and in NOTICE.
-- No upstream source file was edited in the reference checkout; the wrap consumes
-  its build output and runs its backend unmodified in dev mode.
+New product files (not part of upstream):
+- `src/services/desktop-client.ts` — typed DesktopClient over Tauri commands
+  (`window.__TAURI__.core.invoke`) + event subscription; adapts command results to
+  the fetch Response contract the legacy hooks expect. Includes a browser fixture
+  fallback (same shapes as the Rust mock) for previewing the desktop build without
+  the native shell. This is the U02 mock facade; U03 wires the real Codex app-server.
+- `src-tauri/src/lib.rs` — product commands: bootstrap/auth_status/login/register/
+  auth_user/logout/onboarding_status/complete_onboarding/git_config/update_git_config/
+  list_projects/list_sessions/get_messages/send_input/desktop_request. U02 returns
+  fixture data; `desktop_request` is a graceful-degradation stub for unmigrated
+  endpoints (NOT a fake Express API).
+- `run-dev.sh`, `.env` (VITE_DESKTOP=true), this `SOURCE.md`.
+
+Modified upstream files (marked here per Section 7):
+- `src/constants/config.ts` — added `IS_DESKTOP` (Tauri runtime / VITE_DESKTOP).
+- `src/utils/api.js` — in desktop mode the data layer routes through the
+  DesktopClient (typed commands for the boot path; generic product request for the
+  rest). The upstream OSS fetch path is retained for the browser build.
+- `src/components/auth/context/AuthContext.tsx` — added an `IS_DESKTOP` branch that
+  provisions the session via `desktopClient.bootstrap()` (auto-authentication).
+- `src/contexts/WebSocketContext.tsx` — in desktop mode, ordered product events over
+  Tauri IPC replace the WebSocket; `sendMessage` goes through `desktopClient.sendInput`.
+- `src-tauri/tauri.conf.json` — Tauri 2 host config; `frontendDist` = derived `dist/`;
+  `devUrl` = product Vite dev server; CSP widened for the real frontend; YourAgent
+  window branding; Developer ID signing identity for macOS.
+
+Upstream branding ("CloudCLI UI" / "Claude Code UI") is retained in the imported
+source pending the product rebrand; attribution is preserved here and in NOTICE.
+
+## Migration status (HARNESS_CLAUDECODEUI_MIGRATION.md)
+
+- U02 (mock DesktopClient, self-contained boot): DONE — the derived frontend boots
+  into the real workspace (sidebar/project, provider selection, chat composer,
+  settings, Chat/Shell/Files/Git tabs) with NO Express/localhost backend, verified
+  via DOM inspection. Data is fixture mock.
+- U03 (real Rust Codex app-server adapter): NEXT — replace fixtures with real
+  engine execution, streaming, approvals, cancel, history.
+- U04–U06 (file/editor/read-only Git, Harness Tasks tab, full Web-dependency removal
+  + packaging): pending.
 
 ## License obligations carried forward
 
