@@ -102,6 +102,7 @@ fn cmd_run(args: &[String]) -> Result<i32> {
             ],
             codex_home,
             cwd: Some(workspace.clone()),
+            environment: None,
             run_deadline: Duration::from_secs(600),
             max_artifact_bytes: 20 * 1024 * 1024,
         },

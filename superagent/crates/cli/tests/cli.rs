@@ -53,6 +53,7 @@ fn engine_spec(dir: &std::path::Path) -> EngineSpec {
         ],
         codex_home: None,
         cwd: Some(dir.to_path_buf()),
+        environment: None,
         run_deadline: Duration::from_secs(30),
         max_artifact_bytes: 1 << 20,
     }
