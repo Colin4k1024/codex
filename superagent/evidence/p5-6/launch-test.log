@@ -1,0 +1,6 @@
+$ launch signed app binary (background), observe startup
+launch-pid=6582
+process-alive=yes (pid 6582 still running after 5s — WebView host started, no crash)
+ 6582 src-tauri/target/release/bundle/macos/YourAgent.app/Contents/MacOS/youragent-desktop
+--- startup stdout/stderr ---
+launch-test-done (process terminated after observation)
