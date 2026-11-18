@@ -1,0 +1,55 @@
+{
+  "verdict": "CHANGES_REQUESTED",
+  "summary": "Evidence commit for issue #69 superagent P0-6. Trace A (real model task, full initialize→thread/start→turn/start→event-pump→turn/completed flow), trace B (single command-approval decline with side-effect confirmed absent), and trace C (confirmed cancel: child verified present, interrupt, sleep 60 gone in 3s, turn interrupted) are solid and internally consistent; the p0_6.py pgrep-polling fixes remove the earlier false-orphan timing trap and the untrusted→on-request+read-only config adaptation is correct per the cited core/src/config/mod.rs appendix. Code-path citations for trace C (exec.rs Cancelled branch, tasks/mod.rs graceful-interrupt-abort) match the appendix. No secrets are committed (only auth.json paths appear, no token/key contents), and there are no out-of-scope core or prompt/skill changes. However, several acceptance claims in stdio-contract-conclusion.md exceed what the four traces actually demonstrate, so the criteria are not all proven.",
+  "findings": [
+    {
+      "severity": "blocker",
+      "criterion": "typed-handlers",
+      "finding": "Criterion 3 requires typed handlers for command approval, file approval, user input, and MCP elicitation, plus unknown-server-request -> protocol error (-32601) + block (never auto-approve). The only path that is actually exercised by any trace is item/commandExecution/requestApproval (trace B, declined). No trace exercises item/fileChange/requestApproval, user-input requests, mcpServer/elicitation/request, or an unknown request producing a -32601 protocol error. The handler source claimed in the conclusion ('p0_6.py decline_handler') is not part of this commit's diff: the p0_6.py diff contains only the config string and the two pgrep timing loops.",
+      "evidence": "trace-a/c/d transcripts have serverRequests=[] and serverRequestDecisions=[]; trace-b has exactly one item/commandExecution/requestApproval. stdio-contract-conclusion.md asserts typed branches for execCommandApproval/applyPatchApproval/item/fileChange/requestApproval/mcpServer/elicitation/request and -32601-for-unknown, but no trace or diff hunk backs this.",
+      "required_fix": "Add flanking traces that trigger each unexercised typed handler and an unknown request, recording a protocol-level error (method-not-found/-32601) and an assertion that no approval was auto-granted; or narrow the conclusion to the single proven command-approval path and remove the unproven matrix claims."
+    },
+    {
+      "severity": "blocker",
+      "criterion": "disconnect-timeout / event-pump-during-approval",
+      "finding": "Criterion 4 is two parts, both NOT PROVEN. (a) '等待审批时仍消费其他事件' is claimed ('后台读线程') but trace B does not demonstrate it: the requestApproval was emitted at startedAtMs 1794902942755 and resolved via serverRequest/resolved at 1794902942760 (~5ms), with no unrelated notifications observed while an approval remained pending. (b) '超时行为' (request timeout) is not exercised by any trace; the per-type timeout values are only asserted in prose.",
+      "evidence": "trace-b-transcript.json shows requestApproval -> serverRequest/resolved in ~5ms; no trace contains a delayed-approval window or a request-timeout trigger/recovery. stdio-contract-conclusion.md claims both behaviors without a supporting trace.",
+      "required_fix": "Add a trace that holds the approval decision open while asserting ≥1 unrelated notification is consumed in the window, and a trace that forces a per-type request timeout and records timeout handling/recovery."
+    },
+    {
+      "severity": "blocker",
+      "criterion": "resource-limits",
+      "finding": "Criterion 5 (resource-limit initial values) is only partially evidenced. The 16 MiB frame limit IS evidenced (frameLimitBytes=16777216 and empty frameViolations in every transcript). The 100 MiB per-run log limit is explicitly deferred to P1 ('100MiB 轮转在 P1 编排器实现'), so it is a design value, not implemented/proven. Per-type request timeouts (60s / 180-360s / 30-60s) are stated as values but never enforced or demonstrated.",
+      "evidence": "transcripts carry frameLimitBytes=16777216, frameViolations=[]; stdio-contract-conclusion.md resource-limit table states '100MiB 轮转在 P1 编排器实现' and lists timeout values with no execution evidence.",
+      "required_fix": "Implement and evidence the per-run 100 MiB log rotation and per-type timeout enforcement, or explicitly move those two initial values out of scope for this issue and reflect that in the acceptance status instead of counting them as proven."
+    },
+    {
+      "severity": "blocker",
+      "criterion": "spawn",
+      "finding": "Criterion 1's spawn contract ('superagent-engine app-server --listen stdio://', argument array, stdout dedicated JSONL, stderr collected separately) is not directly evidenced in this commit. JSONL stdout and separated stderr are only indirectly evidenced (transcript structure is JSONL; trace B stderrTail captures a distinct ERROR line). No transcript or conclusion records the actual spawn argv/mode/stdio wiring.",
+      "evidence": "No file in the diff shows the spawn command or argv; stdio-contract-conclusion.md and the four transcripts only record the post-spawn protocol traffic.",
+      "required_fix": "Record the actual spawn invocation (argv array and stdin/stdout/stderr wiring) in the evidence, or reference the already-reviewed artifact that covers the spawn path (e.g., the #64 dependency) with a concrete link/field."
+    },
+    {
+      "severity": "major",
+      "criterion": "trace-d-reconcile",
+      "finding": "The reconciliation safety conclusion is contradicted by the commit's own evidence. The conclusion asserts the last turn's 'interrupted' status is terminal and therefore '可证明执行已终止' (disposition resolved as reconciled-terminal, no replay). But trace-d-precrash.json records orphanSleepAfterCrash='84971 sleep 45', i.e. the turn's child process survived the engine SIGKILL and is still running, so execution/side-effects are NOT proven terminated. Treating engine turn status 'interrupted' as proof of side-effect termination is unsafe when an orphaned command persists. Additionally the reconciled turn has completedAt:null (unlike trace C's terminal interrupted turn, which had a completedAt), indicating a recovered/derived status rather than a completed-terminal record.",
+      "evidence": "trace-d-precrash.json: crashExitCode=-9 and orphanSleepAfterCrash='84971 sleep 45'; trace-d-reconcile.json: turn status 'interrupted', completedAt=null; summary.json traceD: terminalProven=true, disposition='reconciled-terminal'. stdio-contract-conclusion.md claims '可证明执行已终止，无需盲目重放'.",
+      "required_fix": "Make reconciliation account for orphaned subprocesses (verify termination/disappearance of the recorded processId or process group before declaring terminal) and correct the disposition: classify as uncertain when an orphan exists, or prove the orphan is harmless. Remove the 'execution provably terminated' claim while an orphan process is alive."
+    },
+    {
+      "severity": "minor",
+      "criterion": "trace-d-reconcile",
+      "finding": "The reconciliation relies on thread/read {includeTurns:true}, which the engine itself flags as deprecated in the very same evidence: deprecationNotice 'Full-history hydration is deprecated for paginated threads; omit includeTurns or set it to false, then page with thread/turns/list and thread/items/list.' The conclusion does not mention this deprecation.",
+      "evidence": "trace-d-reconcile.json notifications contain the deprecationNotice; stdio-contract-conclusion.md credits includeTurns:true without noting the deprecation.",
+      "required_fix": "Migrate reconciliation to the non-deprecated paging API (thread/turns/list, thread/items/list) or document the deprecation as an accepted risk with an owner."
+    },
+    {
+      "severity": "minor",
+      "criterion": "typed-handlers",
+      "finding": "In trace B the server's requestApproval advertises availableDecisions=['accept', {acceptWithExecpolicyAmendment...}, 'cancel'] but the handler responds with decision='decline', which is not in the advertised set; the engine nonetheless accepted it (item status became 'declined'). Relying on an undocumented decision value risks a future contract change silently breaking the decline path.",
+      "evidence": "trace-b-transcript.json serverRequests[0].params.availableDecisions vs serverRequestDecisions[0].payload {result:{decision:'decline'}}; item/completed shows status 'declined'.",
+      "required_fix": "Confirm 'decline' is a sanctioned decision in the app-server contract and document it in the conclusion, or switch the handler to a documented decision value."
+    }
+  ]
+}

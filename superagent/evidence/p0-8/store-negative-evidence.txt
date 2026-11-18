@@ -1,0 +1,111 @@
+# Negative evidence: agent graph store is NOT exposed as a public RPC.
+# git grep 'agent_graph_store|AgentGraphStore' over codex-rs/app-server/src at HEAD:
+
+codex-rs/app-server/src/mcp_refresh.rs:575:                codex_core::local_agent_graph_store_from_state_db(Some(&state_db)),
+codex-rs/app-server/src/message_processor.rs:414:                codex_core::local_agent_graph_store_from_state_db(state_db.as_ref()),
+codex-rs/app-server/src/models_refresh_worker_tests.rs:58:        /*agent_graph_store*/ None,
+
+# Interpretation: the only app-server references are internal wiring that passes
+# codex_core::local_agent_graph_store_from_state_db (core/src/thread_manager.rs:640)
+# into the session/thread manager (message_processor.rs:414, mcp_refresh.rs:575).
+# No ClientRequest method reads or writes the graph store (see no-agent-rpc.txt:
+# zero graph/store methods in the generated schema).
+
+## codex-rs/agent-graph-store/src/lib.rs (full, HEAD):
+//! Storage-neutral parent/child topology for thread-spawned agents.
+
+mod error;
+mod local;
+mod store;
+mod types;
+
+pub use error::AgentGraphStoreError;
+pub use error::AgentGraphStoreResult;
+pub use local::LocalAgentGraphStore;
+pub use store::AgentGraphStore;
+pub use store::AgentGraphStoreFuture;
+pub use types::ThreadSpawnEdgeStatus;
+
+## codex-rs/agent-graph-store/src/store.rs:1-40 (trait surface, HEAD):
+use std::future::Future;
+use std::pin::Pin;
+
+use codex_protocol::ThreadId;
+
+use crate::AgentGraphStoreResult;
+use crate::ThreadSpawnEdgeStatus;
+
+/// Future returned by [`AgentGraphStore`] operations.
+pub type AgentGraphStoreFuture<'a, T> =
+    Pin<Box<dyn Future<Output = AgentGraphStoreResult<T>> + Send + 'a>>;
+
+/// Storage-neutral boundary for persisted thread-spawn parent/child topology.
+///
+/// Implementations are expected to return stable ordering for list methods so callers can merge
+/// persisted graph state with live in-memory state without introducing nondeterministic output.
+pub trait AgentGraphStore: Send + Sync {
+    /// Insert or replace the directional parent/child edge for a spawned thread.
+    ///
+    /// `child_thread_id` has at most one persisted parent. Re-inserting the same child should
+    /// update both the parent and status to match the supplied values.
+    /// The edge may be published before the child's metadata or history exists. A successful
+    /// write must make the child discoverable through the list methods.
+    fn upsert_thread_spawn_edge(
+        &self,
+        parent_thread_id: ThreadId,
+        child_thread_id: ThreadId,
+        status: ThreadSpawnEdgeStatus,
+    ) -> AgentGraphStoreFuture<'_, ()>;
+
+    /// Update the persisted lifecycle status of a spawned thread's incoming edge.
+    ///
+    /// Implementations should treat missing children as a successful no-op.
+    fn set_thread_spawn_edge_status(
+        &self,
+        child_thread_id: ThreadId,
+        status: ThreadSpawnEdgeStatus,
+    ) -> AgentGraphStoreFuture<'_, ()>;
+
+    /// List direct spawned children of a parent thread.
+
+## codex-rs/core/src/agent/registry.rs:1-40 (HEAD):
+use crate::agent::types::AgentMetadata;
+use crate::config::Config;
+use crate::environment_selection::TurnEnvironmentSnapshot;
+use codex_protocol::AgentPath;
+use codex_protocol::ThreadId;
+use codex_protocol::error::AgentErrorContext;
+use codex_protocol::error::CodexErr;
+use codex_protocol::error::CodexErrorDetails;
+use codex_protocol::error::Result;
+use codex_protocol::protocol::SessionSource;
+use codex_protocol::protocol::SubAgentSource;
+use codex_protocol::protocol::TurnEnvironmentSelection;
+use rand::prelude::IndexedRandom;
+use std::collections::HashMap;
+use std::collections::HashSet;
+use std::collections::hash_map::Entry;
+use std::sync::Arc;
+use std::sync::Mutex;
+use std::sync::atomic::AtomicUsize;
+use std::sync::atomic::Ordering;
+
+/// This structure is used to add some limits on the multi-agent capabilities for Codex. In
+/// the current implementation, it limits:
+/// * Total number of sub-agents (i.e. threads) per user session
+///
+/// This structure is shared by all agents in the same user session (because the `LocalAgentControl`
+/// is).
+#[derive(Default)]
+pub(crate) struct AgentRegistry {
+    active_agents: Mutex<ActiveAgents>,
+    total_count: AtomicUsize,
+}
+
+#[derive(Default)]
+struct ActiveAgents {
+    agent_tree: HashMap<String, AgentMetadata>,
+    thread_paths: HashMap<ThreadId, RegisteredAgent>,
+    used_agent_nicknames: HashSet<String>,
+    nickname_reset_count: usize,
+}

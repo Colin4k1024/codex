@@ -1,0 +1,48 @@
+{
+  "threadId": "01a1e880-c8ac-71a1-82c8-4cd506fa44e8",
+  "firstTurnId": "01a1e880-cc72-75c3-9d20-935dfdadc362",
+  "secondTurnId": "01a1e881-35d1-7fe2-a0b3-5d5279742af6",
+  "queueAdd": {
+    "queuedSubmission": {
+      "id": "01a1e880-cc80-7d90-bbd6-dc6c279c1bdf",
+      "input": [
+        {
+          "type": "text",
+          "text": "Reply with exactly QUEUE_DISPATCH_OK.",
+          "text_elements": []
+        }
+      ],
+      "clientUserMessageId": "p04b-q1",
+      "responsesapiClientMetadata": null
+    }
+  },
+  "queuedWhileBusy": {
+    "data": [
+      {
+        "id": "01a1e880-cc80-7d90-bbd6-dc6c279c1bdf",
+        "input": [
+          {
+            "type": "text",
+            "text": "Reply with exactly QUEUE_DISPATCH_OK.",
+            "text_elements": []
+          }
+        ],
+        "clientUserMessageId": "p04b-q1",
+        "responsesapiClientMetadata": null
+      }
+    ],
+    "nextCursor": null
+  },
+  "finalQueue": {
+    "data": [],
+    "nextCursor": null
+  },
+  "secondTurnStatus": "completed",
+  "agentTexts": [
+    "I\u2019ll run `sleep 15` now.",
+    "FIRST_TURN_DONE",
+    "QUEUE_DISPATCH_OK"
+  ],
+  "dispatchOk": true,
+  "queueDrained": true
+}

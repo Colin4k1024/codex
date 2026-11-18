@@ -1,0 +1,811 @@
+{
+  "results": [
+    {
+      "id": 2,
+      "result": {
+        "thread": {
+          "id": "01a1ec32-7ddf-77d3-9325-da719e31221d",
+          "environments": [
+            {
+              "environmentId": "local",
+              "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-b-pua964ch",
+              "runtimeWorkspaceRoots": [
+                "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-b-pua964ch"
+              ]
+            }
+          ],
+          "extra": null,
+          "sessionId": "01a1ec32-7ddf-77d3-9325-da719e31221d",
+          "forkedFromId": null,
+          "attachedToThreadId": null,
+          "parentThreadId": null,
+          "preview": "",
+          "ephemeral": false,
+          "section": null,
+          "sectionEnteredAt": null,
+          "projectId": null,
+          "historyMode": "paginated",
+          "modelProvider": "openai",
+          "model": "gpt-6-astra",
+          "reasoningEffort": null,
+          "createdAt": 1794964094,
+          "updatedAt": 1794964094,
+          "recencyAt": 1794964094,
+          "status": {
+            "type": "idle"
+          },
+          "path": "/Users/<user>/Desktop/code/codex/superagent/evidence/p0-6/home-b/sessions/2026/11/18/rollout-2026-11-18T09-08-14-01a1ec32-7ddf-77d3-9325-da719e31221d.jsonl",
+          "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-b-pua964ch",
+          "cliVersion": "0.0.0",
+          "originator": "superagent-spike",
+          "source": "vscode",
+          "canAcceptDirectInput": true,
+          "threadSource": null,
+          "agentNickname": null,
+          "agentRole": null,
+          "gitInfo": null,
+          "name": null,
+          "daybreakEnabled": null,
+          "turns": []
+        },
+        "model": "gpt-6-astra",
+        "modelProvider": "openai",
+        "serviceTier": null,
+        "disabledPluginIds": [],
+        "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-b-pua964ch",
+        "runtimeWorkspaceRoots": [
+          "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-b-pua964ch"
+        ],
+        "instructionSources": [],
+        "approvalPolicy": "on-request",
+        "approvalsReviewer": "user",
+        "sandbox": {
+          "type": "readOnly",
+          "networkAccess": false
+        },
+        "activePermissionProfile": null,
+        "reasoningEffort": null,
+        "multiAgentMode": "explicitRequestOnly"
+      }
+    },
+    {
+      "id": 3,
+      "result": {
+        "turn": {
+          "id": "01a1ec32-7e53-7a02-9d1f-a56412f384da",
+          "rootTurnId": "01a1ec32-7e53-7a02-9d1f-a56412f384da",
+          "items": [],
+          "itemsView": "notLoaded",
+          "status": "inProgress",
+          "error": null,
+          "startedAt": null,
+          "completedAt": null,
+          "durationMs": null
+        }
+      }
+    }
+  ],
+  "initialize": {
+    "id": 1,
+    "result": {
+      "userAgent": "superagent-spike/0.0.0 (Mac OS 26.6.2; arm64) xterm-256color (superagent-spike; 0.1.0)",
+      "codexHome": "<scrubbed>",
+      "platformFamily": "unix",
+      "platformOs": "macos"
+    }
+  },
+  "notifications": [
+    {
+      "method": "remoteControl/status/changed",
+      "params": {
+        "status": "disabled",
+        "serverName": "<scrubbed>",
+        "installationId": "<scrubbed>",
+        "environmentId": null
+      },
+      "emittedAtMs": 1794964094429
+    },
+    {
+      "method": "thread/started",
+      "params": {
+        "thread": {
+          "id": "01a1ec32-7ddf-77d3-9325-da719e31221d",
+          "environments": [
+            {
+              "environmentId": "local",
+              "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-b-pua964ch",
+              "runtimeWorkspaceRoots": [
+                "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-b-pua964ch"
+              ]
+            }
+          ],
+          "extra": null,
+          "sessionId": "01a1ec32-7ddf-77d3-9325-da719e31221d",
+          "forkedFromId": null,
+          "attachedToThreadId": null,
+          "parentThreadId": null,
+          "preview": "",
+          "ephemeral": false,
+          "section": null,
+          "sectionEnteredAt": null,
+          "projectId": null,
+          "historyMode": "paginated",
+          "modelProvider": "openai",
+          "model": "gpt-6-astra",
+          "reasoningEffort": null,
+          "createdAt": 1794964094,
+          "updatedAt": 1794964094,
+          "recencyAt": 1794964094,
+          "status": {
+            "type": "idle"
+          },
+          "path": "/Users/<user>/Desktop/code/codex/superagent/evidence/p0-6/home-b/sessions/2026/11/18/rollout-2026-11-18T09-08-14-01a1ec32-7ddf-77d3-9325-da719e31221d.jsonl",
+          "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-b-pua964ch",
+          "cliVersion": "0.0.0",
+          "originator": "superagent-spike",
+          "source": "vscode",
+          "canAcceptDirectInput": true,
+          "threadSource": null,
+          "agentNickname": null,
+          "agentRole": null,
+          "gitInfo": null,
+          "name": null,
+          "daybreakEnabled": null,
+          "turns": []
+        }
+      },
+      "emittedAtMs": 1794964094546
+    },
+    {
+      "method": "mcpServer/startupStatus/updated",
+      "params": {
+        "threadId": "01a1ec32-7ddf-77d3-9325-da719e31221d",
+        "name": "codex_apps",
+        "environmentId": null,
+        "status": "starting",
+        "error": null,
+        "failureReason": null
+      },
+      "emittedAtMs": 1794964094546
+    },
+    {
+      "method": "thread/status/changed",
+      "params": {
+        "threadId": "01a1ec32-7ddf-77d3-9325-da719e31221d",
+        "status": {
+          "type": "active",
+          "activeFlags": []
+        }
+      },
+      "emittedAtMs": 1794964094555
+    },
+    {
+      "method": "turn/started",
+      "params": {
+        "threadId": "01a1ec32-7ddf-77d3-9325-da719e31221d",
+        "turn": {
+          "id": "01a1ec32-7e53-7a02-9d1f-a56412f384da",
+          "rootTurnId": "01a1ec32-7e53-7a02-9d1f-a56412f384da",
+          "items": [],
+          "itemsView": "notLoaded",
+          "status": "inProgress",
+          "error": null,
+          "startedAt": 1794964094,
+          "completedAt": null,
+          "durationMs": null
+        }
+      },
+      "emittedAtMs": 1794964094555
+    },
+    {
+      "method": "account/updated",
+      "params": {
+        "authMode": "<scrubbed>",
+        "planType": "<scrubbed>"
+      },
+      "emittedAtMs": 1794964095366
+    },
+    {
+      "method": "mcpServer/startupStatus/updated",
+      "params": {
+        "threadId": "01a1ec32-7ddf-77d3-9325-da719e31221d",
+        "name": "codex_apps",
+        "environmentId": null,
+        "status": "ready",
+        "error": null,
+        "failureReason": null
+      },
+      "emittedAtMs": 1794964095765
+    },
+    {
+      "method": "item/started",
+      "params": {
+        "item": {
+          "type": "userMessage",
+          "id": "01a1ec32-8d3f-7770-a096-cf78d23e58d3",
+          "clientId": null,
+          "content": [
+            {
+              "type": "text",
+              "text": "Run the shell command `touch approval-probe.txt` in the current directory using your command execution tool. If the command is denied by the user, do not retry and do not create the file with any other tool; reply exactly DENIED.",
+              "text_elements": []
+            }
+          ],
+          "startedAtMs": 1794964098368,
+          "completedAtMs": null
+        },
+        "threadId": "01a1ec32-7ddf-77d3-9325-da719e31221d",
+        "turnId": "01a1ec32-7e53-7a02-9d1f-a56412f384da",
+        "startedAtMs": 1794964098368
+      },
+      "emittedAtMs": 1794964098368
+    },
+    {
+      "method": "item/completed",
+      "params": {
+        "item": {
+          "type": "userMessage",
+          "id": "01a1ec32-8d3f-7770-a096-cf78d23e58d3",
+          "clientId": null,
+          "content": [
+            {
+              "type": "text",
+              "text": "Run the shell command `touch approval-probe.txt` in the current directory using your command execution tool. If the command is denied by the user, do not retry and do not create the file with any other tool; reply exactly DENIED.",
+              "text_elements": []
+            }
+          ],
+          "startedAtMs": 1794964098368,
+          "completedAtMs": 1794964098368
+        },
+        "threadId": "01a1ec32-7ddf-77d3-9325-da719e31221d",
+        "turnId": "01a1ec32-7e53-7a02-9d1f-a56412f384da",
+        "contentTokenCount": null,
+        "completedAtMs": 1794964098368
+      },
+      "emittedAtMs": 1794964098370
+    },
+    {
+      "method": "item/started",
+      "params": {
+        "item": {
+          "type": "agentMessage",
+          "moderation": null,
+          "id": "msg_01a8cdc8cb8261d4016afcfa84588487d0bd811a445d6439ed",
+          "text": "",
+          "phase": "commentary",
+          "memoryCitation": null,
+          "delivery": null,
+          "questions": null,
+          "startedAtMs": 1794964100328,
+          "completedAtMs": null
+        },
+        "threadId": "01a1ec32-7ddf-77d3-9325-da719e31221d",
+        "turnId": "01a1ec32-7e53-7a02-9d1f-a56412f384da",
+        "startedAtMs": 1794964100328
+      },
+      "emittedAtMs": 1794964100329
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1ec32-7ddf-77d3-9325-da719e31221d",
+        "turnId": "01a1ec32-7e53-7a02-9d1f-a56412f384da",
+        "itemId": "msg_01a8cdc8cb8261d4016afcfa84588487d0bd811a445d6439ed",
+        "delta": "I"
+      },
+      "emittedAtMs": 1794964100329
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1ec32-7ddf-77d3-9325-da719e31221d",
+        "turnId": "01a1ec32-7e53-7a02-9d1f-a56412f384da",
+        "itemId": "msg_01a8cdc8cb8261d4016afcfa84588487d0bd811a445d6439ed",
+        "delta": "’ll"
+      },
+      "emittedAtMs": 1794964100329
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1ec32-7ddf-77d3-9325-da719e31221d",
+        "turnId": "01a1ec32-7e53-7a02-9d1f-a56412f384da",
+        "itemId": "msg_01a8cdc8cb8261d4016afcfa84588487d0bd811a445d6439ed",
+        "delta": " run"
+      },
+      "emittedAtMs": 1794964100329
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1ec32-7ddf-77d3-9325-da719e31221d",
+        "turnId": "01a1ec32-7e53-7a02-9d1f-a56412f384da",
+        "itemId": "msg_01a8cdc8cb8261d4016afcfa84588487d0bd811a445d6439ed",
+        "delta": " the"
+      },
+      "emittedAtMs": 1794964100329
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1ec32-7ddf-77d3-9325-da719e31221d",
+        "turnId": "01a1ec32-7e53-7a02-9d1f-a56412f384da",
+        "itemId": "msg_01a8cdc8cb8261d4016afcfa84588487d0bd811a445d6439ed",
+        "delta": " command"
+      },
+      "emittedAtMs": 1794964100329
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1ec32-7ddf-77d3-9325-da719e31221d",
+        "turnId": "01a1ec32-7e53-7a02-9d1f-a56412f384da",
+        "itemId": "msg_01a8cdc8cb8261d4016afcfa84588487d0bd811a445d6439ed",
+        "delta": " in"
+      },
+      "emittedAtMs": 1794964100329
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1ec32-7ddf-77d3-9325-da719e31221d",
+        "turnId": "01a1ec32-7e53-7a02-9d1f-a56412f384da",
+        "itemId": "msg_01a8cdc8cb8261d4016afcfa84588487d0bd811a445d6439ed",
+        "delta": " the"
+      },
+      "emittedAtMs": 1794964100329
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1ec32-7ddf-77d3-9325-da719e31221d",
+        "turnId": "01a1ec32-7e53-7a02-9d1f-a56412f384da",
+        "itemId": "msg_01a8cdc8cb8261d4016afcfa84588487d0bd811a445d6439ed",
+        "delta": " current"
+      },
+      "emittedAtMs": 1794964100329
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1ec32-7ddf-77d3-9325-da719e31221d",
+        "turnId": "01a1ec32-7e53-7a02-9d1f-a56412f384da",
+        "itemId": "msg_01a8cdc8cb8261d4016afcfa84588487d0bd811a445d6439ed",
+        "delta": " directory"
+      },
+      "emittedAtMs": 1794964100329
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1ec32-7ddf-77d3-9325-da719e31221d",
+        "turnId": "01a1ec32-7e53-7a02-9d1f-a56412f384da",
+        "itemId": "msg_01a8cdc8cb8261d4016afcfa84588487d0bd811a445d6439ed",
+        "delta": "."
+      },
+      "emittedAtMs": 1794964100329
+    },
+    {
+      "method": "item/completed",
+      "params": {
+        "item": {
+          "type": "agentMessage",
+          "moderation": null,
+          "id": "msg_01a8cdc8cb8261d4016afcfa84588487d0bd811a445d6439ed",
+          "text": "I’ll run the command in the current directory.",
+          "phase": "commentary",
+          "memoryCitation": null,
+          "delivery": null,
+          "questions": null,
+          "startedAtMs": 1794964100328,
+          "completedAtMs": 1794964100643
+        },
+        "threadId": "01a1ec32-7ddf-77d3-9325-da719e31221d",
+        "turnId": "01a1ec32-7e53-7a02-9d1f-a56412f384da",
+        "contentTokenCount": 11,
+        "completedAtMs": 1794964100643
+      },
+      "emittedAtMs": 1794964100646
+    },
+    {
+      "method": "thread/status/changed",
+      "params": {
+        "threadId": "01a1ec32-7ddf-77d3-9325-da719e31221d",
+        "status": {
+          "type": "active",
+          "activeFlags": [
+            "waitingOnApproval"
+          ]
+        }
+      },
+      "emittedAtMs": 1794964101451
+    },
+    {
+      "method": "item/started",
+      "params": {
+        "item": {
+          "type": "commandExecution",
+          "id": "exec-9b8120a7-e268-4717-9a53-9d39ee122135",
+          "pluginId": null,
+          "scriptPath": null,
+          "command": "/bin/zsh -lc 'touch approval-probe.txt'",
+          "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-b-pua964ch",
+          "processId": null,
+          "source": "agent",
+          "status": "inProgress",
+          "commandActions": [
+            {
+              "type": "unknown",
+              "command": "touch approval-probe.txt"
+            }
+          ],
+          "aggregatedOutput": null,
+          "exitCode": null,
+          "durationMs": null,
+          "startedAtMs": 1794964101451,
+          "completedAtMs": null
+        },
+        "threadId": "01a1ec32-7ddf-77d3-9325-da719e31221d",
+        "turnId": "01a1ec32-7e53-7a02-9d1f-a56412f384da",
+        "startedAtMs": 1794964101451
+      },
+      "emittedAtMs": 1794964101452
+    },
+    {
+      "method": "serverRequest/resolved",
+      "params": {
+        "threadId": "01a1ec32-7ddf-77d3-9325-da719e31221d",
+        "requestId": 0
+      },
+      "emittedAtMs": 1794964101453
+    },
+    {
+      "method": "item/completed",
+      "params": {
+        "item": {
+          "type": "commandExecution",
+          "id": "exec-9b8120a7-e268-4717-9a53-9d39ee122135",
+          "pluginId": null,
+          "scriptPath": null,
+          "command": "/bin/zsh -lc 'touch approval-probe.txt'",
+          "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-b-pua964ch",
+          "processId": null,
+          "source": "agent",
+          "status": "declined",
+          "commandActions": [
+            {
+              "type": "unknown",
+              "command": "touch approval-probe.txt"
+            }
+          ],
+          "aggregatedOutput": null,
+          "exitCode": null,
+          "durationMs": null,
+          "startedAtMs": 1794964101451,
+          "completedAtMs": 1794964101454
+        },
+        "threadId": "01a1ec32-7ddf-77d3-9325-da719e31221d",
+        "turnId": "01a1ec32-7e53-7a02-9d1f-a56412f384da",
+        "contentTokenCount": null,
+        "completedAtMs": 1794964101454
+      },
+      "emittedAtMs": 1794964101454
+    },
+    {
+      "method": "thread/status/changed",
+      "params": {
+        "threadId": "01a1ec32-7ddf-77d3-9325-da719e31221d",
+        "status": {
+          "type": "active",
+          "activeFlags": []
+        }
+      },
+      "emittedAtMs": 1794964101454
+    },
+    {
+      "method": "thread/tokenUsage/updated",
+      "params": {
+        "threadId": "01a1ec32-7ddf-77d3-9325-da719e31221d",
+        "turnId": "01a1ec32-7e53-7a02-9d1f-a56412f384da",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 19790,
+            "inputTokens": 19726,
+            "cachedInputTokens": 0,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 64,
+            "reasoningOutputTokens": 0
+          },
+          "last": {
+            "totalTokens": 19790,
+            "inputTokens": 19726,
+            "cachedInputTokens": 0,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 64,
+            "reasoningOutputTokens": 0
+          },
+          "modelContextWindow": 258400
+        }
+      },
+      "emittedAtMs": 1794964101460
+    },
+    {
+      "method": "account/rateLimits/updated",
+      "params": {
+        "rateLimits": {
+          "limitId": "codex",
+          "limitName": null,
+          "normalModelSlug": null,
+          "primary": {
+            "usedPercent": 30,
+            "windowDurationMins": 300,
+            "resetsAt": 1794978024
+          },
+          "secondary": {
+            "usedPercent": 45,
+            "windowDurationMins": 10080,
+            "resetsAt": 1795325947
+          },
+          "credits": {
+            "hasCredits": false,
+            "unlimited": false,
+            "balance": "0"
+          },
+          "individualLimit": null,
+          "spendControlReached": null,
+          "planType": "<scrubbed>",
+          "rateLimitReachedType": null
+        }
+      },
+      "emittedAtMs": 1794964101460
+    },
+    {
+      "method": "item/started",
+      "params": {
+        "item": {
+          "type": "agentMessage",
+          "moderation": null,
+          "id": "msg_01a8cdc8cb8261d4016afcfa8754cc87d09ec11fab7d04bf56",
+          "text": "",
+          "phase": "final_answer",
+          "memoryCitation": null,
+          "delivery": null,
+          "questions": null,
+          "startedAtMs": 1794964103315,
+          "completedAtMs": null
+        },
+        "threadId": "01a1ec32-7ddf-77d3-9325-da719e31221d",
+        "turnId": "01a1ec32-7e53-7a02-9d1f-a56412f384da",
+        "startedAtMs": 1794964103315
+      },
+      "emittedAtMs": 1794964103315
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1ec32-7ddf-77d3-9325-da719e31221d",
+        "turnId": "01a1ec32-7e53-7a02-9d1f-a56412f384da",
+        "itemId": "msg_01a8cdc8cb8261d4016afcfa8754cc87d09ec11fab7d04bf56",
+        "delta": "DEN"
+      },
+      "emittedAtMs": 1794964103315
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1ec32-7ddf-77d3-9325-da719e31221d",
+        "turnId": "01a1ec32-7e53-7a02-9d1f-a56412f384da",
+        "itemId": "msg_01a8cdc8cb8261d4016afcfa8754cc87d09ec11fab7d04bf56",
+        "delta": "IED"
+      },
+      "emittedAtMs": 1794964103315
+    },
+    {
+      "method": "item/completed",
+      "params": {
+        "item": {
+          "type": "agentMessage",
+          "moderation": null,
+          "id": "msg_01a8cdc8cb8261d4016afcfa8754cc87d09ec11fab7d04bf56",
+          "text": "DENIED",
+          "phase": "final_answer",
+          "memoryCitation": null,
+          "delivery": null,
+          "questions": null,
+          "startedAtMs": 1794964103315,
+          "completedAtMs": 1794964103406
+        },
+        "threadId": "01a1ec32-7ddf-77d3-9325-da719e31221d",
+        "turnId": "01a1ec32-7e53-7a02-9d1f-a56412f384da",
+        "contentTokenCount": 3,
+        "completedAtMs": 1794964103406
+      },
+      "emittedAtMs": 1794964103409
+    },
+    {
+      "method": "thread/tokenUsage/updated",
+      "params": {
+        "threadId": "01a1ec32-7ddf-77d3-9325-da719e31221d",
+        "turnId": "01a1ec32-7e53-7a02-9d1f-a56412f384da",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 39631,
+            "inputTokens": 39561,
+            "cachedInputTokens": 19584,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 70,
+            "reasoningOutputTokens": 0
+          },
+          "last": {
+            "totalTokens": 19841,
+            "inputTokens": 19835,
+            "cachedInputTokens": 19584,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 6,
+            "reasoningOutputTokens": 0
+          },
+          "modelContextWindow": 258400
+        }
+      },
+      "emittedAtMs": 1794964103427
+    },
+    {
+      "method": "account/rateLimits/updated",
+      "params": {
+        "rateLimits": {
+          "limitId": "codex",
+          "limitName": null,
+          "normalModelSlug": null,
+          "primary": {
+            "usedPercent": 32,
+            "windowDurationMins": 300,
+            "resetsAt": 1794978024
+          },
+          "secondary": {
+            "usedPercent": 45,
+            "windowDurationMins": 10080,
+            "resetsAt": 1795325947
+          },
+          "credits": {
+            "hasCredits": false,
+            "unlimited": false,
+            "balance": "0"
+          },
+          "individualLimit": null,
+          "spendControlReached": null,
+          "planType": "<scrubbed>",
+          "rateLimitReachedType": null
+        }
+      },
+      "emittedAtMs": 1794964103427
+    },
+    {
+      "method": "thread/status/changed",
+      "params": {
+        "threadId": "01a1ec32-7ddf-77d3-9325-da719e31221d",
+        "status": {
+          "type": "idle"
+        }
+      },
+      "emittedAtMs": 1794964103432
+    },
+    {
+      "method": "turn/completed",
+      "params": {
+        "threadId": "01a1ec32-7ddf-77d3-9325-da719e31221d",
+        "turn": {
+          "id": "01a1ec32-7e53-7a02-9d1f-a56412f384da",
+          "rootTurnId": "01a1ec32-7e53-7a02-9d1f-a56412f384da",
+          "items": [
+            {
+              "type": "agentMessage",
+              "moderation": null,
+              "id": "msg_01a8cdc8cb8261d4016afcfa8754cc87d09ec11fab7d04bf56",
+              "text": "DENIED",
+              "phase": "final_answer",
+              "memoryCitation": null,
+              "delivery": null,
+              "questions": null,
+              "startedAtMs": 1794964103315,
+              "completedAtMs": 1794964103406
+            }
+          ],
+          "itemsView": "summary",
+          "status": "completed",
+          "error": null,
+          "startedAt": 1794964094,
+          "completedAt": 1794964103,
+          "durationMs": 8880
+        }
+      },
+      "emittedAtMs": 1794964103432
+    }
+  ],
+  "notificationCount": 36,
+  "serverRequests": [
+    {
+      "method": "item/commandExecution/requestApproval",
+      "id": 0,
+      "params": {
+        "kind": "command",
+        "threadId": "01a1ec32-7ddf-77d3-9325-da719e31221d",
+        "turnId": "01a1ec32-7e53-7a02-9d1f-a56412f384da",
+        "itemId": "exec-9b8120a7-e268-4717-9a53-9d39ee122135",
+        "startedAtMs": 1794964101451,
+        "environmentId": "local",
+        "reason": "Allow creating approval-probe.txt in the current directory?",
+        "command": "/bin/zsh -lc 'touch approval-probe.txt'",
+        "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-b-pua964ch",
+        "commandActions": [
+          {
+            "type": "unknown",
+            "command": "touch approval-probe.txt"
+          }
+        ],
+        "proposedExecpolicyAmendment": [
+          "touch",
+          "approval-probe.txt"
+        ],
+        "availableDecisions": [
+          "accept",
+          {
+            "acceptWithExecpolicyAmendment": {
+              "execpolicy_amendment": [
+                "touch",
+                "approval-probe.txt"
+              ]
+            }
+          },
+          "cancel"
+        ]
+      }
+    }
+  ],
+  "serverRequestDecisions": [
+    {
+      "method": "item/commandExecution/requestApproval",
+      "payload": {
+        "result": {
+          "decision": "decline"
+        }
+      }
+    }
+  ],
+  "pendingServerRequestIds": [],
+  "maxFrameBytesSeen": 1624,
+  "frameLimitBytes": 16777216,
+  "frameViolations": [],
+  "spawnArgv": [
+    "/Users/<user>/Desktop/code/codex/superagent/packaging/superagent-engine",
+    "app-server",
+    "--listen",
+    "stdio://"
+  ],
+  "spawnWiring": {
+    "stdin": "PIPE (JSONL requests)",
+    "stdout": "PIPE (JSONL frames only)",
+    "stderr": "PIPE (collected separately, ring buffer 2000 lines)",
+    "env": {
+      "CODEX_HOME": "<set per run>"
+    }
+  },
+  "runLogPath": null,
+  "runLogLimitBytes": 104857600,
+  "runLogRotations": 0,
+  "runLogBytesRetained": 0,
+  "defaultTimeoutsByMethod": {
+    "initialize": 30,
+    "thread/start": 60,
+    "thread/read": 60,
+    "thread/list": 60,
+    "thread/resume": 60,
+    "turn/start": 30,
+    "turn/interrupt": 30,
+    "command/exec": 90,
+    "command/exec/terminate": 30
+  },
+  "stderrTail": [
+    "\u001b[2m2026-11-18T01:08:21.454567Z\u001b[0m \u001b[31mERROR\u001b[0m \u001b[2mcodex_core::tools::router\u001b[0m\u001b[2m:\u001b[0m \u001b[3merror\u001b[0m\u001b[2m=\u001b[0mexec_command failed: CreateProcess { message: \"Rejected(\\\"rejected by user\\\")\" }"
+  ],
+  "exitCode": null
+}

@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "id": "fixture-delivery",
+  "version": "0.1.0",
+  "variables": {
+    "workspace": { "type": "path", "required": true },
+    "max_fix_rounds": { "type": "number", "required": false, "default": 2 }
+  },
+  "nodes": [
+    {
+      "id": "plan",
+      "type": "capability",
+      "command_ref": "team.plan",
+      "outputs": ["plan-doc"]
+    },
+    {
+      "id": "implement",
+      "type": "capability",
+      "command_ref": "team.implement",
+      "depends_on": ["plan"],
+      "inputs": ["plan-doc"],
+      "outputs": ["patch"]
+    },
+    {
+      "id": "verify",
+      "type": "verification",
+      "depends_on": ["implement"],
+      "argv": ["python3", "-m", "pytest", "${workspace}/tests"],
+      "gates": ["tests-pass", "patch-schema"]
+    },
+    {
+      "id": "fix-loop",
+      "type": "loop",
+      "depends_on": ["verify"],
+      "body": "implement",
+      "max_attempts": 2,
+      "wall_timeout_secs": 1800,
+      "gate": "tests-pass"
+    }
+  ],
+  "gates": {
+    "tests-pass": {
+      "id": "tests-pass",
+      "kind": "command",
+      "argv": ["python3", "-m", "pytest", "${workspace}/tests"],
+      "expect_exit_code": 0
+    },
+    "patch-schema": {
+      "id": "patch-schema",
+      "kind": "artifact_schema",
+      "artifact": "patch",
+      "schema_ref": "schemas/patch.json"
+    },
+    "ship-approval": {
+      "id": "ship-approval",
+      "kind": "approval",
+      "prompt": "Approve delivery report?"
+    }
+  },
+  "artifacts": {
+    "plan-doc": { "path": "${workspace}/artifacts/plan.md", "media_type": "text/markdown" },
+    "patch": { "path": "${workspace}/artifacts/patch.json", "media_type": "application/json", "schema_ref": "schemas/patch.json" }
+  }
+}

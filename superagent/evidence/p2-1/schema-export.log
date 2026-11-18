@@ -1,0 +1,4 @@
+wrote schema/json/Workflow.json
+wrote schema/json/Node.json
+wrote schema/json/Gate.json
+wrote schema/json/ArtifactSpec.json

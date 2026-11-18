@@ -1,0 +1,17 @@
+{
+  "source": "p0-2-transcript",
+  "subAgentItemCount": 24,
+  "itemKinds": {
+    "started": 6,
+    "wait": 8,
+    "interacted": 4,
+    "completed": 6
+  },
+  "lifecycle": {
+    "spawnObserved": true,
+    "activityObserved": true,
+    "terminalObserved": true
+  },
+  "childHistoryReadableViaPublicRpc": true,
+  "verdict": "SUFFICIENT_NO_FORK"
+}

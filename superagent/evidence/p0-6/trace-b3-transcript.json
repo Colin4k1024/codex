@@ -1,0 +1,894 @@
+{
+  "results": [
+    {
+      "id": 2,
+      "result": {
+        "thread": {
+          "id": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+          "environments": [
+            {
+              "environmentId": "local",
+              "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-b3-8fnb9jus",
+              "runtimeWorkspaceRoots": [
+                "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-b3-8fnb9jus"
+              ]
+            }
+          ],
+          "extra": null,
+          "sessionId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+          "forkedFromId": null,
+          "attachedToThreadId": null,
+          "parentThreadId": null,
+          "preview": "",
+          "ephemeral": false,
+          "section": null,
+          "sectionEnteredAt": null,
+          "projectId": null,
+          "historyMode": "paginated",
+          "modelProvider": "openai",
+          "model": "gpt-6-astra",
+          "reasoningEffort": null,
+          "createdAt": 1794964121,
+          "updatedAt": 1794964121,
+          "recencyAt": 1794964121,
+          "status": {
+            "type": "idle"
+          },
+          "path": "/Users/<user>/Desktop/code/codex/superagent/evidence/p0-6/home-b/sessions/2026/11/18/rollout-2026-11-18T09-08-41-01a1ec32-e6a9-7e82-ae68-740cc9152940.jsonl",
+          "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-b3-8fnb9jus",
+          "cliVersion": "0.0.0",
+          "originator": "superagent-spike",
+          "source": "vscode",
+          "canAcceptDirectInput": true,
+          "threadSource": null,
+          "agentNickname": null,
+          "agentRole": null,
+          "gitInfo": null,
+          "name": null,
+          "daybreakEnabled": null,
+          "turns": []
+        },
+        "model": "gpt-6-astra",
+        "modelProvider": "openai",
+        "serviceTier": null,
+        "disabledPluginIds": [],
+        "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-b3-8fnb9jus",
+        "runtimeWorkspaceRoots": [
+          "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-b3-8fnb9jus"
+        ],
+        "instructionSources": [],
+        "approvalPolicy": "on-request",
+        "approvalsReviewer": "user",
+        "sandbox": {
+          "type": "readOnly",
+          "networkAccess": false
+        },
+        "activePermissionProfile": null,
+        "reasoningEffort": null,
+        "multiAgentMode": "explicitRequestOnly"
+      }
+    },
+    {
+      "id": 3,
+      "result": {
+        "turn": {
+          "id": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+          "rootTurnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+          "items": [],
+          "itemsView": "notLoaded",
+          "status": "inProgress",
+          "error": null,
+          "startedAt": null,
+          "completedAt": null,
+          "durationMs": null
+        }
+      }
+    }
+  ],
+  "initialize": {
+    "id": 1,
+    "result": {
+      "userAgent": "superagent-spike/0.0.0 (Mac OS 26.6.2; arm64) xterm-256color (superagent-spike; 0.1.0)",
+      "codexHome": "<scrubbed>",
+      "platformFamily": "unix",
+      "platformOs": "macos"
+    }
+  },
+  "notifications": [
+    {
+      "method": "remoteControl/status/changed",
+      "params": {
+        "status": "disabled",
+        "serverName": "<scrubbed>",
+        "installationId": "<scrubbed>",
+        "environmentId": null
+      },
+      "emittedAtMs": 1794964121255
+    },
+    {
+      "method": "thread/started",
+      "params": {
+        "thread": {
+          "id": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+          "environments": [
+            {
+              "environmentId": "local",
+              "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-b3-8fnb9jus",
+              "runtimeWorkspaceRoots": [
+                "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-b3-8fnb9jus"
+              ]
+            }
+          ],
+          "extra": null,
+          "sessionId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+          "forkedFromId": null,
+          "attachedToThreadId": null,
+          "parentThreadId": null,
+          "preview": "",
+          "ephemeral": false,
+          "section": null,
+          "sectionEnteredAt": null,
+          "projectId": null,
+          "historyMode": "paginated",
+          "modelProvider": "openai",
+          "model": "gpt-6-astra",
+          "reasoningEffort": null,
+          "createdAt": 1794964121,
+          "updatedAt": 1794964121,
+          "recencyAt": 1794964121,
+          "status": {
+            "type": "idle"
+          },
+          "path": "/Users/<user>/Desktop/code/codex/superagent/evidence/p0-6/home-b/sessions/2026/11/18/rollout-2026-11-18T09-08-41-01a1ec32-e6a9-7e82-ae68-740cc9152940.jsonl",
+          "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-b3-8fnb9jus",
+          "cliVersion": "0.0.0",
+          "originator": "superagent-spike",
+          "source": "vscode",
+          "canAcceptDirectInput": true,
+          "threadSource": null,
+          "agentNickname": null,
+          "agentRole": null,
+          "gitInfo": null,
+          "name": null,
+          "daybreakEnabled": null,
+          "turns": []
+        }
+      },
+      "emittedAtMs": 1794964121358
+    },
+    {
+      "method": "mcpServer/startupStatus/updated",
+      "params": {
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "name": "codex_apps",
+        "environmentId": null,
+        "status": "starting",
+        "error": null,
+        "failureReason": null
+      },
+      "emittedAtMs": 1794964121358
+    },
+    {
+      "method": "thread/status/changed",
+      "params": {
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "status": {
+          "type": "active",
+          "activeFlags": []
+        }
+      },
+      "emittedAtMs": 1794964121365
+    },
+    {
+      "method": "turn/started",
+      "params": {
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "turn": {
+          "id": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+          "rootTurnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+          "items": [],
+          "itemsView": "notLoaded",
+          "status": "inProgress",
+          "error": null,
+          "startedAt": 1794964121,
+          "completedAt": null,
+          "durationMs": null
+        }
+      },
+      "emittedAtMs": 1794964121366
+    },
+    {
+      "method": "account/updated",
+      "params": {
+        "authMode": "<scrubbed>",
+        "planType": "<scrubbed>"
+      },
+      "emittedAtMs": 1794964121924
+    },
+    {
+      "method": "mcpServer/startupStatus/updated",
+      "params": {
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "name": "codex_apps",
+        "environmentId": null,
+        "status": "ready",
+        "error": null,
+        "failureReason": null
+      },
+      "emittedAtMs": 1794964122560
+    },
+    {
+      "method": "item/started",
+      "params": {
+        "item": {
+          "type": "userMessage",
+          "id": "01a1ec32-f243-7141-b253-945e97429627",
+          "clientId": null,
+          "content": [
+            {
+              "type": "text",
+              "text": "Use your apply_patch / file editing tool (NOT a shell command) to create a file named patch-probe.txt containing PATCHED. If the change is denied by the user, do not retry with any tool; reply exactly PATCH-DENIED.",
+              "text_elements": []
+            }
+          ],
+          "startedAtMs": 1794964124228,
+          "completedAtMs": null
+        },
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "turnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+        "startedAtMs": 1794964124228
+      },
+      "emittedAtMs": 1794964124228
+    },
+    {
+      "method": "item/completed",
+      "params": {
+        "item": {
+          "type": "userMessage",
+          "id": "01a1ec32-f243-7141-b253-945e97429627",
+          "clientId": null,
+          "content": [
+            {
+              "type": "text",
+              "text": "Use your apply_patch / file editing tool (NOT a shell command) to create a file named patch-probe.txt containing PATCHED. If the change is denied by the user, do not retry with any tool; reply exactly PATCH-DENIED.",
+              "text_elements": []
+            }
+          ],
+          "startedAtMs": 1794964124228,
+          "completedAtMs": 1794964124228
+        },
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "turnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+        "contentTokenCount": null,
+        "completedAtMs": 1794964124228
+      },
+      "emittedAtMs": 1794964124230
+    },
+    {
+      "method": "item/started",
+      "params": {
+        "item": {
+          "type": "agentMessage",
+          "moderation": null,
+          "id": "msg_0f39080761fdac7c016afcfa9f16c087d09ed9c39e32898872",
+          "text": "",
+          "phase": "commentary",
+          "memoryCitation": null,
+          "delivery": null,
+          "questions": null,
+          "startedAtMs": 1794964127073,
+          "completedAtMs": null
+        },
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "turnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+        "startedAtMs": 1794964127073
+      },
+      "emittedAtMs": 1794964127073
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "turnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+        "itemId": "msg_0f39080761fdac7c016afcfa9f16c087d09ed9c39e32898872",
+        "delta": "I"
+      },
+      "emittedAtMs": 1794964127073
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "turnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+        "itemId": "msg_0f39080761fdac7c016afcfa9f16c087d09ed9c39e32898872",
+        "delta": "’ll"
+      },
+      "emittedAtMs": 1794964127073
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "turnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+        "itemId": "msg_0f39080761fdac7c016afcfa9f16c087d09ed9c39e32898872",
+        "delta": " create"
+      },
+      "emittedAtMs": 1794964127073
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "turnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+        "itemId": "msg_0f39080761fdac7c016afcfa9f16c087d09ed9c39e32898872",
+        "delta": " `"
+      },
+      "emittedAtMs": 1794964127074
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "turnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+        "itemId": "msg_0f39080761fdac7c016afcfa9f16c087d09ed9c39e32898872",
+        "delta": "patch"
+      },
+      "emittedAtMs": 1794964127074
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "turnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+        "itemId": "msg_0f39080761fdac7c016afcfa9f16c087d09ed9c39e32898872",
+        "delta": "-pro"
+      },
+      "emittedAtMs": 1794964127262
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "turnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+        "itemId": "msg_0f39080761fdac7c016afcfa9f16c087d09ed9c39e32898872",
+        "delta": "be"
+      },
+      "emittedAtMs": 1794964127262
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "turnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+        "itemId": "msg_0f39080761fdac7c016afcfa9f16c087d09ed9c39e32898872",
+        "delta": ".txt"
+      },
+      "emittedAtMs": 1794964127262
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "turnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+        "itemId": "msg_0f39080761fdac7c016afcfa9f16c087d09ed9c39e32898872",
+        "delta": "`"
+      },
+      "emittedAtMs": 1794964127262
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "turnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+        "itemId": "msg_0f39080761fdac7c016afcfa9f16c087d09ed9c39e32898872",
+        "delta": " containing"
+      },
+      "emittedAtMs": 1794964127262
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "turnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+        "itemId": "msg_0f39080761fdac7c016afcfa9f16c087d09ed9c39e32898872",
+        "delta": " `"
+      },
+      "emittedAtMs": 1794964127482
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "turnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+        "itemId": "msg_0f39080761fdac7c016afcfa9f16c087d09ed9c39e32898872",
+        "delta": "PATCH"
+      },
+      "emittedAtMs": 1794964127482
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "turnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+        "itemId": "msg_0f39080761fdac7c016afcfa9f16c087d09ed9c39e32898872",
+        "delta": "ED"
+      },
+      "emittedAtMs": 1794964127482
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "turnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+        "itemId": "msg_0f39080761fdac7c016afcfa9f16c087d09ed9c39e32898872",
+        "delta": "`"
+      },
+      "emittedAtMs": 1794964127482
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "turnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+        "itemId": "msg_0f39080761fdac7c016afcfa9f16c087d09ed9c39e32898872",
+        "delta": " using"
+      },
+      "emittedAtMs": 1794964127482
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "turnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+        "itemId": "msg_0f39080761fdac7c016afcfa9f16c087d09ed9c39e32898872",
+        "delta": " the"
+      },
+      "emittedAtMs": 1794964127482
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "turnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+        "itemId": "msg_0f39080761fdac7c016afcfa9f16c087d09ed9c39e32898872",
+        "delta": " file"
+      },
+      "emittedAtMs": 1794964127482
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "turnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+        "itemId": "msg_0f39080761fdac7c016afcfa9f16c087d09ed9c39e32898872",
+        "delta": " editing"
+      },
+      "emittedAtMs": 1794964127482
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "turnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+        "itemId": "msg_0f39080761fdac7c016afcfa9f16c087d09ed9c39e32898872",
+        "delta": " tool"
+      },
+      "emittedAtMs": 1794964127482
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "turnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+        "itemId": "msg_0f39080761fdac7c016afcfa9f16c087d09ed9c39e32898872",
+        "delta": ".\n"
+      },
+      "emittedAtMs": 1794964127482
+    },
+    {
+      "method": "item/completed",
+      "params": {
+        "item": {
+          "type": "agentMessage",
+          "moderation": null,
+          "id": "msg_0f39080761fdac7c016afcfa9f16c087d09ed9c39e32898872",
+          "text": "I’ll create `patch-probe.txt` containing `PATCHED` using the file editing tool.\n",
+          "phase": "commentary",
+          "memoryCitation": null,
+          "delivery": null,
+          "questions": null,
+          "startedAtMs": 1794964127073,
+          "completedAtMs": 1794964127704
+        },
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "turnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+        "contentTokenCount": 21,
+        "completedAtMs": 1794964127704
+      },
+      "emittedAtMs": 1794964127709
+    },
+    {
+      "method": "item/started",
+      "params": {
+        "item": {
+          "type": "fileChange",
+          "id": "exec-e754f5ba-95c9-4835-b1b3-1c89cefd2fd9",
+          "changes": [
+            {
+              "path": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-b3-8fnb9jus/patch-probe.txt",
+              "kind": {
+                "type": "add"
+              },
+              "diff": "PATCHED\n"
+            }
+          ],
+          "status": "inProgress",
+          "startedAtMs": 1794964129112,
+          "completedAtMs": null
+        },
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "turnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+        "startedAtMs": 1794964129112
+      },
+      "emittedAtMs": 1794964129113
+    },
+    {
+      "method": "thread/status/changed",
+      "params": {
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "status": {
+          "type": "active",
+          "activeFlags": [
+            "waitingOnApproval"
+          ]
+        }
+      },
+      "emittedAtMs": 1794964129114
+    },
+    {
+      "method": "serverRequest/resolved",
+      "params": {
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "requestId": 0
+      },
+      "emittedAtMs": 1794964129114
+    },
+    {
+      "method": "thread/status/changed",
+      "params": {
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "status": {
+          "type": "active",
+          "activeFlags": []
+        }
+      },
+      "emittedAtMs": 1794964129115
+    },
+    {
+      "method": "item/completed",
+      "params": {
+        "item": {
+          "type": "fileChange",
+          "id": "exec-e754f5ba-95c9-4835-b1b3-1c89cefd2fd9",
+          "changes": [
+            {
+              "path": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-b3-8fnb9jus/patch-probe.txt",
+              "kind": {
+                "type": "add"
+              },
+              "diff": "PATCHED\n"
+            }
+          ],
+          "status": "declined",
+          "startedAtMs": 1794964129112,
+          "completedAtMs": 1794964129115
+        },
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "turnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+        "contentTokenCount": null,
+        "completedAtMs": 1794964129115
+      },
+      "emittedAtMs": 1794964129121
+    },
+    {
+      "method": "thread/tokenUsage/updated",
+      "params": {
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "turnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 19837,
+            "inputTokens": 19733,
+            "cachedInputTokens": 0,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 104,
+            "reasoningOutputTokens": 0
+          },
+          "last": {
+            "totalTokens": 19837,
+            "inputTokens": 19733,
+            "cachedInputTokens": 0,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 104,
+            "reasoningOutputTokens": 0
+          },
+          "modelContextWindow": 258400
+        }
+      },
+      "emittedAtMs": 1794964129124
+    },
+    {
+      "method": "account/rateLimits/updated",
+      "params": {
+        "rateLimits": {
+          "limitId": "codex",
+          "limitName": null,
+          "normalModelSlug": null,
+          "primary": {
+            "usedPercent": 35,
+            "windowDurationMins": 300,
+            "resetsAt": 1794978024
+          },
+          "secondary": {
+            "usedPercent": 45,
+            "windowDurationMins": 10080,
+            "resetsAt": 1795325947
+          },
+          "credits": {
+            "hasCredits": false,
+            "unlimited": false,
+            "balance": "0"
+          },
+          "individualLimit": null,
+          "spendControlReached": null,
+          "planType": "<scrubbed>",
+          "rateLimitReachedType": null
+        }
+      },
+      "emittedAtMs": 1794964129124
+    },
+    {
+      "method": "item/started",
+      "params": {
+        "item": {
+          "type": "agentMessage",
+          "moderation": null,
+          "id": "msg_0f39080761fdac7c016afcfaa4974c87d0bba60f00c7d184c9",
+          "text": "",
+          "phase": "final_answer",
+          "memoryCitation": null,
+          "delivery": null,
+          "questions": null,
+          "startedAtMs": 1794964132595,
+          "completedAtMs": null
+        },
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "turnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+        "startedAtMs": 1794964132595
+      },
+      "emittedAtMs": 1794964132595
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "turnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+        "itemId": "msg_0f39080761fdac7c016afcfaa4974c87d0bba60f00c7d184c9",
+        "delta": "PATCH"
+      },
+      "emittedAtMs": 1794964132595
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "turnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+        "itemId": "msg_0f39080761fdac7c016afcfaa4974c87d0bba60f00c7d184c9",
+        "delta": "-D"
+      },
+      "emittedAtMs": 1794964132595
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "turnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+        "itemId": "msg_0f39080761fdac7c016afcfaa4974c87d0bba60f00c7d184c9",
+        "delta": "EN"
+      },
+      "emittedAtMs": 1794964132595
+    },
+    {
+      "method": "item/agentMessage/delta",
+      "params": {
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "turnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+        "itemId": "msg_0f39080761fdac7c016afcfaa4974c87d0bba60f00c7d184c9",
+        "delta": "IED"
+      },
+      "emittedAtMs": 1794964132595
+    },
+    {
+      "method": "item/completed",
+      "params": {
+        "item": {
+          "type": "agentMessage",
+          "moderation": null,
+          "id": "msg_0f39080761fdac7c016afcfaa4974c87d0bba60f00c7d184c9",
+          "text": "PATCH-DENIED",
+          "phase": "final_answer",
+          "memoryCitation": null,
+          "delivery": null,
+          "questions": null,
+          "startedAtMs": 1794964132595,
+          "completedAtMs": 1794964132704
+        },
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "turnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+        "contentTokenCount": 5,
+        "completedAtMs": 1794964132704
+      },
+      "emittedAtMs": 1794964132706
+    },
+    {
+      "method": "thread/tokenUsage/updated",
+      "params": {
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "turnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+        "tokenUsage": {
+          "total": {
+            "totalTokens": 39712,
+            "inputTokens": 39600,
+            "cachedInputTokens": 19712,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 112,
+            "reasoningOutputTokens": 0
+          },
+          "last": {
+            "totalTokens": 19875,
+            "inputTokens": 19867,
+            "cachedInputTokens": 19712,
+            "cacheWriteInputTokens": 0,
+            "outputTokens": 8,
+            "reasoningOutputTokens": 0
+          },
+          "modelContextWindow": 258400
+        }
+      },
+      "emittedAtMs": 1794964132733
+    },
+    {
+      "method": "account/rateLimits/updated",
+      "params": {
+        "rateLimits": {
+          "limitId": "codex",
+          "limitName": null,
+          "normalModelSlug": null,
+          "primary": {
+            "usedPercent": 37,
+            "windowDurationMins": 300,
+            "resetsAt": 1794978024
+          },
+          "secondary": {
+            "usedPercent": 46,
+            "windowDurationMins": 10080,
+            "resetsAt": 1795325947
+          },
+          "credits": {
+            "hasCredits": false,
+            "unlimited": false,
+            "balance": "0"
+          },
+          "individualLimit": null,
+          "spendControlReached": null,
+          "planType": "<scrubbed>",
+          "rateLimitReachedType": null
+        }
+      },
+      "emittedAtMs": 1794964132733
+    },
+    {
+      "method": "thread/status/changed",
+      "params": {
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "status": {
+          "type": "idle"
+        }
+      },
+      "emittedAtMs": 1794964132737
+    },
+    {
+      "method": "turn/completed",
+      "params": {
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "turn": {
+          "id": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+          "rootTurnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+          "items": [
+            {
+              "type": "agentMessage",
+              "moderation": null,
+              "id": "msg_0f39080761fdac7c016afcfaa4974c87d0bba60f00c7d184c9",
+              "text": "PATCH-DENIED",
+              "phase": "final_answer",
+              "memoryCitation": null,
+              "delivery": null,
+              "questions": null,
+              "startedAtMs": 1794964132595,
+              "completedAtMs": 1794964132704
+            }
+          ],
+          "itemsView": "summary",
+          "status": "completed",
+          "error": null,
+          "startedAt": 1794964121,
+          "completedAt": 1794964132,
+          "durationMs": 11374
+        }
+      },
+      "emittedAtMs": 1794964132737
+    }
+  ],
+  "notificationCount": 48,
+  "serverRequests": [
+    {
+      "method": "item/fileChange/requestApproval",
+      "id": 0,
+      "params": {
+        "threadId": "01a1ec32-e6a9-7e82-ae68-740cc9152940",
+        "turnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+        "itemId": "exec-e754f5ba-95c9-4835-b1b3-1c89cefd2fd9",
+        "startedAtMs": 1794964129114,
+        "reason": null,
+        "grantRoot": null
+      }
+    }
+  ],
+  "serverRequestDecisions": [
+    {
+      "method": "item/fileChange/requestApproval",
+      "payload": {
+        "result": {
+          "decision": "decline"
+        }
+      }
+    }
+  ],
+  "pendingServerRequestIds": [],
+  "maxFrameBytesSeen": 1629,
+  "frameLimitBytes": 16777216,
+  "frameViolations": [],
+  "spawnArgv": [
+    "/Users/<user>/Desktop/code/codex/superagent/packaging/superagent-engine",
+    "app-server",
+    "--listen",
+    "stdio://"
+  ],
+  "spawnWiring": {
+    "stdin": "PIPE (JSONL requests)",
+    "stdout": "PIPE (JSONL frames only)",
+    "stderr": "PIPE (collected separately, ring buffer 2000 lines)",
+    "env": {
+      "CODEX_HOME": "<set per run>"
+    }
+  },
+  "runLogPath": null,
+  "runLogLimitBytes": 104857600,
+  "runLogRotations": 0,
+  "runLogBytesRetained": 0,
+  "defaultTimeoutsByMethod": {
+    "initialize": 30,
+    "thread/start": 60,
+    "thread/read": 60,
+    "thread/list": 60,
+    "thread/resume": 60,
+    "turn/start": 30,
+    "turn/interrupt": 30,
+    "command/exec": 90,
+    "command/exec/terminate": 30
+  },
+  "stderrTail": [
+    "\u001b[2m2026-11-18T01:08:49.121381Z\u001b[0m \u001b[31mERROR\u001b[0m \u001b[2mcodex_core::tools::router\u001b[0m\u001b[2m:\u001b[0m \u001b[3merror\u001b[0m\u001b[2m=\u001b[0mpatch rejected by user"
+  ],
+  "exitCode": null
+}
