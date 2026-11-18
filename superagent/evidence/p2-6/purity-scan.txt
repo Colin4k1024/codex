@@ -1,0 +1,21 @@
+=== cargo tree -e normal (codex engine DTOs must NOT appear) ===
+superagent-cli v0.1.0 (/private/tmp/sa-p2-6-wt/superagent/crates/cli)
+│   │       └── superagent-contracts v0.1.0 (/private/tmp/sa-p2-6-wt/superagent/crates/contracts) (*)
+│   │   └── superagent-storage v0.1.0 (/private/tmp/sa-p2-6-wt/superagent/crates/storage)
+│   │   ├── superagent-contracts v0.1.0 (/private/tmp/sa-p2-6-wt/superagent/crates/contracts) (*)
+│   └── superagent-storage v0.1.0 (/private/tmp/sa-p2-6-wt/superagent/crates/storage) (*)
+│   ├── superagent-adapter v0.1.0 (/private/tmp/sa-p2-6-wt/superagent/crates/adapter) (*)
+│   ├── superagent-contracts v0.1.0 (/private/tmp/sa-p2-6-wt/superagent/crates/contracts) (*)
+│   ├── superagent-orchestrator v0.1.0 (/private/tmp/sa-p2-6-wt/superagent/crates/orchestrator)
+│   ├── superagent-orchestrator v0.1.0 (/private/tmp/sa-p2-6-wt/superagent/crates/orchestrator) (*)
+└── superagent-storage v0.1.0 (/private/tmp/sa-p2-6-wt/superagent/crates/storage) (*)
+├── superagent-adapter v0.1.0 (/private/tmp/sa-p2-6-wt/superagent/crates/adapter)
+├── superagent-contracts v0.1.0 (/private/tmp/sa-p2-6-wt/superagent/crates/contracts)
+├── superagent-executor v0.1.0 (/private/tmp/sa-p2-6-wt/superagent/crates/executor)
+├── superagent-orchestrator v0.1.0 (/private/tmp/sa-p2-6-wt/superagent/crates/orchestrator) (*)
+├── superagent-recovery v0.1.0 (/private/tmp/sa-p2-6-wt/superagent/crates/recovery)
+=== direct codex_ refs in cli src (expect none) ===
+src/main.rs:68:    let codex_home = flag(args, "--codex-home")
+src/main.rs:103:            codex_home,
+=== cli src direct process spawn / network (engine access is via adapter/executor only) ===
+NONE

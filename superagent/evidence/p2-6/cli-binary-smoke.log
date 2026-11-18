@@ -1,0 +1,48 @@
+=== version ===
+superagent 0.1.0 (workflow schema 1)
+exit=0
+=== dry-run (real binary, no engine/model) ===
+{
+  "dryRun": true,
+  "nodes": [
+    {
+      "budget_tokens": null,
+      "command_ref": "team.modify",
+      "depends_on": [],
+      "id": "cap",
+      "inputs": [],
+      "model": null,
+      "outputs": [],
+      "type": "capability"
+    },
+    {
+      "argv": [
+        "python3",
+        "-c",
+        "pass"
+      ],
+      "budget_tokens": null,
+      "depends_on": [
+        "cap"
+      ],
+      "gates": [
+        "g1"
+      ],
+      "id": "ver",
+      "model": null,
+      "type": "verification"
+    }
+  ],
+  "order": [
+    "cap",
+    "ver"
+  ],
+  "startedCommand": false,
+  "startedModel": false,
+  "validated": true
+}
+exit=0
+=== usage error exit code ===
+exit=2
+=== missing workflow exit code ===
+exit=2
