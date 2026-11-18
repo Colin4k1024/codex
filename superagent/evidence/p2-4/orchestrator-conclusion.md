@@ -23,6 +23,7 @@
 
 ## 4. 测试结果
 `cargo test --release`：**18 passed; 0 failed**（evidence/p2-4/test-output.log）。
+superagent-ci 门禁（toolchain 1.99.1）：`cargo +1.99.1 fmt -- --check` 0 diffs、`cargo +1.99.1 clippy --all-targets -- -D warnings` clean、`cargo +1.99.1 test` 18 passed（test-output.log 已含 1.99.1 门禁输出）。合并 main 后修复两处 clippy lint：`GateOutcome::is_proven` 的 `map_or(false,..)`→`is_some_and(..)`；测试中 `Policy::default()` 后字段重赋→结构体初始化器 `Policy{..Default::default()}`（field_reassign_with_default）。
 依赖纯净：`cargo tree` 无 codex-* crate（evidence/p2-4/purity-scan.txt）。storage 代码无 unused/dead_code 告警。
 开发中修复两处逻辑缺陷：(a) attempt 计数在预算检查前自增→预算阻断时 attempts 应为 0（已将自增移到预算检查后）；(b) run 聚合让 Blocked 掩盖真实 Failed→改为 Failed 优先于 Blocked（失败是下游阻断的根因）。
 
@@ -40,4 +41,4 @@ cargo tree --prefix depth   # 无 codex-* 依赖
 ```
 
 ## 7. 合并约束
-堆叠 base=`feat/p2-3-storage`（#80，APPROVE）。合并顺序 **#72 → #78 → #80 → #81**。
+#72/#78/#80 均已合并入 main；本分支已 merge 最新 main（storage 取 main 权威版本，orchestrator 为 #81 交付），base=main，可直接合并。

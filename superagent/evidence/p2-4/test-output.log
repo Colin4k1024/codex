@@ -1,52 +1,18 @@
-warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+# P2-4 / #81 orchestrator gate (toolchain 1.99.1, matches superagent-ci)
+# HEAD: c0055cbb66acb4c8b5ee38ee47f80e554d5e4c4a
+$ cargo +1.99.1 fmt --manifest-path superagent/crates/orchestrator/Cargo.toml -- --check
   |
-  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
-warning: failed to parse serde attribute
-  | 
+fmt exit=0 (0 diffs = clean)
+$ cargo +1.99.1 clippy --manifest-path superagent/crates/orchestrator/Cargo.toml --all-targets -- -D warnings
   | deny_unknown_fields 
   | 
-  = note: ts-rs failed to parse this attribute. It will be ignored.
-warning: failed to parse serde attribute
-  | 
-  | deny_unknown_fields 
-  | 
-  = note: ts-rs failed to parse this attribute. It will be ignored.
-   Compiling superagent-orchestrator v0.1.0 (/Users/fanjia/Desktop/code/codex/superagent/crates/orchestrator)
-    Finished `release` profile [optimized] target(s) in 2.74s
-     Running unittests src/lib.rs (target/release/deps/superagent_orchestrator-b51abc11ffa7d968)
-
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.23s
+$ cargo +1.99.1 test --manifest-path superagent/crates/orchestrator/Cargo.toml
+     Running unittests src/lib.rs (superagent/crates/orchestrator/target/debug/deps/superagent_orchestrator-d211b34adb3d1022)
 running 0 tests
-
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
-
-     Running tests/orchestrator.rs (target/release/deps/orchestrator-97ebdf5d2db8bed2)
-
+     Running tests/orchestrator.rs (superagent/crates/orchestrator/target/debug/deps/orchestrator-771522e2a8abf076)
 running 18 tests
-test downstream_invalidation_is_transitive ... ok
-test dag_cycle_rejected_at_plan ... ok
-test topo_order_serial_and_deterministic ... ok
-test token_budget_exhaustion_blocks ... ok
-test unknown_dependency_rejected ... ok
-test needs_input_yields_waiting_input ... ok
-test fatal_failure_not_retried ... ok
-test non_idempotent_node_never_blindly_retried ... ok
-test all_gates_proven_succeeds ... ok
-test run_persists_events_and_intents_to_store ... ok
-test uncertain_kind_yields_uncertain ... ok
-test gate_pass_without_evidence_is_not_success ... ok
-test max_attempts_exhausted_is_failed ... ok
-test failed_gate_blocks_succeeded ... ok
-test failure_propagates_to_downstream ... ok
-test wall_budget_exhaustion_cancels_remaining ... ok
-test capability_requires_evidence_not_nl ... ok
-test verification_failure_repaired_then_succeeds ... ok
-
-test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
-
-   Doc-tests superagent_orchestrator
-
+test result: ok. 18 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
 running 0 tests
-
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
-
-CARGO_EXIT=0
