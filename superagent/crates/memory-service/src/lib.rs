@@ -61,7 +61,10 @@ impl std::fmt::Display for MemoryError {
         match self {
             MemoryError::Sqlite(e) => write!(f, "sqlite: {e}"),
             MemoryError::EmbeddingsUnsupported => {
-                write!(f, "embeddings vector retrieval is reserved (optional posterior), not implemented")
+                write!(
+                    f,
+                    "embeddings vector retrieval is reserved (optional posterior), not implemented"
+                )
             }
             MemoryError::EmptyQuery => write!(f, "search query must be non-empty"),
         }
@@ -81,14 +84,20 @@ pub type Result<T> = std::result::Result<T, MemoryError>;
 /// Reserved embeddings interface (optional posterior). No implementation in
 /// this crate spawns a model or vector engine; the stub fails explicitly.
 pub trait VectorIndex {
-    fn upsert_embedding(&mut self, kind: SourceKind, source_id: &str, vector: &[f32]) -> Result<()>;
+    fn upsert_embedding(&mut self, kind: SourceKind, source_id: &str, vector: &[f32])
+        -> Result<()>;
     fn search_vector(&self, query: &[f32], limit: usize) -> Result<Vec<Hit>>;
 }
 
 pub struct ReservedVectorIndex;
 
 impl VectorIndex for ReservedVectorIndex {
-    fn upsert_embedding(&mut self, _kind: SourceKind, _source_id: &str, _vector: &[f32]) -> Result<()> {
+    fn upsert_embedding(
+        &mut self,
+        _kind: SourceKind,
+        _source_id: &str,
+        _vector: &[f32],
+    ) -> Result<()> {
         Err(MemoryError::EmbeddingsUnsupported)
     }
     fn search_vector(&self, _query: &[f32], _limit: usize) -> Result<Vec<Hit>> {
@@ -142,21 +151,32 @@ impl MemoryService {
     }
 
     pub fn migrate(&self) -> Result<()> {
-        let v: u32 = self.conn.pragma_query_value(None, "user_version", |r| r.get(0))?;
+        let v: u32 = self
+            .conn
+            .pragma_query_value(None, "user_version", |r| r.get(0))?;
         if v < SCHEMA_VERSION {
             self.conn.execute_batch(SCHEMA_V1)?;
-            self.conn.pragma_update(None, "user_version", SCHEMA_VERSION)?;
+            self.conn
+                .pragma_update(None, "user_version", SCHEMA_VERSION)?;
         }
         Ok(())
     }
 
     pub fn schema_version(&self) -> Result<u32> {
-        Ok(self.conn.pragma_query_value(None, "user_version", |r| r.get(0))?)
+        Ok(self
+            .conn
+            .pragma_query_value(None, "user_version", |r| r.get(0))?)
     }
 
     /// Incremental sync: insert new sources, reindex changed content, skip
     /// unchanged content (hash match). FTS rowid mirrors sources.id.
-    pub fn index(&self, kind: SourceKind, source_id: &str, content: &str, metadata: &serde_json::Value) -> Result<SyncOutcome> {
+    pub fn index(
+        &self,
+        kind: SourceKind,
+        source_id: &str,
+        content: &str,
+        metadata: &serde_json::Value,
+    ) -> Result<SyncOutcome> {
         let hash = content_hash(content);
         let meta = metadata.to_string();
         let now = std::time::SystemTime::now()
@@ -228,7 +248,7 @@ impl MemoryService {
         if query.trim().is_empty() {
             return Err(MemoryError::EmptyQuery);
         }
-        let limit = limit.min(MAX_RESULTS).max(1);
+        let limit = limit.clamp(1, MAX_RESULTS);
         let match_expr = format!("\"{}\"", query.replace('"', "\"\""));
         let mut stmt = self.conn.prepare(
             "SELECT s.kind, s.source_id, snippet(mem_fts, 2, '[', ']', '…', 12), bm25(mem_fts) \
@@ -236,7 +256,12 @@ impl MemoryService {
              WHERE mem_fts MATCH ?1 ORDER BY bm25(mem_fts) LIMIT ?2",
         )?;
         let rows = stmt.query_map(rusqlite::params![match_expr, limit as i64], |r| {
-            Ok(Hit { kind: r.get(0)?, source_id: r.get(1)?, snippet: r.get(2)?, score: r.get(3)? })
+            Ok(Hit {
+                kind: r.get(0)?,
+                source_id: r.get(1)?,
+                snippet: r.get(2)?,
+                score: r.get(3)?,
+            })
         })?;
         let mut hits = Vec::new();
         for row in rows {
