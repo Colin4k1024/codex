@@ -1,0 +1,19 @@
+[package]
+name = "superagent-recovery"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+description = "SuperAgent recovery/reconciliation core: exclusive resume, digest-gated reuse, uncertain reconciliation, four-breakpoint fault injection (P2-7 / #84). No engine DTOs, no process/model execution."
+
+[workspace]
+
+[dependencies]
+superagent-contracts = { path = "../contracts" }
+superagent-storage = { path = "../storage" }
+superagent-orchestrator = { path = "../orchestrator" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[dev-dependencies]
+tempfile = "3"
+superagent-adapter = { path = "../adapter" }

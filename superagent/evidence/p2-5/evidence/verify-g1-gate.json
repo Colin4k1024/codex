@@ -1,0 +1,21 @@
+{
+  "actualExitCode": 0,
+  "argv": [
+    "python3",
+    "-c",
+    "import sys; sys.exit(0 if open('hello.txt').read().strip()=='HELLO-P25' else 1)"
+  ],
+  "expectExitCode": 0,
+  "gateId": "g1",
+  "passed": true,
+  "path": "command/exec",
+  "sandboxPolicy": {
+    "networkAccess": false,
+    "type": "workspaceWrite",
+    "writableRoots": [
+      "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/.tmpw1DpUN"
+    ]
+  },
+  "stderr": "",
+  "stdout": ""
+}
