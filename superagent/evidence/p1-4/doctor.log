@@ -1,0 +1,9 @@
+OK   platform: Darwin arm64
+OK   engine-version: codex-cli 0.0.0
+OK   engine-digest: 2421b8b5605f7487c092d8988c8eb941827448b15cf5c87802e6d99fa4ad6a2f
+OK   auth: auth.json present (contents never read or printed)
+OK   pack: superagent-meta-agent v0.1.0 digest=5b26dcb803642b472a2d91d44cc0cf745319b30fbc61cd78e6a9cf5f58c204a7 files=6
+OK   installed-pack: p1-4-fixture v0.1.0 digest=2d35a5a1839ee8326c17aafe4534096c5fca121a6e1b491d583f23b7024d70ba
+OK   codex-home-writable: /Users/fanjia/Library/Application Support/SuperAgent/codex-home
+OK   user-config-isolation: product CODEX_HOME is separate from ~/.codex
+ALL GREEN

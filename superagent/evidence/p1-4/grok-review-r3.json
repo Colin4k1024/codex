@@ -1,0 +1,66 @@
+{
+  "verdict": "APPROVE",
+  "summary": "All Issue #76 acceptance criteria are proven by committed code+tests+evidence, and both r2 findings (BLOCKER fresh-install rollback, MAJOR pin determinism) are substantively fixed in the reviewed HEAD. Read-only review against the inlined diff; no commands run.",
+  "criteria": [
+    {
+      "criterion": "安装器：原子解包 / 拒绝路径穿越",
+      "status": "PROVEN",
+      "evidence": "install_pack.py: check_relpath rejects absolute/'..'/empty paths; extract_tar pre-validates members (rejects symlink/hardlink/non-regular) plus filter='data' on >=3.12 and pre-validated fallback below; directory packs reject symlinks via os.walk. Whole-pack all-or-nothing swap with rollback including backup=None (fresh install). Tests: traversal/absolute/symlink/dir-symlink/tamper/pinned/fresh+whole-pack rollback all pass in committed test-output.log (Ran 18 tests OK)."
+    },
+    {
+      "criterion": "r2 BLOCKER整改",
+      "status": "PROVEN",
+      "evidence": "install() OSError branch now removes each already-swapped new target (isdir->rmtree, lexists->remove), restores backup when present, and for backup=None additionally rmdir(parent) to clear swap_item-created empty dirs. test_mid_swap_failure_rolls_back_fresh_install asserts tree_state=={} and os.listdir(home)==[] on an empty home; passes in test-output.log."
+    },
+    {
+      "criterion": "启动器：专属 CODEX_HOME 拉起 TUI",
+      "status": "PROVEN",
+      "evidence": "bin/superagent exports CODEX_HOME=<product home>, defaults to --no-daemon, pass-through args. tui-probe.log: tui_rendered=True error_screen=False; tui-screen.log contains real rendered frame ('OpenAI Codex', 'Ask Codex to do anything', 'GPT-6-Astra default', /init /status /permissions /quit). skills-after-install initialize reports codexHome=product home. Meta-agent persona/branding is explicitly scoped to #74 (honest)."
+    },
+    {
+      "criterion": "doctor：版本/摘要/认证/pack/平台，排除凭据",
+      "status": "PROVEN",
+      "evidence": "doctor.py emits platform, engine-version, engine-digest, auth (os.path.getsize only, never reads), pack (manifest schema+digest+licenses), installed-pack, codex-home-writable, user-config-isolation. doctor.log and coldstart-doctor.json show ALL GREEN / all_ok=true. test_doctor_all_green_and_credential_free injects SECRET_TOKEN and asserts zero leak in text+JSON; also missing-engine FAIL and tampered-pack FAIL tests pass."
+    },
+    {
+      "criterion": "用户现有配置零改动 / 不改 config.toml+AGENTS.md",
+      "status": "PROVEN",
+      "evidence": "is_safe_install_target rejects ~/.codex and subdirs. user-codex-before.config.json == user-codex-after.config.json (identical blob d60d4b773); user-codex-config.diff empty; config.toml and AGENTS.md sha256 unchanged. user-codex-bulk-changes.json limits changes to tmp/arg0-macos lock/apply_patch files, disclosed and attributed to the parallel ChatGPT.app."
+    },
+    {
+      "criterion": "干净 macOS 一条命令安装 + doctor 全绿",
+      "status": "PROVEN",
+      "evidence": "install.sh = install_pack + doctor in one command; coldstart-install.log: OK installed p1-4-fixture + 8 checks ALL GREEN + 'Install complete'. coldstart-conclusion.json: one_command_install_exit=0, doctor_exit=0, doctor_all_green=true, install_plus_doctor_green=true."
+    },
+    {
+      "criterion": "r2 MAJOR整改（确定性 source pin + 日志/结论一致）",
+      "status": "PROVEN",
+      "evidence": "p1-4-coldstart.sh has deterministic constant SOURCE_COMMIT=92240f13e... (env-overridable), checkout --detach, WT_COMMIT==SOURCE_COMMIT guard (exit 1), and writes BUILD_START/BUILD_RC/ENGINE_SHA256/COLDSTART_BUILD_DONE itself. coldstart-build.log header source_commit=worktree_commit=92240f13e; conclusion recomputes pin_consistent=(wt_commit==pinned==header_commit)=true. Incremental r2 rebuild (2.97s) and retained r1 full from-scratch log (26m49s, codex-rs byte-identical across commits) are honestly disclosed."
+    },
+    {
+      "criterion": "无越界改动 / 无凭据提交",
+      "status": "PROVEN",
+      "evidence": "Diff is 33 files, all under superagent/. codex-rs citations in the appendix are reference evidence only, not changes. Committed evidence contains only sha256 digests of user files (not credential values); test secret is a fake token."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "minor",
+      "title": "结论文档存在过期数字",
+      "detail": "installer-conclusion.md lists the test file as '(17)' while test-output.log shows Ran 18, and cites tui bytes=10956 while the committed tui-probe.log reports 11571. The committed evidence files are authoritative and internally consistent; the stale references are documentation-only.",
+      "required_fix": null
+    },
+    {
+      "severity": "minor",
+      "title": "coldstart-conclusion.json 未记录增量构建边界",
+      "detail": "engine_built_from_source=true in the JSON does not itself record that the r2 build reused the cargo target cache (Finished 2.97s). The incremental nature and from-scratch proof are disclosed in the committed installer-conclusion.md and in the coldstart script/log, so this is a single-field documentation gap rather than fabricated success.",
+      "required_fix": null
+    },
+    {
+      "severity": "minor",
+      "title": "doctor installed-pack 检查不校验已装文件摘要",
+      "detail": "doctor.py 'installed-pack' only reads .superagent/install.json and reports ok=true whenever the record exists; it does not re-hash installed files against the record digest. Source pack integrity IS verified by the separate 'pack' check, which covers the issue's stated doctor scope, so this is informational.",
+      "required_fix": null
+    }
+  ]
+}
