@@ -30,17 +30,19 @@
 
 ## 4. 编排层沙箱强制实证（满足 c3「沙箱生效」）
 
-**(a) P0-7（#70，已合并 origin/main 697de6498，已独立审查 APPROVE）**
-`superagent/evidence/p0-7/summary.json` `allPass=true`；`command/exec` 携带显式
-`sandboxPolicy={type:workspaceWrite, writableRoots:[WORK], networkAccess:false}`，cases：
-`escapeWrite`（越界写被阻）、`networkBlocked`、`invalidPolicyBlocked`、`semanticPolicyBlocked`、
-`defaultPolicyNoHostWrite` 均 pass（`cases.json`/`transcript.json`）。证明编排层逐调用 SandboxPolicy 真实强制。
+**(a) 机制背景：P0-7（#70，已合并 origin/main 697de6498，已独立审查 APPROVE）**
+编排层以 `command/exec` 携带显式 `sandboxPolicy={type:workspaceWrite, writableRoots:[...],
+networkAccess:false}` 逐调用强制沙箱（越界写被阻、网络被阻）。P0-7 的证据文件位于 origin/main，
+不在本分支 HEAD 树内，故此处仅作机制背景说明，**c3 的实证以下方 (b) 本 PR 内可核验的 P0-2e 为准**。
 
-**(b) P0-2e（本 PR 新增，针对角色代理）**
+**(b) P0-2e（本 PR 新增，针对角色代理；c3 的运行时实证）**
 `superagent/tests/p0_2e_sandbox.py` → `superagent/evidence/p0-2/p0-2e-sandbox-summary.json`：
-leader turn workspace-write（writableRoots=[WORK]）下 spawn implementer 角色代理执行两条写命令——
-越界写 `~/p0-2e-escape-probe.txt` 被阻（`escapeWriteBlocked=true`，escapeFileExists=false），
-工作区内写 `WORK/inner-ok.txt` 成功（`innerWriteAllowed=true`，正向对照证明 exec 可用、阻断来自策略而非执行器损坏）
+leader turn workspace-write（config-overlay `sandbox_mode="workspace-write"`，WORK 经 trusted project 可写）
+下 spawn implementer 角色代理执行两条写命令——
+越界写 `~/p0-2e-escape-probe.txt` 被阻（`escapeWriteBlocked=true`，escapeFileExists=false；
+code-mode exec 输出 `exit_code=1`、`zsh:1: operation not permitted`，`escapeExitNonZero=true`），
+工作区内写 `WORK/inner-ok.txt` 成功（`innerWriteAllowed=true`，`exit_code=0`，`innerExitZero=true`；
+正向对照证明 exec 可用、阻断来自策略而非执行器损坏）
 → `orchestrationSandboxEnforced=true`。证明编排层沙箱强制**作用于 spawned 角色代理**。
 
 ## 5. 为何是限定而非削弱

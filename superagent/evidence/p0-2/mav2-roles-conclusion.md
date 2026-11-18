@@ -42,11 +42,12 @@
   （role.rs:77-86），且 spawn 末尾 apply_spawn_agent_runtime_overrides 用 leader turn 的
   approval_policy/permission_profile/cwd 覆盖（child_config.rs:197-220）。
   **编排层强制（已运行时实证，满足 c3「沙箱生效」）**：按角色的沙箱约束在编排层以 command/exec
-  SandboxPolicy 逐调用强制。双重证据：(a) P0-7（#70，已合并）`evidence/p0-7/summary.json allPass=true`
-  （escapeWrite/networkBlocked 等 case 全 pass）；(b) **P0-2e（本 PR 新增，针对 spawned 角色代理）**
+  SandboxPolicy 逐调用强制（机制背景：P0-7/#70 已合并 origin/main，其证据文件不在本分支 HEAD 树内）。
+  c3 实证以本 PR 内可核验的 **P0-2e（针对 spawned 角色代理）** 为准：
   `tests/p0_2e_sandbox.py` → `evidence/p0-2/p0-2e-sandbox-summary.json`：leader workspace-write 下 spawn
-  implementer 角色代理，越界写 `~/p0-2e-escape-probe.txt` 被阻（escapeWriteBlocked=true）、工作区内写
-  `WORK/inner-ok.txt` 成功（innerWriteAllowed=true，正向对照）→ orchestrationSandboxEnforced=true、allPass=true。
+  implementer 角色代理，越界写 `~/p0-2e-escape-probe.txt` 被阻（escapeWriteBlocked=true，code-mode exec
+  exit_code=1 "operation not permitted"，escapeExitNonZero=true）、工作区内写 `WORK/inner-ok.txt` 成功
+  （innerWriteAllowed=true，exit_code=0，innerExitZero=true，正向对照）→ orchestrationSandboxEnforced=true、allPass=true。
   正式验收限定签核见 `evidence/p0-2/acceptance-deviation-c3-sandbox.md`（scope clarification，非删除验收项）。
   角色层 sandbox override 需 core fork，列入 P0-9 缺口清单（非 fork 触发项）。
 

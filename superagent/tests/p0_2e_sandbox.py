@@ -11,6 +11,7 @@ SUCCEEDS. Filesystem existence + child commandExecution exit codes are the evide
 """
 import json
 import os
+import re
 import shutil
 import sys
 import tempfile
@@ -72,9 +73,13 @@ try:
                              and n.get("params", {}).get("threadId") == thread_id, timeout=540)
     resp = client.wait_response(rid, timeout=30)
 
-    # Collect child rollouts + every commandExecution item (exit codes) across sessions.
+    # Collect child rollouts + command executions. The model runs commands in
+    # code-mode (custom_tool_call name=exec -> tools.exec_command), whose exit_code
+    # lives in the custom_tool_call_output JSON; native CommandExecution items use
+    # the exit_code key. Capture both so the blocked attempt is evidenced.
     sessions_root = f"{HOME_B}/sessions"
     child_files, cmd_items = [], []
+    exec_inputs, exec_outputs = {}, {}
     for root, _dirs, files in os.walk(sessions_root):
         for fn in files:
             if not fn.endswith(".jsonl"):
@@ -97,24 +102,55 @@ try:
                     p = json.loads(line).get("payload", {})
                 except ValueError:
                     continue
-                if p.get("type") == "item_completed":
+                t = p.get("type")
+                if t == "item_completed":
                     item = p.get("item", {})
                     if item.get("type") in ("CommandExecution", "commandExecution"):
                         cmd_items.append({"file": path, "item": item})
+                elif t == "custom_tool_call" and p.get("name") == "exec":
+                    exec_inputs[p.get("call_id")] = p.get("input", "") or ""
+                elif t == "custom_tool_call_output":
+                    o = p.get("output")
+                    exec_outputs[p.get("call_id")] = o if isinstance(o, str) else json.dumps(o, ensure_ascii=False)
 
     escape_blocked = not os.path.exists(ESCAPE_TARGET)
     inner_allowed = os.path.exists(INNER_TARGET)
     inner_content = open(INNER_TARGET).read().strip() if inner_allowed else None
 
-    # Corroborate with child commandExecution exit codes referencing the targets.
+    def output_texts(out):
+        try:
+            parsed = json.loads(out)
+        except (ValueError, TypeError):
+            return [out] if isinstance(out, str) else []
+        if isinstance(parsed, list):
+            return [s.get("text", "") for s in parsed if isinstance(s, dict) and isinstance(s.get("text"), str)]
+        if isinstance(parsed, dict):
+            return [json.dumps(parsed, ensure_ascii=False)]
+        return [str(parsed)]
+
+    def exec_exit_code(out):
+        for txt in output_texts(out):
+            m = re.search(r'"exit_code"\s*:\s*(-?\d+)', txt)
+            if m:
+                return int(m.group(1))
+        return None
+
     def cmds_for(target):
+        base = os.path.basename(target)
         out = []
         for c in cmd_items:
             it = c["item"]
-            blob = json.dumps(it, ensure_ascii=False)
-            if os.path.basename(target) in blob:
-                out.append({"command": it.get("command"), "exitCode": it.get("exitCode"),
-                            "status": it.get("status")})
+            if base in json.dumps(it, ensure_ascii=False):
+                out.append({"command": it.get("command"),
+                            "exitCode": it.get("exit_code", it.get("exitCode")),
+                            "status": it.get("status"), "source": "commandExecution"})
+        for cid, inp in exec_inputs.items():
+            if base in inp:
+                o = exec_outputs.get(cid, "")
+                snippet = next((txt[:300] for txt in output_texts(o)
+                                if "operation not permitted" in txt or base in txt), "")
+                out.append({"call_id": cid, "input": inp[:300], "exitCode": exec_exit_code(o),
+                            "outputSnippet": snippet, "source": "code-mode-exec"})
         return out
 
     escape_cmds = cmds_for(ESCAPE_TARGET)
@@ -130,7 +166,7 @@ try:
     summary = {
         "threadId": thread_id,
         "workspace": WORK,
-        "leaderSandboxMode": "workspace-write (config-overlay; writableRoots=[WORK])",
+        "leaderSandboxMode": "workspace-write (config-overlay sandbox_mode; WORK writable via trusted project)",
         "escapeTarget": ESCAPE_TARGET,
         "innerTarget": INNER_TARGET,
         "escapeFileExists": os.path.exists(ESCAPE_TARGET),
@@ -151,8 +187,10 @@ try:
                                 "on a spawned implementer role agent.",
     }
     # Sandbox enforced on the role agent: escape blocked AND inner allowed (positive
-    # control proves exec works, so the block is policy, not a broken executor).
-    summary["orchestrationSandboxEnforced"] = escape_blocked and inner_allowed
+    # control proves exec works, so the block is policy, not a broken executor), AND
+    # the real exit codes corroborate (escape != 0, inner == 0).
+    summary["orchestrationSandboxEnforced"] = (escape_blocked and inner_allowed
+                                               and escape_exit_nonzero and inner_exit_zero)
     summary["allPass"] = summary["orchestrationSandboxEnforced"] and summary["spawnObserved"]
     save("p0-2e-sandbox-summary.json", summary)
     save("p0-2e-sandbox-transcript.json", {"results": [ts, resp],
