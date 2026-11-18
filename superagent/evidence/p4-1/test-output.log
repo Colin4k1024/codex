@@ -1,0 +1,24 @@
+# P4-1 / #90 superagent-gateway gate (toolchain 1.99.1; real engine subprocess + real TCP socket; model-free)
+
+## cargo +1.99.1 fmt --check
+fmt-exit=0
+
+## cargo +1.99.1 clippy --all-targets -- -D warnings
+clippy-exit=0
+error-lines=0
+
+## cargo +1.99.1 test (6 real-subprocess/TCP integration tests)
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test audit_and_manifest_traceable ... ok
+test concurrency_cap_enforced ... ok
+test pool_release_no_leak ... ok
+test dual_tenant_isolation ... ok
+test unified_entry_tcp_routes_tenants ... ok
+test pool_crash_recovery ... ok
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.36s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+## parallel stability — 3 consecutive full-suite runs
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.17s
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.30s
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.19s
