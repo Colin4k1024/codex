@@ -1,0 +1,59 @@
+name: superagent-ci
+
+on:
+  pull_request:
+    paths:
+      - "superagent/**"
+      - ".github/workflows/superagent-ci.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "superagent/**"
+      - ".github/workflows/superagent-ci.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: superagent-ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  cargo:
+    name: superagent cargo (fmt / clippy / test)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@d124f86f28ff42855784ff3319f48ac182c248f8 # 1.99.1
+        with:
+          components: rustfmt, clippy
+      - name: cargo fmt / clippy / test
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -f superagent/Cargo.toml ]]; then
+            echo "Detected superagent workspace: superagent/Cargo.toml"
+            cargo fmt --manifest-path superagent/Cargo.toml --all -- --check
+            cargo clippy --manifest-path superagent/Cargo.toml --workspace --all-targets -- -D warnings
+            cargo test --manifest-path superagent/Cargo.toml --workspace
+            exit 0
+          fi
+
+          mapfile -t manifests < <(find superagent/crates -name Cargo.toml -not -path '*/target/*' 2>/dev/null | sort || true)
+          if [[ ${#manifests[@]} -eq 0 ]]; then
+            echo "No superagent Rust crates yet; nothing to build."
+            exit 0
+          fi
+
+          for manifest in "${manifests[@]}"; do
+            echo "::group::${manifest}"
+            cargo fmt --manifest-path "${manifest}" -- --check
+            cargo clippy --manifest-path "${manifest}" --all-targets -- -D warnings
+            cargo test --manifest-path "${manifest}"
+            echo "::endgroup::"
+          done
