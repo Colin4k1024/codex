@@ -6,7 +6,9 @@ use std::path::PathBuf;
 use superagent_contracts::{ArtifactSpec, Gate, Node, Workflow};
 
 fn main() {
-    let out = std::env::args().nth(1).unwrap_or_else(|| "schema/json".to_string());
+    let out = std::env::args()
+        .nth(1)
+        .unwrap_or_else(|| "schema/json".to_string());
     let out = PathBuf::from(out);
     std::fs::create_dir_all(&out).expect("create schema dir");
     let entries: Vec<(&str, schemars::schema::RootSchema)> = vec![
