@@ -1,0 +1,27 @@
+# P2-8 / #85 CLI gate (toolchain 1.99.1, model-free fake_engine real-stdio transport)
+
+## cargo fmt --check
+fmt-exit=0
+
+## cargo clippy --all-targets -- -D warnings
+clippy-exit=0
+error-lines=0
+
+## cargo test (full cli crate: 11 cli + 4 mvp_exit)
+     Running unittests src/lib.rs (target/debug/deps/superagent_cli-875306aa31374388)
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running unittests src/main.rs (target/debug/deps/superagent-cf94f4894194d08f)
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/cli.rs (target/debug/deps/cli-a3e5ae38dc401932)
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.47s
+     Running tests/mvp_exit.rs (target/debug/deps/mvp_exit-264c8e34de1f7cb5)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.60s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+## mvp_exit parallel stability — 6 consecutive full-suite runs (default parallel threads)
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.71s
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.53s
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.69s
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.76s
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.84s
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.69s
