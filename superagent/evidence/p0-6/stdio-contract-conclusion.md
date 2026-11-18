@@ -58,11 +58,25 @@ stdio JSON-RPC 接入契约成立，**无需 fork 改动**。
 - 断言：审批挂起 8s 窗口内通知数严格增加（无关事件被消费），decline 后无副作用文件。
 - 证据（待回填）：`trace-b2-transcript.json`。
 
-## Trace C — 确认取消（PASS，已提交）
+## Trace C — 确认取消（PASS；核心最小 fork 修复 yielded-exec 孤儿）
 
-- 先 pgrep 确认 `sleep 60` 子进程存在 → `turn/interrupt` → 轮询进程消失（cleanupSeconds=3）。
-- 代码路径：core/src/exec.rs:1043-1099（terminate/kill process group + 宽限期）；
-  core/src/tasks/mod.rs:1220-1234（优雅中断 100ms 后 abort）。
+- 先 pgrep 确认 `sleep 60` 子进程存在 → `turn/interrupt` → 轮询进程消失。
+- **根因（已核对 HEAD）**：one-shot 完成路径 `unified_exec/oneshot.rs:41-124`
+  （`exec_command_to_completion`）本就在取消时 terminate（child_token + drop_guard +
+  `tokio::select!` 75-97 → `terminate_confirmed`）；但 **yielded 路径**
+  （`exec_command`，completion=None）把进程存入 manager（`store_process`），
+  `collect_output_until_deadline` 只 race 进程退出 token + deadline，turn 中断时 future 被 drop，
+  子进程组存活成为孤儿。`unified_exec_options`（runtimes/unified_exec.rs:111-122）只挂
+  DefaultTimeout + network_denial token，无 turn token；orchestrator.rs:106 不 race 取消。
+  CodeModeInterrupt（features default_enabled）只 terminate code-mode cell，不杀 yielded 子进程。
+- **修复（最小 fork）**：`core/src/unified_exec/process_manager.rs` 新增
+  `terminate_process_on_turn_cancellation(process, turn_cancellation)` watcher，镜像
+  `terminate_process_on_network_denial`；在 `exec_command_inner` 中仅对 yielded 路径
+  （`completion.is_none()`）spawn：select turn_cancellation.cancelled() vs
+  process.cancellation_token().cancelled()，中断则 `process.fail_and_terminate("interrupted")`
+  （走 exec.rs terminate/kill process group + 宽限期；子进程为组 leader，child_command.rs:281 process_group(0)）。
+- **实证**：`trace-c-rerun.json`（新引擎）pass=true，sleepBeforeInterrupt="5412 sleep 60"，
+  sleepAfterInterrupt=""，cleanupSeconds=0（即时回收），turnStatus=interrupted。
 - 时序陷阱：子进程未 spawn 或清理窗口内采样会误判孤儿；必须"确认存在→interrupt→轮询消失"。
 
 ## Trace D — 断连对账（PASS，已提交；孤儿感知整改）
@@ -92,7 +106,12 @@ stdio JSON-RPC 接入契约成立，**无需 fork 改动**。
 
 ## fork 裁决
 
-无缺口。审批/取消/对账/资源上限均可用现有 API + 客户端纪律完成。
+审批/对账/资源上限均可用现有 API + 客户端纪律完成，无需 core 改动。
+**唯一最小 fork（S0 证明 API 不足）**：yielded-exec 子进程在 turn 中断时不被回收（孤儿）。
+现有 API 无 turn 级取消信号挂到 yielded 进程；one-shot 路径已正确而 yielded 路径缺失。
+修复限于 `core/src/unified_exec/process_manager.rs` 新增 turn-cancellation watcher（镜像既有
+network-denial watcher），仅对 yielded 路径生效，不改协议/不动 one-shot 正确路径。
+证据：trace-c-rerun.json（修复后 cleanupSeconds=0）。该 fork 满足混合路线「仅 S0 证明不足时最小 fork」。
 
 ## 审查整改记录
 
@@ -104,4 +123,11 @@ stdio JSON-RPC 接入契约成立，**无需 fork 改动**。
 ⑤trace D 孤儿感知 → terminalProven 加孤儿消失条件；
 ⑥thread/read 弃用 → 接受风险+owner+跟踪；
 ⑦"denied" 非法值 → schema 核实改 "deny"。
-待配额恢复后重跑 p0_6.py 回填 A/B/B2/B3/B4/C/D 运行时证据。
+配额恢复后已重跑 p0_6.py 回填 A/B/B2/B3/C/D 运行时证据（summary.json）：
+- Trace C/D：核心最小 fork（process_manager.rs turn-cancellation watcher）修复 yielded-exec 孤儿，
+  trace C cleanupSeconds=0、trace D 孤儿感知对账 PASS。
+- Trace B2：单 turn 阻塞审批期间无无关事件 → 改为同连接并发第二 thread 在挂起窗口发通知，
+  断言 unrelatedFromOtherThread 非空（pumpConsumedWhilePending=true），证明事件泵不阻塞。
+- Trace B4（user-input）：本 build 未向模型暴露 user-input 工具（userInputRequestObserved=false），
+  记 UNAVAILABLE 并收窄结论；B4 单独报告，不计入 allPass（allPass=A/B/B2/B3/C/D）。
+- elicitation：需 elicitation MCP server 构造运行时触发，handler+schema 已验证，结论限于已证明路径。

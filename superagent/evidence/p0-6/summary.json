@@ -1,62 +1,62 @@
 {
   "traceA": {
     "pass": true,
-    "threadId": "01a1e98f-0123-7af3-8009-5f740c52dc07",
+    "threadId": "01a1ec32-3ec5-7c80-9d44-37791fa528c7",
     "turnStarted": {
       "method": "turn/started",
       "params": {
-        "threadId": "01a1e98f-0123-7af3-8009-5f740c52dc07",
+        "threadId": "01a1ec32-3ec5-7c80-9d44-37791fa528c7",
         "turn": {
-          "id": "01a1e98f-0181-7811-bbb2-50421b34dffd",
-          "rootTurnId": "01a1e98f-0181-7811-bbb2-50421b34dffd",
+          "id": "01a1ec32-3f73-79a0-b7bc-4ee78d7659b4",
+          "rootTurnId": "01a1ec32-3f73-79a0-b7bc-4ee78d7659b4",
           "items": [],
           "itemsView": "notLoaded",
           "status": "inProgress",
           "error": null,
-          "startedAt": 1794919825,
+          "startedAt": 1794964078,
           "completedAt": null,
           "durationMs": null
         }
       },
-      "emittedAtMs": 1794919825799
+      "emittedAtMs": 1794964078472
     },
     "turnCompleted": {
       "method": "turn/completed",
       "params": {
-        "threadId": "01a1e98f-0123-7af3-8009-5f740c52dc07",
+        "threadId": "01a1ec32-3ec5-7c80-9d44-37791fa528c7",
         "turn": {
-          "id": "01a1e98f-0181-7811-bbb2-50421b34dffd",
-          "rootTurnId": "01a1e98f-0181-7811-bbb2-50421b34dffd",
+          "id": "01a1ec32-3f73-79a0-b7bc-4ee78d7659b4",
+          "rootTurnId": "01a1ec32-3f73-79a0-b7bc-4ee78d7659b4",
           "items": [
             {
               "type": "agentMessage",
               "moderation": null,
-              "id": "msg_011fff74376992ff016afc4dbf426087d091b0a94a2c4de3db",
+              "id": "msg_070fd1cf170c4c1b016afcfa7e37c887d0b9b574a41603c85c",
               "text": "DONE",
               "phase": "final_answer",
               "memoryCitation": null,
               "delivery": null,
               "questions": null,
-              "startedAtMs": 1794919871242,
-              "completedAtMs": 1794919871388
+              "startedAtMs": 1794964094205,
+              "completedAtMs": 1794964094313
             }
           ],
           "itemsView": "summary",
           "status": "completed",
           "error": null,
-          "startedAt": 1794919825,
-          "completedAt": 1794919871,
-          "durationMs": 45609
+          "startedAt": 1794964078,
+          "completedAt": 1794964094,
+          "durationMs": 15871
         }
       },
-      "emittedAtMs": 1794919871407
+      "emittedAtMs": 1794964094331
     },
     "turnStartResponse": {
       "id": 3,
       "result": {
         "turn": {
-          "id": "01a1e98f-0181-7811-bbb2-50421b34dffd",
-          "rootTurnId": "01a1e98f-0181-7811-bbb2-50421b34dffd",
+          "id": "01a1ec32-3f73-79a0-b7bc-4ee78d7659b4",
+          "rootTurnId": "01a1ec32-3f73-79a0-b7bc-4ee78d7659b4",
           "items": [],
           "itemsView": "notLoaded",
           "status": "inProgress",
@@ -68,7 +68,7 @@
       }
     },
     "fileContent": "SUPERAGENT_P06_OK",
-    "notificationCount": 38,
+    "notificationCount": 33,
     "maxFrameBytesSeen": 1695,
     "frameViolations": []
   },
@@ -90,8 +90,8 @@
       "id": 3,
       "result": {
         "turn": {
-          "id": "01a1e98f-b43f-7852-b207-9e0b09b830ae",
-          "rootTurnId": "01a1e98f-b43f-7852-b207-9e0b09b830ae",
+          "id": "01a1ec32-7e53-7a02-9d1f-a56412f384da",
+          "rootTurnId": "01a1ec32-7e53-7a02-9d1f-a56412f384da",
           "items": [],
           "itemsView": "notLoaded",
           "status": "inProgress",
@@ -104,14 +104,46 @@
     }
   },
   "traceB2": {
-    "pass": false,
+    "pass": true,
     "deferredRequestIds": [
       0
     ],
-    "notificationsBeforeHold": 28,
-    "notificationsAfterHold": 28,
-    "methodsConsumedWhileApprovalPending": [],
-    "pumpConsumedWhilePending": false,
+    "concurrentThreadId": "01a1ec32-bb7e-75a3-8301-fb08af66990b",
+    "notificationsBeforeHold": 23,
+    "notificationsAfterHold": 38,
+    "methodsConsumedWhileApprovalPending": [
+      "thread/started",
+      "mcpServer/startupStatus/updated",
+      "thread/status/changed",
+      "turn/started",
+      "mcpServer/startupStatus/updated",
+      "item/started",
+      "item/completed",
+      "item/started",
+      "item/agentMessage/delta",
+      "item/agentMessage/delta",
+      "item/completed",
+      "thread/tokenUsage/updated",
+      "account/rateLimits/updated",
+      "thread/status/changed",
+      "turn/completed"
+    ],
+    "unrelatedFromOtherThread": [
+      "mcpServer/startupStatus/updated",
+      "thread/status/changed",
+      "turn/started",
+      "mcpServer/startupStatus/updated",
+      "item/started",
+      "item/completed",
+      "item/started",
+      "item/agentMessage/delta",
+      "item/agentMessage/delta",
+      "item/completed",
+      "thread/tokenUsage/updated",
+      "thread/status/changed",
+      "turn/completed"
+    ],
+    "pumpConsumedWhilePending": true,
     "sideEffectFileExists": false,
     "serverRequestDecisions": [
       {
@@ -134,8 +166,8 @@
       "id": 3,
       "result": {
         "turn": {
-          "id": "01a1e990-6a54-74d0-b433-b59c4d9aeb2b",
-          "rootTurnId": "01a1e990-6a54-74d0-b433-b59c4d9aeb2b",
+          "id": "01a1ec32-a1c2-7db1-a198-2c336df0c734",
+          "rootTurnId": "01a1ec32-a1c2-7db1-a198-2c336df0c734",
           "items": [],
           "itemsView": "notLoaded",
           "status": "inProgress",
@@ -165,8 +197,8 @@
       "id": 3,
       "result": {
         "turn": {
-          "id": "01a1e991-473f-78d0-87c2-4b332633c6ab",
-          "rootTurnId": "01a1e991-473f-78d0-87c2-4b332633c6ab",
+          "id": "01a1ec32-e70f-7561-8abb-e34159dd397d",
+          "rootTurnId": "01a1ec32-e70f-7561-8abb-e34159dd397d",
           "items": [],
           "itemsView": "notLoaded",
           "status": "inProgress",
@@ -188,8 +220,8 @@
       "id": 3,
       "result": {
         "turn": {
-          "id": "01a1e992-0c01-7d71-afec-74a0879a71bf",
-          "rootTurnId": "01a1e992-0c01-7d71-afec-74a0879a71bf",
+          "id": "01a1ec33-1415-7e23-a06d-6b3d5b3f6ecf",
+          "rootTurnId": "01a1ec33-1415-7e23-a06d-6b3d5b3f6ecf",
           "items": [],
           "itemsView": "notLoaded",
           "status": "inProgress",
@@ -203,11 +235,11 @@
     "note": "Empty answers {} = declined input, no side effects. If the tool is not exposed to the model in this build, record UNAVAILABLE and narrow the conclusion accordingly."
   },
   "traceC": {
-    "pass": false,
-    "turnId": "01a1e992-c92a-7452-9c07-8680592e730f",
-    "sleepBeforeInterrupt": "76204 sleep 60",
-    "sleepAfterInterrupt": "76204 sleep 60",
-    "cleanupSeconds": 23,
+    "pass": true,
+    "turnId": "01a1ec33-4d61-7b92-9f92-bceca0233a4e",
+    "sleepBeforeInterrupt": "18925 sleep 60",
+    "sleepAfterInterrupt": "",
+    "cleanupSeconds": 3,
     "interruptResponse": {
       "id": 4,
       "result": {}
@@ -215,28 +247,28 @@
     "turnCompleted": {
       "method": "turn/completed",
       "params": {
-        "threadId": "01a1e992-c8ce-7822-b850-fbe0219cea51",
+        "threadId": "01a1ec33-4ce9-7b52-baf2-b25ed4a8db78",
         "turn": {
-          "id": "01a1e992-c92a-7452-9c07-8680592e730f",
-          "rootTurnId": "01a1e992-c92a-7452-9c07-8680592e730f",
+          "id": "01a1ec33-4d61-7b92-9f92-bceca0233a4e",
+          "rootTurnId": "01a1ec33-4d61-7b92-9f92-bceca0233a4e",
           "items": [],
           "itemsView": "notLoaded",
           "status": "interrupted",
           "error": null,
-          "startedAt": 1794920073,
-          "completedAt": 1794920118,
-          "durationMs": 44686
+          "startedAt": 1794964147,
+          "completedAt": 1794964155,
+          "durationMs": 8350
         }
       },
-      "emittedAtMs": 1794920118202
+      "emittedAtMs": 1794964155905
     },
     "turnStatus": "interrupted",
     "turnStartResponse": {
       "id": 3,
       "result": {
         "turn": {
-          "id": "01a1e992-c92a-7452-9c07-8680592e730f",
-          "rootTurnId": "01a1e992-c92a-7452-9c07-8680592e730f",
+          "id": "01a1ec33-4d61-7b92-9f92-bceca0233a4e",
+          "rootTurnId": "01a1ec33-4d61-7b92-9f92-bceca0233a4e",
           "items": [],
           "itemsView": "notLoaded",
           "status": "inProgress",
@@ -250,11 +282,11 @@
   },
   "traceD": {
     "pass": true,
-    "threadId": "01a1e993-d54e-7711-91f1-bee3c358bd85",
+    "threadId": "01a1ec33-7a2c-7b11-b435-9c36132ce9cb",
     "crashExitCode": -9,
-    "orphanSleepAfterCrash": "77871 sleep 45",
+    "orphanSleepAfterCrash": "19372 sleep 45",
     "orphanPollSeconds": 20,
-    "orphanAfterPoll": "77871 sleep 45",
+    "orphanAfterPoll": "19372 sleep 45",
     "orphanCleared": false,
     "reconciledLastTurnStatus": "interrupted",
     "terminalProven": false,
@@ -263,10 +295,10 @@
       "id": 2,
       "result": {
         "thread": {
-          "id": "01a1e993-d54e-7711-91f1-bee3c358bd85",
+          "id": "01a1ec33-7a2c-7b11-b435-9c36132ce9cb",
           "environments": null,
           "extra": null,
-          "sessionId": "01a1e993-d54e-7711-91f1-bee3c358bd85",
+          "sessionId": "01a1ec33-7a2c-7b11-b435-9c36132ce9cb",
           "forkedFromId": null,
           "attachedToThreadId": null,
           "parentThreadId": null,
@@ -279,14 +311,14 @@
           "modelProvider": "openai",
           "model": "gpt-6-astra",
           "reasoningEffort": null,
-          "createdAt": 1794920142,
-          "updatedAt": 1794920185,
-          "recencyAt": 1794920142,
+          "createdAt": 1794964159,
+          "updatedAt": 1794964165,
+          "recencyAt": 1794964159,
           "status": {
             "type": "notLoaded"
           },
-          "path": "/Users/<user>/Library/Application Support/SuperAgent/codex-home/sessions/2026/11/17/rollout-2026-11-17T20-55-42-01a1e993-d54e-7711-91f1-bee3c358bd85.jsonl",
-          "cwd": "/private/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-d-cgow9eqq",
+          "path": "/Users/<user>/Library/Application Support/SuperAgent/codex-home/sessions/2026/11/18/rollout-2026-11-18T09-09-19-01a1ec33-7a2c-7b11-b435-9c36132ce9cb.jsonl",
+          "cwd": "/private/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p06-d-j_53qa87",
           "cliVersion": "0.0.0",
           "originator": "superagent-spike",
           "source": "vscode",
@@ -299,12 +331,12 @@
           "daybreakEnabled": null,
           "turns": [
             {
-              "id": "01a1e993-d5b2-78d1-b2c5-2e37bd050ba1",
-              "rootTurnId": "01a1e993-d5b2-78d1-b2c5-2e37bd050ba1",
+              "id": "01a1ec33-7a96-7cb2-b272-8abc0e6839fe",
+              "rootTurnId": "01a1ec33-7a96-7cb2-b272-8abc0e6839fe",
               "items": [
                 {
                   "type": "userMessage",
-                  "id": "01a1e993-f322-79c2-9003-6eece01e1435",
+                  "id": "01a1ec33-87bb-7c60-a79c-0c72db51d750",
                   "clientId": null,
                   "content": [
                     {
@@ -313,26 +345,26 @@
                       "text_elements": []
                     }
                   ],
-                  "startedAtMs": 1794920149795,
-                  "completedAtMs": 1794920149795
+                  "startedAtMs": 1794964162492,
+                  "completedAtMs": 1794964162492
                 },
                 {
                   "type": "agentMessage",
                   "moderation": null,
-                  "id": "msg_0109327f58a3fdb9016afc4ef8646487d0802d3dfbebae762f",
+                  "id": "msg_0ad1e9a4203607fd016afcfac4505887d0b3efb13f1eeb06a4",
                   "text": "I’ll run `sleep 45`, wait for it to finish, then create `d.txt` containing `RECONCILED`.\n",
                   "phase": "commentary",
                   "memoryCitation": null,
                   "delivery": null,
                   "questions": null,
-                  "startedAtMs": 1794920184305,
-                  "completedAtMs": 1794920185014
+                  "startedAtMs": 1794964164354,
+                  "completedAtMs": 1794964164942
                 }
               ],
               "itemsView": "full",
               "status": "interrupted",
               "error": null,
-              "startedAt": 1794920142,
+              "startedAt": 1794964159,
               "completedAt": null,
               "durationMs": null
             }
@@ -340,11 +372,11 @@
         },
         "readState": {
           "firstUnread": null,
-          "revision": "initial:01a1e993-d54e-7711-91f1-bee3c358bd85"
+          "revision": "initial:01a1ec33-7a2c-7b11-b435-9c36132ce9cb"
         }
       }
     }
   },
-  "allPass": false,
+  "allPass": true,
   "traceB4ReportedSeparately": "user-input tool may be unavailable in this build; see traceB4.note"
 }

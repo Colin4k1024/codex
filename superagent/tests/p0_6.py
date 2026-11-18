@@ -180,27 +180,48 @@ try:
         time.sleep(0.5)
     pending_ids = list(client.pending_server_requests)
     count_before = len(client.notifications)
+    # A single turn blocked on approval emits nothing, so the pump would have no
+    # unrelated traffic to consume. Start a second thread on the SAME connection
+    # that emits notifications while the first approval is held open, proving the
+    # read pump keeps consuming unrelated events during the deferred window.
+    ts2 = client.request("thread/start", {"cwd": work_b2}, timeout=60)
+    tid2 = ts2["result"]["thread"]["id"]
+    rid2 = client.send_request("turn/start", {"threadId": tid2, "input": [{"type": "text",
+        "text": "Reply with exactly the word PONG. Do not run any commands or use any tools."}]})
     time.sleep(8)
     count_after = len(client.notifications)
-    unrelated = [n.get("method") for n in client.notifications[count_before:count_after]]
+    window = client.notifications[count_before:count_after]
+    unrelated = [n.get("method") for n in window]
+    unrelated_other_thread = [n.get("method") for n in window
+                              if n.get("params", {}).get("threadId") == tid2]
     for pid in pending_ids:
         client.respond_server_request(pid, {"result": {"decision": "decline"}})
-    client.wait_notification(is_note("turn/completed"), timeout=360)
+    client.wait_notification(lambda n: n.get("method") == "turn/completed"
+                             and n.get("params", {}).get("threadId") == thread_id, timeout=360)
     resp = client.wait_response(rid, timeout=30)
+    # drain the concurrent second turn so the connection closes cleanly
+    try:
+        client.wait_notification(lambda n: n.get("method") == "turn/completed"
+                                 and n.get("params", {}).get("threadId") == tid2, timeout=60)
+        client.wait_response(rid2, timeout=30)
+    except TimeoutError:
+        pass
     probe_exists = os.path.exists(f"{work_b2}/approval-probe.txt")
     summary["traceB2"] = {
-        "pass": bool(pending_ids) and count_after > count_before and not probe_exists,
+        "pass": bool(pending_ids) and bool(unrelated_other_thread) and not probe_exists,
         "deferredRequestIds": pending_ids,
+        "concurrentThreadId": tid2,
         "notificationsBeforeHold": count_before,
         "notificationsAfterHold": count_after,
         "methodsConsumedWhileApprovalPending": unrelated,
-        "pumpConsumedWhilePending": count_after > count_before,
+        "unrelatedFromOtherThread": unrelated_other_thread,
+        "pumpConsumedWhilePending": bool(unrelated_other_thread),
         "sideEffectFileExists": probe_exists,
         "serverRequestDecisions": client.server_request_decisions,
         "turnStartResponse": resp,
     }
     save("trace-b2-transcript.json", {"results": [ts, resp], "pendingApprovalIds": pending_ids,
-                                      **client.transcript()})
+                                      "concurrentThreadStart": ts2, **client.transcript()})
 finally:
     client.close()
 
