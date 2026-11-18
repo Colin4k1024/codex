@@ -173,7 +173,7 @@ fn identity_forgery_rejected() {
 
 #[test]
 fn heartbeat_liveness_and_stale_exclusion() {
-    let (mut reg, _a, b) = two_hosts();
+    let (mut reg, a, b) = two_hosts();
     assert_eq!(reg.discover("host-1", NOW).len(), 1);
 
     // Past the heartbeat TTL with no refresh: agents drop out of discovery.
@@ -189,13 +189,69 @@ fn heartbeat_liveness_and_stale_exclusion() {
     assert_eq!(live[0].agent_id, "agent-b");
     assert_eq!(live[0].last_seen, later);
 
-    // Heartbeat with a mismatched subject is Forged.
+    // A token whose kid is not in the JWKS is UnknownKid.
     let other = identity("agent-x", "host-2", 7);
     assert_eq!(
         reg.heartbeat("agent-b", &other.issue_token(later, TOKEN_TTL), later)
             .unwrap_err(),
         RegistryError::UnknownKid
     );
+
+    // A registered kid whose sub differs from the target agent hits the
+    // heartbeat sub-binding branch: Forged (agent-a's token on agent-b).
+    assert_eq!(
+        reg.heartbeat("agent-b", &a.issue_token(later, TOKEN_TTL), later)
+            .unwrap_err(),
+        RegistryError::Forged
+    );
+}
+
+#[test]
+fn reregistration_identity_replacement_rejected() {
+    let (mut reg, a, b) = two_hosts();
+    let tok_a = a.issue_token(NOW, TOKEN_TTL);
+    let tok_b = b.issue_token(NOW, TOKEN_TTL);
+
+    // Attacker re-registers the live agent-a with a DIFFERENT signing key and a
+    // self-signed token whose sub/host match: identity replacement must be Forged.
+    let attacker = identity("agent-a", "host-1", 9);
+    let r = Registration {
+        agent_id: "agent-a".into(),
+        host_id: "host-1".into(),
+        capabilities: caps(&["build"]),
+        endpoint: "board://agent-a".into(),
+        public_key: attacker.public_key(),
+        session_credential: "sess-evil".into(),
+    };
+    assert_eq!(
+        reg.register(r, &attacker.issue_token(NOW, TOKEN_TTL), NOW)
+            .unwrap_err(),
+        RegistryError::Forged
+    );
+
+    // The published JWKS key is unchanged: the real agent still verifies and the
+    // attacker's key is still rejected.
+    reg.heartbeat("agent-a", &tok_a, NOW).unwrap();
+    assert_eq!(
+        reg.heartbeat("agent-a", &attacker.issue_token(NOW, TOKEN_TTL), NOW)
+            .unwrap_err(),
+        RegistryError::InvalidSignature
+    );
+
+    // The session credential is unchanged: sess-a routes, sess-evil is denied.
+    reg.send_handoff("agent-a", "agent-b", "task", &tok_a, "sess-a", NOW)
+        .unwrap();
+    assert_eq!(
+        reg.send_handoff("agent-a", "agent-b", "task", &tok_a, "sess-evil", NOW)
+            .unwrap_err(),
+        RegistryError::SessionDenied
+    );
+
+    // No forged delivery: agent-b receives only the legitimate handoff.
+    let inbox = reg.recv("agent-b", &tok_b, NOW).unwrap();
+    assert_eq!(inbox.len(), 1);
+    assert_eq!(inbox[0].payload, "task");
+    assert_eq!(inbox[0].from, "agent-a");
 }
 
 #[test]

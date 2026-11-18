@@ -240,10 +240,19 @@ impl AgentRegistry {
     ) -> Result<(), RegistryError> {
         let key = VerifyingKey::from_bytes(&reg.public_key)
             .map_err(|_| RegistryError::InvalidSignature)?;
-        // A failed re-registration must not revoke an already-published identity,
-        // so only roll back the JWKS key when this registration newly added it.
-        let newly = !self.jwks.contains_key(&reg.agent_id);
-        self.jwks.insert(reg.agent_id.clone(), key);
+        // A published identity is immutable. Re-registering an existing agent_id
+        // must present the SAME public key and verify against the EXISTING JWKS
+        // key; a different key is an identity-replacement forgery and is rejected
+        // before any key/session mutation. Only a brand-new agent_id inserts a key
+        // (rolled back if its verification fails).
+        let existing = self.jwks.get(&reg.agent_id).copied();
+        if let Some(prev) = existing {
+            if prev != key {
+                return Err(RegistryError::Forged);
+            }
+        } else {
+            self.jwks.insert(reg.agent_id.clone(), key);
+        }
         let verified = self.verify(token, now).and_then(|claims| {
             if claims.sub != reg.agent_id || claims.host != reg.host_id {
                 Err(RegistryError::Forged)
@@ -252,7 +261,7 @@ impl AgentRegistry {
             }
         });
         if let Err(e) = verified {
-            if newly {
+            if existing.is_none() {
                 self.jwks.remove(&reg.agent_id);
             }
             return Err(e);
