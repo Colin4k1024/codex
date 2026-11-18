@@ -1,0 +1,25 @@
+$ cargo +1.99.1 fmt --check
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+fmt-exit=0
+$ cargo +1.99.1 clippy --all-targets -- -D warnings
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+warning: failed to parse serde attribute
+  | 
+  | deny_unknown_fields 
+  | 
+  = note: ts-rs failed to parse this attribute. It will be ignored.
+warning: failed to parse serde attribute
+  | 
+  | deny_unknown_fields 
+  | 
+  = note: ts-rs failed to parse this attribute. It will be ignored.
+    Checking superagent-remote-exec v0.1.0 (/private/tmp/sa-p5-1-wt/superagent/crates/remote-exec)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.59s
+clippy-exit=0
