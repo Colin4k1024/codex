@@ -250,13 +250,20 @@ if alive():
     except OSError:
         os.kill(pid, signal.SIGKILL)
 try:
-    os.waitpid(pid, 0)
-except ChildProcessError:
-    pass
-try:
     os.killpg(pid, signal.SIGKILL)
 except OSError:
     pass
+# Bounded non-blocking reap: a lingering pty child must never block the
+# post-run reconciliation / conclusion write (the delivery is already captured
+# on disk). WNOHANG polls instead of an indefinite wait4.
+for _ in range(20):
+    try:
+        done, _status = os.waitpid(pid, os.WNOHANG)
+        if done != 0:
+            break
+    except ChildProcessError:
+        break
+    time.sleep(0.5)
 time.sleep(2)
 screen.close()
 
@@ -328,9 +335,23 @@ def resident_intro_tokens():
     except ImportError:
         return None
     persona = open(f"{ROOT}/superagent/pack/roles/leader-persona.md").read()
-    # resident intro = the §2 resident introduction section
-    marker = "resident intro"
-    text = persona
+    # resident intro = the §2 section body (injected into root_agent_usage_hint_text),
+    # NOT the whole persona file. Extract from the "## 2. ... resident intro"
+    # heading to the next "## " heading or EOF.
+    lines = persona.splitlines()
+    start = None
+    for i, ln in enumerate(lines):
+        if ln.startswith("## 2.") and "resident intro" in ln:
+            start = i + 1
+            break
+    if start is None:
+        return None
+    body = []
+    for ln in lines[start:]:
+        if ln.startswith("## "):
+            break
+        body.append(ln)
+    text = "\n".join(body).strip()
     enc = tiktoken.get_encoding("o200k_base")
     return len(enc.encode(text))
 

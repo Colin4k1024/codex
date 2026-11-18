@@ -1,0 +1,25 @@
+test_negative (test_calc.TestAdd.test_negative) ... FAIL
+test_positive (test_calc.TestAdd.test_positive) ... FAIL
+
+======================================================================
+FAIL: test_negative (test_calc.TestAdd.test_negative)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p15tui-28umvx3x/test_calc.py", line 10, in test_negative
+    self.assertEqual(add(-2, -3), -5)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+AssertionError: 1 != -5
+
+======================================================================
+FAIL: test_positive (test_calc.TestAdd.test_positive)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p15tui-28umvx3x/test_calc.py", line 7, in test_positive
+    self.assertEqual(add(2, 3), 5)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+AssertionError: -1 != 5
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.001s
+
+FAILED (failures=2)

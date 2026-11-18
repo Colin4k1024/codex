@@ -1,0 +1,165 @@
+{
+  "issue": 77,
+  "criterion": "P1 acceptance: TUI meta-agent team fixture end-to-end REAL delivery",
+  "mode": "interactive TUI (bare CLI, pty, task-only prompt prefill)",
+  "launch": {
+    "argv": [
+      "/Users/fanjia/Desktop/code/codex/superagent/packaging/superagent-engine",
+      "--no-daemon",
+      "<task-only prompt>"
+    ],
+    "prompt": "This project has a failing unit test (test_calc.py). Use your team to diagnose the bug, fix the source so the test passes, verify by running the test, review the change, and write a short report. Actually edit calc.py and run `python3 -m unittest test_calc` to confirm it passes. In the report, separate what is verified (the test now passes) from anything unverified.",
+    "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p15tui-28umvx3x",
+    "envCODEX_HOME": "/tmp/sa-p1-5-wt/superagent/evidence/p1-5/home-p1-5-tui",
+    "startedAtEpoch": 1794980943.4559438
+  },
+  "fixture": {
+    "source": "/private/tmp/sa-p1-5-wt/superagent/tests/fixtures/p0-2-task",
+    "baselineTestPass": false,
+    "finalTestPass": true,
+    "baselineCalc": "def add(a, b):\n    # BUG: subtraction instead of addition\n    return a - b",
+    "finalCalc": "def add(a, b):\n    return a + b\n",
+    "fixtureDelivered": true
+  },
+  "promptIsTaskOnly": true,
+  "leaderSessionFile": "/tmp/sa-p1-5-wt/superagent/evidence/p1-5/home-p1-5-tui/sessions/2026/11/18/rollout-2026-11-18T13-49-11-01a1ed33-b65d-7c41-a80c-de522aae4521.jsonl",
+  "leaderOriginator": "codex-tui",
+  "leaderTurnStatuses": [
+    "completed"
+  ],
+  "personaInLeaderRollout": true,
+  "spawnedRoles": [
+    "implementer",
+    "planner",
+    "reporter",
+    "reviewer",
+    "verifier"
+  ],
+  "minRolesRequired": 3,
+  "minRolesSpawned": true,
+  "childProof": {
+    "01a1ed36-222a-7592-9d5a-5deb32b2b444": {
+      "role": "reporter",
+      "threadId": "01a1ed36-222a-7592-9d5a-5deb32b2b444",
+      "model": "gpt-5.6-luna",
+      "agentNickname": "Clio",
+      "turnStatuses": [
+        "completed"
+      ],
+      "turnErrors": [],
+      "turnsCompleted": true,
+      "rolloutFile": "/tmp/sa-p1-5-wt/superagent/evidence/p1-5/home-p1-5-tui/sessions/2026/11/18/rollout-2026-11-18T13-51-50-01a1ed36-222a-7592-9d5a-5deb32b2b444.jsonl"
+    },
+    "01a1ed34-b00b-7a63-bd43-ab625fc03c40": {
+      "role": "implementer",
+      "threadId": "01a1ed34-b00b-7a63-bd43-ab625fc03c40",
+      "model": "gpt-6-astra",
+      "agentNickname": "Daedalus",
+      "turnStatuses": [
+        "completed"
+      ],
+      "turnErrors": [],
+      "turnsCompleted": true,
+      "rolloutFile": "/tmp/sa-p1-5-wt/superagent/evidence/p1-5/home-p1-5-tui/sessions/2026/11/18/rollout-2026-11-18T13-50-15-01a1ed34-b00b-7a63-bd43-ab625fc03c40.jsonl"
+    },
+    "01a1ed35-5238-7311-adf8-b070419e7656": {
+      "role": "verifier",
+      "threadId": "01a1ed35-5238-7311-adf8-b070419e7656",
+      "model": "gpt-5.6-luna",
+      "agentNickname": "Argus",
+      "turnStatuses": [
+        "completed"
+      ],
+      "turnErrors": [],
+      "turnsCompleted": true,
+      "rolloutFile": "/tmp/sa-p1-5-wt/superagent/evidence/p1-5/home-p1-5-tui/sessions/2026/11/18/rollout-2026-11-18T13-50-57-01a1ed35-5238-7311-adf8-b070419e7656.jsonl"
+    },
+    "01a1ed34-00d2-7aa3-a0e6-4769c5c1a63d": {
+      "role": "planner",
+      "threadId": "01a1ed34-00d2-7aa3-a0e6-4769c5c1a63d",
+      "model": "gpt-6-astra",
+      "agentNickname": "Athena",
+      "turnStatuses": [
+        "completed"
+      ],
+      "turnErrors": [],
+      "turnsCompleted": true,
+      "rolloutFile": "/tmp/sa-p1-5-wt/superagent/evidence/p1-5/home-p1-5-tui/sessions/2026/11/18/rollout-2026-11-18T13-49-30-01a1ed34-00d2-7aa3-a0e6-4769c5c1a63d.jsonl"
+    },
+    "01a1ed35-66ee-7b52-ae05-6ede61ace6d2": {
+      "role": "reviewer",
+      "threadId": "01a1ed35-66ee-7b52-ae05-6ede61ace6d2",
+      "model": "gpt-5.6-luna",
+      "agentNickname": "Nemesis",
+      "turnStatuses": [
+        "completed"
+      ],
+      "turnErrors": [],
+      "turnsCompleted": true,
+      "rolloutFile": "/tmp/sa-p1-5-wt/superagent/evidence/p1-5/home-p1-5-tui/sessions/2026/11/18/rollout-2026-11-18T13-51-02-01a1ed35-66ee-7b52-ae05-6ede61ace6d2.jsonl"
+    }
+  },
+  "allChildTurnsCompleted": true,
+  "budget": {
+    "residentIntroTokens": 238,
+    "residentIntroCap": 400,
+    "residentIntroOk": true,
+    "fragmentCap": 900,
+    "fragmentByChild": {
+      "01a1ed36-222a-7592-9d5a-5deb32b2b444": {
+        "role": "reporter",
+        "finalAnswerTokens": 28,
+        "withinFragmentCap": true
+      },
+      "01a1ed34-b00b-7a63-bd43-ab625fc03c40": {
+        "role": "implementer",
+        "finalAnswerTokens": 76,
+        "withinFragmentCap": true
+      },
+      "01a1ed35-5238-7311-adf8-b070419e7656": {
+        "role": "verifier",
+        "finalAnswerTokens": 97,
+        "withinFragmentCap": true
+      },
+      "01a1ed34-00d2-7aa3-a0e6-4769c5c1a63d": {
+        "role": "planner",
+        "finalAnswerTokens": 82,
+        "withinFragmentCap": true
+      },
+      "01a1ed35-66ee-7b52-ae05-6ede61ace6d2": {
+        "role": "reviewer",
+        "finalAnswerTokens": 95,
+        "withinFragmentCap": true
+      }
+    },
+    "fragmentOk": true,
+    "budgetAllPass": true,
+    "口径note": "口径b per #74 grok ruling: orchestrator-injected delivery content, not one-time engine base context / provider prompt-cache behavior."
+  },
+  "zeroRegression": {
+    "engineDigestBefore": "26de2be50c0ec5f4576f541e9e7db1591f52e8bd68cad13749a7776d5d06a0dd",
+    "engineDigestAfter": "26de2be50c0ec5f4576f541e9e7db1591f52e8bd68cad13749a7776d5d06a0dd",
+    "engineUnchanged": true
+  },
+  "reportArtifact": {
+    "verified": [
+      "fixture defect fixed: baseline test FAILED -> source edited -> unit test PASSES",
+      "TUI leader autonomously spawned 5 persona roles; all child turns completed",
+      "budget: residentIntro=238<=400; delivery fragments within 900",
+      "zero engine regression: engine binary digest unchanged (no source edit)"
+    ],
+    "unverified": []
+  },
+  "traceArchive": [
+    "/tmp/sa-p1-5-wt/superagent/evidence/p1-5/trace/rollout-2026-11-18T13-49-11-01a1ed33-b65d-7c41-a80c-de522aae4521.jsonl",
+    "/tmp/sa-p1-5-wt/superagent/evidence/p1-5/trace/rollout-2026-11-18T13-51-50-01a1ed36-222a-7592-9d5a-5deb32b2b444.jsonl",
+    "/tmp/sa-p1-5-wt/superagent/evidence/p1-5/trace/rollout-2026-11-18T13-50-15-01a1ed34-b00b-7a63-bd43-ab625fc03c40.jsonl",
+    "/tmp/sa-p1-5-wt/superagent/evidence/p1-5/trace/rollout-2026-11-18T13-50-57-01a1ed35-5238-7311-adf8-b070419e7656.jsonl",
+    "/tmp/sa-p1-5-wt/superagent/evidence/p1-5/trace/rollout-2026-11-18T13-49-30-01a1ed34-00d2-7aa3-a0e6-4769c5c1a63d.jsonl",
+    "/tmp/sa-p1-5-wt/superagent/evidence/p1-5/trace/rollout-2026-11-18T13-51-02-01a1ed35-66ee-7b52-ae05-6ede61ace6d2.jsonl"
+  ],
+  "screenLog": "/tmp/sa-p1-5-wt/superagent/evidence/p1-5/p1-5-tui-screen.log",
+  "tuiFixtureDelivery": "PROVEN",
+  "allPass": true,
+  "honestyNote": "PROVEN only if the baseline test genuinely failed, a genuine TUI leader autonomously spawned >=3 persona roles with completed turns, the fixture source was actually fixed and the unit test genuinely passes, budget is met, and the engine binary is unchanged. Otherwise NOT_PROVEN with observed facts; never fabricated. 'Can chat / can spawn' alone is NOT acceptance."
+}
