@@ -52,11 +52,14 @@ appears 18/22/16 times respectively).
 
 ## Gate (CI toolchain 1.99.1)
 
-- `cargo +1.99.1 fmt --check`: clean
-- `cargo +1.99.1 clippy --all-targets -- -D warnings`: clean
-- `cargo +1.99.1 test`: 15 unit + 5 integration = **20 passed, 0 failed**
+- `cargo +1.99.1 fmt --check`: exit 0 (see `fmt-clippy.log`)
+- `cargo +1.99.1 clippy --all-targets -- -D warnings`: exit 0, error-lines=0 (see `fmt-clippy.log`)
+- `cargo +1.99.1 test`: 0 unit + 20 integration (15 core `memory_service` + 5 `source_adapter`) = **20 passed, 0 failed**
 
-See `test-output.log` for the full run including the latency baseline line.
+See `test-output.log` for the full test run including the latency baseline line,
+and `fmt-clippy.log` for the committed fmt/clippy command trace.
+
+Refs #87
 
 ## Honesty / scope
 
