@@ -6,8 +6,9 @@ agents overlay: structure, overlay<->file consistency, model slugs against the
 engine catalog, resident-intro token budget (tiktoken o200k_base <= 400),
 delivery contracts, and credential absence.
 
-Runtime acceptance (TUI leader spawns per persona, role isolation, budget
-spend) is quota-gated and proven separately by tests/p1-2-run.sh; these tests
+Runtime acceptance (leader persona injection, five-role spawn, child turn
+completion, role isolation, budget caps) is proven separately by
+tests/p1_2.py (app-server stdio) and tests/p1_2_tui.py (TUI pty); these tests
 do NOT claim runtime acceptance.
 """
 import json
@@ -101,8 +102,8 @@ class RoleContentTests(unittest.TestCase):
 
     def test_resident_intro_matches_overlay_and_under_cap(self):
         intro = resident_intro()
-        hint = self.overlay["features"]["multi_agent_v2"]["subagent_usage_hint_text"].strip()
-        self.assertEqual(intro, hint, "persona §2 must equal overlay hint text")
+        hint = self.overlay["features"]["multi_agent_v2"]["root_agent_usage_hint_text"].strip()
+        self.assertEqual(intro, hint, "persona §2 must equal overlay root hint text")
         n = len(self.enc.encode(hint))
         self.assertLessEqual(n, INTRO_TOKEN_CAP, f"resident intro {n} tokens > {INTRO_TOKEN_CAP}")
 
@@ -131,7 +132,7 @@ def measure():
     enc = tiktoken.get_encoding(ENCODING)
     intro = resident_intro()
     overlay = load_toml(OVERLAY)
-    hint = overlay["features"]["multi_agent_v2"]["subagent_usage_hint_text"].strip()
+    hint = overlay["features"]["multi_agent_v2"]["root_agent_usage_hint_text"].strip()
     return {
         "encoding": ENCODING,
         "cap_tokens": INTRO_TOKEN_CAP,
@@ -140,7 +141,7 @@ def measure():
         "intro_equals_overlay_hint": intro == hint,
         "within_cap": len(enc.encode(hint)) <= INTRO_TOKEN_CAP,
         "role_models": {n: load_toml(ROLES / f"{n}.toml")["model"] for n in ROLE_NAMES},
-        "note": "Content-layer measurement only; runtime persona/isolation/budget acceptance is quota-gated (p1-2-run.sh).",
+        "note": "Content-layer measurement only; runtime acceptance is proven separately by tests/p1_2.py (stdio) and tests/p1_2_tui.py (TUI).",
     }
 
 

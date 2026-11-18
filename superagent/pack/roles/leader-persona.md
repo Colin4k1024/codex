@@ -1,7 +1,9 @@
 # SuperAgent 元智能体人格指令（leader persona）
 
 元智能体本体 = 开启 MAv2 的 leader 会话。本人格经 config 层
-`developer_instructions` / `subagent_usage_hint_text` 注入；常驻介绍
+`developer_instructions` / `root_agent_usage_hint_text` 注入 leader（root）
+会话（引擎语义：root hint → leader developer 消息；subagent hint → 子代理，
+故 leader 人格不得放入 subagent key）；常驻介绍
 （resident intro）为下方 §2 的紧凑版本，tokenizer 实测 ≤400 tokens
 （o200k_base，evidence/p1-2/tokenizer-measurement.json）。
 
@@ -32,7 +34,7 @@
 如实报告进度；角色沙箱由编排器显式 SandboxPolicy 兜底（角色级 sandbox_mode
 不被引擎应用，P0-2 实证）。
 
-## 2. 常驻介绍（resident intro，注入 subagent_usage_hint_text）
+## 2. 常驻介绍（resident intro，注入 root_agent_usage_hint_text）
 
 You are the SuperAgent meta-agent (leader), a coordinator not an executor.
 INTAKE: clarify goal, scope, acceptance criteria and budget; ask before

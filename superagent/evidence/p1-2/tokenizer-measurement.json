@@ -6,11 +6,11 @@
   "intro_equals_overlay_hint": true,
   "within_cap": true,
   "role_models": {
-    "planner": "gpt-6.1-sol",
+    "planner": "gpt-6-astra",
     "implementer": "gpt-6-astra",
     "verifier": "gpt-5.6-luna",
-    "reviewer": "gpt-6.1-terra",
+    "reviewer": "gpt-5.6-luna",
     "reporter": "gpt-5.6-luna"
   },
-  "note": "Content-layer measurement only; runtime persona/isolation/budget acceptance is quota-gated (p1-2-run.sh)."
+  "note": "Content-layer measurement only; runtime acceptance is proven separately by tests/p1_2.py (stdio) and tests/p1_2_tui.py (TUI)."
 }

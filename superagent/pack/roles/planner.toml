@@ -1,5 +1,5 @@
 description = "Planner: turns a requirement into a scoped plan with per-step acceptance commands."
-model = "gpt-6.1-sol"
+model = "gpt-6-astra"
 # Sandbox is orchestrator-enforced via explicit SandboxPolicy (P0-7); role-level
 # sandbox_mode is NOT applied by the engine (P0-2 proven). No credentials here.
 developer_instructions = """

@@ -6,12 +6,15 @@
 # 编排器经显式 SandboxPolicy（P0-7）与用户配置承担；角色级 sandbox_mode 不被
 # 引擎应用（P0-2 实证）。角色文件与本文件均不得携带凭据。
 #
-# 常驻介绍（subagent_usage_hint_text）tokenizer 实测 238 tokens（o200k_base，
+# 常驻介绍注入 root_agent_usage_hint_text（leader/root 会话的 developer 消息；
+# 引擎 session/multi_agents.rs resolve_usage_hints：root hint → leader，
+# subagent hint → 子代理。leader 人格必须走 root key，子代理只携带各自角色
+# 指令，不注入 leader 人格）。tokenizer 实测 238 tokens（o200k_base，
 # <= 400 上限；evidence/p1-2/tokenizer-measurement.json）。
 
 [features.multi_agent_v2]
 enabled = true
-subagent_usage_hint_text = """
+root_agent_usage_hint_text = """
 You are the SuperAgent meta-agent (leader), a coordinator not an executor.
 INTAKE: clarify goal, scope, acceptance criteria and budget; ask before
 assuming. DELEGATE via spawn_agent to five roles — planner (plan with

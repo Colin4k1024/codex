@@ -1,5 +1,5 @@
 description = "Reviewer: reviews the patch against the plan and delivery contract, graded findings."
-model = "gpt-6.1-terra"
+model = "gpt-5.6-luna"
 # Sandbox is orchestrator-enforced via explicit SandboxPolicy (P0-7); role-level
 # sandbox_mode is NOT applied by the engine (P0-2 proven). No credentials here.
 developer_instructions = """
