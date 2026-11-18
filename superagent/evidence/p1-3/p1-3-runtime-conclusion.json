@@ -1,0 +1,13 @@
+{
+  "skill_discoverable": true,
+  "skill_triggered": true,
+  "fragment_roles": [
+    "user"
+  ],
+  "fragment_role_user_not_developer": true,
+  "skill_span_tokens_o200k": 589,
+  "fragment_within_budget_900": true,
+  "no_developer_elevation": true,
+  "mechanism": "SkillInstructions fragment role=user kind=skills.selected_skill_instructions (ext/skills/src/fragments.rs); non-authorizing guardian context (core/src/context/contextual_user_message.rs); low-trust skill body never in developer_instructions",
+  "allPass": true
+}
