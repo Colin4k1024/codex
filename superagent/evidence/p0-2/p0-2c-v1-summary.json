@@ -1,0 +1,130 @@
+{
+  "leaderThreadId": "01a1e983-9a29-7d81-aabc-e7f23eff068e",
+  "leaderModelExpected": "gpt-5.6-luna",
+  "multiAgentVersionExpected": "v1",
+  "childThreads": {},
+  "collabItems": [
+    {
+      "tool": "spawnAgent",
+      "status": "completed",
+      "receiverThreadIds": [
+        "01a1e984-53cc-7952-a82e-bbcda443d437"
+      ],
+      "agentsStates": {
+        "01a1e984-53cc-7952-a82e-bbcda443d437": {
+          "status": "pendingInit",
+          "message": null
+        }
+      }
+    },
+    {
+      "tool": "wait",
+      "status": "completed",
+      "receiverThreadIds": [
+        "01a1e984-53cc-7952-a82e-bbcda443d437"
+      ],
+      "agentsStates": {
+        "01a1e984-53cc-7952-a82e-bbcda443d437": {
+          "status": "completed",
+          "message": "V1-CHILD-OK"
+        }
+      }
+    },
+    {
+      "tool": "closeAgent",
+      "status": "completed",
+      "receiverThreadIds": [
+        "01a1e984-53cc-7952-a82e-bbcda443d437"
+      ],
+      "agentsStates": {
+        "01a1e984-53cc-7952-a82e-bbcda443d437": {
+          "status": "completed",
+          "message": "V1-CHILD-OK"
+        }
+      }
+    },
+    {
+      "tool": "resumeAgent",
+      "status": "completed",
+      "receiverThreadIds": [
+        "01a1e984-53cc-7952-a82e-bbcda443d437"
+      ],
+      "agentsStates": {
+        "01a1e984-53cc-7952-a82e-bbcda443d437": {
+          "status": "pendingInit",
+          "message": null
+        }
+      }
+    }
+  ],
+  "spawnCallFound": true,
+  "waitCallFound": true,
+  "closeCallFound": true,
+  "closeCalls": [],
+  "closeCollabItems": [
+    {
+      "tool": "closeAgent",
+      "status": "completed",
+      "receiverThreadIds": [
+        "01a1e984-53cc-7952-a82e-bbcda443d437"
+      ],
+      "agentsStates": {
+        "01a1e984-53cc-7952-a82e-bbcda443d437": {
+          "status": "completed",
+          "message": "V1-CHILD-OK"
+        }
+      }
+    }
+  ],
+  "resumeCallFound": true,
+  "resumeCalls": [],
+  "resumeCollabItems": [
+    {
+      "tool": "resumeAgent",
+      "status": "completed",
+      "receiverThreadIds": [
+        "01a1e984-53cc-7952-a82e-bbcda443d437"
+      ],
+      "agentsStates": {
+        "01a1e984-53cc-7952-a82e-bbcda443d437": {
+          "status": "pendingInit",
+          "message": null
+        }
+      }
+    }
+  ],
+  "detectionNote": "V1 collab tools emit camelCase collabAgentToolCall items; detection accepts rollout function calls OR completed collab items with receiverThreadIds. close requires a result (rollout output or collab agentsStates).",
+  "leaderFinalMessage": "I’ll run the requested sub-agent lifecycle in the exact order and preserve the tool outputs verbatim where requested.\nV1-CHILD-OK\n1. Agent ID: `01a1e984-53cc-7952-a82e-bbcda443d437`\n2. Reply: `V1-CHILD-OK`\n3. Close result: `{\"previous_status\":{\"completed\":\"V1-CHILD-OK\"}}`\n4. Resume result: `{\"status\":\"pending_init\"}`",
+  "turnCompleted": {
+    "method": "turn/completed",
+    "params": {
+      "threadId": "01a1e983-9a29-7d81-aabc-e7f23eff068e",
+      "turn": {
+        "id": "01a1e983-a01b-7151-942c-71628e208dfe",
+        "rootTurnId": "01a1e983-a01b-7151-942c-71628e208dfe",
+        "items": [
+          {
+            "type": "agentMessage",
+            "moderation": null,
+            "id": "msg_0464c34e1bb75a1a016afc4b0824a087d098ce8e1f54f9987f",
+            "text": "1. Agent ID: `01a1e984-53cc-7952-a82e-bbcda443d437`\n2. Reply: `V1-CHILD-OK`\n3. Close result: `{\"previous_status\":{\"completed\":\"V1-CHILD-OK\"}}`\n4. Resume result: `{\"status\":\"pending_init\"}`",
+            "phase": "final_answer",
+            "memoryCitation": null,
+            "delivery": null,
+            "questions": null,
+            "startedAtMs": 1794919176116,
+            "completedAtMs": 1794919177588
+          }
+        ],
+        "itemsView": "summary",
+        "status": "completed",
+        "error": null,
+        "startedAt": 1794919079,
+        "completedAt": 1794919177,
+        "durationMs": 97731
+      }
+    },
+    "emittedAtMs": 1794919177700
+  },
+  "allPass": true
+}

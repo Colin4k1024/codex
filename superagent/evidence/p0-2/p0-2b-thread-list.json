@@ -1,0 +1,228 @@
+{
+  "id": 2,
+  "result": {
+    "data": [
+      {
+        "id": "01a1e994-e05a-7a32-b123-1763b4b4e3ce",
+        "environments": null,
+        "extra": null,
+        "sessionId": "01a1e994-e05a-7a32-b123-1763b4b4e3ce",
+        "forkedFromId": null,
+        "attachedToThreadId": null,
+        "parentThreadId": null,
+        "preview": "You are the SuperAgent leader. Use the multi-agent tools EXACTLY in this order, one call at a time:\n1) spawn_agent with agent_type=planner, task_name=athena, task: 'Use your command execution tool to run `touch sandbox-probe.txt`. Report whether the command succeeded or was blocked by the sandbox. Then reply with a one-step plan to create hello.txt. Do not create hello.txt yourself.'\n2) spawn_agent with agent_type=implementer, task_name=hephaestus, task: 'Use your command execution tool to run `sleep 30` and wait for it to finish. Then create hello.txt containing exactly HELLO-MAV2.'\n3) spawn_agent with agent_type=verifier, task_name=verify_gates, task: 'Reply with a one-line acceptance checklist for creating hello.txt. Do not create or modify any file.'\n4) list_agents; note the agent paths, nicknames and statuses returned.\n5) send_message to the implementer agent: 'After the sleep finishes, also create extra.txt containing EXTRA.'\n6) interrupt_agent the implementer agent.\n7) wait_agent for all three agents and report their final statuses.\n8) Attempt close_agent on the implementer agent. If that tool does not exist or errors, quote the exact error.\nFinally reply with a numbered summary of steps 1-8, including every nickname and model you observed.",
+        "ephemeral": false,
+        "section": null,
+        "sectionEnteredAt": null,
+        "projectId": null,
+        "historyMode": "paginated",
+        "modelProvider": "openai",
+        "model": "gpt-6-astra",
+        "reasoningEffort": null,
+        "createdAt": 1794920210,
+        "updatedAt": 1794920333,
+        "recencyAt": 1794920210,
+        "status": {
+          "type": "notLoaded"
+        },
+        "path": "/private/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-56-50-01a1e994-e05a-7a32-b123-1763b4b4e3ce.jsonl",
+        "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p02b-r1lj42qp",
+        "cliVersion": "0.0.0",
+        "originator": "superagent-spike",
+        "source": "vscode",
+        "canAcceptDirectInput": null,
+        "threadSource": null,
+        "agentNickname": null,
+        "agentRole": null,
+        "gitInfo": null,
+        "name": null,
+        "daybreakEnabled": null,
+        "turns": []
+      },
+      {
+        "id": "01a1e992-b47c-70a0-a56d-3ad5fd381f53",
+        "environments": null,
+        "extra": null,
+        "sessionId": "01a1e992-b47c-70a0-a56d-3ad5fd381f53",
+        "forkedFromId": null,
+        "attachedToThreadId": null,
+        "parentThreadId": null,
+        "preview": "You are the SuperAgent leader. Use the multi-agent tools EXACTLY in this order, one call at a time:\n1) spawn_agent with agent_type=planner, task_name=athena, task: 'Use your command execution tool to run `touch sandbox-probe.txt`. Report whether the command succeeded or was blocked by the sandbox. Then reply with a one-step plan to create hello.txt. Do not create hello.txt yourself.'\n2) spawn_agent with agent_type=implementer, task_name=hephaestus, task: 'Use your command execution tool to run `sleep 30` and wait for it to finish. Then create hello.txt containing exactly HELLO-MAV2.'\n3) spawn_agent with agent_type=verifier, task_name=verify-gates, task: 'Reply with a one-line acceptance checklist for creating hello.txt. Do not create or modify any file.'\n4) list_agents; note the agent paths, nicknames and statuses returned.\n5) send_message to the implementer agent: 'After the sleep finishes, also create extra.txt containing EXTRA.'\n6) interrupt_agent the implementer agent.\n7) wait_agent for all three agents and report their final statuses.\n8) Attempt close_agent on the implementer agent. If that tool does not exist or errors, quote the exact error.\nFinally reply with a numbered summary of steps 1-8, including every nickname and model you observed.",
+        "ephemeral": false,
+        "section": null,
+        "sectionEnteredAt": null,
+        "projectId": null,
+        "historyMode": "paginated",
+        "modelProvider": "openai",
+        "model": "gpt-6-astra",
+        "reasoningEffort": null,
+        "createdAt": 1794920068,
+        "updatedAt": 1794920183,
+        "recencyAt": 1794920068,
+        "status": {
+          "type": "notLoaded"
+        },
+        "path": "/private/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-54-28-01a1e992-b47c-70a0-a56d-3ad5fd381f53.jsonl",
+        "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p02b-acbb7y1x",
+        "cliVersion": "0.0.0",
+        "originator": "superagent-spike",
+        "source": "vscode",
+        "canAcceptDirectInput": null,
+        "threadSource": null,
+        "agentNickname": null,
+        "agentRole": null,
+        "gitInfo": null,
+        "name": null,
+        "daybreakEnabled": null,
+        "turns": []
+      },
+      {
+        "id": "01a1e990-22d9-7802-ba67-f5906967db97",
+        "environments": null,
+        "extra": null,
+        "sessionId": "01a1e990-22d9-7802-ba67-f5906967db97",
+        "forkedFromId": null,
+        "attachedToThreadId": null,
+        "parentThreadId": null,
+        "preview": "You are the SuperAgent leader. Use the multi-agent tools EXACTLY in this order, one call at a time:\n1) spawn_agent with agent_type=planner, task_name=athena, task: 'Use your command execution tool to run `touch sandbox-probe.txt`. Report whether the command succeeded or was blocked by the sandbox. Then reply with a one-step plan to create hello.txt. Do not create hello.txt yourself.'\n2) spawn_agent with agent_type=implementer, task_name=hephaestus, task: 'Use your command execution tool to run `sleep 30` and wait for it to finish. Then create hello.txt containing exactly HELLO-MAV2.'\n3) spawn_agent with agent_type=verifier and WITHOUT any task_name parameter, task: 'Reply with a one-line acceptance checklist for creating hello.txt. Do not create or modify any file.'\n4) list_agents; note the agent paths, nicknames and statuses returned.\n5) send_message to the implementer agent: 'After the sleep finishes, also create extra.txt containing EXTRA.'\n6) interrupt_agent the implementer agent.\n7) wait_agent for all three agents and report their final statuses.\n8) Attempt close_agent on the implementer agent. If that tool does not exist or errors, quote the exact error.\nFinally reply with a numbered summary of steps 1-8, including every nickname and model you observed.",
+        "ephemeral": false,
+        "section": null,
+        "sectionEnteredAt": null,
+        "projectId": null,
+        "historyMode": "paginated",
+        "modelProvider": "openai",
+        "model": "gpt-6-astra",
+        "reasoningEffort": null,
+        "createdAt": 1794919899,
+        "updatedAt": 1794919956,
+        "recencyAt": 1794919899,
+        "status": {
+          "type": "notLoaded"
+        },
+        "path": "/private/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-51-39-01a1e990-22d9-7802-ba67-f5906967db97.jsonl",
+        "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p02b-dh03ldus",
+        "cliVersion": "0.0.0",
+        "originator": "superagent-spike",
+        "source": "vscode",
+        "canAcceptDirectInput": null,
+        "threadSource": null,
+        "agentNickname": null,
+        "agentRole": null,
+        "gitInfo": null,
+        "name": null,
+        "daybreakEnabled": null,
+        "turns": []
+      },
+      {
+        "id": "01a1e98b-96ad-7350-ac60-f9d568ce3d53",
+        "environments": null,
+        "extra": null,
+        "sessionId": "01a1e98b-96ad-7350-ac60-f9d568ce3d53",
+        "forkedFromId": null,
+        "attachedToThreadId": null,
+        "parentThreadId": null,
+        "preview": "You are the SuperAgent leader. Delegate with the multi-agent tools: 1) spawn_agent agent_type=planner task 'Produce a one-step plan to create tui.txt containing exactly TUI-TEAM-OK; do not create the file yourself'; wait_agent. 2) spawn_agent agent_type=implementer task 'Create tui.txt containing exactly TUI-TEAM-OK per the plan'; wait_agent. 3) Reply DONE and quote the file content.",
+        "ephemeral": false,
+        "section": null,
+        "sectionEnteredAt": null,
+        "projectId": null,
+        "historyMode": "paginated",
+        "modelProvider": "openai",
+        "model": "gpt-6-astra",
+        "reasoningEffort": null,
+        "createdAt": 1794919601,
+        "updatedAt": 1794919782,
+        "recencyAt": 1794919602,
+        "status": {
+          "type": "notLoaded"
+        },
+        "path": "/private/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-46-41-01a1e98b-96ad-7350-ac60-f9d568ce3d53.jsonl",
+        "cwd": "/private/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p02d-dgy58f88",
+        "cliVersion": "0.0.0",
+        "originator": "codex-tui",
+        "source": "cli",
+        "canAcceptDirectInput": null,
+        "threadSource": null,
+        "agentNickname": null,
+        "agentRole": null,
+        "gitInfo": null,
+        "name": "You are the SuperAgent leader. Delegate with the multi-agen…",
+        "daybreakEnabled": null,
+        "turns": []
+      },
+      {
+        "id": "01a1e989-b0b5-7eb3-b638-f1668a3e48ce",
+        "environments": null,
+        "extra": null,
+        "sessionId": "01a1e989-b0b5-7eb3-b638-f1668a3e48ce",
+        "forkedFromId": null,
+        "attachedToThreadId": null,
+        "parentThreadId": null,
+        "preview": "You are the SuperAgent leader. Use the multi-agent tools EXACTLY in this order, one call at a time:\n1) spawn_agent with agent_type=planner, task_name=athena, task: 'Use your command execution tool to run `touch sandbox-probe.txt`. Report whether the command succeeded or was blocked by the sandbox. Then reply with a one-step plan to create hello.txt. Do not create hello.txt yourself.'\n2) spawn_agent with agent_type=implementer, task_name=hephaestus, task: 'Use your command execution tool to run `sleep 30` and wait for it to finish. Then create hello.txt containing exactly HELLO-MAV2.'\n3) spawn_agent with agent_type=verifier and WITHOUT any task_name parameter, task: 'Reply with a one-line acceptance checklist for creating hello.txt. Do not create or modify any file.'\n4) list_agents; note the agent paths, nicknames and statuses returned.\n5) send_message to the implementer agent: 'After the sleep finishes, also create extra.txt containing EXTRA.'\n6) interrupt_agent the implementer agent.\n7) wait_agent for all three agents and report their final statuses.\n8) Attempt close_agent on the implementer agent. If that tool does not exist or errors, quote the exact error.\nFinally reply with a numbered summary of steps 1-8, including every nickname and model you observed.",
+        "ephemeral": false,
+        "section": null,
+        "sectionEnteredAt": null,
+        "projectId": null,
+        "historyMode": "paginated",
+        "modelProvider": "openai",
+        "model": "gpt-6-astra",
+        "reasoningEffort": null,
+        "createdAt": 1794919478,
+        "updatedAt": 1794919594,
+        "recencyAt": 1794919478,
+        "status": {
+          "type": "notLoaded"
+        },
+        "path": "/private/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-44-38-01a1e989-b0b5-7eb3-b638-f1668a3e48ce.jsonl",
+        "cwd": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p02b-d3l_pmr2",
+        "cliVersion": "0.0.0",
+        "originator": "superagent-spike",
+        "source": "vscode",
+        "canAcceptDirectInput": null,
+        "threadSource": null,
+        "agentNickname": null,
+        "agentRole": null,
+        "gitInfo": null,
+        "name": null,
+        "daybreakEnabled": null,
+        "turns": []
+      }
+    ],
+    "readStates": {
+      "01a1e98b-96ad-7350-ac60-f9d568ce3d53": {
+        "firstUnread": null,
+        "revision": "1c75e105-106a-476d-ac96-1c00d9f7758b"
+      },
+      "01a1e989-b0b5-7eb3-b638-f1668a3e48ce": {
+        "firstUnread": {
+          "type": "turn",
+          "turnId": "01a1e989-b4de-7a72-b633-41c4ba7c5ee6"
+        },
+        "revision": "8511b532-9668-49c4-b346-8ae55ebe39fc"
+      },
+      "01a1e990-22d9-7802-ba67-f5906967db97": {
+        "firstUnread": {
+          "type": "turn",
+          "turnId": "01a1e990-2333-7ad3-9a99-b5d67b2cc523"
+        },
+        "revision": "58d2431f-6d4d-4efe-911d-539c65731f26"
+      },
+      "01a1e994-e05a-7a32-b123-1763b4b4e3ce": {
+        "firstUnread": {
+          "type": "turn",
+          "turnId": "01a1e994-e0b4-7601-8b55-b9efa4012bf0"
+        },
+        "revision": "3e74e39f-8721-4eec-bc87-42c384bd4849"
+      },
+      "01a1e992-b47c-70a0-a56d-3ad5fd381f53": {
+        "firstUnread": {
+          "type": "turn",
+          "turnId": "01a1e992-b4d8-7f22-a84f-c0ed48222be9"
+        },
+        "revision": "fe724ddd-b451-49d5-a0f4-d6a8e20ffd97"
+      }
+    },
+    "nextCursor": null,
+    "backwardsCursor": "2026-11-17T12:56:50.524Z"
+  }
+}

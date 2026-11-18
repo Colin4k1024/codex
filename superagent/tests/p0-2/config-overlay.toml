@@ -11,6 +11,7 @@ subagent_usage_hint_text = "You are the SuperAgent leader. Delegate substantial 
 [agents]
 enabled = true
 max_concurrent_threads_per_session = 4
+default_subagent_model = "gpt-5.6-terra"
 
 [agents.planner]
 description = "Planning role: breaks requirements into scoped steps with acceptance commands."
