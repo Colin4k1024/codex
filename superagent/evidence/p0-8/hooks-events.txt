@@ -1,0 +1,17 @@
+# STATIC protocol existence only (git grep at HEAD); this spike does NOT
+# trace runtime hook firing. Source paths included per line.
+
+codex-rs/core/src/hook_runtime.rs:139:        // sources dispatch SubagentStart. Internal/system subagents skip start hooks.
+codex-rs/core/src/hook_runtime.rs:149:                StartHookTarget::SubagentStart {
+codex-rs/core/src/hook_runtime.rs:384:    // request. Root turns run Stop; thread-spawned child turns run SubagentStop.
+codex-rs/core/src/hook_runtime.rs:414:                StopHookTarget::SubagentStop {
+codex-rs/core/src/hook_runtime.rs:423:        // hooks, so there is no Stop or SubagentStop request to dispatch.
+codex-rs/core/src/hook_runtime.rs:478:    // SessionEnd is root-only; ThreadSpawn uses SubagentStart/SubagentStop and other subagents
+codex-rs/core/src/hook_runtime.rs:1040:        HookEventName::SubagentStart => "SubagentStart",
+codex-rs/core/src/hook_runtime.rs:1041:        HookEventName::SubagentStop => "SubagentStop",
+codex-rs/protocol/src/hooks.rs:30:    #[serde(rename = "SubagentStart", default)]
+codex-rs/protocol/src/hooks.rs:32:    #[serde(rename = "SubagentStop", default)]
+codex-rs/protocol/src/hooks.rs:132:            (Event::SubagentStart, &mut self.subagent_start),
+codex-rs/protocol/src/hooks.rs:133:            (Event::SubagentStop, &mut self.subagent_stop),
+codex-rs/protocol/src/protocol.rs:1841:    SubagentStart,
+codex-rs/protocol/src/protocol.rs:1842:    SubagentStop,

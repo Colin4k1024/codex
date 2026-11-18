@@ -34,13 +34,14 @@ SCHEMA='{"type":"object","properties":{"verdict":{"type":"string","enum":["APPRO
   echo "- For spike/evidence issues: traces must be real command outputs, conclusions must follow from evidence."
   echo "- Do NOT modify any files. Read-only review. Prefer concluding from the inlined diff and acceptance text; only read local files if strictly necessary."
   echo "- Do NOT run any Bash/shell commands at all (compound commands are blocked and will abort this review). If part of this prompt was offloaded to a file, use the read_file tool to read it. The inlined diff IS the complete authoritative diff for the reviewed paths; no git history verification is needed."
-  echo "- Code citations are pre-extracted in the appendix below; verify claims against it instead of running commands."
+  echo "- Code citations are pre-extracted in the appendix below from the reviewed HEAD commit (git show); verify claims against it instead of running commands."
+  echo "- The working tree may be checked out at a DIFFERENT branch than the reviewed HEAD. Never judge file presence/content from the working tree; the inlined diff and the appendix are the authoritative state at the reviewed HEAD."
   echo "- Output ONLY JSON matching the schema: verdict APPROVE only if all criteria proven and no blocker/major findings; otherwise CHANGES_REQUESTED with actionable required_fix per finding."
 } > "$TMP/prompt.txt"
 
-python3 - "$TMP/prompt.txt" "$ROOT" <<'PY'
-import re, sys, os
-prompt_path, root = sys.argv[1], sys.argv[2]
+python3 - "$TMP/prompt.txt" "$ROOT" "$HEAD" <<'PY'
+import re, sys, os, subprocess
+prompt_path, root, head = sys.argv[1], sys.argv[2], sys.argv[3]
 text = open(prompt_path).read()
 cites = {}
 for m in re.finditer(r'([A-Za-z0-9_./-]+\.(?:rs|py|toml|md|sh)):(\d+)(?:-(\d+))?', text):
@@ -49,18 +50,20 @@ for m in re.finditer(r'([A-Za-z0-9_./-]+\.(?:rs|py|toml|md|sh)):(\d+)(?:-(\d+))?
     if b - a > 60:
         b = a + 60
     cites.setdefault(path, set()).add((max(1, a - 2), b + 2))
-appendix = ["", "## Code citation appendix (extracted from local HEAD checkout; ranges include 2 context lines)"]
+appendix = ["", f"## Code citation appendix (extracted via git show from reviewed HEAD {head}; ranges include 2 context lines)"]
 budget = 30000
 used = 0
 for path, ranges in sorted(cites.items()):
-    full = None
-    for cand in (os.path.join(root, path), os.path.join(root, "codex-rs", path)):
-        if os.path.isfile(cand):
-            full = cand
+    content = None
+    for cand in (path, os.path.join("codex-rs", path)):
+        r = subprocess.run(["git", "-C", root, "show", f"{head}:{cand}"],
+                           capture_output=True, text=True)
+        if r.returncode == 0:
+            content = r.stdout
             break
-    if not full:
+    if content is None:
         continue
-    lines = open(full, encoding="utf-8", errors="replace").read().splitlines()
+    lines = content.splitlines()
     merged = []
     for a, b in sorted(ranges):
         if merged and a <= merged[-1][1] + 1:

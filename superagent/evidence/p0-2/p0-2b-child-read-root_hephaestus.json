@@ -1,0 +1,65 @@
+{
+  "id": 4,
+  "result": {
+    "thread": {
+      "id": "01a1e995-aa65-7e01-b408-2f4c2951eb19",
+      "environments": null,
+      "extra": null,
+      "sessionId": "01a1e995-aa65-7e01-b408-2f4c2951eb19",
+      "forkedFromId": "01a1e994-e05a-7a32-b123-1763b4b4e3ce",
+      "attachedToThreadId": null,
+      "parentThreadId": "01a1e994-e05a-7a32-b123-1763b4b4e3ce",
+      "preview": "",
+      "ephemeral": false,
+      "section": null,
+      "sectionEnteredAt": null,
+      "projectId": null,
+      "historyMode": "paginated",
+      "modelProvider": "openai",
+      "model": "gpt-5.6-terra",
+      "reasoningEffort": "medium",
+      "createdAt": 1794920262,
+      "updatedAt": 1794920286,
+      "recencyAt": 1794920262,
+      "status": {
+        "type": "notLoaded"
+      },
+      "path": "/private/tmp/sa-p0-2-wt/superagent/evidence/p0-2/home-b/sessions/2026/11/17/rollout-2026-11-17T20-57-42-01a1e995-aa65-7e01-b408-2f4c2951eb19.jsonl",
+      "cwd": "/private/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/p02b-r1lj42qp",
+      "cliVersion": "0.0.0",
+      "originator": "superagent-spike",
+      "source": {
+        "subAgent": {
+          "thread_spawn": {
+            "parent_thread_id": "01a1e994-e05a-7a32-b123-1763b4b4e3ce",
+            "depth": 1,
+            "agent_path": "/root/hephaestus",
+            "agent_nickname": "Hephaestus",
+            "agent_role": "implementer"
+          }
+        }
+      },
+      "canAcceptDirectInput": null,
+      "threadSource": "subagent",
+      "agentNickname": "Hephaestus",
+      "agentRole": "implementer",
+      "gitInfo": null,
+      "name": null,
+      "daybreakEnabled": null,
+      "turns": [
+        {
+          "id": "01a1e995-aa79-7470-87d7-1ff30590bf9a",
+          "rootTurnId": "01a1e994-e0b4-7601-8b55-b9efa4012bf0",
+          "items": [],
+          "itemsView": "full",
+          "status": "interrupted",
+          "error": null,
+          "startedAt": 1794920262,
+          "completedAt": 1794920286,
+          "durationMs": 24342
+        }
+      ]
+    },
+    "readState": null
+  }
+}
