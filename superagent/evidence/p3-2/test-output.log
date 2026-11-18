@@ -1,0 +1,34 @@
+# P3-2 (#88) test output — superagent-retrieval-mcp (toolchain 1.99.1)
+$ cargo +1.99.1 test
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s
+     Running unittests src/lib.rs (target/debug/deps/superagent_retrieval_mcp-d642031da52d6710)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/retrieval.rs (target/debug/deps/retrieval-a3329fb1e9693479)
+
+running 6 tests
+test unknown_tool_and_empty_query_rejected ... ok
+test bounded_results_cite_source ... ok
+test low_trust_no_developer_elevation ... ok
+test cross_session_retrieval_trace ... ok
+test caller_bound_identity_rejects_spoof ... ok
+test injection_budget_compliance ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+   Doc-tests superagent_retrieval_mcp
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+# parallel stability (5 consecutive full-suite runs)
+run 1: test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+run 2: test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+run 3: test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+run 4: test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+run 5: test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s

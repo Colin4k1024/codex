@@ -1,0 +1,15 @@
+# fmt/clippy gate (toolchain 1.99.1) — superagent-retrieval-mcp
+cwd: superagent/crates/retrieval-mcp
+
+$ cargo +1.99.1 fmt --check
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+fmt-exit=0
+
+$ cargo +1.99.1 clippy --all-targets -- -D warnings
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.13s
+clippy-exit=0
+error-lines=0
