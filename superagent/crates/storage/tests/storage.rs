@@ -104,7 +104,7 @@ fn expired_lease_can_be_taken_over() {
     let b = file_store(&dir);
     a.create_run(&spec("exp"), 1000).unwrap();
     a.acquire_lease("exp", "owner-A", 1000, 10).unwrap(); // expires 1010
-    // B arrives after expiry -> takeover allowed.
+                                                          // B arrives after expiry -> takeover allowed.
     b.acquire_lease("exp", "owner-B", 1011, 10).unwrap();
     let err = a.acquire_lease("exp", "owner-A", 1012, 10).unwrap_err();
     assert!(matches!(err, StoreError::LeaseHeld { .. }));
@@ -121,14 +121,17 @@ fn lease_on_missing_run_is_not_found() {
 fn intent_persists_then_binds_in_separate_transactions() {
     let s = Store::open_in_memory().unwrap();
     s.create_run(&spec("r"), 1).unwrap();
-    let id = s.persist_intent("r", "n1", 1, "{\"argv\":[\"echo\"]}", 10).unwrap();
+    let id = s
+        .persist_intent("r", "n1", 1, "{\"argv\":[\"echo\"]}", 10)
+        .unwrap();
     let a = s.get_attempt(id).unwrap();
     assert_eq!(a.state, AttemptState::IntentPersisted);
     assert!(a.thread_id.is_none());
     assert!(a.turn_id.is_none());
     assert!(a.process_id.is_none());
 
-    s.bind_external_ids(id, Some("thread-1"), Some("turn-1"), Some(4242)).unwrap();
+    s.bind_external_ids(id, Some("thread-1"), Some("turn-1"), Some(4242))
+        .unwrap();
     let a = s.get_attempt(id).unwrap();
     assert_eq!(a.state, AttemptState::Bound);
     assert_eq!(a.thread_id.as_deref(), Some("thread-1"));
@@ -151,7 +154,10 @@ fn fault_between_persist_and_bind_leaves_recoverable_intent() {
     let err = s
         .send_intent("r", "n1", 1, "{}", 10, Some("t"), Some("u"), Some(1))
         .unwrap_err();
-    assert!(matches!(err, StoreError::FaultInjected(Breakpoint::BeforeExternalBind)));
+    assert!(matches!(
+        err,
+        StoreError::FaultInjected(Breakpoint::BeforeExternalBind)
+    ));
 
     // Intent is durable and unbound -> recoverable.
     let unbound = s.unbound_intents("r").unwrap();
@@ -162,7 +168,8 @@ fn fault_between_persist_and_bind_leaves_recoverable_intent() {
     // Recovery: clear fault, re-bind the same intent (no duplicate attempt).
     s.clear_fault_hook();
     let id = unbound[0].id;
-    s.bind_external_ids(id, Some("t"), Some("u"), Some(1)).unwrap();
+    s.bind_external_ids(id, Some("t"), Some("u"), Some(1))
+        .unwrap();
     assert_eq!(s.get_attempt(id).unwrap().state, AttemptState::Bound);
     assert!(s.unbound_intents("r").unwrap().is_empty());
 }
@@ -182,7 +189,10 @@ fn fault_after_persist_breakpoint_is_injectable() {
         }
     });
     let err = s.persist_intent("r", "n1", 1, "{}", 10).unwrap_err();
-    assert!(matches!(err, StoreError::FaultInjected(Breakpoint::AfterIntentPersist)));
+    assert!(matches!(
+        err,
+        StoreError::FaultInjected(Breakpoint::AfterIntentPersist)
+    ));
     assert_eq!(hits.load(Ordering::SeqCst), 1);
     // The intent committed before the breakpoint still exists.
     assert_eq!(s.unbound_intents("r").unwrap().len(), 1);
@@ -203,7 +213,9 @@ fn duplicate_attempt_no_rejected() {
 fn event_sequence_is_monotonic_and_replayable() {
     let s = Store::open_in_memory().unwrap();
     s.create_run(&spec("r"), 1).unwrap();
-    let s1 = s.append_event("r", "node_started", "n1 started", 10).unwrap();
+    let s1 = s
+        .append_event("r", "node_started", "n1 started", 10)
+        .unwrap();
     let s2 = s.append_event("r", "node_finished", "n1 done", 11).unwrap();
     let s3 = s.append_event("r", "gate_passed", "gate ok", 12).unwrap();
     assert!(s1 < s2 && s2 < s3);
@@ -230,7 +242,10 @@ fn event_append_breakpoint_injectable() {
         }
     });
     let err = s.append_event("r", "k", "summary", 1).unwrap_err();
-    assert!(matches!(err, StoreError::FaultInjected(Breakpoint::BeforeEventAppend)));
+    assert!(matches!(
+        err,
+        StoreError::FaultInjected(Breakpoint::BeforeEventAppend)
+    ));
     assert!(s.events_after("r", 0).unwrap().is_empty());
 }
 
@@ -249,7 +264,16 @@ fn oversize_summaries_rejected_explicitly() {
     assert!(matches!(err, StoreError::SummaryTooLarge { .. }));
 
     let err = s
-        .record_artifact("ok", None, "/tmp/a", "text/plain", None, None, None, Some(&big))
+        .record_artifact(
+            "ok",
+            None,
+            "/tmp/a",
+            "text/plain",
+            None,
+            None,
+            None,
+            Some(&big),
+        )
         .unwrap_err();
     assert!(matches!(err, StoreError::SummaryTooLarge { .. }));
 
@@ -263,8 +287,16 @@ fn artifact_reference_stored_without_blob() {
     let s = Store::open_in_memory().unwrap();
     s.create_run(&spec("r"), 1).unwrap();
     let id = s
-        .record_artifact("r", Some("n1"), "/tmp/out.json", "application/json",
-                         Some("sha256:abc"), Some(123), Some("gate-result"), Some("bounded"))
+        .record_artifact(
+            "r",
+            Some("n1"),
+            "/tmp/out.json",
+            "application/json",
+            Some("sha256:abc"),
+            Some(123),
+            Some("gate-result"),
+            Some("bounded"),
+        )
         .unwrap();
     assert!(id > 0);
 }
@@ -312,7 +344,9 @@ fn seed_nodes_from_contracts_workflow() {
 fn attempt_state_transitions_explicit() {
     let s = Store::open_in_memory().unwrap();
     s.create_run(&spec("r"), 1).unwrap();
-    let id = s.send_intent("r", "n1", 1, "{}", 10, Some("t"), None, None).unwrap();
+    let id = s
+        .send_intent("r", "n1", 1, "{}", 10, Some("t"), None, None)
+        .unwrap();
     s.set_attempt_state(id, AttemptState::Running).unwrap();
     assert_eq!(s.get_attempt(id).unwrap().state, AttemptState::Running);
     s.set_attempt_state(id, AttemptState::Succeeded).unwrap();

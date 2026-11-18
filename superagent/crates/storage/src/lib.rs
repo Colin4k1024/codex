@@ -50,9 +50,16 @@ type FaultHook = Arc<dyn Fn(Breakpoint) -> std::result::Result<(), StoreError> +
 pub enum StoreError {
     Sqlite(rusqlite::Error),
     /// Another owner holds the run lease (exclusive lease contention).
-    LeaseHeld { run_id: String, owner: String },
+    LeaseHeld {
+        run_id: String,
+        owner: String,
+    },
     /// A summary exceeds [`MAX_SUMMARY_BYTES`]; store a file reference instead.
-    SummaryTooLarge { field: String, len: usize, cap: usize },
+    SummaryTooLarge {
+        field: String,
+        len: usize,
+        cap: usize,
+    },
     /// A fault-injection hook aborted the operation at a commit boundary.
     FaultInjected(Breakpoint),
     /// The referenced row does not exist.
@@ -248,23 +255,31 @@ impl Store {
         conn.pragma_update(None, "journal_mode", "WAL")?;
         conn.pragma_update(None, "foreign_keys", "ON")?;
         conn.pragma_update(None, "busy_timeout", 5000)?;
-        let store = Store { conn, fault_hook: Mutex::new(None) };
+        let store = Store {
+            conn,
+            fault_hook: Mutex::new(None),
+        };
         store.migrate()?;
         Ok(store)
     }
 
     fn migrate(&self) -> Result<()> {
-        let version: u32 = self.conn.pragma_query_value(None, "user_version", |r| r.get(0))?;
+        let version: u32 = self
+            .conn
+            .pragma_query_value(None, "user_version", |r| r.get(0))?;
         if version < 1 {
             self.conn.execute_batch(SCHEMA_V1)?;
-            self.conn.pragma_update(None, "user_version", SCHEMA_VERSION)?;
+            self.conn
+                .pragma_update(None, "user_version", SCHEMA_VERSION)?;
         }
         Ok(())
     }
 
     /// The migrated schema version currently recorded in the database.
     pub fn schema_version(&self) -> Result<u32> {
-        Ok(self.conn.pragma_query_value(None, "user_version", |r| r.get(0))?)
+        Ok(self
+            .conn
+            .pragma_query_value(None, "user_version", |r| r.get(0))?)
     }
 
     /// Install a fault-injection hook invoked at each [`Breakpoint`]. Used by
@@ -310,8 +325,14 @@ impl Store {
                 repo_identity, start_head, config_summary, state, created_at)
              VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, 'pending', ?8)",
             params![
-                spec.id, spec.workflow_digest, spec.bundle_digest, spec.input_summary,
-                spec.repo_identity, spec.start_head, spec.config_summary, now
+                spec.id,
+                spec.workflow_digest,
+                spec.bundle_digest,
+                spec.input_summary,
+                spec.repo_identity,
+                spec.start_head,
+                spec.config_summary,
+                now
             ],
         )?;
         Ok(())
@@ -385,7 +406,14 @@ impl Store {
         tx.execute(
             "INSERT INTO attempts (run_id, node_id, attempt_no, intent_json, state, created_at)
              VALUES (?1, ?2, ?3, ?4, ?5, ?6)",
-            params![run_id, node_id, attempt_no, intent_json, AttemptState::IntentPersisted.as_str(), now],
+            params![
+                run_id,
+                node_id,
+                attempt_no,
+                intent_json,
+                AttemptState::IntentPersisted.as_str(),
+                now
+            ],
         )?;
         let id = tx.last_insert_rowid();
         tx.commit()?;
@@ -407,7 +435,13 @@ impl Store {
         let changed = tx.execute(
             "UPDATE attempts SET thread_id = ?1, turn_id = ?2, process_id = ?3, state = ?4
              WHERE id = ?5",
-            params![thread_id, turn_id, process_id, AttemptState::Bound.as_str(), attempt_id],
+            params![
+                thread_id,
+                turn_id,
+                process_id,
+                AttemptState::Bound.as_str(),
+                attempt_id
+            ],
         )?;
         if changed == 0 {
             return Err(StoreError::NotFound(format!("attempt {attempt_id}")));
@@ -420,6 +454,7 @@ impl Store {
     /// breakpoints between the two commits. If a hook aborts after persist, the
     /// intent remains durable and unbound (recoverable), and the error is
     /// surfaced — never swallowed.
+    #[allow(clippy::too_many_arguments)] // intent identity + optional external bindings
     pub fn send_intent(
         &self,
         run_id: &str,
@@ -536,6 +571,7 @@ impl Store {
 
     /// Record an artifact reference (path + digest + bounded summary). The blob
     /// itself stays in a file; only the index/reference is stored here.
+    #[allow(clippy::too_many_arguments)] // artifact index fields are independently optional
     pub fn record_artifact(
         &self,
         run_id: &str,
