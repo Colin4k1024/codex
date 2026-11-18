@@ -1,0 +1,15 @@
+$ cargo +1.99.1 fmt --check
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+fmt-exit=0
+$ cargo +1.99.1 clippy --all-targets -- -D warnings
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+warning: `/Users/fanjia/.cargo/config` is deprecated in favor of `config.toml`
+  |
+  = help: if you need to support cargo 1.38 or earlier, you can symlink `config` to `config.toml`
+    Checking superagent-agent-registry v0.1.0 (/private/tmp/sa-p5-2-wt/superagent/crates/agent-registry)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.93s
+clippy-exit=0
