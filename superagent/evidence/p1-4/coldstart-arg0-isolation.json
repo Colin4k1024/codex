@@ -1,0 +1,6 @@
+{
+  "product_home": "/var/folders/3v/8mdpnn6s6j9bbf1wypj3h4600000gn/T/tmp.zgulKLtC9h/clean-home/Library/Application Support/SuperAgent/codex-home",
+  "product_tmp_entries": [],
+  "arg0_dir_under_product_home": false,
+  "note": "engine ran with CODEX_HOME under the fresh isolated HOME; its arg0 helper dir is created under product home on first real session, not the real user ~/.codex (structurally untouched because HOME was redirected for the whole run). Cold-start runs install+doctor (--version) only, so arg0 dir is not yet created."
+}
