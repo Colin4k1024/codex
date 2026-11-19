@@ -1,0 +1,28 @@
+[package]
+name = "youragent-desktop"
+version = "0.1.0"
+edition = "2021"
+license = "AGPL-3.0-or-later"
+description = "YourAgent Tauri 2 desktop host (P5-6 signing-path proof; reuses gateway API, not engine-direct)"
+
+[lib]
+name = "youragent_desktop_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+chrono = { version = "0.4", default-features = false, features = ["std", "clock"] }
+superagent-orchestrator = { path = "../../superagent/crates/orchestrator" }
+superagent-contracts = { path = "../../superagent/crates/contracts" }
+superagent-storage = { path = "../../superagent/crates/storage" }
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = "s"
+strip = true

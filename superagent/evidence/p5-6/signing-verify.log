@@ -1,0 +1,40 @@
+$ codesign --verify --deep --strict --verbose=2 YourAgent.app
+src-tauri/target/release/bundle/macos/YourAgent.app: valid on disk
+src-tauri/target/release/bundle/macos/YourAgent.app: satisfies its Designated Requirement
+codesign-verify-exit=0
+
+$ codesign -dvvv YourAgent.app (identity / flags)
+Executable=/private/tmp/sa-p5-6-wt/desktop/src-tauri/target/release/bundle/macos/YourAgent.app/Contents/MacOS/youragent-desktop
+Identifier=com.youragent.desktop
+Format=app bundle with Mach-O thin (arm64)
+CodeDirectory v=20500 size=8513 flags=0x10000(runtime) hashes=259+3 location=embedded
+Hash type=sha256 size=32
+CandidateCDHash sha256=869d44a0e7ff8f50041645c2b87c1ae2b0c4ae4e
+CandidateCDHashFull sha256=869d44a0e7ff8f50041645c2b87c1ae2b0c4ae4ee12880f43bbdbbb793281a6f
+Hash choices=sha256
+CMSDigest=869d44a0e7ff8f50041645c2b87c1ae2b0c4ae4ee12880f43bbdbbb793281a6f
+CMSDigestType=2
+CDHash=869d44a0e7ff8f50041645c2b87c1ae2b0c4ae4e
+Signature size=9046
+Authority=Developer ID Application: Haier Electric Appliance International Co., Ltd. (KRV5T3384C)
+Authority=Developer ID Certification Authority
+Authority=Apple Root CA
+Timestamp=Nov 18, 2026 at 17:21:38
+Info.plist entries=14
+TeamIdentifier=KRV5T3384C
+Runtime Version=27.0.0
+Sealed Resources version=2 rules=13 files=1
+Internal requirements count=1 size=184
+codesign-display-exit=0
+
+$ spctl -a -vvv -t exec YourAgent.app (Gatekeeper assessment)
+src-tauri/target/release/bundle/macos/YourAgent.app: accepted
+source=Developer ID
+override=security disabled
+origin=Developer ID Application: Haier Electric Appliance International Co., Ltd. (KRV5T3384C)
+spctl-exit=0
+
+$ codesign --verify --strict --verbose=2 DMG
+src-tauri/target/release/bundle/dmg/YourAgent_0.1.0_aarch64.dmg: valid on disk
+src-tauri/target/release/bundle/dmg/YourAgent_0.1.0_aarch64.dmg: satisfies its Designated Requirement
+dmg-verify-exit=0

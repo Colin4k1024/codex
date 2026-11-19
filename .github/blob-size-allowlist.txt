@@ -9,3 +9,6 @@ codex-rs/models-manager/models.json
 codex-rs/tui/tests/fixtures/oss-story.jsonl
 codex-rs/tui_app_server/tests/fixtures/oss-story.jsonl
 codex-rs/tui/src/app.rs
+# Tauri app icons (intentional checked-in binary assets)
+desktop/src-tauri/icons/icon.icns
+desktop/src-tauri/app-icon.png
