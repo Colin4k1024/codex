@@ -56,6 +56,36 @@ const fixtureProject = () => ({
   sessionMeta: { total: 1, hasMore: false },
   taskmaster: { hasTaskmaster: false },
 });
+// Browser-preview fixture mirroring the Rust harness success run (U05 mock).
+const fixtureHarnessTask = (title: string): HarnessTaskDetail => {
+  const now = Date.now();
+  const gate = (id: string, exit: number | null, evidence: string | null): HarnessGateView => ({
+    id, passed: true, proven: evidence !== null, exit_code: exit, evidence_ref: evidence,
+  });
+  const node = (id: string, kind: string, gates: HarnessGateView[]): HarnessNodeView => ({
+    id, kind, state: 'succeeded', attempts: 1, reason: '', depends_on: [], gates,
+  });
+  const nodes: HarnessNodeView[] = [
+    node('intake', 'capability', [gate('intake:evidence', null, 'task-1/intake_doc')]),
+    node('plan', 'capability', [gate('plan:evidence', null, 'task-1/plan_doc')]),
+    node('implement', 'capability', [gate('implement:evidence', null, 'task-1/changes_doc')]),
+    node('verify', 'verification', [gate('tests_pass', 0, 'cmd:true -> exit 0')]),
+    node('review', 'capability', [gate('review:evidence', null, 'task-1/review_doc')]),
+    node('report', 'capability', [gate('report:evidence', null, 'task-1/report_doc')]),
+  ];
+  const artifacts: HarnessArtifactView[] = ['intake_doc', 'plan_doc', 'changes_doc', 'review_doc', 'report_doc'].map((key) => ({
+    id: `task-1/${key}`, node_id: key.replace('_doc', ''), name: key,
+    media_type: 'text/markdown', size_bytes: 32, path: `artifacts/${key}.md`,
+  }));
+  return {
+    id: 'task-1', title, workflow_id: 'team-delivery', state: 'succeeded', created_at: now,
+    nodes, artifacts,
+    report: `# ${title}\n\nRun state: **succeeded**\n`,
+    tokens_used: 6000, wall_secs: 1,
+    order: ['intake', 'plan', 'implement', 'verify', 'review', 'report'],
+    events: [{ seq: 1, kind: 'run_final', summary: 'succeeded', created_at: now }],
+  };
+};
 const mockInvoke = (cmd: string, args?: Record<string, unknown>): Promise<unknown> => {
   const user = { username: (args?.username as string) || 'demo' };
   switch (cmd) {
@@ -111,6 +141,15 @@ const mockInvoke = (cmd: string, args?: Record<string, unknown>): Promise<unknow
       return Promise.resolve({ commits: [] });
     case 'git_file_with_diff':
       return Promise.resolve({ oldContent: '', currentContent: '', isDeleted: false, isUntracked: false });
+    case 'harness_list_tasks':
+      return Promise.resolve({ tasks: [] });
+    case 'harness_create_task':
+    case 'harness_get_task':
+      return Promise.resolve(fixtureHarnessTask((args?.title as string) || 'Team delivery'));
+    case 'harness_read_artifact':
+      return Promise.resolve({ mediaType: 'text/markdown', content: '# Fixture artifact\n' });
+    case 'harness_export_report':
+      return Promise.resolve({ report: '# Fixture report\n' });
     case 'desktop_request': {
       const endpoint = (args?.endpoint as string) || '';
       const listLike = ['files', 'sessions', 'projects', 'templates', 'tasks', 'branches', 'changes'];
@@ -255,6 +294,62 @@ export const mapEngineEvent = (payload: unknown): Record<string, any> | null => 
   return p;
 };
 
+// U05 Harness business-task shapes (mirror Rust harness.rs; gate-evidence-only).
+export interface HarnessGateView {
+  id: string;
+  passed: boolean;
+  proven: boolean;
+  exit_code: number | null;
+  evidence_ref: string | null;
+}
+export interface HarnessNodeView {
+  id: string;
+  kind: string;
+  state: string;
+  attempts: number;
+  reason: string;
+  depends_on: string[];
+  gates: HarnessGateView[];
+}
+export interface HarnessArtifactView {
+  id: string;
+  node_id: string | null;
+  name: string;
+  media_type: string;
+  size_bytes: number;
+  path: string;
+}
+export interface HarnessEventView {
+  seq: number;
+  kind: string;
+  summary: string;
+  created_at: number;
+}
+export interface HarnessTaskSummary {
+  id: string;
+  title: string;
+  workflow_id: string;
+  state: string;
+  created_at: number;
+  node_count: number;
+  succeeded_count: number;
+}
+export interface HarnessTaskDetail {
+  id: string;
+  title: string;
+  workflow_id: string;
+  state: string;
+  created_at: number;
+  nodes: HarnessNodeView[];
+  artifacts: HarnessArtifactView[];
+  report: string;
+  tokens_used: number;
+  wall_secs: number;
+  order: string[];
+  events: HarnessEventView[];
+  error?: string;
+}
+
 export const desktopClient = {
   bootstrap: () => invoke<DesktopBootstrap>('bootstrap'),
   authStatus: () => invoke<{ needsSetup: boolean; isAuthenticated: boolean }>('auth_status'),
@@ -302,6 +397,18 @@ export const desktopClient = {
     invoke<{ diff?: string; error?: string }>('git_commit_diff', { projectName, commit }),
   gitFileWithDiff: (projectName: string, filePath: string) =>
     invoke<unknown>('git_file_with_diff', { projectName, filePath }),
+  // U05 Harness business tasks (gate-evidence-only; state owned by Rust).
+  harnessListTasks: () => invoke<{ tasks: HarnessTaskSummary[] }>('harness_list_tasks'),
+  harnessCreateTask: (title: string, mode?: string) =>
+    invoke<HarnessTaskDetail>('harness_create_task', { title, mode: mode ?? null }),
+  harnessGetTask: (taskId: string) =>
+    invoke<HarnessTaskDetail>('harness_get_task', { taskId }),
+  harnessReadArtifact: (taskId: string, artifactId: string) =>
+    invoke<{ mediaType?: string; content?: string; error?: string }>(
+      'harness_read_artifact', { taskId, artifactId },
+    ),
+  harnessExportReport: (taskId: string) =>
+    invoke<{ report?: string; error?: string }>('harness_export_report', { taskId }),
   // Generic product request for endpoints not yet migrated to typed commands.
   // U02 mock: Rust returns an empty/graceful payload so unmigrated features
   // degrade rather than crash. Replaced by typed commands + real adapter in U03+.

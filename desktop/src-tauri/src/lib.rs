@@ -11,6 +11,7 @@
 
 mod bridge;
 mod engine;
+mod harness;
 mod workspace;
 
 use std::collections::HashMap;
@@ -30,6 +31,10 @@ struct EngineState(Mutex<Option<Arc<EngineClient>>>);
 
 /// Tracks the active turn id per thread so `abort-session` can interrupt it.
 struct ActiveTurns(Mutex<HashMap<String, String>>);
+
+/// U05 Harness business-task state (orchestrator + persisted store). The scheduler
+/// is the authority; the WebView only reads backend-resolved task/artifact ids.
+struct HarnessState(Mutex<harness::Harness>);
 
 #[tauri::command]
 fn engine_connect(app: tauri::AppHandle, state: tauri::State<EngineState>) -> Value {
@@ -409,6 +414,61 @@ fn git_file_with_diff(project_name: String, file_path: String) -> Value {
     workspace::git_file_with_diff(&project_name, &file_path)
 }
 
+// ─── U05 Harness business-task commands ──────────────────────────────────────
+// Backed by the SuperAgent orchestrator (gate-evidence-only success) + persisted
+// store. NOT TaskMaster. Identifiers are backend-resolved; no arbitrary host paths.
+
+#[tauri::command]
+fn harness_list_tasks(state: tauri::State<HarnessState>) -> Value {
+    harness::list_json(&state.0.lock().unwrap())
+}
+
+#[tauri::command]
+fn harness_create_task(
+    state: tauri::State<HarnessState>,
+    title: String,
+    mode: Option<String>,
+) -> Value {
+    let m = harness::FixtureMode::parse(mode.as_deref().unwrap_or("success"));
+    match state.0.lock().unwrap().create_task(&title, m) {
+        Ok(detail) => json!(detail),
+        Err(e) => json!({ "error": e }),
+    }
+}
+
+#[tauri::command]
+fn harness_get_task(state: tauri::State<HarnessState>, task_id: String) -> Value {
+    match state.0.lock().unwrap().get_task(&task_id) {
+        Some(detail) => json!(detail),
+        None => json!({ "error": "task not found" }),
+    }
+}
+
+#[tauri::command]
+fn harness_read_artifact(
+    state: tauri::State<HarnessState>,
+    task_id: String,
+    artifact_id: String,
+) -> Value {
+    match state
+        .0
+        .lock()
+        .unwrap()
+        .read_artifact(&task_id, &artifact_id)
+    {
+        Some((media, content)) => json!({ "mediaType": media, "content": content }),
+        None => json!({ "error": "artifact not found" }),
+    }
+}
+
+#[tauri::command]
+fn harness_export_report(state: tauri::State<HarnessState>, task_id: String) -> Value {
+    match state.0.lock().unwrap().export_report(&task_id) {
+        Some(report) => json!({ "report": report }),
+        None => json!({ "error": "task not found" }),
+    }
+}
+
 #[tauri::command]
 fn desktop_request(_method: String, endpoint: String, _body: Value) -> Value {
     // Graceful-degradation stub for unmigrated endpoints. Returns an empty list
@@ -435,6 +495,10 @@ pub fn run() {
     tauri::Builder::default()
         .manage(EngineState(Mutex::new(None)))
         .manage(ActiveTurns(Mutex::new(HashMap::new())))
+        .manage(HarnessState(Mutex::new(
+            harness::Harness::open(harness::resolve_harness_db())
+                .unwrap_or_else(|_| harness::Harness::in_memory()),
+        )))
         .invoke_handler(tauri::generate_handler![
             bootstrap,
             auth_status,
@@ -465,7 +529,12 @@ pub fn run() {
             git_remote_status,
             git_commits,
             git_commit_diff,
-            git_file_with_diff
+            git_file_with_diff,
+            harness_list_tasks,
+            harness_create_task,
+            harness_get_task,
+            harness_read_artifact,
+            harness_export_report
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

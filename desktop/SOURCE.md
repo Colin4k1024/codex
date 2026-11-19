@@ -47,6 +47,10 @@ New product files (not part of upstream):
   typed `permission_request` events and are NEVER auto-answered. U04 adds typed
   file/Git methods (listFiles/readFile/saveFile/gitStatus/gitDiff/gitBranches/
   gitRemoteStatus/gitCommits/gitCommitDiff/gitFileWithDiff) with matching browser
+  fixtures. U05 adds typed Harness methods (harnessListTasks/harnessCreateTask/
+  harnessGetTask/harnessReadArtifact/harnessExportReport) + exported view interfaces
+  (HarnessTaskSummary/HarnessTaskDetail/HarnessNodeView/HarnessGateView/
+  HarnessArtifactView/HarnessEventView) mirroring the Rust serde shapes, with browser
   fixtures.
 - `src-tauri/src/engine.rs` — U03 stdio JSON-RPC client for `codex app-server`.
   Spawns the engine with an ISOLATED `CODEX_HOME` (default `$HOME/.youragent/codex-home`,
@@ -69,6 +73,24 @@ New product files (not part of upstream):
   silently overwriting. Git is read-only: fixed `git` subcommands with structured
   args (no shell), `GIT_EXTERNAL_DIFF`/`diff.external` disabled so no external helper
   runs; status/diff/branches/remote-status/commits/commit-diff/file-with-diff.
+- `src-tauri/src/harness.rs` — U05 Harness business-task backend. Reuses the
+  SuperAgent `superagent-orchestrator` / `superagent-contracts` / `superagent-storage`
+  crates (path deps) rather than reinventing a state machine: a deterministic DAG run
+  whose node success is proven ONLY by gate evidence (real process exit codes for
+  verification gates, artifact evidence for capability nodes). Persists run identity,
+  events and artifacts to an isolated SQLite store (`YOURAGENT_HARNESS_DB`, else
+  `$HOME/.youragent/harness.db`; never user data). A `FixtureExecutor` drives the
+  `team-delivery` workflow in three modes (success / verify_fails / needs_input) and
+  runs real `true`/`false` programs so gates carry genuine exit codes. Exposes typed
+  views (task summary/detail, node, gate, artifact, event) + markdown report export.
+  Detailed node/gate snapshots are kept in memory; restart-recovery of gate evidence
+  from the store is a documented follow-up. Live engine-driven business execution
+  (wiring the P2-5/P2-6 executor to the engine adapter) is the next step.
+- `src/components/harness-tasks/**` (view/HarnessTasksPanel, hooks/useHarnessTasks,
+  index) — U05 new product Tasks tab. Renders the task list, per-node state badges,
+  gate evidence (proven / exit_code / evidence_ref), artifacts (read by backend id)
+  and the markdown report. State comes verbatim from Rust typed commands; frontend
+  TaskMaster identifiers never drive node success.
 - `src-tauri/src/lib.rs` — product commands: bootstrap/auth_status/login/register/
   auth_user/logout/onboarding_status/complete_onboarding/git_config/update_git_config/
   list_projects/list_sessions/get_messages/send_input/desktop_request plus U03
@@ -77,12 +99,15 @@ New product files (not part of upstream):
   thread/items/list, thread/start + turn/start, turn/interrupt) with fixture
   fallback when no engine is configured. U04 adds list_files/read_file/save_file
   and git_status/git_diff/git_branches/git_remote_status/git_commits/
-  git_commit_diff/git_file_with_diff, all delegating to workspace.rs.
+  git_commit_diff/git_file_with_diff, all delegating to workspace.rs. U05 adds
+  harness_list_tasks/harness_create_task/harness_get_task/harness_read_artifact/
+  harness_export_report, delegating to harness.rs (HarnessState managed at boot).
   `desktop_request` remains a graceful-
   degradation stub for unmigrated endpoints (NOT a fake Express API). Approval
   decisions default to `decline` (never auto-accept).
 - `run-dev.sh`, `.env` (VITE_DESKTOP=true), this `SOURCE.md`.
-- `src-tauri/Cargo.toml` — added `chrono` (timestamp conversion in bridge.rs).
+- `src-tauri/Cargo.toml` — added `chrono` (timestamp conversion in bridge.rs) and
+  U05 path deps `superagent-orchestrator` / `superagent-contracts` / `superagent-storage`.
 
 Modified upstream files (marked here per Section 7):
 - `src/constants/config.ts` — added `IS_DESKTOP` (Tauri runtime / VITE_DESKTOP).
@@ -112,6 +137,9 @@ Modified upstream files (marked here per Section 7):
   a `readOnly` prop (set from `IS_DESKTOP`) disables all Git mutation buttons
   (switch/create/delete branch, fetch/pull/push/publish, revert, discard/delete file,
   commit/initial-commit, generate message); read-only Refresh stays enabled.
+- `src/components/main-content/view/MainContent.tsx` — U05: in desktop mode the Tasks
+  tab renders the Rust-managed `HarnessTasksPanel` (shown regardless of TaskMaster
+  installation); the web build keeps `TaskMasterPanel` behind its existing gate.
 - `src-tauri/tauri.conf.json` — Tauri 2 host config; `frontendDist` = derived `dist/`;
   `devUrl` = product Vite dev server; CSP widened for the real frontend; YourAgent
   window branding; Developer ID signing identity for macOS.
@@ -152,7 +180,25 @@ source pending the product rebrand; attribution is preserved here and in NOTICE.
   Developer ID-signed `YourAgent.app` (signature `--verify --deep --strict` valid),
   which boots alive with an isolated CODEX_HOME + real workspace root and no engine
   (fixture fallback) and shuts down cleanly.
-- U05–U06 (Harness Tasks tab, full Web-dependency removal + packaging): pending.
+- U05 (Harness Tasks tab, node status, gate evidence, reports): DONE (wired +
+  verified at the command boundary) — harness.rs reuses the SuperAgent orchestrator/
+  contracts/storage crates; the Tasks tab is the Rust-managed Harness business view in
+  desktop mode (no TaskMaster execution dependency). Verified: 33 Rust unit tests pass
+  (6 new harness tests: success run proves every gate; failing verify blocks downstream
+  and fails the run with finite retries; missing acceptance waits for input; artifact
+  read by backend id + report export + traversal rejection; list/get refresh events;
+  fixture workflow plans without validation errors); clippy/fmt clean; frontend
+  typecheck clean. Node success is proven only by gate evidence (real `true`/`false`
+  exit codes / artifacts), never by chat text or TaskMaster identifiers. The rebuilt
+  dist is embedded in the Developer ID-signed `YourAgent.app` (signature
+  `--verify --deep --strict` valid, Team KRV5T3384C), which boots alive with an isolated
+  CODEX_HOME + isolated harness DB (created at boot) + real workspace root and no engine,
+  then shuts down cleanly. In-app click-through of the WebView could not be automated in
+  this environment (browser automation cannot reach the Tauri WebView); the data
+  contracts are covered by the Rust tests. Follow-ups: restart-recovery of detailed gate
+  evidence from the store, and live engine-driven business execution (P2-5/P2-6 executor
+  wired to the engine adapter).
+- U06 (full Web-dependency removal + packaging): pending.
 
 ## License obligations carried forward
 

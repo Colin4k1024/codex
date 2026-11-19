@@ -17,6 +17,9 @@ tauri = { version = "2", features = [] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 chrono = { version = "0.4", default-features = false, features = ["std", "clock"] }
+superagent-orchestrator = { path = "../../superagent/crates/orchestrator" }
+superagent-contracts = { path = "../../superagent/crates/contracts" }
+superagent-storage = { path = "../../superagent/crates/storage" }
 
 [profile.release]
 codegen-units = 1

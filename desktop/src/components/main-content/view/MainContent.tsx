@@ -12,6 +12,8 @@ import { useEditorSidebar } from '../../code-editor/hooks/useEditorSidebar';
 import EditorSidebar from '../../code-editor/view/EditorSidebar';
 import type { Project } from '../../../types/app';
 import { TaskMasterPanel } from '../../task-master';
+import { HarnessTasksPanel } from '../../harness-tasks';
+import { IS_DESKTOP } from '../../../constants/config';
 import MainContentHeader from './subcomponents/MainContentHeader';
 import MainContentStateView from './subcomponents/MainContentStateView';
 import ErrorBoundary from './ErrorBoundary';
@@ -55,7 +57,9 @@ function MainContent({
   const { currentProject, setCurrentProject } = useTaskMaster() as TaskMasterContextValue;
   const { tasksEnabled, isTaskMasterInstalled } = useTasksSettings() as TasksSettingsContextValue;
 
-  const shouldShowTasksTab = Boolean(tasksEnabled && isTaskMasterInstalled);
+  // Desktop build: the Tasks tab is the Rust-managed Harness business view, shown
+  // regardless of TaskMaster installation. Web build keeps the TaskMaster gate.
+  const shouldShowTasksTab = IS_DESKTOP || Boolean(tasksEnabled && isTaskMasterInstalled);
 
   const {
     editingFile,
@@ -133,7 +137,7 @@ function MainContent({
                 autoScrollToBottom={autoScrollToBottom}
                 sendByCtrlEnter={sendByCtrlEnter}
                 externalMessageUpdate={externalMessageUpdate}
-                onShowAllTasks={tasksEnabled ? () => setActiveTab('tasks') : null}
+                onShowAllTasks={(IS_DESKTOP || tasksEnabled) ? () => setActiveTab('tasks') : null}
               />
             </ErrorBoundary>
           </div>
@@ -161,7 +165,11 @@ function MainContent({
             </div>
           )}
 
-          {shouldShowTasksTab && <TaskMasterPanel isVisible={activeTab === 'tasks'} />}
+          {shouldShowTasksTab && (
+            IS_DESKTOP
+              ? <HarnessTasksPanel isVisible={activeTab === 'tasks'} />
+              : <TaskMasterPanel isVisible={activeTab === 'tasks'} />
+          )}
 
           <div className={`h-full overflow-hidden ${activeTab === 'preview' ? 'block' : 'hidden'}`} />
 
