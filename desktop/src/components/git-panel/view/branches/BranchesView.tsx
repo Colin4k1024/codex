@@ -5,6 +5,7 @@ import NewBranchModal from '../modals/NewBranchModal';
 
 type BranchesViewProps = {
   isMobile: boolean;
+  readOnly?: boolean;
   isLoading: boolean;
   currentBranch: string;
   localBranches: string[];
@@ -28,11 +29,12 @@ type BranchRowProps = {
   aheadCount: number;
   behindCount: number;
   isMobile: boolean;
+  readOnly: boolean;
   onSwitch: () => void;
   onDelete: () => void;
 };
 
-function BranchRow({ name, isCurrent, isRemote, aheadCount, behindCount, isMobile, onSwitch, onDelete }: BranchRowProps) {
+function BranchRow({ name, isCurrent, isRemote, aheadCount, behindCount, isMobile, readOnly, onSwitch, onDelete }: BranchRowProps) {
   return (
     <div
       className={`group flex items-center gap-3 border-b border-border/40 px-4 transition-colors hover:bg-accent/40 ${
@@ -88,14 +90,16 @@ function BranchRow({ name, isCurrent, isRemote, aheadCount, behindCount, isMobil
           <>
             <button
               onClick={onSwitch}
-              className="rounded-md px-2 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+              disabled={readOnly}
+              className="rounded-md px-2 py-1 text-xs font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50"
               title={`Switch to ${name}`}
             >
               Switch
             </button>
             <button
               onClick={onDelete}
-              className="rounded-md p-1 text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
+              disabled={readOnly}
+              className="rounded-md p-1 text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive disabled:cursor-not-allowed disabled:opacity-50"
               title={`Delete ${name}`}
             >
               <Trash2 className="h-3.5 w-3.5" />
@@ -126,6 +130,7 @@ function SectionHeader({ label, count }: { label: string; count: number }) {
 
 export default function BranchesView({
   isMobile,
+  readOnly = false,
   isLoading,
   currentBranch,
   localBranches,
@@ -175,7 +180,8 @@ export default function BranchesView({
         </span>
         <button
           onClick={() => setShowNewBranchModal(true)}
-          className="flex items-center gap-1.5 rounded-lg bg-primary/10 px-3 py-1.5 text-sm font-medium text-primary transition-colors hover:bg-primary/20"
+          disabled={readOnly}
+          className="flex items-center gap-1.5 rounded-lg bg-primary/10 px-3 py-1.5 text-sm font-medium text-primary transition-colors hover:bg-primary/20 disabled:cursor-not-allowed disabled:opacity-50"
         >
           <Plus className="h-3.5 w-3.5" />
           New branch
@@ -196,6 +202,7 @@ export default function BranchesView({
                 aheadCount={branch === currentBranch ? aheadCount : 0}
                 behindCount={branch === currentBranch ? behindCount : 0}
                 isMobile={isMobile}
+                readOnly={readOnly}
                 onSwitch={() => requestSwitch(branch)}
                 onDelete={() => requestDelete(branch)}
               />
@@ -215,6 +222,7 @@ export default function BranchesView({
                 aheadCount={0}
                 behindCount={0}
                 isMobile={isMobile}
+                readOnly={readOnly}
                 onSwitch={() => requestSwitch(branch)}
                 onDelete={() => requestDelete(branch)}
               />
@@ -232,6 +240,7 @@ export default function BranchesView({
 
       <NewBranchModal
         isOpen={showNewBranchModal}
+        readOnly={readOnly}
         currentBranch={currentBranch}
         isCreatingBranch={isCreatingBranch}
         onClose={() => setShowNewBranchModal(false)}

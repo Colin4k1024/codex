@@ -149,14 +149,21 @@ export const api = {
       body: JSON.stringify(workspaceData),
     }),
   readFile: (projectName, filePath) =>
-    authenticatedFetch(`/api/projects/${projectName}/file?filePath=${encodeURIComponent(filePath)}`),
-  saveFile: (projectName, filePath, content) =>
-    authenticatedFetch(`/api/projects/${projectName}/file`, {
-      method: 'PUT',
-      body: JSON.stringify({ filePath, content }),
-    }),
+    IS_DESKTOP
+      ? desktopJson(desktopClient.readFile(projectName, filePath))
+      : authenticatedFetch(`/api/projects/${projectName}/file?filePath=${encodeURIComponent(filePath)}`),
+  /** @param {number | null} [expectedMtimeMs] */
+  saveFile: (projectName, filePath, content, expectedMtimeMs = null) =>
+    IS_DESKTOP
+      ? desktopJson(desktopClient.saveFile(projectName, filePath, content, expectedMtimeMs))
+      : authenticatedFetch(`/api/projects/${projectName}/file`, {
+          method: 'PUT',
+          body: JSON.stringify({ filePath, content }),
+        }),
   getFiles: (projectName, options = {}) =>
-    authenticatedFetch(`/api/projects/${projectName}/files`, options),
+    IS_DESKTOP
+      ? desktopJson(desktopClient.listFiles(projectName))
+      : authenticatedFetch(`/api/projects/${projectName}/files`, options),
 
   // File operations
   createFile: (projectName, { path, type, name }) =>

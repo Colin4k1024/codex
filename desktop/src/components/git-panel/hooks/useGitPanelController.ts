@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { authenticatedFetch } from '../../../utils/api';
+import { IS_DESKTOP } from '../../../constants/config';
+import { desktopClient, jsonResponse } from '../../../services/desktop-client';
 import { DEFAULT_BRANCH, RECENT_COMMITS_LIMIT } from '../constants/constants';
 import type {
   GitApiErrorResponse,
@@ -19,8 +21,24 @@ import type {
 import { getAllChangedFiles } from '../utils/gitPanelUtils';
 import { useSelectedProvider } from './useSelectedProvider';
 
-// ! use authenticatedFetch directly. fetchWithAuth is redundant 
-const fetchWithAuth = authenticatedFetch as (url: string, options?: RequestInit) => Promise<Response>;
+// ! use authenticatedFetch directly. fetchWithAuth is redundant
+// U04: read-only Git in the desktop build. Reads go through typed DesktopClient
+// commands (gitRead below); any non-GET request is rejected in-band so a write
+// can never reach the host even if a UI affordance is triggered.
+const READ_ONLY_GIT_MESSAGE = 'Git write operations are disabled in the desktop build (read-only).';
+const fetchWithAuth = ((url: string, options?: RequestInit): Promise<Response> => {
+  if (IS_DESKTOP && options?.method && options.method.toUpperCase() !== 'GET') {
+    return Promise.resolve(jsonResponse({ success: false, error: READ_ONLY_GIT_MESSAGE }));
+  }
+  return authenticatedFetch(url, options);
+}) as (url: string, options?: RequestInit) => Promise<Response>;
+
+const gitRead = (
+  desktopCall: () => Promise<unknown>,
+  url: string,
+  signal?: AbortSignal,
+): Promise<Response> =>
+  IS_DESKTOP ? desktopCall().then((data) => jsonResponse(data)) : fetchWithAuth(url, { signal });
 
 function isAbortError(error: unknown): boolean {
   return error instanceof DOMException && error.name === 'AbortError';
@@ -81,9 +99,10 @@ export function useGitPanelController({
       const projectName = selectedProject.name;
 
       try {
-        const response = await fetchWithAuth(
+        const response = await gitRead(
+          () => desktopClient.gitDiff(projectName, filePath),
           `/api/git/diff?project=${encodeURIComponent(projectName)}&file=${encodeURIComponent(filePath)}`,
-          { signal },
+          signal,
         );
         const data = await readJson<GitDiffResponse>(response, signal);
 
@@ -120,7 +139,11 @@ export function useGitPanelController({
 
     setIsLoading(true);
     try {
-      const response = await fetchWithAuth(`/api/git/status?project=${encodeURIComponent(projectName)}`, { signal });
+      const response = await gitRead(
+        () => desktopClient.gitStatus(projectName),
+        `/api/git/status?project=${encodeURIComponent(projectName)}`,
+        signal,
+      );
       const data = await readJson<GitStatusResponse>(response, signal);
 
       if (
@@ -169,7 +192,10 @@ export function useGitPanelController({
     }
 
     try {
-      const response = await fetchWithAuth(`/api/git/branches?project=${encodeURIComponent(selectedProject.name)}`);
+      const response = await gitRead(
+        () => desktopClient.gitBranches(selectedProject.name),
+        `/api/git/branches?project=${encodeURIComponent(selectedProject.name)}`,
+      );
       const data = await readJson<GitBranchesResponse>(response);
 
       if (!data.error && data.branches) {
@@ -196,7 +222,10 @@ export function useGitPanelController({
     }
 
     try {
-      const response = await fetchWithAuth(`/api/git/remote-status?project=${encodeURIComponent(selectedProject.name)}`);
+      const response = await gitRead(
+        () => desktopClient.gitRemoteStatus(selectedProject.name),
+        `/api/git/remote-status?project=${encodeURIComponent(selectedProject.name)}`,
+      );
       const data = await readJson<GitRemoteStatus | GitApiErrorResponse>(response);
 
       if (!data.error) {
@@ -497,7 +526,8 @@ export function useGitPanelController({
     }
 
     try {
-      const response = await fetchWithAuth(
+      const response = await gitRead(
+        () => desktopClient.gitCommits(selectedProject.name, RECENT_COMMITS_LIMIT),
         `/api/git/commits?project=${encodeURIComponent(selectedProject.name)}&limit=${RECENT_COMMITS_LIMIT}`,
       );
       const data = await readJson<GitCommitsResponse>(response);
@@ -517,7 +547,8 @@ export function useGitPanelController({
       }
 
       try {
-        const response = await fetchWithAuth(
+        const response = await gitRead(
+          () => desktopClient.gitCommitDiff(selectedProject.name, commitHash),
           `/api/git/commit-diff?project=${encodeURIComponent(selectedProject.name)}&commit=${commitHash}`,
         );
         const data = await readJson<GitDiffResponse>(response);
@@ -644,7 +675,8 @@ export function useGitPanelController({
       }
 
       try {
-        const response = await fetchWithAuth(
+        const response = await gitRead(
+          () => desktopClient.gitFileWithDiff(selectedProject.name, filePath),
           `/api/git/file-with-diff?project=${encodeURIComponent(selectedProject.name)}&file=${encodeURIComponent(filePath)}`,
         );
         const data = await readJson<GitFileWithDiffResponse>(response);

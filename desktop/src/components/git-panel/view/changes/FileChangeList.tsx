@@ -8,6 +8,7 @@ type FileChangeListProps = {
   expandedFiles: Set<string>;
   selectedFiles: Set<string>;
   isMobile: boolean;
+  readOnly?: boolean;
   wrapText: boolean;
   filePaths?: Set<string>;
   onToggleSelected: (filePath: string) => void;
@@ -23,6 +24,7 @@ export default function FileChangeList({
   expandedFiles,
   selectedFiles,
   isMobile,
+  readOnly = false,
   wrapText,
   filePaths,
   onToggleSelected,
@@ -42,6 +44,7 @@ export default function FileChangeList({
               filePath={filePath}
               status={status}
               isMobile={isMobile}
+              readOnly={readOnly}
               isExpanded={expandedFiles.has(filePath)}
               isSelected={selectedFiles.has(filePath)}
               diff={gitDiff[filePath]}

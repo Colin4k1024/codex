@@ -5,6 +5,7 @@ import NewBranchModal from './modals/NewBranchModal';
 
 type GitPanelHeaderProps = {
   isMobile: boolean;
+  readOnly?: boolean;
   currentBranch: string;
   branches: string[];
   remoteStatus: GitRemoteStatus | null;
@@ -30,6 +31,7 @@ type GitPanelHeaderProps = {
 
 export default function GitPanelHeader({
   isMobile,
+  readOnly = false,
   currentBranch,
   branches,
   remoteStatus,
@@ -154,7 +156,8 @@ export default function GitPanelHeader({
                   <button
                     key={branch}
                     onClick={() => void handleSwitchBranch(branch)}
-                    className={`w-full px-4 py-2 text-left text-sm transition-colors hover:bg-accent ${
+                    disabled={readOnly}
+                    className={`w-full px-4 py-2 text-left text-sm transition-colors hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50 ${
                       branch === currentBranch ? 'bg-accent/50 text-foreground' : 'text-muted-foreground'
                     }`}
                   >
@@ -171,7 +174,8 @@ export default function GitPanelHeader({
                     setShowNewBranchModal(true);
                     setShowBranchDropdown(false);
                   }}
-                  className="flex w-full items-center space-x-2 px-4 py-2 text-left text-sm transition-colors hover:bg-accent"
+                  disabled={readOnly}
+                  className="flex w-full items-center space-x-2 px-4 py-2 text-left text-sm transition-colors hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   <Plus className="h-3 w-3" />
                   <span>Create new branch</span>
@@ -188,7 +192,7 @@ export default function GitPanelHeader({
               {!remoteStatus.hasUpstream ? (
                 <button
                   onClick={requestPublishConfirmation}
-                  disabled={anyPending}
+                  disabled={anyPending || readOnly}
                   className="flex items-center gap-1 rounded-lg bg-purple-600 px-2.5 py-1 text-sm text-white transition-colors hover:bg-purple-700 disabled:opacity-50"
                   title={`Publish "${currentBranch}" to ${remoteName}`}
                 >
@@ -200,7 +204,7 @@ export default function GitPanelHeader({
                   {/* Fetch — always visible when remote exists */}
                   <button
                     onClick={() => void onFetch()}
-                    disabled={anyPending}
+                    disabled={anyPending || readOnly}
                     className="flex items-center gap-1 rounded-lg bg-primary px-2.5 py-1 text-sm text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-50"
                     title={`Fetch from ${remoteName}`}
                   >
@@ -211,7 +215,7 @@ export default function GitPanelHeader({
                   {behindCount > 0 && (
                     <button
                       onClick={requestPullConfirmation}
-                      disabled={anyPending}
+                      disabled={anyPending || readOnly}
                       className="flex items-center gap-1 rounded-lg bg-green-600 px-2.5 py-1 text-sm text-white transition-colors hover:bg-green-700 disabled:opacity-50"
                       title={`Pull ${behindCount} from ${remoteName}`}
                     >
@@ -223,7 +227,7 @@ export default function GitPanelHeader({
                   {aheadCount > 0 && (
                     <button
                       onClick={requestPushConfirmation}
-                      disabled={anyPending}
+                      disabled={anyPending || readOnly}
                       className="flex items-center gap-1 rounded-lg bg-orange-600 px-2.5 py-1 text-sm text-white transition-colors hover:bg-orange-700 disabled:opacity-50"
                       title={`Push ${aheadCount} to ${remoteName}`}
                     >
@@ -238,7 +242,7 @@ export default function GitPanelHeader({
 
           <button
             onClick={requestRevertLocalCommitConfirmation}
-            disabled={isRevertingLocalCommit}
+            disabled={isRevertingLocalCommit || readOnly}
             className={`rounded-lg transition-colors hover:bg-accent disabled:opacity-50 ${isMobile ? 'p-1' : 'p-1.5'}`}
             title="Revert latest local commit"
           >
@@ -275,6 +279,7 @@ export default function GitPanelHeader({
 
       <NewBranchModal
         isOpen={showNewBranchModal}
+        readOnly={readOnly}
         currentBranch={currentBranch}
         isCreatingBranch={isCreatingBranch}
         onClose={() => setShowNewBranchModal(false)}

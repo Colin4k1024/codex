@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import { IS_DESKTOP } from '../../../constants/config';
 import { authenticatedFetch } from '../../../utils/api';
 import type { GitOperationResponse } from '../types/types';
 
@@ -15,7 +16,7 @@ export function useRevertLocalCommit({ projectName, onSuccess }: UseRevertLocalC
   const [isRevertingLocalCommit, setIsRevertingLocalCommit] = useState(false);
 
   const revertLatestLocalCommit = useCallback(async () => {
-    if (!projectName) {
+    if (!projectName || IS_DESKTOP) {
       return;
     }
 

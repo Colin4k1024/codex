@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { api } from '../../../utils/api';
 import type { CodeEditorFile } from '../types/types';
 import { isBinaryFile } from '../utils/binaryFile';
@@ -22,66 +22,78 @@ export const useCodeEditorDocument = ({ file, projectPath }: UseCodeEditorDocume
   const [saving, setSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+  // U04: a save was rejected because the file changed on disk (e.g. by the agent).
+  const [saveConflict, setSaveConflict] = useState(false);
   const [isBinary, setIsBinary] = useState(false);
+  // Optimistic-concurrency token: the mtime we loaded, sent back on save so the
+  // backend can detect concurrent modification instead of silently overwriting.
+  const loadedMtimeRef = useRef<number | null>(null);
   const fileProjectName = file.projectName ?? projectPath;
   const filePath = file.path;
   const fileName = file.name;
   const fileDiffNewString = file.diffInfo?.new_string;
   const fileDiffOldString = file.diffInfo?.old_string;
 
-  useEffect(() => {
-    const loadFileContent = async () => {
-      try {
-        setLoading(true);
-        setIsBinary(false);
+  const loadDocument = useCallback(async () => {
+    try {
+      setLoading(true);
+      setIsBinary(false);
+      setSaveConflict(false);
+      loadedMtimeRef.current = null;
 
-        // Check if file is binary by extension
-        if (isBinaryFile(file.name)) {
-          setIsBinary(true);
-          setLoading(false);
-          return;
-        }
-
-        // Diff payload may already include full old/new snapshots, so avoid disk read.
-        if (file.diffInfo && fileDiffNewString !== undefined && fileDiffOldString !== undefined) {
-          setContent(fileDiffNewString);
-          setLoading(false);
-          return;
-        }
-
-        if (!fileProjectName) {
-          throw new Error('Missing project identifier');
-        }
-
-        const response = await api.readFile(fileProjectName, filePath);
-        if (!response.ok) {
-          throw new Error(`Failed to load file: ${response.status} ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        setContent(data.content);
-      } catch (error) {
-        const message = getErrorMessage(error);
-        console.error('Error loading file:', error);
-        setContent(`// Error loading file: ${message}\n// File: ${fileName}\n// Path: ${filePath}`);
-      } finally {
+      // Check if file is binary by extension
+      if (isBinaryFile(file.name)) {
+        setIsBinary(true);
         setLoading(false);
+        return;
       }
-    };
 
-    loadFileContent();
+      // Diff payload may already include full old/new snapshots, so avoid disk read.
+      if (file.diffInfo && fileDiffNewString !== undefined && fileDiffOldString !== undefined) {
+        setContent(fileDiffNewString);
+        setLoading(false);
+        return;
+      }
+
+      if (!fileProjectName) {
+        throw new Error('Missing project identifier');
+      }
+
+      const response = await api.readFile(fileProjectName, filePath);
+      if (!response.ok) {
+        throw new Error(`Failed to load file: ${response.status} ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      setContent(data.content);
+      loadedMtimeRef.current = typeof data.mtimeMs === 'number' ? data.mtimeMs : null;
+    } catch (error) {
+      const message = getErrorMessage(error);
+      console.error('Error loading file:', error);
+      setContent(`// Error loading file: ${message}\n// File: ${fileName}\n// Path: ${filePath}`);
+    } finally {
+      setLoading(false);
+    }
   }, [file.diffInfo, file.name, fileDiffNewString, fileDiffOldString, fileName, filePath, fileProjectName]);
+
+  useEffect(() => {
+    void loadDocument();
+  }, [loadDocument]);
 
   const handleSave = useCallback(async () => {
     setSaving(true);
     setSaveError(null);
+    setSaveConflict(false);
 
     try {
       if (!fileProjectName) {
         throw new Error('Missing project identifier');
       }
 
-      const response = await api.saveFile(fileProjectName, filePath, content);
+      const response = await api.saveFile(fileProjectName, filePath, content, loadedMtimeRef.current);
 
       if (!response.ok) {
         const contentType = response.headers.get('content-type');
@@ -95,7 +107,20 @@ export const useCodeEditorDocument = ({ file, projectPath }: UseCodeEditorDocume
         throw new Error(`Save failed: ${response.status} ${response.statusText}`);
       }
 
-      await response.json();
+      // The desktop bridge conveys errors in-band (HTTP 200), so inspect the body
+      // even on success. A conflict means the file changed on disk — do not overwrite.
+      const data = await response.json();
+      if (data.conflict) {
+        setSaveConflict(true);
+        setSaveError(data.error || 'File changed on disk. Reload to avoid overwriting newer changes.');
+        return;
+      }
+      if (data.error) {
+        throw new Error(data.error);
+      }
+      if (typeof data.mtimeMs === 'number') {
+        loadedMtimeRef.current = data.mtimeMs;
+      }
 
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 2000);
@@ -130,8 +155,10 @@ export const useCodeEditorDocument = ({ file, projectPath }: UseCodeEditorDocume
     saving,
     saveSuccess,
     saveError,
+    saveConflict,
     isBinary,
     handleSave,
     handleDownload,
+    reload: loadDocument,
   };
 };

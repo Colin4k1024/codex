@@ -8,6 +8,7 @@ import FileStatusLegend from './FileStatusLegend';
 
 type ChangesViewProps = {
   isMobile: boolean;
+  readOnly?: boolean;
   projectPath: string;
   gitStatus: GitStatusResponse | null;
   gitDiff: GitDiffMap;
@@ -27,6 +28,7 @@ type ChangesViewProps = {
 
 export default function ChangesView({
   isMobile,
+  readOnly = false,
   projectPath,
   gitStatus,
   gitDiff,
@@ -99,6 +101,9 @@ export default function ChangesView({
 
   const requestFileAction = useCallback(
     (filePath: string, status: FileStatusCode) => {
+      if (readOnly) {
+        return;
+      }
       if (status === 'U') {
         onRequestConfirmation({
           type: 'delete',
@@ -118,7 +123,7 @@ export default function ChangesView({
         },
       });
     },
-    [onDeleteFile, onDiscardFile, onRequestConfirmation],
+    [onDeleteFile, onDiscardFile, onRequestConfirmation, readOnly],
   );
 
   const commitSelectedFiles = useCallback(
@@ -141,6 +146,7 @@ export default function ChangesView({
     <>
       <CommitComposer
         isMobile={isMobile}
+        readOnly={readOnly}
         projectPath={projectPath}
         selectedFileCount={selectedFiles.size}
         isHidden={hasExpandedFiles}
@@ -167,7 +173,7 @@ export default function ChangesView({
             </p>
             <button
               onClick={() => void onCreateInitialCommit()}
-              disabled={isCreatingInitialCommit}
+              disabled={isCreatingInitialCommit || readOnly}
               className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isCreatingInitialCommit ? (
@@ -213,6 +219,7 @@ export default function ChangesView({
                 expandedFiles={expandedFiles}
                 selectedFiles={selectedFiles}
                 isMobile={isMobile}
+                readOnly={readOnly}
                 wrapText={wrapText}
                 filePaths={selectedFiles}
                 onToggleSelected={toggleFileSelected}
@@ -246,6 +253,7 @@ export default function ChangesView({
                 expandedFiles={expandedFiles}
                 selectedFiles={selectedFiles}
                 isMobile={isMobile}
+                readOnly={readOnly}
                 wrapText={wrapText}
                 filePaths={unstagedFiles}
                 onToggleSelected={toggleFileSelected}

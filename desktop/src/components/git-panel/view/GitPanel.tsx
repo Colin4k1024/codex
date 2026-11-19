@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import { IS_DESKTOP } from '../../../constants/config';
 import { useGitPanelController } from '../hooks/useGitPanelController';
 import { useRevertLocalCommit } from '../hooks/useRevertLocalCommit';
 import type { ConfirmationRequest, GitPanelProps, GitPanelView } from '../types/types';
@@ -87,6 +88,7 @@ export default function GitPanel({ selectedProject, isMobile = false, onFileOpen
     <div className="flex h-full flex-col bg-background">
       <GitPanelHeader
         isMobile={isMobile}
+        readOnly={IS_DESKTOP}
         currentBranch={currentBranch}
         branches={branches}
         remoteStatus={remoteStatus}
@@ -125,6 +127,7 @@ export default function GitPanel({ selectedProject, isMobile = false, onFileOpen
             <ChangesView
               key={selectedProject.fullPath}
               isMobile={isMobile}
+              readOnly={IS_DESKTOP}
               projectPath={selectedProject.fullPath}
               gitStatus={gitStatus}
               gitDiff={gitDiff}
@@ -157,6 +160,7 @@ export default function GitPanel({ selectedProject, isMobile = false, onFileOpen
           {activeView === 'branches' && (
             <BranchesView
               isMobile={isMobile}
+              readOnly={IS_DESKTOP}
               isLoading={isLoading}
               currentBranch={currentBranch}
               localBranches={localBranches}

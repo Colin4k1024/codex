@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 
 type NewBranchModalProps = {
   isOpen: boolean;
+  readOnly?: boolean;
   currentBranch: string;
   isCreatingBranch: boolean;
   onClose: () => void;
@@ -11,6 +12,7 @@ type NewBranchModalProps = {
 
 export default function NewBranchModal({
   isOpen,
+  readOnly = false,
   currentBranch,
   isCreatingBranch,
   onClose,
@@ -26,7 +28,7 @@ export default function NewBranchModal({
 
   const handleCreateBranch = async (): Promise<boolean> => {
     const branchName = newBranchName.trim();
-    if (!branchName) {
+    if (!branchName || readOnly) {
       return false;
     }
 
@@ -69,7 +71,7 @@ export default function NewBranchModal({
               value={newBranchName}
               onChange={(event) => setNewBranchName(event.target.value)}
               onKeyDown={(event) => {
-                if (event.key === 'Enter' && !isCreatingBranch) {
+                if (event.key === 'Enter' && !isCreatingBranch && !readOnly) {
                   event.preventDefault();
                   event.stopPropagation();
                   void handleCreateBranch();
@@ -101,7 +103,7 @@ export default function NewBranchModal({
             </button>
             <button
               onClick={() => void handleCreateBranch()}
-              disabled={!newBranchName.trim() || isCreatingBranch}
+              disabled={!newBranchName.trim() || isCreatingBranch || readOnly}
               className="flex items-center space-x-2 rounded-lg bg-primary px-4 py-2 text-sm text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isCreatingBranch ? (

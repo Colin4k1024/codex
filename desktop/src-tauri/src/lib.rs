@@ -11,6 +11,7 @@
 
 mod bridge;
 mod engine;
+mod workspace;
 
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
@@ -90,8 +91,8 @@ fn fixture_project() -> Value {
     json!({
         "name": "superagent",
         "displayName": "SuperAgent",
-        "fullPath": "/Users/fanjia/Desktop/code/codex",
-        "path": "/Users/fanjia/Desktop/code/codex",
+        "fullPath": workspace::FIXTURE_WORKSPACE_ROOT,
+        "path": workspace::FIXTURE_WORKSPACE_ROOT,
         "sessions": [fixture_session()],
         "codexSessions": [fixture_session()],
         "cursorSessions": [],
@@ -349,6 +350,65 @@ fn cancel_turn(thread_id: String, turn_id: String, state: tauri::State<EngineSta
     }
 }
 
+// ─── U04 workspace file + read-only Git commands ─────────────────────────────
+// All paths are confined to a backend-resolved workspace root (workspace.rs).
+// Git is read-only; write operations are disabled in the frontend desktop build.
+
+#[tauri::command]
+fn list_files(project_name: String) -> Value {
+    workspace::list_files(&project_name)
+}
+
+#[tauri::command]
+fn read_file(project_name: String, file_path: String) -> Value {
+    workspace::read_file(&project_name, &file_path)
+}
+
+#[tauri::command]
+fn save_file(
+    project_name: String,
+    file_path: String,
+    content: String,
+    expected_mtime_ms: Option<i64>,
+) -> Value {
+    workspace::save_file(&project_name, &file_path, &content, expected_mtime_ms)
+}
+
+#[tauri::command]
+fn git_status(project_name: String) -> Value {
+    workspace::git_status(&project_name)
+}
+
+#[tauri::command]
+fn git_diff(project_name: String, file_path: String) -> Value {
+    workspace::git_diff(&project_name, &file_path)
+}
+
+#[tauri::command]
+fn git_branches(project_name: String) -> Value {
+    workspace::git_branches(&project_name)
+}
+
+#[tauri::command]
+fn git_remote_status(project_name: String) -> Value {
+    workspace::git_remote_status(&project_name)
+}
+
+#[tauri::command]
+fn git_commits(project_name: String, limit: i64) -> Value {
+    workspace::git_commits(&project_name, limit)
+}
+
+#[tauri::command]
+fn git_commit_diff(project_name: String, commit: String) -> Value {
+    workspace::git_commit_diff(&project_name, &commit)
+}
+
+#[tauri::command]
+fn git_file_with_diff(project_name: String, file_path: String) -> Value {
+    workspace::git_file_with_diff(&project_name, &file_path)
+}
+
 #[tauri::command]
 fn desktop_request(_method: String, endpoint: String, _body: Value) -> Value {
     // Graceful-degradation stub for unmigrated endpoints. Returns an empty list
@@ -395,7 +455,17 @@ pub fn run() {
             engine_status,
             engine_disconnect,
             respond_to_request,
-            cancel_turn
+            cancel_turn,
+            list_files,
+            read_file,
+            save_file,
+            git_status,
+            git_diff,
+            git_branches,
+            git_remote_status,
+            git_commits,
+            git_commit_diff,
+            git_file_with_diff
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

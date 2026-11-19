@@ -92,6 +92,25 @@ const mockInvoke = (cmd: string, args?: Record<string, unknown>): Promise<unknow
     case 'cancel_turn':
     case 'respond_to_request':
       return Promise.resolve({ ok: false, error: 'engine not connected' });
+    case 'list_files':
+      return Promise.resolve([]);
+    case 'read_file':
+      return Promise.resolve({ content: '', mtimeMs: 0 });
+    case 'save_file':
+      return Promise.resolve({ success: true, mtimeMs: 0 });
+    case 'git_status':
+      return Promise.resolve({ branch: 'main', hasCommits: true, modified: [], added: [], deleted: [], untracked: [] });
+    case 'git_diff':
+    case 'git_commit_diff':
+      return Promise.resolve({ diff: '' });
+    case 'git_branches':
+      return Promise.resolve({ branches: [], localBranches: [], remoteBranches: [] });
+    case 'git_remote_status':
+      return Promise.resolve({ hasRemote: false, hasUpstream: false });
+    case 'git_commits':
+      return Promise.resolve({ commits: [] });
+    case 'git_file_with_diff':
+      return Promise.resolve({ oldContent: '', currentContent: '', isDeleted: false, isUntracked: false });
     case 'desktop_request': {
       const endpoint = (args?.endpoint as string) || '';
       const listLike = ['files', 'sessions', 'projects', 'templates', 'tasks', 'branches', 'changes'];
@@ -264,6 +283,25 @@ export const desktopClient = {
     invoke<{ ok: boolean; error?: string }>('cancel_turn', { threadId, turnId }),
   respondToRequest: (requestId: unknown, result: unknown) =>
     invoke<{ ok: boolean; error?: string }>('respond_to_request', { requestId, result }),
+  // U04 workspace file + read-only Git (paths confined to a backend-resolved root).
+  listFiles: (projectName: string) => invoke<unknown[]>('list_files', { projectName }),
+  readFile: (projectName: string, filePath: string) =>
+    invoke<{ content?: string; mtimeMs?: number; error?: string }>('read_file', { projectName, filePath }),
+  saveFile: (projectName: string, filePath: string, content: string, expectedMtimeMs?: number | null) =>
+    invoke<{ success?: boolean; mtimeMs?: number; error?: string; conflict?: boolean; currentMtimeMs?: number }>(
+      'save_file', { projectName, filePath, content, expectedMtimeMs: expectedMtimeMs ?? null },
+    ),
+  gitStatus: (projectName: string) => invoke<unknown>('git_status', { projectName }),
+  gitDiff: (projectName: string, filePath: string) =>
+    invoke<{ diff?: string; error?: string }>('git_diff', { projectName, filePath }),
+  gitBranches: (projectName: string) => invoke<unknown>('git_branches', { projectName }),
+  gitRemoteStatus: (projectName: string) => invoke<unknown>('git_remote_status', { projectName }),
+  gitCommits: (projectName: string, limit: number) =>
+    invoke<{ commits?: unknown[]; error?: string }>('git_commits', { projectName, limit }),
+  gitCommitDiff: (projectName: string, commit: string) =>
+    invoke<{ diff?: string; error?: string }>('git_commit_diff', { projectName, commit }),
+  gitFileWithDiff: (projectName: string, filePath: string) =>
+    invoke<unknown>('git_file_with_diff', { projectName, filePath }),
   // Generic product request for endpoints not yet migrated to typed commands.
   // U02 mock: Rust returns an empty/graceful payload so unmigrated features
   // degrade rather than crash. Replaced by typed commands + real adapter in U03+.

@@ -7,6 +7,7 @@ type FileChangeItemProps = {
   filePath: string;
   status: FileStatusCode;
   isMobile: boolean;
+  readOnly?: boolean;
   isExpanded: boolean;
   isSelected: boolean;
   diff?: string;
@@ -22,6 +23,7 @@ export default function FileChangeItem({
   filePath,
   status,
   isMobile,
+  readOnly = false,
   isExpanded,
   isSelected,
   diff,
@@ -76,7 +78,8 @@ export default function FileChangeItem({
                   event.stopPropagation();
                   onRequestFileAction(filePath, status);
                 }}
-                className={`${isMobile ? 'px-2 py-1 text-xs' : 'p-1'} flex items-center gap-1 rounded font-medium text-destructive hover:bg-destructive/10`}
+                disabled={readOnly}
+                className={`${isMobile ? 'px-2 py-1 text-xs' : 'p-1'} flex items-center gap-1 rounded font-medium text-destructive hover:bg-destructive/10 disabled:cursor-not-allowed disabled:opacity-50`}
                 title={status === 'U' ? 'Delete untracked file' : 'Discard changes'}
               >
                 <Trash2 className="h-3 w-3" />

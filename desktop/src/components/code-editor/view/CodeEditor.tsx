@@ -55,9 +55,11 @@ export default function CodeEditor({
     saving,
     saveSuccess,
     saveError,
+    saveConflict,
     isBinary,
     handleSave,
     handleDownload,
+    reload,
   } = useCodeEditorDocument({
     file,
     projectPath,
@@ -220,8 +222,17 @@ export default function CodeEditor({
           />
 
           {saveError && (
-            <div className="border-b border-red-200 bg-red-50 px-3 py-1.5 text-xs text-red-700 dark:border-red-900/40 dark:bg-red-900/20 dark:text-red-300">
-              {saveError}
+            <div className="flex items-center justify-between gap-2 border-b border-red-200 bg-red-50 px-3 py-1.5 text-xs text-red-700 dark:border-red-900/40 dark:bg-red-900/20 dark:text-red-300">
+              <span>{saveError}</span>
+              {saveConflict && (
+                <button
+                  type="button"
+                  onClick={() => void reload()}
+                  className="shrink-0 rounded border border-red-300 px-2 py-0.5 font-medium hover:bg-red-100 dark:border-red-800 dark:hover:bg-red-900/40"
+                >
+                  {t('actions.reload', 'Reload')}
+                </button>
+              )}
             </div>
           )}
 

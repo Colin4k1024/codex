@@ -8,6 +8,7 @@ const commitMessageCache = new Map<string, string>();
 
 type CommitComposerProps = {
   isMobile: boolean;
+  readOnly?: boolean;
   projectPath: string;
   selectedFileCount: number;
   isHidden: boolean;
@@ -18,6 +19,7 @@ type CommitComposerProps = {
 
 export default function CommitComposer({
   isMobile,
+  readOnly = false,
   projectPath,
   selectedFileCount,
   isHidden,
@@ -42,7 +44,7 @@ export default function CommitComposer({
 
   const handleCommit = async (message = commitMessage) => {
     const trimmedMessage = message.trim();
-    if (!trimmedMessage || selectedFileCount === 0 || isCommitting) {
+    if (!trimmedMessage || selectedFileCount === 0 || isCommitting || readOnly) {
       return false;
     }
 
@@ -59,7 +61,7 @@ export default function CommitComposer({
   };
 
   const handleGenerateMessage = async () => {
-    if (selectedFileCount === 0 || isGeneratingMessage) {
+    if (selectedFileCount === 0 || isGeneratingMessage || readOnly) {
       return;
     }
 
@@ -76,7 +78,7 @@ export default function CommitComposer({
 
   const requestCommitConfirmation = () => {
     const trimmedMessage = commitMessage.trim();
-    if (!trimmedMessage || selectedFileCount === 0 || isCommitting) {
+    if (!trimmedMessage || selectedFileCount === 0 || isCommitting || readOnly) {
       return;
     }
 
@@ -128,7 +130,7 @@ export default function CommitComposer({
               className="w-full resize-none rounded-xl border border-border bg-background px-3 py-2 pr-20 text-sm text-foreground placeholder:text-muted-foreground focus:border-primary/30 focus:outline-none focus:ring-2 focus:ring-primary/20"
               rows={3}
               onKeyDown={(event) => {
-                if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) {
+                if (event.key === 'Enter' && (event.ctrlKey || event.metaKey) && !readOnly) {
                   event.preventDefault();
                   void handleCommit();
                 }
@@ -137,7 +139,7 @@ export default function CommitComposer({
             <div className="absolute right-2 top-2 flex gap-1">
               <button
                 onClick={() => void handleGenerateMessage()}
-                disabled={selectedFileCount === 0 || isGeneratingMessage}
+                disabled={selectedFileCount === 0 || isGeneratingMessage || readOnly}
                 className="p-1.5 text-muted-foreground transition-colors hover:text-foreground disabled:cursor-not-allowed disabled:opacity-50"
                 title="Generate commit message"
               >
@@ -163,7 +165,7 @@ export default function CommitComposer({
             </span>
             <button
               onClick={requestCommitConfirmation}
-              disabled={!commitMessage.trim() || selectedFileCount === 0 || isCommitting}
+              disabled={!commitMessage.trim() || selectedFileCount === 0 || isCommitting || readOnly}
               className="flex items-center space-x-1 rounded-lg bg-primary px-3 py-1.5 text-sm text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
             >
               <Check className="h-3 w-3" />
