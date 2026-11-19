@@ -111,18 +111,21 @@ New product files (not part of upstream):
 
 Modified upstream files (marked here per Section 7):
 - `src/constants/config.ts` — added `IS_DESKTOP` (Tauri runtime / VITE_DESKTOP).
-- `src/utils/api.js` — in desktop mode the data layer routes through the
-  DesktopClient (typed commands for the boot path; generic product request for the
-  rest). The upstream OSS fetch path is retained for the browser build. U04:
-  `getFiles`/`readFile`/`saveFile` route to typed file commands; `saveFile` carries
-  an optional `expectedMtimeMs` for conflict detection.
+- `src/utils/api.js` — the data layer routes through the DesktopClient (typed commands
+  for the boot path; generic product request for the rest). U04: `getFiles`/`readFile`/
+  `saveFile` route to typed file commands; `saveFile` carries an optional `expectedMtimeMs`
+  for conflict detection. U06: removed the upstream OSS `fetch`/Bearer-JWT/token-refresh
+  fallback — `authenticatedFetch` and every endpoint now go over Tauri IPC only; the
+  `/api/...` strings are product-request endpoint identifiers, not network URLs.
 - `src/components/auth/context/AuthContext.tsx` — added an `IS_DESKTOP` branch that
-  provisions the session via `desktopClient.bootstrap()` (auto-authentication).
-- `src/contexts/WebSocketContext.tsx` — in desktop mode, ordered product events over
-  Tauri IPC replace the WebSocket; `sendMessage` goes through `desktopClient.sendInput`.
-  U03: on boot it subscribes to `desktop-event` then calls `engineConnect()` so the
-  real adapter is wired before any event arrives; falls back gracefully when no
-  engine is configured.
+  provisions the session via `desktopClient.bootstrap()` (auto-authentication). U06:
+  removed the Web platform (`IS_PLATFORM`) auto-login branch.
+- `src/contexts/WebSocketContext.tsx` — ordered product events over Tauri IPC replace the
+  WebSocket; `sendMessage` goes through `desktopClient.sendInput`. U03: on boot it
+  subscribes to `desktop-event` then calls `engineConnect()` so the real adapter is wired
+  before any event arrives; falls back gracefully when no engine is configured. U06:
+  removed the OSS `new WebSocket` transport / `/ws` URL builder / reconnect loop entirely;
+  the `ws` field is kept (always null) only for downstream prop-shape compatibility.
 - `src/components/code-editor/hooks/useCodeEditorDocument.ts` — U04: tracks the
   loaded `mtimeMs`, passes it on save, and surfaces a `{conflict:true}` response as
   a save-conflict state (no silent overwrite) with a Reload action; exposes `reload`.
@@ -140,6 +143,31 @@ Modified upstream files (marked here per Section 7):
 - `src/components/main-content/view/MainContent.tsx` — U05: in desktop mode the Tasks
   tab renders the Rust-managed `HarnessTasksPanel` (shown regardless of TaskMaster
   installation); the web build keeps `TaskMasterPanel` behind its existing gate.
+- U06 Web JWT/Express/WS/PWA dependency removal (marked per Section 7):
+  - `src/main.jsx`, `index.html` — removed the PWA service-worker registration (`/sw.js`),
+    the manifest link and iOS home-screen meta/icons. Deleted `public/sw.js`,
+    `public/manifest.json`, `public/clear-cache.html`.
+  - `src/App.tsx`, `src/types/global.d.ts` — desktop uses `HashRouter` (stable under the
+    Tauri custom protocol); removed the upstream `window.__ROUTER_BASENAME__` platform
+    bridge. Internal `window.refreshProjects`/`openSettings` bridges are retained.
+  - `src/components/app/AppContent.tsx` — removed the PWA service-worker navigation listener.
+  - `src/hooks/useWebPush.ts` — Web Push removed (no service worker / pushManager / VAPID);
+    the hook reports `unsupported` and no-ops, so the notifications settings tab shows the
+    unsupported notice instead of a toggle.
+  - `src/hooks/useVersionCheck.ts` — disabled the localhost `/health` install-mode probe and
+    the upstream GitHub releases update poll in desktop mode.
+  - `src/components/shell/hooks/useShellConnection.ts` — the interactive terminal has no
+    desktop PTY backend yet (deferred); desktop shows a notice instead of opening the
+    upstream localhost shell WebSocket.
+  - `src/components/sidebar/hooks/useSidebarController.ts` — conversation search streams over
+    the upstream localhost SSE endpoint; desktop degrades to no results (project-name
+    filtering still works client-side) instead of opening an `EventSource`.
+  - `src/components/project-creation-wizard/data/workspaceApi.ts` — clone-with-progress uses
+    the upstream localhost SSE endpoint; desktop rejects clearly instead of opening an
+    `EventSource`.
+  - `package.json` / `package-lock.json` — removed unused upstream deps `@octokit/rest`,
+    `mime-types`, `gray-matter` (dependency split; no Express/PTY/SDK/JWT/WS/SQLite server
+    deps were ever carried into the desktop frontend).
 - `src-tauri/tauri.conf.json` — Tauri 2 host config; `frontendDist` = derived `dist/`;
   `devUrl` = product Vite dev server; CSP widened for the real frontend; YourAgent
   window branding; Developer ID signing identity for macOS.
@@ -198,7 +226,22 @@ source pending the product rebrand; attribution is preserved here and in NOTICE.
   contracts are covered by the Rust tests. Follow-ups: restart-recovery of detailed gate
   evidence from the store, and live engine-driven business execution (P2-5/P2-6 executor
   wired to the engine adapter).
-- U06 (full Web-dependency removal + packaging): pending.
+- U06 (remove Web JWT/Express/WS/PWA deps; run with no localhost service): DONE —
+  the desktop frontend carries no Express/PTY/SDK/JWT/WS/SQLite server deps (dependency
+  split verified; unused `@octokit/rest`/`mime-types`/`gray-matter` removed). The migrated
+  data path is Tauri-IPC-only: `api.js` has no `fetch`/Bearer-JWT fallback, WebSocketContext
+  has no `new WebSocket`, and the PWA service worker / manifest / Web Push / platform router
+  bridge are removed. Remaining upstream Web network paths (shell WS, conversation-search
+  SSE, clone-progress SSE, `/health` + GitHub update poll) are guarded by `IS_DESKTOP` so the
+  desktop build never opens a localhost connection; those capabilities are deferred and
+  degrade gracefully. Verified: frontend `tsc --noEmit` clean; rebuilt dist contains no
+  `sw.js`/`manifest.json` and zero service-worker registration; 33 Rust tests + clippy/fmt
+  clean; the rebuilt dist is embedded in the Developer ID-signed `YourAgent.app`
+  (`codesign --verify --deep --strict` valid, Team KRV5T3384C, zero `/sw.js`/`manifest.json`
+  refs in the binary), which boots alive with isolated CODEX_HOME + harness DB + real
+  workspace root and no engine, then shuts down cleanly. Source attribution (LICENSE/NOTICE,
+  this record, upstream branding pending rebrand) is preserved. In-app WebView click-through
+  could not be automated here (browser automation cannot reach the Tauri WebView).
 
 ## License obligations carried forward
 

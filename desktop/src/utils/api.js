@@ -1,11 +1,11 @@
-import { IS_PLATFORM, IS_DESKTOP } from "../constants/config";
 import { desktopClient, jsonResponse } from "../services/desktop-client";
 
-// Product modification (AGPL Section 7 — see desktop/SOURCE.md): in the Tauri
-// desktop build the data layer goes through the typed DesktopClient (Rust commands),
-// not the upstream Express backend. The legacy fetch path is retained for the OSS
-// browser build. U02 mock: boot-critical endpoints use typed commands; the rest use
-// a generic product request that returns graceful empty payloads until migrated.
+// Product modification (AGPL Section 7 — see desktop/SOURCE.md): the data layer goes
+// through the typed DesktopClient (Rust commands), NOT the upstream Express backend.
+// U06 removed the Web fetch/JWT fallback: there is no localhost service in the desktop
+// product. Boot-critical endpoints use typed commands; unmigrated endpoints use a
+// generic product request (desktop_request) that returns graceful empty payloads. The
+// '/api/...' strings below are product-request endpoint identifiers, not network URLs.
 
 const parseBody = (options) => {
   if (!options || options.body == null) return null;
@@ -15,97 +15,32 @@ const parseBody = (options) => {
   return null; // FormData etc. not supported over the desktop mock boundary
 };
 
-// Utility function for authenticated API calls
-export const authenticatedFetch = (url, options = {}) => {
-  if (IS_DESKTOP) {
-    return desktopClient
-      .request(options.method || 'GET', url, parseBody(options))
-      .then((data) => jsonResponse(data));
-  }
-
-  const token = localStorage.getItem('auth-token');
-
-  const defaultHeaders = {};
-
-  // Only set Content-Type for non-FormData requests
-  if (!(options.body instanceof FormData)) {
-    defaultHeaders['Content-Type'] = 'application/json';
-  }
-
-  if (!IS_PLATFORM && token) {
-    defaultHeaders['Authorization'] = `Bearer ${token}`;
-  }
-
-  return fetch(url, {
-    ...options,
-    headers: {
-      ...defaultHeaders,
-      ...options.headers,
-    },
-  }).then((response) => {
-    const refreshedToken = response.headers.get('X-Refreshed-Token');
-    if (refreshedToken) {
-      localStorage.setItem('auth-token', refreshedToken);
-    }
-    return response;
-  });
-};
+// Authenticated product request — always over Tauri IPC (no fetch, no Bearer JWT).
+export const authenticatedFetch = (url, options = {}) =>
+  desktopClient
+    .request(options.method || 'GET', url, parseBody(options))
+    .then((data) => jsonResponse(data));
 
 const desktopJson = (promise) => promise.then((data) => jsonResponse(data));
 
 // API endpoints
 export const api = {
-  // Auth endpoints (no token required)
+  // Auth endpoints (provisioned by the Rust DesktopClient)
   auth: {
-    status: () =>
-      IS_DESKTOP ? desktopJson(desktopClient.authStatus()) : fetch('/api/auth/status'),
-    login: (username, password) =>
-      IS_DESKTOP
-        ? desktopJson(desktopClient.login(username, password))
-        : fetch('/api/auth/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password }),
-          }),
-    register: (username, password) =>
-      IS_DESKTOP
-        ? desktopJson(desktopClient.register(username, password))
-        : fetch('/api/auth/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password }),
-          }),
-    user: () =>
-      IS_DESKTOP ? desktopJson(desktopClient.authUser()) : authenticatedFetch('/api/auth/user'),
-    logout: () =>
-      IS_DESKTOP
-        ? desktopClient.logout().then(() => jsonResponse({}))
-        : authenticatedFetch('/api/auth/logout', { method: 'POST' }),
+    status: () => desktopJson(desktopClient.authStatus()),
+    login: (username, password) => desktopJson(desktopClient.login(username, password)),
+    register: (username, password) => desktopJson(desktopClient.register(username, password)),
+    user: () => desktopJson(desktopClient.authUser()),
+    logout: () => desktopClient.logout().then(() => jsonResponse({})),
   },
 
   // Protected endpoints
-  projects: () =>
-    IS_DESKTOP ? desktopJson(desktopClient.listProjects()) : authenticatedFetch('/api/projects'),
+  projects: () => desktopJson(desktopClient.listProjects()),
   sessions: (projectName, limit = 5, offset = 0) =>
-    IS_DESKTOP
-      ? desktopJson(desktopClient.listSessions(projectName, limit, offset))
-      : authenticatedFetch(`/api/projects/${projectName}/sessions?limit=${limit}&offset=${offset}`),
+    desktopJson(desktopClient.listSessions(projectName, limit, offset)),
   // Unified endpoint — all providers through one URL
-  unifiedSessionMessages: (sessionId, provider = 'claude', { projectName = '', projectPath = '', limit = null, offset = 0 } = {}) => {
-    if (IS_DESKTOP) {
-      return desktopJson(desktopClient.getMessages(sessionId, { provider, projectName, projectPath, limit, offset }));
-    }
-    const params = new URLSearchParams();
-    params.append('provider', provider);
-    if (projectName) params.append('projectName', projectName);
-    if (projectPath) params.append('projectPath', projectPath);
-    if (limit !== null) {
-      params.append('limit', String(limit));
-      params.append('offset', String(offset));
-    }
-    const queryString = params.toString();
-    return authenticatedFetch(`/api/sessions/${encodeURIComponent(sessionId)}/messages${queryString ? `?${queryString}` : ''}`);
-  },
+  unifiedSessionMessages: (sessionId, provider = 'claude', { projectName = '', projectPath = '', limit = null, offset = 0 } = {}) =>
+    desktopJson(desktopClient.getMessages(sessionId, { provider, projectName, projectPath, limit, offset })),
   renameProject: (projectName, displayName) =>
     authenticatedFetch(`/api/projects/${projectName}/rename`, {
       method: 'PUT',
@@ -149,21 +84,12 @@ export const api = {
       body: JSON.stringify(workspaceData),
     }),
   readFile: (projectName, filePath) =>
-    IS_DESKTOP
-      ? desktopJson(desktopClient.readFile(projectName, filePath))
-      : authenticatedFetch(`/api/projects/${projectName}/file?filePath=${encodeURIComponent(filePath)}`),
+    desktopJson(desktopClient.readFile(projectName, filePath)),
   /** @param {number | null} [expectedMtimeMs] */
   saveFile: (projectName, filePath, content, expectedMtimeMs = null) =>
-    IS_DESKTOP
-      ? desktopJson(desktopClient.saveFile(projectName, filePath, content, expectedMtimeMs))
-      : authenticatedFetch(`/api/projects/${projectName}/file`, {
-          method: 'PUT',
-          body: JSON.stringify({ filePath, content }),
-        }),
+    desktopJson(desktopClient.saveFile(projectName, filePath, content, expectedMtimeMs)),
   getFiles: (projectName, options = {}) =>
-    IS_DESKTOP
-      ? desktopJson(desktopClient.listFiles(projectName))
-      : authenticatedFetch(`/api/projects/${projectName}/files`, options),
+    desktopJson(desktopClient.listFiles(projectName)),
 
   // File operations
   createFile: (projectName, { path, type, name }) =>
@@ -244,23 +170,12 @@ export const api = {
 
   // User endpoints
   user: {
-    gitConfig: () =>
-      IS_DESKTOP ? desktopJson(desktopClient.gitConfig()) : authenticatedFetch('/api/user/git-config'),
+    gitConfig: () => desktopJson(desktopClient.gitConfig()),
     updateGitConfig: (gitName, gitEmail) =>
-      IS_DESKTOP
-        ? desktopClient.updateGitConfig(gitName, gitEmail).then(() => jsonResponse({}))
-        : authenticatedFetch('/api/user/git-config', {
-            method: 'POST',
-            body: JSON.stringify({ gitName, gitEmail }),
-          }),
-    onboardingStatus: () =>
-      IS_DESKTOP ? desktopJson(desktopClient.onboardingStatus()) : authenticatedFetch('/api/user/onboarding-status'),
+      desktopClient.updateGitConfig(gitName, gitEmail).then(() => jsonResponse({})),
+    onboardingStatus: () => desktopJson(desktopClient.onboardingStatus()),
     completeOnboarding: () =>
-      IS_DESKTOP
-        ? desktopClient.completeOnboarding().then(() => jsonResponse({}))
-        : authenticatedFetch('/api/user/complete-onboarding', {
-            method: 'POST',
-          }),
+      desktopClient.completeOnboarding().then(() => jsonResponse({})),
   },
 
   // Generic GET method for any endpoint

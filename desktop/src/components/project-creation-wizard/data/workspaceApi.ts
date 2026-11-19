@@ -1,4 +1,5 @@
 import { api } from '../../../utils/api';
+import { IS_DESKTOP } from '../../../constants/config';
 import type {
   BrowseFilesystemResponse,
   CloneProgressEvent,
@@ -109,6 +110,12 @@ export const cloneWorkspaceWithProgress = (
   handlers: CloneProgressHandlers,
 ) =>
   new Promise<Record<string, unknown> | undefined>((resolve, reject) => {
+    // U06: clone-with-progress streams over the upstream localhost SSE endpoint, which
+    // the desktop product does not run. Reject clearly instead of opening an EventSource.
+    if (IS_DESKTOP) {
+      reject(new Error('Cloning with progress is not available in the desktop build yet.'));
+      return;
+    }
     const query = buildCloneProgressQuery(params);
     const eventSource = new EventSource(`/api/projects/clone-progress?${query}`);
     let settled = false;

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { version } from '../../package.json';
 import { ReleaseInfo } from '../types/sharedTypes';
+import { IS_DESKTOP } from '../constants/config';
 
 /**
  * Compare two semantic version strings
@@ -30,6 +31,8 @@ export const useVersionCheck = (owner: string, repo: string) => {
   const [installMode, setInstallMode] = useState<InstallMode>('git');
 
   useEffect(() => {
+    // U06: no localhost /health endpoint in the desktop product.
+    if (IS_DESKTOP) return;
     const fetchInstallMode = async () => {
       try {
         const response = await fetch('/health');
@@ -45,6 +48,8 @@ export const useVersionCheck = (owner: string, repo: string) => {
   }, []);
 
   useEffect(() => {
+    // U06: the desktop product does not poll upstream GitHub releases for updates.
+    if (IS_DESKTOP) return;
     const checkVersion = async () => {
       try {
         const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/releases/latest`);

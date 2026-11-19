@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { IS_PLATFORM, IS_DESKTOP } from '../../../constants/config';
+import { IS_DESKTOP } from '../../../constants/config';
 import { api } from '../../../utils/api';
 import { desktopClient } from '../../../services/desktop-client';
 import { AUTH_ERROR_MESSAGES, AUTH_TOKEN_STORAGE_KEY } from '../constants';
@@ -133,15 +133,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         .finally(() => {
           setIsLoading(false);
         });
-      return;
-    }
-
-    if (IS_PLATFORM) {
-      setUser({ username: 'platform-user' });
-      setNeedsSetup(false);
-      void checkOnboardingStatus().finally(() => {
-        setIsLoading(false);
-      });
       return;
     }
 

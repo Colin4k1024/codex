@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type React from 'react';
 import type { TFunction } from 'i18next';
 import { api } from '../../../utils/api';
+import { IS_DESKTOP } from '../../../constants/config';
 import type { Project, ProjectSession, SessionProvider } from '../../../types/app';
 import type {
   AdditionalSessionsByProject,
@@ -197,7 +198,10 @@ export function useSidebarController({
     }
 
     const query = searchFilter.trim();
-    if (searchMode !== 'conversations' || query.length < 2) {
+    // U06: conversation search streams over the upstream localhost SSE endpoint, which
+    // the desktop product does not run. Degrade to no results instead of opening an
+    // EventSource (project-name filtering still works client-side).
+    if (searchMode !== 'conversations' || query.length < 2 || IS_DESKTOP) {
       searchSeqRef.current += 1;
       setConversationResults(null);
       setSearchProgress(null);
