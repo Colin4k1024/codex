@@ -60,7 +60,9 @@ const useWebSocketProviderState = (): WebSocketContextType => {
 
     if (IS_DESKTOP) {
       // Self-contained desktop: ordered product events over Tauri IPC replace the
-      // upstream WebSocket. U02 mock feeds fixture events; U03 wires the real adapter.
+      // upstream WebSocket. Subscribe first so no engine event is missed, then
+      // connect the real Codex app-server adapter (U03). When no engine is
+      // configured the commands fall back to fixtures and the shell still boots.
       setIsConnected(true);
       hasConnectedRef.current = true;
       void desktopClient
@@ -69,9 +71,15 @@ const useWebSocketProviderState = (): WebSocketContextType => {
         })
         .then((unlisten) => {
           unlistenRef.current = unlisten;
+          return desktopClient.engineConnect();
+        })
+        .then((status) => {
+          if (!status.connected && status.reason) {
+            console.info('Desktop engine not connected:', status.reason);
+          }
         })
         .catch((error) => {
-          console.error('Desktop event subscription failed:', error);
+          console.error('Desktop event subscription/engine connect failed:', error);
         });
       return;
     }
